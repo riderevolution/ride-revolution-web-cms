@@ -1,5 +1,23 @@
 @import 'fonts'
 
+light_green()
+    color: #E2FDF9
+
+green()
+    color: #33B09D
+
+white()
+    color: #FFF
+
+black()
+    color: #383D40
+
+black_alternate()
+    color: #777
+
+gray()
+    color: #91939B
+
 html
     -ms-text-size-adjust: 100%
     -webkit-text-size-adjust: 100%
@@ -31,6 +49,11 @@ h1
     background-color: #FFE5E6
     text-align: center
     transition: .3s ease-in-out
+    &:hover,
+    &:focus
+        color: #FFE5E6
+        background-color: #F3525C
+        transition: .3s ease-in-out
 
 /**
  * HeaderNav */
@@ -46,9 +69,14 @@ h1
     width: 100%
     .header_icons
         padding-right: 30px
+        img
+            margin: 0 10px
+            cursor: pointer
+            &:last-child
+                margin: 0
     .header_user
         position: relative
-        padding: 20px 30px
+        padding: 20px 60px 20px 30px
         border-left: 1px solid #E2E2E2
         display: flex
         flex-flow: row wrap
@@ -63,7 +91,7 @@ h1
             margin-right: 15px
         .user_name
             sf_pro_regular(16px)
-            color: #777
+            black_alternate()
         .user_select
             position: absolute
             right: 0
@@ -75,15 +103,23 @@ h1
             opacity: 0
             visibility: hidden
             box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
-            transition: all .3s ease-in-out
+            transition: all .2s ease-in-out
             a
                 text-decoration: none
                 outline: none
                 &.select_item
                     display: block
                     sf_pro_regular(16px)
-                    color: #777
+                    black_alternate()
                     padding: 10px 30px
+                    background-color: transparent
+                    border-left: 2px solid transparent
+                    transition: .3s ease-in-out
+                    &:hover,
+                    &:focus
+                        background-color: #E2FDF9
+                        border-left: 2px solid #33B09D
+                        transition: .3s ease-in-out
             .select_footer
                 margin-top: 10px
                 padding: 0 30px
@@ -95,7 +131,7 @@ h1
                 top: calc(100% + 0px)
                 visibility: visible
                 opacity: 1
-                transition: all .3s ease-in-out
+                transition: all .2s ease-in-out
 
 /**
  * Footer */
@@ -112,7 +148,7 @@ h1
     background-color: #fff
     .footer_label
         sf_pro_light(14px)
-        color: #91939B
+        gray()
 
 .image_responsive
     max-width: 100%
@@ -143,7 +179,7 @@ h1
                 margin: 30px 40px 30px 20px
                 .logo_title
                     neutra_text(18px)
-                    color: #383D40
+                    black()
                     text-transform: uppercase
                     letter-spacing: 2px
                     padding-left: 5px
@@ -155,7 +191,7 @@ h1
                 .item_wrapper
                     .nav_item
                         sf_pro_light(16px)
-                        color: #383D40
+                        black()
                         display: block
                         position: relative
                         padding: 20px 30px 20px 60px
@@ -240,7 +276,7 @@ h1
                                 .sub_nav_item
                                     display: block
                                     sf_pro_light(16px)
-                                    color: #383D40
+                                    black()
                                     text-decoration: none
                                     outline: none
                                     padding: 20px
@@ -248,7 +284,7 @@ h1
                                     transition: .3s ease-in-out
                                     &:hover,
                                     &:focus
-                                        color: #FFF
+                                        white()
                                         background-color: #33B09D
                                         transition: .3s ease-in-out
     .content

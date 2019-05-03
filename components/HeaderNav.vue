@@ -4,7 +4,7 @@
             <img src="/icons/header/icon.svg" class="image_responsive" width="19px" height="19px" />
             <img src="/icons/header/icon.svg" class="image_responsive" width="19px" height="19px" />
         </div>
-        <div class="header_user" @click="showSelect($event)">
+        <div :class="`header_user ${(isToggled) ? 'active' : ''}`" @click="showSelect()">
             <div class="user_picture"></div>
             <div class="user_name">Hello, Admin!</div>
             <div class="user_select">
@@ -21,18 +21,19 @@
 
 <script>
     export default {
+        data () {
+            return {
+                isToggled: false
+            }
+        },
         methods: {
             /**
-             * Toggler custom select
-             * @param  {object} event
-             * @return {event}
-             */
-            showSelect (event) {
-                console.log(event.target);
-                if (event.target.classList.contains('active')) {
-                    event.target.classList.remove('active')
+             * Toggler custom select */
+            showSelect () {
+                if (this.isToggled) {
+                    this.isToggled = false
                 } else {
-                    event.target.classList.add('active')
+                    this.isToggled = true
                 }
             }
         }
