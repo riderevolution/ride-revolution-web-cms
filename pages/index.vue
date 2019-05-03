@@ -1,17 +1,15 @@
 <template>
-    <div id="container" class="dashboard">
-        <navbar />
-        <div class="content">
-            <h1 class="header_title">Dashboard</h1>
-        </div>
+    <div id="cms" class="content dashboard">
+        <h1 class="header_title">Dashboard</h1>
+        <foot />
     </div>
 </template>
 
 <script>
-    import Navbar from '../components/Navbar'
+    import Foot from '../components/Foot'
     export default {
         components: {
-            Navbar
+            Foot
         }
     }
 </script>
