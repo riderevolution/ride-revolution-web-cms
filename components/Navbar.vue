@@ -12,6 +12,7 @@
                 <li class="item_wrapper" v-for="(navItem, parent_key) in navItems" :key="parent_key" @mouseover="itemHover($event)" @mouseleave="itemLeave($event)">
                     <nuxt-link :class="`nav_item ${navItem.class}`" :to="navItem.link">{{ navItem.title }}</nuxt-link>
                     <div class="sub_wrapper" v-if="navItem.subItems">
+                        <label class="nav_label">{{ navItem.title }}</label>
                         <ul class="sub_nav_list" v-for="(subItem, sub_key) in navItem.subItems" :key="sub_key">
                             <li class="sub_item_wrapper">
                                 <nuxt-link class="sub_nav_item" :to="subItem.link">{{ subItem.title }}</nuxt-link>

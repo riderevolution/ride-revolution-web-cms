@@ -61,6 +61,7 @@ h1
     position: fixed
     top: 0
     left: 0
+    z-index: 1
     display: flex
     flex-flow: row wrap
     align-items: center
@@ -94,11 +95,11 @@ h1
             black_alternate()
         .user_select
             position: absolute
-            right: 0
+            right: 15px
             top: calc(100% + 30px)
             z-index: 1
-            width: 100%
-            padding: 10px 0 20px
+            width: 350px
+            border-radius: 5px
             background-color: #fff
             opacity: 0
             visibility: hidden
@@ -107,25 +108,23 @@ h1
             a
                 text-decoration: none
                 outline: none
-                &.select_item
-                    display: block
+                display: block
+            .select_header
+                padding: 20px
+                background-image: linear-gradient(to right, #5686FB, #33B09D)
+                border-radius: 5px 5px 0 0
+                .header_name
+                    sf_pro_regular(18px)
+                    white()
+                .header_role
+                    sf_pro_light(14px)
+                    color: #F8F8FB
+                    margin-top: 5px
+            .select_footer
+                padding: 10px 20px
+                .select_item
                     sf_pro_regular(16px)
                     black_alternate()
-                    padding: 10px 30px
-                    background-color: transparent
-                    border-left: 2px solid transparent
-                    transition: .3s ease-in-out
-                    &:hover,
-                    &:focus
-                        background-color: #E2FDF9
-                        border-left: 2px solid #33B09D
-                        transition: .3s ease-in-out
-            .select_footer
-                margin-top: 10px
-                padding: 0 30px
-                .field_btn_red
-                    width: 100%
-                    display: block
         &.active
             .user_select
                 top: calc(100% + 0px)
@@ -215,7 +214,8 @@ h1
                             visibility: hidden
                             opacity: 0
                             z-index: 1
-                            background-color: #E2FDF9
+                            background-color: #FFF
+                            border-left: 1px solid #E2E2E2
                             transition: all .3s ease-in-out
                             &:hover,
                             &:focus
@@ -269,6 +269,11 @@ h1
                                 right: 0
                                 transition: all .3s ease-in-out
                     .sub_wrapper
+                        .nav_label
+                            display: block
+                            sf_pro_medium(16px)
+                            black()
+                            padding: 20px
                         .sub_nav_list
                             list-style: none
                             padding: 0
@@ -281,14 +286,87 @@ h1
                                     outline: none
                                     padding: 20px
                                     background-color: transparent
+                                    border-left: 2px solid transparent
                                     transition: .3s ease-in-out
                                     &:hover,
                                     &:focus
-                                        white()
-                                        background-color: #33B09D
+                                        background-color: #E2FDF9
+                                        border-left: 2px solid #33B09D
                                         transition: .3s ease-in-out
     .content
         position: relative
-        z-index: -1
         flex: 1 auto
         background-color: #F8F8FB
+
+#cms
+    &.dashboard
+        #top_content
+            .header_title
+                neutra_text(36px)
+                black()
+                padding: 40px 40px 0
+        #content
+            .branches_tab
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                padding: 15px 40px
+                border-bottom: 1px solid #E2E2E2
+                .branches
+                    width: 100%
+                    max-width: 200px
+                    box-shadow: none
+                    outline: none
+                    -webkit-appearance: none
+                    background-color: #FFF
+                    border: 1px solid #E2E2E2
+                    padding: 10px
+                    sf_pro_light(20px)
+                    letter-spacing: 1px
+                .add_customer
+                    width: 100%
+                    max-width: 200px
+                    text-align: center
+                    padding: 12px
+                    margin-left: 20px
+                    background-color: #e3f7ff
+                    border: 1px solid #e3f7ff
+                    sf_pro_regular(18px)
+                    color: #3db1ff
+                    cursor: pointer
+                    user-select: none
+                    transition: .3s ease-in-out
+                    &:hover,
+                    &:focus
+                        white()
+                        background-color: #3db1ff
+                        transition: .3s ease-in-out
+            .total_section
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: space-between
+                padding: 0 40px
+                .wrapper
+                    flex: 0 0 23%
+                    text-align: center
+                    background-color: #FFF
+                    padding: 80px 0
+                    box-shadow: 15px 25px 40px transparent
+                    transition: .3s ease-in-out
+                    .total_icon
+                        width: 40px
+                        height: 40px
+                        background-color: #E3EBFF
+                        border-radius: 50%
+                        margin: 0 auto
+                    .total_count
+                        sf_pro_bold(45px)
+                        black()
+                        margin: 15px 0
+                    .total_text
+                        sf_pro_light(16px)
+                        black()
+                    &:hover
+                        box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+                        transition: .3s ease-in-out
