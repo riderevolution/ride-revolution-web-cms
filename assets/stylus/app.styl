@@ -6,6 +6,9 @@ light_green()
 green()
     color: #33B09D
 
+red()
+    color: #F3525C
+
 white()
     color: #FFF
 
@@ -18,36 +21,129 @@ black_alternate()
 gray()
     color: #91939B
 
-html
-    -ms-text-size-adjust: 100%
-    -webkit-text-size-adjust: 100%
-    -moz-osx-font-smoothing: grayscale
-    -webkit-font-smoothing: antialiased
-    box-sizing: border-box
+body.cms
+    ::-webkit-scrollbar-track
+    	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1)
+    	background-color: #f8f8fb
+    	border-radius: 10px
+    ::-webkit-scrollbar
+    	width: 10px
+    	background-color: #f8f8fb
+    ::-webkit-scrollbar-thumb
+    	border-radius: 10px
+    	background-color: #33B09D
+
+body
+    overflow-x: hidden
+    &.cms
+        background-color: #f8f8fb
+    &.no_click
+        pointer-events: none
 
 *,
 *:before,
 *:after
-  box-sizing: border-box
-  margin: 0
+    user-select: none
+    box-sizing: border-box
+    margin: 0
 
-h1
+h1,
+h2,
+h3,
+h4,
+h5
     font-weight: normal
 
 /**
- * Global */
+ * Default Loader
+ */
+.loader_wrapper
+    display: flex
+    align-items: center
+    position: fixed
+    top: 50%
+    left: 50%
+    z-index: 99
+    text-align: center
+    background-color: #33b09d
+    box-shadow: 0px 10px 25px rgba(0,0,0,0.15)
+    padding: 0 40px
+    border-radius: 5px
+    transform: translate(-50%, -50%)
+    .loader
+        display: inline-block
+        position: relative
+        width: 64px
+        height: 64px
+        div
+            display: inline-block
+            position: absolute
+            left: 6px
+            width: 13px
+            background-color: #fff
+            animation: loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite
+            &:nth-child(1)
+                left: 6px
+                animation-delay: -0.24s
+            &:nth-child(2)
+                left: 26px
+                animation-delay: -0.12s
+            &:nth-child(3)
+                left: 45px
+                animation-delay: 0
+    .loader_text
+        sf_pro_regular(18px)
+        white()
+        margin-left: 10px
 
-.field_btn_red
-    sf_pro_regular(14px)
+@keyframes loader
+    0% {
+        top: 6px
+        height: 51px
+    }
+    50%, 100% {
+        top: 19px
+        height: 26px
+    }
+
+/**
+ * Default Buttons
+ */
+.action_success_btn
+    display: inline-block
+    width: 150px
+    sf_pro_regular(16px)
     text-decoration: none
     outline: none
-    box-shadow: none
-    color: #F3525C
-    padding: 7px 15px
-    border-radius: 2px
-    border: 1px solid #FFE5E6
-    background-color: #FFE5E6
+    green()
+    padding: 17px
+    background-color: #E2FDF9
+    border: 1px solid #33B09D
+    position: relative
     text-align: center
+    cursor: pointer
+    user-select: none
+    transition: .3s ease-in-out
+    &:hover,
+    &:focus
+        light_green()
+        background-color: #33B09D
+        transition: .3s ease-in-out
+.action_cancel_btn
+    display: inline-block
+    width: 150px
+    sf_pro_regular(16px)
+    text-decoration: none
+    outline: none
+    red()
+    padding: 17px
+    background-color: #FFE5E6
+    border: 1px solid #F3525C
+    position: relative
+    text-align: center
+    margin-left: 20px
+    cursor: pointer
+    user-select: none
     transition: .3s ease-in-out
     &:hover,
     &:focus
@@ -56,112 +152,569 @@ h1
         transition: .3s ease-in-out
 
 /**
- * HeaderNav */
-.header
-    position: fixed
-    top: 0
-    left: 0
-    z-index: 1
+ * Default Form
+ */
+.note-tooltip
+    sf_pro_regular(14px)
+
+#action_form
+    margin-bottom: 60px
+    label
+        user-select: none
+        display: block
+        sf_pro_medium(14px)
+        font-weight: normal
+        text-transform: uppercase
+        black_alternate()
+        margin-bottom: 10px
+    .form_flex
+        display: flex
+        flex-flow: row wrap
+        justify-content: space-between
+        align-items: flex-end
+        .form_group
+            flex: 0 0 48.33%
+            &.single
+                flex: 0 0 100%
+    .form_group
+        .action_form,
+        .action_textarea,
+        .action_select,
+        .action_image_label,
+        .vue-tags-input
+            width: 100%
+            background-color: #fff
+            border: 1px solid #ccc
+            padding: 20px 25px
+            sf_pro_regular(18px)
+            color: #000
+            outline: none
+            transition: 0.3s ease-in-out
+            &:hover,
+            &:focus
+                border: 1px solid #383D40
+                transition: 0.3s ease-in-out
+        .action_textarea
+            resize: none
+        .action_select
+            -webkit-appearance: none
+            background-image: url(/images/icons/dropdown.png)
+            background-position: calc(100% - 25px) center
+            background-repeat: no-repeat
+    .form_image_group
+        margin-bottom: 20px
+        label
+          strong
+            color: #000
+        .action_image
+            position: absolute
+            bottom: 10px
+            opacity: 0
+        .action_image_label
+            position: relative
+            text-transform: none
+            cursor: pointer
+            &::before
+                content: 'Browse'
+                green()
+                position: absolute
+                top: 50%
+                right: 0
+                padding: 20px 25px
+                background-color: #E2FDF9
+                border-left: 1px solid #ccc
+                transform: translateY(-51%)
+                transition: .3s ease-in-out
+            &:hover,
+            &:focus
+                &::before
+                    color: #E2FDF9
+                    background-color: #33B09D
+                    border-left: 1px solid #000
+                    transition: .3s ease-in-out
+                & ~ .action_image_remove
+                    border-left: 1px solid #000
+                    border-right: 1px solid #000
+                    transition: .3s ease-in-out
+            & ~ .action_image_remove
+                sf_pro_regular(18px)
+                red()
+                position: absolute
+                top: 50%
+                right: 0
+                padding: 20px 25px
+                background-color: #FFE5E6
+                transform: translateY(-51%)
+                border-left: 1px solid #ccc
+                border-right: 1px solid #ccc
+                border-top: none
+                border-bottom: none
+                outline: none
+                transition: 0.3s ease-in-out
+                &:hover,
+                &:focus
+                    background-color: #F3525C
+                    color: #FFE5E6
+                    transition: .3s ease-in-out
+        .action_image_add
+            display: inline-block
+            width: 150px
+            text-decoration: none
+            outline: none
+            sf_pro_regular(16px)
+            color: #295AAE
+            padding: 17px
+            background-color: #d3e3ff
+            border: 1px solid #295AAE
+            position: relative
+            text-align: center
+            cursor: pointer
+            transition: .3s ease-in-out
+            &:hover,
+            &:focus
+                white()
+                background-color: #295AAE
+                transition: .3s ease-in-out
+        .form_tags_group
+            display: flex
+            flex-flow: row wrap
+            align-items: flex-start
+            justify-content: space-between
+            margin-bottom: 20px
+            .preview_group
+                flex: 0 0 30%
+                img
+                    width: 100%
+                    height: 200px
+                    background-color: #fff
+                    border-left: 1px solid #ccc
+                    object-fit: cover
+            .tags_group
+                flex: 0 0 68%
+                .form_group
+                    &:last-child
+                        margin-bottom: 0
+    .form_meta_group
+        margin-top: 60px
+        .action_header
+            neutra_text(28px)
+            line-height: 1.5
+            black()
+            margin-bottom: 40px
+    .form_check
+        align-items: center
+        label
+            flex: 0 auto
+            margin-left: 10px
+            margin-bottom: 0
+        .action_check
+            -webkit-appearance: none
+            outline: none
+            width: 21px
+            height: 21px
+            background-image: url('/images/icons/unchecked.png')
+            background-position: center
+            background-repeat: no-repeat
+            background-size: cover
+            transition: .3s ease-in-out
+            &:checked
+                background-image: url('/images/icons/checked.png')
+                transition: .3s ease-in-out
+    .note-editor
+        &.note-frame
+                border: 1px solid #ccc
+                transition: 0.3s ease-in-out
+            &:hover,
+            &:focus
+                border: 1px solid #383D40
+                transition: 0.3s ease-in-out
+            .note-toolbar
+                background-color: #F8F8FB
+            .note-editing-area
+                .note-editable
+                    sf_pro_regular(18px)
+                    padding: 20px 25px
+    .button_group
+        justify-content: flex-start
+        padding-top: 50px
+    .vue-tags-input
+        width: 100%
+        max-width: 100%
+        padding: 10px 15px !important
+        .ti-input
+            border: none
+            padding: 0
+            .ti-tags
+                .ti-new-tag-input-wrapper
+                    padding: 0
+                    margin: 0
+                    input
+                        padding: 10px
+                        sf_pro_regular(18px)
+                        color: #000
+                        outline: none
+                        transition: 0.3s ease-in-out
+                .ti-tag
+                    sf_pro_regular(16px)
+                    background-color: #33b09d
+/**
+ * Default Table
+ */
+.cms_table
+    border-collapse: collapse
+    width: 100%
+    background-color: #fff
+    box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+    border-radius: 10px
+    thead
+        th
+            sf_pro_regular(14px)
+            black()
+            text-align: left
+            padding: 20px 30px
+            background-color: #E2FDF9
+            &:first-child
+                border-radius: 10px 0 0 0
+            &:last-child
+                border-radius: 0 10px 0 0
+    tbody
+        tr
+            background-color: transparent
+            transition: .3s ease-in-out
+            td
+                sf_pro_regular(16px)
+                black()
+                padding: 20px 30px
+                a
+                    text-decoration: none
+                    outline: none
+                    sf_pro_regular(16px)
+                    black()
+                    transition: .3s ease-in-out
+                    &:hover,
+                    &:focus
+                        green()
+                        transition: .3s ease-in-out
+            &:hover,
+            &:focus
+                background-color: #F8F8FB
+                transition: .3s ease-in-out
+    .no_results
+        text-align: center
+
+/**
+ * Default Toggler
+ */
+.cms_toggler
     display: flex
     flex-flow: row wrap
     align-items: center
     justify-content: flex-end
-    background-color: #FFF
-    width: 100%
-    .header_icons
-        padding-right: 30px
-        img
-            margin: 0 10px
-            cursor: pointer
-            &:last-child
-                margin: 0
-    .header_user
-        position: relative
-        padding: 20px 60px 20px 30px
-        border-left: 1px solid #E2E2E2
-        display: flex
-        flex-flow: row wrap
-        align-items: center
+    margin-bottom: 40px
+    .cms_toggler_header
+        flex: 1 0 auto
+        neutra_text(24px)
+        line-height: 1.5
+        black()
+    .cms_toggler_title
+        text-align: center
+        padding: 15px 25px
+        sf_pro_regular(18px)
+        black()
+        background-color: #fff
         cursor: pointer
         user-select: none
-        .user_picture
-            background-color: #33B09D
-            width: 38px
-            height: 38px
-            border-radius: 50%
-            margin-right: 15px
-        .user_name
-            sf_pro_regular(16px)
-            black_alternate()
-        .user_select
-            position: absolute
-            right: 15px
-            top: calc(100% + 30px)
-            z-index: 1
-            width: 350px
-            border-radius: 5px
-            background-color: #fff
-            opacity: 0
-            visibility: hidden
-            box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
-            transition: all .2s ease-in-out
-            a
-                text-decoration: none
-                outline: none
-                display: block
-            .select_header
-                padding: 20px
-                background-image: linear-gradient(to right, #5686FB, #33B09D)
-                border-radius: 5px 5px 0 0
-                .header_name
-                    sf_pro_regular(18px)
-                    white()
-                .header_role
-                    sf_pro_light(14px)
-                    color: #F8F8FB
-                    margin-top: 5px
-            .select_footer
-                padding: 10px 20px
-                .select_item
-                    sf_pro_regular(16px)
-                    black_alternate()
-        &.active
-            .user_select
-                top: calc(100% + 0px)
-                visibility: visible
-                opacity: 1
-                transition: all .2s ease-in-out
+        box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+        transition: .3s ease-in-out
+        &.alternate
+            white()
+            background-color: #295aae
+            transition: .3s ease-in-out
+            &.active,
+            &:hover,
+            &:focus
+                color: #295aae
+                background-color: #d3e3ff
+                transition: .3s ease-in-out
+        &.active,
+        &:hover,
+        &:focus
+            background-color: #33b09d
+            white()
+            transition: .3s ease-in-out
 
 /**
- * Footer */
-.footer
-    position: absolute
-    left: 0
-    bottom: 0
-    width: 100%
+ * Default 3 Col
+ */
+.cms_col_three
     display: flex
     flex-flow: row wrap
     align-items: center
     justify-content: space-between
-    padding: 20px 40px
+    .wrapper
+        flex: 0 0 32.33%
+        margin-bottom: 30px
+        text-align: center
+        background-color: #FFF
+        padding: 80px 0
+        box-shadow: 15px 25px 40px transparent
+        text-decoration: none
+        transition: .3s ease-in-out
+        .total_icon
+            width: 40px
+            height: 40px
+            background-image: linear-gradient(to right, #5686fb, #33b09d 70%)
+            border-radius: 50%
+            margin: 0 auto
+        .total_count
+            sf_pro_bold(45px)
+            black()
+            margin: 15px 0
+        .total_text
+            sf_pro_light(16px)
+            black()
+        &:hover
+            box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+            transition: .3s ease-in-out
+
+.cms_col_four
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: space-between
+    .wrapper
+        flex: 0 0 23%
+        text-align: center
+        background-color: #FFF
+        padding: 80px 0
+        box-shadow: 15px 25px 40px transparent
+        text-decoration: none
+        transition: .3s ease-in-out
+        .total_icon
+            width: 40px
+            height: 40px
+            background-image: linear-gradient(to right, #5686fb, #33b09d 70%)
+            border-radius: 50%
+            margin: 0 auto
+        .total_count
+            sf_pro_bold(45px)
+            black()
+            margin: 15px 0
+        .total_text
+            sf_pro_light(16px)
+            black()
+        &:hover
+            box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+            transition: .3s ease-in-out
+/**
+ * Default Alert */
+.cms_alert
+    &#success
+        position: absolute
+        top: 50px
+        right: 0
+        left: 0
+        z-index: 999
+        margin: 0 auto
+        width: 300px
+        text-align: center
+        sf_pro_regular(18px)
+        white()
+        background-color: #33b09d
+        padding: 20px
+        border-radius: 5px
+        box-shadow: 0px 10px 12px rgba(0,0,0,0.15)
+
+.confirmation_wrapper
+    position: absolute
+    top: -50px
+    right: 0
+    left: 0
+    z-index: 999
+    margin: 0 auto
+    width: 425px
+    text-align: center
+    font-family: SFProDisplay-Regular
+    font-size: 18px
     background-color: #fff
-    .footer_label
-        sf_pro_light(14px)
-        gray()
+    padding: 20px
+    border-radius: 5px
+    box-shadow: 0px 10px 12px rgba(0,0,0,0.15)
+    .confirmation_text
+        margin-bottom: 30px
 
-.image_responsive
-    max-width: 100%
-    vertical-align: middle
+/**
+ * Pagination
+ */
+#cms_pagination
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: center
+    margin-top: 60px
+    user-select: none
+    .next,
+    .prev
+        sf_pro_regular(16px)
+        white()
+        background-color: #33b09d
+        border: 1px solid #33b09d
+        padding: 8px 14px
+        margin: 0 3px
+        cursor: pointer
+        transition: .3s ease-in-out
+        &:hover,
+        &:focus
+            background-color: #e2fdf9
+            green()
+            transition: .3s ease-in-out
+        &.disabled
+            background-color: #e2e2e2
+            black()
+            border: 1px solid #e2e2e2
+            transition: .3s ease-in-out
+    .number
+        sf_pro_regular(16px)
+        green()
+        background-color: #e2fdf9
+        border: 1px solid #33b09d
+        padding: 8px 14px
+        margin: 0 3px
+        cursor: pointer
+        transition: .3s ease-in-out
+        &:hover,
+        &:focus,
+        &.active
+            background-color: #33b09d
+            white()
+            transition: .3s ease-in-out
+        &.active
+            pointer-events: none
 
-#container
+/**
+ * Login */
+#login_container
+    position: relative
+    height: 100vh
+    background-image: linear-gradient(to right, rgba(0, 0, 72, 1), rgba(41,90,174,1))
+    .cms_login
+        position: absolute
+        top: 50%
+        left: 50%
+        padding: 40px
+        border-radius: 20px
+        background-color: #FFF
+        box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.5)
+        transform: translate(-50%, -50%)
+        .logo
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: center
+            margin-bottom: 40px
+            .logo_title
+                neutra_text(18px)
+                line-height: 1.5
+                black()
+                text-transform: uppercase
+                letter-spacing: 2px
+                padding-left: 10px
+    .button_group
+        flex-flow: column
+        .error
+            red()
+            sf_pro_regular(16px)
+            margin-bottom: 20px
+            text-align: center
+
+#admin_container
     display: flex
     flex-flow: row wrap
     padding-top: 78px
-    .navbar_container
-        display: block
+    /**
+     * HeaderNav
+     */
+    .header
+        position: fixed
+        top: 0
+        left: 0
+        z-index: 2
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: flex-end
+        background-color: #FFF
         width: 100%
-        max-width: 265px
-        height: 100vh
+        .header_icons
+            padding-right: 30px
+            img
+                margin: 0 10px
+                cursor: pointer
+                &:last-child
+                    margin: 0
+        .header_select
+            position: relative
+            border-left: 1px solid #E2E2E2
+            user-select: none
+            .header_user
+                padding: 20px 60px 20px 30px
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                cursor: pointer
+                .user_picture
+                    background-color: #33B09D
+                    border-radius: 50%
+                    margin-right: 15px
+                    padding: 10px 15px
+                    color: #fff
+                    sf_pro_regular(16px)
+                .user_name
+                    sf_pro_regular(16px)
+                    black_alternate()
+            .user_select
+                position: absolute
+                right: 15px
+                top: calc(100% + 30px)
+                z-index: 1
+                width: 350px
+                border-radius: 5px
+                background-color: #fff
+                opacity: 0
+                visibility: hidden
+                box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+                transition: all .2s ease-in-out
+                a
+                    text-decoration: none
+                    outline: none
+                    display: block
+                .select_header
+                    padding: 20px
+                    background-image: linear-gradient(to right, #5686FB, #33B09D)
+                    border-radius: 5px 5px 0 0
+                    .header_name
+                        sf_pro_regular(18px)
+                        white()
+                    .header_role
+                        sf_pro_light(14px)
+                        color: #F8F8FB
+                        margin-top: 5px
+                .select_footer
+                    padding: 10px 20px
+                    display: flex
+                    justify-content: space-between
+                    .select_item
+                        sf_pro_regular(16px)
+                        black_alternate()
+                &.active
+                    top: calc(100% + 0px)
+                    visibility: visible
+                    opacity: 1
+                    transition: all .2s ease-in-out
+    /**
+     * Navbar Side
+     */
+    .navbar_container
         flex: 0 0 auto
         .navbar
             position: fixed
@@ -169,27 +722,33 @@ h1
             left: 0
             z-index: 2
             height: 100%
-            border: 1px solid #E2E2E2
+            border-right: 1px solid #E2E2E2
+            background-color: #fff
             .logo
+                text-decoration: none
                 display: flex
                 flex-flow: row wrap
                 align-items: center
                 justify-content: center
-                margin: 30px 40px 30px 20px
+                padding: 30px 40px 30px 20px
+                margin-bottom: 40px
                 .logo_title
                     neutra_text(18px)
+                    line-height: 1.5
                     black()
                     text-transform: uppercase
                     letter-spacing: 2px
-                    padding-left: 5px
+                    padding-left: 10px
             .nav_list
                 position: relative
                 list-style: none
                 padding: 0
-                height: 100%
+                height: 800px
+                overflow-x: hidden
+                overflow-y: auto
                 .item_wrapper
                     .nav_item
-                        sf_pro_light(16px)
+                        sf_pro_regular(16px)
                         black()
                         display: block
                         position: relative
@@ -204,25 +763,11 @@ h1
                         background-size: 20px
                         transition: .3s ease-in-out
                         & ~ .sub_wrapper
-                            position: absolute
-                            top: 0
-                            right: -50px
-                            width: 100%
-                            max-width: 200px
-                            height: 100%
+                            display: block
+                            height: 0px
                             overflow: hidden
-                            visibility: hidden
                             opacity: 0
-                            z-index: 1
-                            background-color: #FFF
-                            border-left: 1px solid #E2E2E2
-                            transition: all .3s ease-in-out
-                            &:hover,
-                            &:focus
-                                visibility: visible
-                                opacity: 1
-                                right: 0
-                                transition: all .3s ease-in-out
+                            transition: .3s ease-in-out
                         &.dashboard
                             background-image: url('/icons/navbar/dashboard-unselected.png')
                         &.booker
@@ -239,8 +784,23 @@ h1
                             background-image: url('/icons/navbar/reporting-unselected.png')
                         &.admin
                             background-image: url('/icons/navbar/admin-unselected.png')
-                        &.active,
+                        &.nav_parent
+                            position: relative
+                            &::before
+                                content: ''
+                                position: absolute
+                                top: 50%
+                                width: 0
+                                height: 0
+                                border-left: 7px solid transparent
+                                border-right: 7px solid transparent
+                                border-top: 7px solid #33B09D
+                                right: 25px
+                                z-index: 1
+                                transform: translateY(-50%) rotate(0deg)
+                                transition: .3s ease-in-out
                         &.nuxt-link-exact-active,
+                        &.nuxt-link-active,
                         &:hover,
                         &:focus
                             background-color: #E2FDF9
@@ -262,111 +822,202 @@ h1
                                 background-image: url('/icons/navbar/reporting-selected.png')
                             &.admin
                                 background-image: url('/icons/navbar/admin-selected.png')
-                        &:hover
+                    &.toggled
+                        .nav_item
                             & ~ .sub_wrapper
-                                visibility: visible
                                 opacity: 1
-                                right: 0
+                                transition: .2s ease-in-out
+                            &.nav_parent
+                                position: relative
+                                &::before
+                                    transform: translateY(-50%) rotate(-180deg)
+                                    transition: .3s ease-in-out
+                    &:first-child
+                        .nav_item
+                            &.dashboard
+                                background-image: url('/icons/navbar/dashboard-unselected.png')
+                            &.booker
+                                background-image: url('/icons/navbar/booker-unselected.png')
+                            &.scheduler
+                                background-image: url('/icons/navbar/scheduler-unselected.png')
+                            &.customers
+                                background-image: url('/icons/navbar/customers-unselected.png')
+                            &.instructors
+                                background-image: url('/icons/navbar/instructors-unselected.png')
+                            &.supplies
+                                background-image: url('/icons/navbar/supplies-unselected.png')
+                            &.reporting
+                                background-image: url('/icons/navbar/reporting-unselected.png')
+                            &.admin
+                                background-image: url('/icons/navbar/admin-unselected.png')
+                            &.nuxt-link-active
+                                border-left: 2px solid transparent
+                                background-color: transparent
                                 transition: all .3s ease-in-out
+                            &:hover,
+                            &:focus
+                                background-color: #E2FDF9
+                                border-left: 2px solid #33B09D
+                                transition: .3s ease-in-out
+                                &.dashboard
+                                    background-image: url('/icons/navbar/dashboard-selected.png')
+                                &.booker
+                                    background-image: url('/icons/navbar/booker-selected.png')
+                                &.scheduler
+                                    background-image: url('/icons/navbar/scheduler-selected.png')
+                                &.customers
+                                    background-image: url('/icons/navbar/customers-selected.png')
+                                &.instructors
+                                    background-image: url('/icons/navbar/instructors-selected.png')
+                                &.supplies
+                                    background-image: url('/icons/navbar/supplies-selected.png')
+                                &.reporting
+                                    background-image: url('/icons/navbar/reporting-selected.png')
+                                &.admin
+                                    background-image: url('/icons/navbar/admin-selected.png')
                     .sub_wrapper
-                        .nav_label
-                            display: block
-                            sf_pro_medium(16px)
-                            black()
-                            padding: 20px
                         .sub_nav_list
                             list-style: none
                             padding: 0
                             .sub_item_wrapper
                                 .sub_nav_item
+                                    position: relative
                                     display: block
                                     sf_pro_light(16px)
                                     black()
                                     text-decoration: none
                                     outline: none
-                                    padding: 20px
+                                    padding: 20px 20px 20px 60px
                                     background-color: transparent
                                     border-left: 2px solid transparent
                                     transition: .3s ease-in-out
+                                    &.nuxt-link-exact-active,
+                                    &.nuxt-link-active,
                                     &:hover,
                                     &:focus
                                         background-color: #E2FDF9
                                         border-left: 2px solid #33B09D
                                         transition: .3s ease-in-out
+                                    &::before
+                                        content: ''
+                                        position: absolute
+                                        top: 50%
+                                        left: 20px
+                                        width: 20px
+                                        height: 1px
+                                        transform: translateY(-50%)
+                                        background-color: #33B09D
+
+    /**
+    * Breadcrumb
+    */
+    .breadcrumb
+        .fixed
+            width: 100%
+            padding: 20px 40px
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            list-style: none
+            li
+                .home
+                    green()
+                .field_crumb
+                    black()
+                    margin-left: 5px
+                .slash
+                    sf_pro_light(16px)
+                    black()
+                span
+                    sf_pro_light(16px)
+                    text-transform: capitalize
+                    text-decoration: none
+                    outline: none
     .content
+        height: 100vh
         position: relative
         flex: 1 auto
         background-color: #F8F8FB
+        padding-left: 315px
 
-#cms
-    &.dashboard
+#admin
+    &.landing
         #top_content
+            display: flex
+            flex-flow: row wrap
+            justify-content: space-between
+            align-items: center
+            padding: 40px 40px 0
             .header_title
-                neutra_text(36px)
-                black()
-                padding: 40px 40px 0
-        #content
-            .branches_tab
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                padding: 15px 40px
-                border-bottom: 1px solid #E2E2E2
-                .branches
-                    width: 100%
-                    max-width: 200px
-                    box-shadow: none
-                    outline: none
-                    -webkit-appearance: none
-                    background-color: #FFF
-                    border: 1px solid #E2E2E2
-                    padding: 10px
-                    sf_pro_light(20px)
-                    letter-spacing: 1px
-                .add_customer
-                    width: 100%
-                    max-width: 200px
-                    text-align: center
-                    padding: 12px
-                    margin-left: 20px
-                    background-color: #e3f7ff
-                    border: 1px solid #e3f7ff
-                    sf_pro_regular(18px)
-                    color: #3db1ff
-                    cursor: pointer
+                padding: 0
+    #top_content
+        .header_title
+            neutra_text(36px)
+            line-height: 1.5
+            black()
+            padding: 40px 40px 0
+            text-transform: capitalize
+    #content
+        padding: 40px
+        position: relative
+        .authoring
+            margin-bottom: 60px
+    .webform_viewer
+        position: fixed
+        background-color: rgba(0, 0, 0, 0.5)
+        width: 100%
+        height: 100%
+        top: 0
+        left: 0
+        z-index: 999
+        .values
+            position: absolute
+            background-color: #fff
+            padding: 30px 60px 40px
+            border-radius: 15px
+            top: 50%
+            left: 50%
+            width: 750px
+            transform: translate(-50%, -50%)
+            .header_title
+                neutra_text(28px)
+                line-height: 1.75
+                margin-bottom: 20px
+            .field_body
+                .flex
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: flex-start
+                    justify-content: space-between
+                    .flex_col
+                        flex: 0 0 49%
+                strong
                     user-select: none
-                    transition: .3s ease-in-out
-                    &:hover,
-                    &:focus
-                        white()
-                        background-color: #3db1ff
-                        transition: .3s ease-in-out
-            .total_section
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                justify-content: space-between
-                padding: 0 40px
-                .wrapper
-                    flex: 0 0 23%
-                    text-align: center
-                    background-color: #FFF
-                    padding: 80px 0
-                    box-shadow: 15px 25px 40px transparent
-                    transition: .3s ease-in-out
-                    .total_icon
-                        width: 40px
-                        height: 40px
-                        background-color: #E3EBFF
-                        border-radius: 50%
-                        margin: 0 auto
-                    .total_count
-                        sf_pro_bold(45px)
-                        black()
-                        margin: 15px 0
-                    .total_text
-                        sf_pro_light(16px)
-                        black()
-                    &:hover
-                        box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
-                        transition: .3s ease-in-out
+                    display: block
+                    sf_pro_medium(14px)
+                    black_alternate()
+                    font-family: SFProDisplay-Medium
+                    font-weight: normal
+                    text-transform: uppercase
+                    margin-bottom: 5px
+                p,
+                a
+                    display: block
+                    sf_pro_regular(18px)
+                    black()
+                    margin-bottom: 25px
+    .footer
+        position: fixed
+        left: 0
+        bottom: 0
+        width: 100%
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: space-between
+        padding: 20px 40px 20px 350px
+        background-color: #fff
+        opacity: 1
+        .footer_label
+            sf_pro_light(14px)
+            gray()
