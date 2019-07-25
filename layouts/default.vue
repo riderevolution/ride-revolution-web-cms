@@ -1,18 +1,23 @@
 <template>
     <div id="admin_container" >
-        <headerNav />
         <navbar />
-        <nuxt />
+        <div class="admin_flex">
+            <headerNav />
+            <nuxt />
+            <foot />
+        </div>
     </div>
 </template>
 
 <script>
     import Navbar from '../components/Navbar'
     import HeaderNav from '../components/HeaderNav'
+    import Foot from '../components/Foot'
     export default {
         components: {
             Navbar,
-            HeaderNav
+            HeaderNav,
+            Foot
         },
         mounted () {
             document.addEventListener('contextmenu', event => event.preventDefault())

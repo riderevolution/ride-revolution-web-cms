@@ -4,7 +4,6 @@
             <section id="top_content">
                 <h1 class="header_title">Dashboard</h1>
             </section>
-            <breadcrumb />
             <section id="content">
                 <div class="cms_col_three">
                     <div class="wrapper">
@@ -41,16 +40,13 @@
                     </div>
                 </div>
             </section>
-            <foot />
         </div>
     </div>
 </template>
 
 <script>
-    import Foot from '../components/Foot'
     export default {
         components: {
-            Foot
         }
     }
 </script>

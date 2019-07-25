@@ -2,7 +2,7 @@
     <div class="navbar_container">
         <div class="navbar">
             <div class="logo">
-                <img src="/logo.png" width="65px" />
+                <img src="/logo.png" />
                 <div class="logo_title">
                     Ride <br/>
                     Revolution

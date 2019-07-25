@@ -21,6 +21,11 @@ black_alternate()
 gray()
     color: #91939B
 
+image_default =
+    height: auto
+    vertical-align: middle
+    object-fit: cover
+
 body.cms
     ::-webkit-scrollbar-track
     	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1)
@@ -630,12 +635,206 @@ h5
 #admin_container
     display: flex
     flex-flow: row wrap
-    padding-top: 78px
+    /**
+     * Navbar Side
+     */
+    .navbar_container
+        flex: 0 0 70px
+        width: 70px
+        transition: .3s ease-in-out
+        &:hover
+            flex: 0 0 270px
+            width: 270px
+            transition: .3s ease-in-out .2s
+            .navbar
+                .logo
+                    padding: 40px 10px 60px
+                    transition: .3s ease-in-out .3s
+                    .logo_title
+                        neutra_text(18px)
+                        letter-spacing: 1px
+                        padding-left: 10px
+                        opacity: 1
+                        visibility: visible
+                        transition: .3s ease-in-out .3s
+                .nav_list
+                    .item_wrapper
+                        .nav_item
+                            black()
+                            transition: .3s ease-in-out .3s
+                            &.nav_parent
+                                &::before
+                                    opacity: 1
+                                    visibility: visible
+                                    transition: .3s ease-in-out
+                            &.nuxt-link-exact-active,
+                            &.nuxt-link-active
+                                transition: .3s ease-in-out .3s
+        .navbar
+            height: 100%
+            border-right: 1px solid #E2E2E2
+            background-color: #fff
+            .logo
+                text-decoration: none
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: flex-start
+                padding: 40px 2px 60px
+                transition: .3s ease-in-out
+                img
+                    width: 65px
+                    {image_default}
+                    transition: .3s ease-in-out
+                .logo_title
+                    neutra_text(0)
+                    line-height: 1.5
+                    black()
+                    padding-left: 0
+                    text-transform: uppercase
+                    visibility: hidden
+                    letter-spacing: 0px
+                    opacity: 0
+                    transition: .3s ease-in-out
+            .nav_list
+                position: relative
+                list-style: none
+                padding: 0
+                height: 945px
+                overflow-x: hidden
+                overflow-y: auto
+                .item_wrapper
+                    .nav_item
+                        sf_pro_regular(16px)
+                        color: transparent
+                        display: block
+                        position: relative
+                        padding: 20px 30px 20px 70px
+                        border-left: 2px solid transparent
+                        background-color: transparent
+                        text-decoration: none
+                        outline: none
+                        z-index: 0
+                        background-position: calc(0% + 20px) calc(50%)
+                        background-repeat: no-repeat
+                        background-size: 25px
+                        transition: .3s ease-in-out
+                        & ~ .sub_wrapper
+                            display: block
+                            height: 0px
+                            overflow: hidden
+                            opacity: 0
+                            transition: .3s ease-in-out
+                        &.dashboard
+                            background-image: url('/icons/navbar/dashboard-unselected.png')
+                        &.booker
+                            background-image: url('/icons/navbar/booker-unselected.png')
+                        &.scheduler
+                            background-image: url('/icons/navbar/scheduler-unselected.png')
+                        &.customers
+                            background-image: url('/icons/navbar/customers-unselected.png')
+                        &.instructors
+                            background-image: url('/icons/navbar/instructors-unselected.png')
+                        &.supplies
+                            background-image: url('/icons/navbar/supplies-unselected.png')
+                        &.reporting
+                            background-image: url('/icons/navbar/reporting-unselected.png')
+                        &.admin
+                            background-image: url('/icons/navbar/admin-unselected.png')
+                        &.nav_parent
+                            position: relative
+                            &::before
+                                content: ''
+                                position: absolute
+                                top: 50%
+                                width: 0
+                                height: 0
+                                border-left: 7px solid transparent
+                                border-right: 7px solid transparent
+                                border-top: 7px solid #33B09D
+                                right: 25px
+                                z-index: 1
+                                transform: translateY(-50%) rotate(0deg)
+                                opacity: 0
+                                visibility: hidden
+                                transition: .3s ease-in-out
+                        &.nuxt-link-exact-active,
+                        &.nuxt-link-active,
+                        &:hover,
+                        &:focus
+                            background-color: #E2FDF9
+                            border-left: 2px solid #33B09D
+                            transition: .3s ease-in-out
+                            &.dashboard
+                                background-image: url('/icons/navbar/dashboard-selected.png')
+                            &.booker
+                                background-image: url('/icons/navbar/booker-selected.png')
+                            &.scheduler
+                                background-image: url('/icons/navbar/scheduler-selected.png')
+                            &.customers
+                                background-image: url('/icons/navbar/customers-selected.png')
+                            &.instructors
+                                background-image: url('/icons/navbar/instructors-selected.png')
+                            &.supplies
+                                background-image: url('/icons/navbar/supplies-selected.png')
+                            &.reporting
+                                background-image: url('/icons/navbar/reporting-selected.png')
+                            &.admin
+                                background-image: url('/icons/navbar/admin-selected.png')
+                    &.toggled
+                        .nav_item
+                            & ~ .sub_wrapper
+                                opacity: 1
+                                transition: .2s ease-in-out
+                            &.nav_parent
+                                position: relative
+                                &::before
+                                    transform: translateY(-50%) rotate(-180deg)
+                                    transition: .3s ease-in-out
+                    .sub_wrapper
+                        .sub_nav_list
+                            list-style: none
+                            padding: 0
+                            .sub_item_wrapper
+                                .sub_nav_item
+                                    position: relative
+                                    display: block
+                                    sf_pro_light(16px)
+                                    black()
+                                    text-decoration: none
+                                    outline: none
+                                    padding: 20px 20px 20px 60px
+                                    background-color: transparent
+                                    border-left: 2px solid transparent
+                                    transition: .3s ease-in-out
+                                    &.nuxt-link-exact-active,
+                                    &.nuxt-link-active,
+                                    &:hover,
+                                    &:focus
+                                        background-color: #E2FDF9
+                                        border-left: 2px solid #33B09D
+                                        transition: .3s ease-in-out
+                                    &::before
+                                        content: ''
+                                        position: absolute
+                                        top: 50%
+                                        left: 20px
+                                        width: 20px
+                                        height: 1px
+                                        transform: translateY(-50%)
+                                        background-color: #33B09D
+
+    .admin_flex
+        flex: 1 0 50%
+        .content
+            height: 100vh
+            position: relative
+            flex: 1 auto
+            background-color: #F8F8FB
     /**
      * HeaderNav
      */
     .header
-        position: fixed
         top: 0
         left: 0
         z-index: 2
@@ -712,203 +911,6 @@ h5
                     opacity: 1
                     transition: all .2s ease-in-out
     /**
-     * Navbar Side
-     */
-    .navbar_container
-        flex: 0 0 auto
-        .navbar
-            position: fixed
-            top: 0
-            left: 0
-            z-index: 2
-            height: 100%
-            border-right: 1px solid #E2E2E2
-            background-color: #fff
-            .logo
-                text-decoration: none
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                justify-content: center
-                padding: 30px 40px 30px 20px
-                margin-bottom: 40px
-                .logo_title
-                    neutra_text(18px)
-                    line-height: 1.5
-                    black()
-                    text-transform: uppercase
-                    letter-spacing: 2px
-                    padding-left: 10px
-            .nav_list
-                position: relative
-                list-style: none
-                padding: 0
-                height: 800px
-                overflow-x: hidden
-                overflow-y: auto
-                .item_wrapper
-                    .nav_item
-                        sf_pro_regular(16px)
-                        black()
-                        display: block
-                        position: relative
-                        padding: 20px 30px 20px 60px
-                        border-left: 2px solid transparent
-                        background-color: transparent
-                        text-decoration: none
-                        outline: none
-                        z-index: 0
-                        background-position: calc(0% + 20px) calc(50%)
-                        background-repeat: no-repeat
-                        background-size: 20px
-                        transition: .3s ease-in-out
-                        & ~ .sub_wrapper
-                            display: block
-                            height: 0px
-                            overflow: hidden
-                            opacity: 0
-                            transition: .3s ease-in-out
-                        &.dashboard
-                            background-image: url('/icons/navbar/dashboard-unselected.png')
-                        &.booker
-                            background-image: url('/icons/navbar/booker-unselected.png')
-                        &.scheduler
-                            background-image: url('/icons/navbar/scheduler-unselected.png')
-                        &.customers
-                            background-image: url('/icons/navbar/customers-unselected.png')
-                        &.instructors
-                            background-image: url('/icons/navbar/instructors-unselected.png')
-                        &.supplies
-                            background-image: url('/icons/navbar/supplies-unselected.png')
-                        &.reporting
-                            background-image: url('/icons/navbar/reporting-unselected.png')
-                        &.admin
-                            background-image: url('/icons/navbar/admin-unselected.png')
-                        &.nav_parent
-                            position: relative
-                            &::before
-                                content: ''
-                                position: absolute
-                                top: 50%
-                                width: 0
-                                height: 0
-                                border-left: 7px solid transparent
-                                border-right: 7px solid transparent
-                                border-top: 7px solid #33B09D
-                                right: 25px
-                                z-index: 1
-                                transform: translateY(-50%) rotate(0deg)
-                                transition: .3s ease-in-out
-                        &.nuxt-link-exact-active,
-                        &.nuxt-link-active,
-                        &:hover,
-                        &:focus
-                            background-color: #E2FDF9
-                            border-left: 2px solid #33B09D
-                            transition: .3s ease-in-out
-                            &.dashboard
-                                background-image: url('/icons/navbar/dashboard-selected.png')
-                            &.booker
-                                background-image: url('/icons/navbar/booker-selected.png')
-                            &.scheduler
-                                background-image: url('/icons/navbar/scheduler-selected.png')
-                            &.customers
-                                background-image: url('/icons/navbar/customers-selected.png')
-                            &.instructors
-                                background-image: url('/icons/navbar/instructors-selected.png')
-                            &.supplies
-                                background-image: url('/icons/navbar/supplies-selected.png')
-                            &.reporting
-                                background-image: url('/icons/navbar/reporting-selected.png')
-                            &.admin
-                                background-image: url('/icons/navbar/admin-selected.png')
-                    &.toggled
-                        .nav_item
-                            & ~ .sub_wrapper
-                                opacity: 1
-                                transition: .2s ease-in-out
-                            &.nav_parent
-                                position: relative
-                                &::before
-                                    transform: translateY(-50%) rotate(-180deg)
-                                    transition: .3s ease-in-out
-                    &:first-child
-                        .nav_item
-                            &.dashboard
-                                background-image: url('/icons/navbar/dashboard-unselected.png')
-                            &.booker
-                                background-image: url('/icons/navbar/booker-unselected.png')
-                            &.scheduler
-                                background-image: url('/icons/navbar/scheduler-unselected.png')
-                            &.customers
-                                background-image: url('/icons/navbar/customers-unselected.png')
-                            &.instructors
-                                background-image: url('/icons/navbar/instructors-unselected.png')
-                            &.supplies
-                                background-image: url('/icons/navbar/supplies-unselected.png')
-                            &.reporting
-                                background-image: url('/icons/navbar/reporting-unselected.png')
-                            &.admin
-                                background-image: url('/icons/navbar/admin-unselected.png')
-                            &.nuxt-link-active
-                                border-left: 2px solid transparent
-                                background-color: transparent
-                                transition: all .3s ease-in-out
-                            &:hover,
-                            &:focus
-                                background-color: #E2FDF9
-                                border-left: 2px solid #33B09D
-                                transition: .3s ease-in-out
-                                &.dashboard
-                                    background-image: url('/icons/navbar/dashboard-selected.png')
-                                &.booker
-                                    background-image: url('/icons/navbar/booker-selected.png')
-                                &.scheduler
-                                    background-image: url('/icons/navbar/scheduler-selected.png')
-                                &.customers
-                                    background-image: url('/icons/navbar/customers-selected.png')
-                                &.instructors
-                                    background-image: url('/icons/navbar/instructors-selected.png')
-                                &.supplies
-                                    background-image: url('/icons/navbar/supplies-selected.png')
-                                &.reporting
-                                    background-image: url('/icons/navbar/reporting-selected.png')
-                                &.admin
-                                    background-image: url('/icons/navbar/admin-selected.png')
-                    .sub_wrapper
-                        .sub_nav_list
-                            list-style: none
-                            padding: 0
-                            .sub_item_wrapper
-                                .sub_nav_item
-                                    position: relative
-                                    display: block
-                                    sf_pro_light(16px)
-                                    black()
-                                    text-decoration: none
-                                    outline: none
-                                    padding: 20px 20px 20px 60px
-                                    background-color: transparent
-                                    border-left: 2px solid transparent
-                                    transition: .3s ease-in-out
-                                    &.nuxt-link-exact-active,
-                                    &.nuxt-link-active,
-                                    &:hover,
-                                    &:focus
-                                        background-color: #E2FDF9
-                                        border-left: 2px solid #33B09D
-                                        transition: .3s ease-in-out
-                                    &::before
-                                        content: ''
-                                        position: absolute
-                                        top: 50%
-                                        left: 20px
-                                        width: 20px
-                                        height: 1px
-                                        transform: translateY(-50%)
-                                        background-color: #33B09D
-
-    /**
     * Breadcrumb
     */
     .breadcrumb
@@ -933,12 +935,20 @@ h5
                     text-transform: capitalize
                     text-decoration: none
                     outline: none
-    .content
-        height: 100vh
-        position: relative
-        flex: 1 auto
-        background-color: #F8F8FB
-        padding-left: 315px
+    .footer
+        left: 0
+        bottom: 0
+        width: 100%
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: space-between
+        padding: 20px 40px
+        background-color: #fff
+        opacity: 1
+        .footer_label
+            sf_pro_light(14px)
+            gray()
 
 #admin
     &.landing
@@ -1006,18 +1016,3 @@ h5
                     sf_pro_regular(18px)
                     black()
                     margin-bottom: 25px
-    .footer
-        position: fixed
-        left: 0
-        bottom: 0
-        width: 100%
-        display: flex
-        flex-flow: row wrap
-        align-items: center
-        justify-content: space-between
-        padding: 20px 40px 20px 350px
-        background-color: #fff
-        opacity: 1
-        .footer_label
-            sf_pro_light(14px)
-            gray()
