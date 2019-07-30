@@ -5,40 +5,66 @@
                 <h1 class="header_title">Dashboard</h1>
             </section>
             <section id="content">
-                <div class="cms_col_three">
-                    <div class="wrapper">
-                        <div class="total_icon"></div>
-                        <div class="total_count">12</div>
-                        <div class="total_text">Total Career Applications</div>
+                <nuxt-link to="/branch/greenbelt" class="cms_summary wrapper">
+                    <div class="summary_header">
+                        <h2 class="header_title">Greenbelt</h2>
+                        <h2 class="action_highlight"><span>&#9679;</span> Juan Dela Cruz</h2>
                     </div>
-                    <div class="wrapper">
-                        <div class="total_icon"></div>
-                        <div class="total_count">12</div>
-                        <div class="total_text">Total Inquiries</div>
+                    <div class="summary_body">
+                        <div class="column">
+                            <div class="total_label">Today</div>
+                            <div class="total" v-for="(data, key) in res.today">
+                                <div class="total_image">
+                                    <img class="front" :src="data.imgSrc" />
+                                    <img class="back" :src="data.imgSrc" />
+                                </div>
+                                <div class="total_label">{{ data.label }}</div>
+                                <div class="total_count">{{ data.count }}</div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="total_label">Month Running (May 1 - Today)</div>
+                            <div class="total" v-for="(data, key) in res.month">
+                                <div class="total_image">
+                                    <img class="front" :src="data.imgSrc" />
+                                    <img class="back" :src="data.imgSrc" />
+                                </div>
+                                <div class="total_label">{{ data.label }}</div>
+                                <div class="total_count">{{ data.count }}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="wrapper">
-                        <div class="total_icon"></div>
-                        <div class="total_count">12</div>
-                        <div class="total_text">Total Prayers</div>
+                </nuxt-link>
+                <nuxt-link to="/branch/shangri-la-plaza" class="cms_summary wrapper">
+                    <div class="summary_header">
+                        <h2 class="header_title">Shangri-la Plaza</h2>
+                        <h2 class="action_highlight"><span>&#9679;</span> Juan Dela Cruz</h2>
                     </div>
-                </div>
-                <div class="cms_col_three">
-                    <div class="wrapper">
-                        <div class="total_icon"></div>
-                        <div class="total_count">12</div>
-                        <div class="total_text">Total Reserve Inquiries</div>
+                    <div class="summary_body">
+                        <div class="column">
+                            <div class="total_label">Today</div>
+                            <div class="total" v-for="(data, key) in res.today">
+                                <div class="total_image">
+                                    <img class="front" :src="data.imgSrc" />
+                                    <img class="back" :src="data.imgSrc" />
+                                </div>
+                                <div class="total_label">{{ data.label }}</div>
+                                <div class="total_count">{{ data.count }}</div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="total_label">Month Running (May 1 - Today)</div>
+                            <div class="total" v-for="(data, key) in res.month">
+                                <div class="total_image">
+                                    <img class="front" :src="data.imgSrc" />
+                                    <img class="back" :src="data.imgSrc" />
+                                </div>
+                                <div class="total_label">{{ data.label }}</div>
+                                <div class="total_count">{{ data.count }}</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="wrapper">
-                        <div class="total_icon"></div>
-                        <div class="total_count">12</div>
-                        <div class="total_text">Total Downloaded Forms</div>
-                    </div>
-                    <div class="wrapper">
-                        <div class="total_icon"></div>
-                        <div class="total_count">12</div>
-                        <div class="total_text">Total Tuition Inquiries</div>
-                    </div>
-                </div>
+                </nuxt-link>
             </section>
         </div>
     </div>
@@ -46,7 +72,55 @@
 
 <script>
     export default {
-        components: {
+        data () {
+            return {
+                res: {
+                    today: [
+                        {
+                            label: 'Total Customers',
+                            count: 235,
+                            imgSrc: '/icons/total-customer-icon.svg'
+                        },
+                        {
+                            label: 'Total Package Sales',
+                            count: '₱150,000',
+                            imgSrc: '/icons/total-package-sales-icon.svg'
+                        },
+                        {
+                            label: 'Total Product Sales',
+                            count: '₱47,830',
+                            imgSrc: '/icons/total-product-sales-icon.svg'
+                        },
+                        {
+                            label: 'Total Revenue from Packages',
+                            count: '₱47,830',
+                            imgSrc: '/icons/total-revenue-icon.svg'
+                        }
+                    ],
+                    month: [
+                        {
+                            label: 'Total Customers',
+                            count: 235,
+                            imgSrc: '/icons/total-customer-icon.svg'
+                        },
+                        {
+                            label: 'Total Package Sales',
+                            count: '₱150,000',
+                            imgSrc: '/icons/total-package-sales-icon.svg'
+                        },
+                        {
+                            label: 'Total Product Sales',
+                            count: '₱47,830',
+                            imgSrc: '/icons/total-product-sales-icon.svg'
+                        },
+                        {
+                            label: 'Total Revenue from Packages',
+                            count: '₱47,830',
+                            imgSrc: '/icons/total-revenue-icon.svg'
+                        }
+                    ]
+                }
+            }
         }
     }
 </script>

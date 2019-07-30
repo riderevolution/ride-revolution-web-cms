@@ -25,6 +25,7 @@
         },
         head () {
             return {
+                title: 'Ride Revolution | Admin Panel',
                 script: [
                     { src: 'https://code.jquery.com/jquery-3.2.1.slim.min.js' },
                     { src: 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-lite.js' }

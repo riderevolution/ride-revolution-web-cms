@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar_container">
+    <div class="navbar_container" @mouseover="resetHoverToggle()" @mouseleave="resetLeaveToggle()">
         <div class="navbar">
             <div class="logo">
                 <img src="/logo.png" />
@@ -122,6 +122,32 @@
             }
         },
         methods: {
+            resetHoverToggle () {
+                const me = this
+                const elements = document.querySelectorAll('.toggled .sub_wrapper')
+                document.querySelector('.admin_flex').classList.add('toggled')
+                elements.forEach((element, index) => {
+                    setTimeout( () => {
+                        const length = element.querySelectorAll('.sub_nav_list').length
+                        const height = 59
+                        const currentHeight = height * length
+                        element.style.height = `${currentHeight}px`
+                    }, 300)
+                })
+            },
+            resetLeaveToggle () {
+                const me = this
+                const elements = document.querySelectorAll('.toggled .sub_wrapper')
+                document.querySelector('.admin_flex').classList.remove('toggled')
+                elements.forEach((element, index) => {
+                    setTimeout( () => {
+                        const length = element.querySelectorAll('.sub_nav_list').length
+                        const height = element.querySelector('.sub_nav_list').scrollHeight
+                        const currentHeight = height * length
+                        element.style.height = `${currentHeight}px`
+                    }, 300)
+                })
+            },
             toggleChild(event) {
                 const me = this
                 const target = event.target
@@ -129,8 +155,10 @@
                     target.nextElementSibling.style.height = `${target.nextElementSibling.scrollHeight}px`
                     target.parentNode.classList.add('toggled')
                 } else {
-                    target.nextElementSibling.style.height = 0
-                    target.parentNode.classList.remove('toggled')
+                    setTimeout( () => {
+                        target.nextElementSibling.style.height = 0
+                        target.parentNode.classList.remove('toggled')
+                    }, 300)
                 }
             }
         }
