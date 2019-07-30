@@ -28,7 +28,7 @@ body.cms
     	background-color: #f8f8fb
     ::-webkit-scrollbar-thumb
     	border-radius: 10px
-    	background-color: $green
+    	background-color: #C9CAD3
 
 body
     overflow-x: hidden
@@ -279,11 +279,12 @@ h5
     &.active
         &::before
             opacity: 1
+            animation: blink 1s infinite alternate
             transition: .3s ease-in-out
 
 /**
  * Default Form */
-.default_selector
+.default_select
     padding: 10px 40px 10px 15px
     sf_pro_regular(15px)
     color: $black
@@ -292,6 +293,25 @@ h5
     box-shadow: none
     border: 1px solid $border
     background-color: $white
+
+.default_text
+    width: 100%
+    background-color: $white
+    border: 1px solid #ccc
+    padding: 15px
+    sf_pro_regular(15px)
+    color: $black
+    outline: none
+    transition: .3s ease-in-out
+    &.search
+        background-image: url('/icons/search-icon.svg')
+        background-position: calc(100% - 10px) center
+        background-repeat: no-repeat
+        background-size: 20px
+    &:hover,
+    &:focus
+        border: 1px solid $black
+        transition: .3s ease-in-out
 
 .note-tooltip
     sf_pro_regular(14px)
@@ -582,11 +602,31 @@ h5
 
 /**
  * Default Column */
+.cms_col_alt_two
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 30px
+    .wrapper
+        flex: 0 0 48.66%
+        margin-bottom: 30px
+        background-color: $white
+        box-shadow: 15px 25px 40px transparent
+        text-decoration: none
+        transition: .3s ease-in-out
+        .list_wrapper
+            height: 400px
+            overflow-y: scroll
+        &:hover
+            box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+            transition: .3s ease-in-out
 .cms_col_three
     display: flex
     flex-flow: row wrap
     align-items: center
     justify-content: space-between
+    margin-bottom: 30px
     .wrapper
         flex: 0 0 32.33%
         margin-bottom: 30px
@@ -596,12 +636,10 @@ h5
         box-shadow: 15px 25px 40px transparent
         text-decoration: none
         transition: .3s ease-in-out
-        .total_icon
-            width: 40px
-            height: 40px
-            background-image: linear-gradient(to right, #5686fb, #33b09d 70%)
-            border-radius: 50%
-            margin: 0 auto
+        .total_image
+            .back
+                right: 0
+                margin: 0 auto
         .total_count
             sf_pro_bold(45px)
             color: $black
@@ -612,14 +650,15 @@ h5
         &:hover
             box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
             transition: .3s ease-in-out
-
 .cms_col_four
     display: flex
     flex-flow: row wrap
+    align-items: center
     justify-content: space-between
-    margin-bottom: 60px
+    margin-bottom: 30px
     .wrapper
         flex: 0 0 23%
+        margin-bottom: 30px
         text-align: center
         background-color: $white
         padding: 100px 0
@@ -1271,7 +1310,7 @@ h5
         .header_selector
             border-bottom: 1px solid $border
             padding: 0 40px 20px
-            .default_selector
+            .default_select
                 width: 210px
                 sf_pro_regular(22px)
         .information
@@ -1306,5 +1345,16 @@ h5
 	to {
 		opacity: 1
         transform: translateX(0px)
+    }
+}
+
+/**
+ * Blinking */
+@keyframes blink {
+	from {
+		opacity: 0
+    }
+	to {
+		opacity: 1
     }
 }
