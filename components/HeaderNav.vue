@@ -9,11 +9,11 @@
                 <svg :class="`notification_icon ${(isToggledNotif) ? 'active' : ''}`" xmlns="http://www.w3.org/2000/svg" width="18.021" height="16.75" viewBox="0 0 18.021 16.75"> <g transform="translate(-1075.213 -38.25)"> <path class="notif_icon" d="M14.965,12.855c.116.149,1.211.371,1.03.371H.9c-.181,0-1.474-.222-1.362-.371l1.5-.394c.448-.566,1.55-1.28,1.55-2.018V6.019A5.4,5.4,0,0,1,7.854.49h0a5.4,5.4,0,0,1,5.26,5.529v4.443c0,.746,1.115,1.475,1.571,2.045Z" transform="translate(1076.466 38.51)" /> <g class="notif_icon_no_fill" transform="translate(1082.4 52.867)"> <path class="notif_icon_no_fill" d="M2.133,2.133A2.136,2.136,0,0,1,0,0H4.267A2.136,2.136,0,0,1,2.133,2.133Z" /> <path class="notif_icon_alt" d="M 2.133241415023804 2.133480310440063 C 0.9569713473320007 2.133480310440063 1.339569053016021e-06 1.176410317420959 1.339569053016021e-06 2.744293112755258e-07 L 4.266721248626709 2.744293112755258e-07 C 4.266721248626709 1.176520228385925 3.309531450271606 2.133480310440063 2.133241415023804 2.133480310440063 Z" /> </g> </g> </svg>
                 <div :class="`notification_box ${(isToggledNotif) ? 'active' : ''}`">
                     <div class="wrapper">
-                        <div class="notification_wrapper" v-for="(notification, key) in notifications">
+                        <div class="notification_wrapper" v-for="(notification, key) in notifications" v-if="(key + 1) <= 20">
                             <span>&#9679;</span>
                             <div class="notification_desc">
-                                <div class="notification_title">{{ notification.label }}</div>
-                                <div class="notification_time">{{ notification.time }}</div>
+                                <div class="notification_title">{{ notification.message }}</div>
+                                <div class="notification_time">{{ getFromNow(notification.created_at) }}</div>
                             </div>
                         </div>
                     </div>
@@ -23,16 +23,17 @@
         </div>
         <div :class="`header_select ${(isToggled) ? 'active' : ''}`" v-click-outside="closeMe">
             <div class="header_user" @click="showSelect()">
-                <div class="user_picture">S</div>
-                <div class="user_name">Hello, Billy!</div>
+                <div class="user_picture">{{ $store.state.user.name.charAt(0) }}</div>
+                <div class="user_name">Hello, {{ $store.state.user.name }}!</div>
             </div>
             <div class="user_select">
                 <div class="select_header">
-                    <div class="header_name">Billy Pogi</div>
-                    <div class="header_role">Admin</div>
+                    <div class="header_name">{{ $store.state.user.name }}</div>
+                    <div class="header_role">{{ $store.state.user.role.display_name }}</div>
                 </div>
                 <div class="select_footer">
-                    <a href="javascript:void(0)" class="select_item">Sign Out</a>
+                    <nuxt-link to="/my-account" class="select_item">My Account</nuxt-link>
+                    <a href="javascript:void(0)" class="select_item" @click="logout()">Sign Out</a>
                 </div>
             </div>
         </div>
@@ -46,45 +47,13 @@
                 isToggled: false,
                 isToggledNotif: false,
                 res: [0],
-                notifications: [
-                    {
-                        label: 'Jun 28, 2019 10:00 AM Class has been cancelled.',
-                        time: '3m ago'
-                    },
-                    {
-                        label: 'Billy Capistrano would like to reschedule her availability.',
-                        time: '1m ago'
-                    },
-                    {
-                        label: 'Hanz Go would like to reschedule his availability.',
-                        time: '3m ago'
-                    },
-                    {
-                        label: 'Bruce Lee has just logged in at Ride Revolution Greenbelt 5.',
-                        time: '3m ago'
-                    },
-                    {
-                        label: 'Brie Larson has just logged in at Ride Revolution Shangri-la Plaza.',
-                        time: '3m ago'
-                    },
-                    {
-                        label: 'Hanz Go would like to reschedule his availability.',
-                        time: '3m ago'
-                    },
-                    {
-                        label: 'Bruce Lee has just logged in at Ride Revolution Greenbelt 5.',
-                        time: '3m ago'
-                    },
-                    {
-                        label: 'Brie Larson has just logged in at Ride Revolution Shangri-la Plaza.',
-                        time: '3m ago'
-                    },
-                    {
-                        label: 'Jackie Chan has just logged in at Ride Revolution BGC.',
-                        time: '3m ago'
-                    }
-                ]
+                notifications: []
             }
+        },
+        async mounted () {
+            const me = this
+            const notifs = await me.$axios.get('api/logs')
+            me.notifications = notifs.data.logs.data
         },
         methods: {
             /**
@@ -100,6 +69,12 @@
             },
             closeNotif () {
                 this.isToggledNotif = false
+            },
+            getFromNow (value) {
+                const me = this
+                if (value) {
+                    return me.$moment(value).fromNow()
+                }
             }
         }
     }

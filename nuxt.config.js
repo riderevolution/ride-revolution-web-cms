@@ -22,7 +22,7 @@ export default {
   ** Customize the progress-bar color
   */
   loading: {
-      color: '#33B09D',
+      color: '#ffa069',
       throttle: 0,
       height: '4px'
   },
@@ -40,7 +40,12 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
-      { src: '~/plugins/vue-click-outside'}
+      { src: '~/plugins/vue-scrollto', ssr: false },
+      { src: '~/plugins/vue-moment' },
+      { src: '~/plugins/vue-click-outside' },
+      { src: '~/plugins/vue-cookie' },
+      { src: '~/plugins/vee-validate' },
+      { src: '~/plugins/mixins'}
   ],
 
   /*
@@ -55,6 +60,8 @@ export default {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
+    baseURL: (process.env.NODE_ENV == "development") ? 'http://api.riderevolution.test' : 'https://beta-api.xsn.edu.ph/',
+    credentials: false
   },
   env: {
     baseUrl: process.env.BASE_URL || 'http://localhost:3000'

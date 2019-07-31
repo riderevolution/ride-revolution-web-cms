@@ -5,6 +5,7 @@ $green = #33B09D
 $light_blue = #E3F7FF
 $blue = #00B1FF
 $red = #F3525C
+$light_red = #FFE5E6
 $white = #FFF
 $black = #383D40
 $black_alternate = #777
@@ -18,7 +19,7 @@ image_default =
     vertical-align: middle
     object-fit: cover
 
-body.cms
+body
     ::-webkit-scrollbar-track
     	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1)
     	background-color: #f8f8fb
@@ -132,7 +133,7 @@ h5
     outline: none
     color: $red
     padding: 17px
-    background-color: #FFE5E6
+    background-color: $light_red
     border: 1px solid $red
     position: relative
     text-align: center
@@ -142,8 +143,29 @@ h5
     transition: .3s ease-in-out
     &:hover,
     &:focus
-        color: #FFE5E6
+        color: $light_red
         background-color: $red
+        transition: .3s ease-in-out
+.action_back_btn
+    display: inline-block
+    sf_pro_medium(18px)
+    text-decoration: none
+    outline: none
+    color: $black
+    padding: 10px
+    background-color: transparent
+    border: 1px solid transparent
+    position: relative
+    text-align: center
+    cursor: pointer
+    user-select: none
+    text-transform: capitalize
+    transition: .3s ease-in-out
+    &:hover,
+    &:focus
+        color: $green
+        background-color: $light_green
+        border: 1px solid $light_green
         transition: .3s ease-in-out
 .action_btn
     display: inline-block
@@ -293,12 +315,14 @@ h5
     box-shadow: none
     border: 1px solid $border
     background-color: $white
+    border-radius: 3px
 
 .default_text
     width: 100%
     background-color: $white
     border: 1px solid #ccc
     padding: 15px
+    border-radius: 3px
     sf_pro_regular(15px)
     color: $black
     outline: none
@@ -313,53 +337,79 @@ h5
         border: 1px solid $black
         transition: .3s ease-in-out
 
+#default_form
+    width: 100%
+    max-width: 50%
+    margin: 0 auto
+    background-color: $white
+    .form_wrapper
+        box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.05)
+        margin-bottom: 60px
+        .form_title
+            sf_pro_bold(22px)
+            color: $black
+            padding: 30px
+            border-bottom: 1px solid $border
+        .form_main_group
+            padding: 30px
+
+.form_flex
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: space-between
+    .form_group
+        flex: 0 0 47%
+        &.flex
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: space-between
+            label
+                flex: 0 0 100%
+            .form_flex_input
+                position: relative
+                flex: 0 0 47%
+
+.form_group
+    position: relative
+    margin-bottom: 30px
+    label
+        user-select: none
+        display: block
+        sf_pro_regular(15px)
+        font-weight: normal
+        color: $black
+        margin-bottom: 10px
+        span
+            color: $green
+    .validation_errors
+        position: absolute
+        top: calc(100% + 5px)
+        background-color: $red
+        color: $white
+        sf_pro_medium(14px)
+        z-index: 1
+        padding: 5px 10px
+        border-radius: 5px
+        user-select: none
+        left: 0
+        &::before
+            content: ""
+            position: absolute
+            bottom: calc(100% - 1px)
+            width: 0
+            height: 0
+            border-left: 7px solid transparent
+            border-right: 7px solid transparent
+            border-bottom: 7px solid $red
+            left: 17px
+            z-index: 1
+
 .note-tooltip
     sf_pro_regular(14px)
 
 #action_form
-    margin-bottom: 60px
-    label
-        user-select: none
-        display: block
-        sf_pro_medium(14px)
-        font-weight: normal
-        text-transform: uppercase
-        color: $black_alternate
-        margin-bottom: 10px
-    .form_flex
-        display: flex
-        flex-flow: row wrap
-        justify-content: space-between
-        align-items: flex-end
-        .form_group
-            flex: 0 0 48.33%
-            &.single
-                flex: 0 0 100%
-    .form_group
-        .action_form,
-        .action_textarea,
-        .action_select,
-        .action_image_label,
-        .vue-tags-input
-            width: 100%
-            background-color: $white
-            border: 1px solid #ccc
-            padding: 20px 25px
-            sf_pro_regular(18px)
-            color: $black
-            outline: none
-            transition: 0.3s ease-in-out
-            &:hover,
-            &:focus
-                border: 1px solid $black
-                transition: 0.3s ease-in-out
-        .action_textarea
-            resize: none
-        .action_select
-            -webkit-appearance: none
-            background-image: url(/images/icons/dropdown.png)
-            background-position: calc(100% - 25px) center
-            background-repeat: no-repeat
     .form_image_group
         margin-bottom: 20px
         label
@@ -453,32 +503,6 @@ h5
                 .form_group
                     &:last-child
                         margin-bottom: 0
-    .form_meta_group
-        margin-top: 60px
-        .action_header
-            neutra_text(28px)
-            line-height: 1.5
-            color: $black
-            margin-bottom: 40px
-    .form_check
-        align-items: center
-        label
-            flex: 0 auto
-            margin-left: 10px
-            margin-bottom: 0
-        .action_check
-            -webkit-appearance: none
-            outline: none
-            width: 21px
-            height: 21px
-            background-image: url('/images/icons/unchecked.png')
-            background-position: center
-            background-repeat: no-repeat
-            background-size: cover
-            transition: .3s ease-in-out
-            &:checked
-                background-image: url('/images/icons/checked.png')
-                transition: .3s ease-in-out
     .note-editor
         &.note-frame
                 border: 1px solid #ccc
@@ -493,66 +517,65 @@ h5
                 .note-editable
                     sf_pro_regular(18px)
                     padding: 20px 25px
-    .button_group
-        justify-content: flex-start
-        padding-top: 50px
-    .vue-tags-input
-        width: 100%
-        max-width: 100%
-        padding: 10px 15px !important
-        .ti-input
-            border: none
-            padding: 0
-            .ti-tags
-                .ti-new-tag-input-wrapper
-                    padding: 0
-                    margin: 0
-                    input
-                        padding: 10px
-                        sf_pro_regular(18px)
-                        color: $black
-                        outline: none
-                        transition: 0.3s ease-in-out
-                .ti-tag
-                    sf_pro_regular(16px)
-                    background-color: $green
 /**
  * Default Table */
 .cms_table
     border-collapse: collapse
     width: 100%
-    background-color: $white
-    box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
     border-radius: 10px
     thead
         th
-            sf_pro_regular(14px)
-            color: $black
+            sf_pro_semibold(16px)
+            color: $gray
             text-align: left
-            padding: 20px 30px
-            background-color: $light_green
+            padding: 15px 30px
+            background-color: transparent
             &:first-child
                 border-radius: 10px 0 0 0
             &:last-child
                 border-radius: 0 10px 0 0
     tbody
+        box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+        background-color: $white
         tr
             background-color: transparent
+            border-bottom: 2px dashed $border
             transition: .3s ease-in-out
             td
                 sf_pro_regular(16px)
                 color: $black
                 padding: 20px 30px
-                a
-                    text-decoration: none
-                    outline: none
-                    sf_pro_regular(16px)
-                    color: $black
-                    transition: .3s ease-in-out
-                    &:hover,
-                    &:focus
-                        color: $green
-                        transition: .3s ease-in-out
+                &.table_actions
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    justify-content: space-between
+                    a
+                        flex: 0 0 47%
+                        text-align: center
+                        text-decoration: none
+                        sf_pro_medium(16px)
+                        padding: 10px 0
+                        &.table_action_edit
+                            background-color: $light_blue
+                            color: $blue
+                            transition: .3s ease-in-out
+                            &:hover,
+                            &:focus
+                                background-color: $blue
+                                color: $white
+                                transition: .3s ease-in-out
+                        &.table_action_cancel
+                            background-color: $light_red
+                            color: $red
+                            transition: .3s ease-in-out
+                            &:hover,
+                            &:focus
+                                background-color: $red
+                                color: $white
+                                transition: .3s ease-in-out
+            &:last-child
+                border-bottom: 2px dashed transparent
             &:hover,
             &:focus
                 background-color: #F8F8FB
@@ -628,11 +651,11 @@ h5
     justify-content: space-between
     margin-bottom: 30px
     .wrapper
-        flex: 0 0 32.33%
+        flex: 0 0 31.33%
         margin-bottom: 30px
         text-align: center
         background-color: $white
-        padding: 80px 0
+        padding: 120px 0
         box-shadow: 15px 25px 40px transparent
         text-decoration: none
         transition: .3s ease-in-out
@@ -647,6 +670,10 @@ h5
         .total_text
             sf_pro_light(16px)
             color: $black
+        .total_title
+            sf_pro_bold(30px)
+            color: $black
+            margin-top: 15px
         &:hover
             box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
             transition: .3s ease-in-out
@@ -676,6 +703,10 @@ h5
         .total_text
             sf_pro_light(16px)
             color: $black
+        .total_title
+            sf_pro_bold(18px)
+            color: $black
+            margin-top: 15px
         &:hover
             box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
             transition: .3s ease-in-out
@@ -864,11 +895,12 @@ h5
 #login_container
     position: relative
     height: 100vh
-    background-image: linear-gradient(to right, rgba(0, 0, 72, 1), rgba(41,90,174,1))
+    background-image: linear-gradient(to right, #FC565F, #FFA069)
     .cms_login
         position: absolute
         top: 50%
         left: 50%
+        width: 400px
         padding: 40px
         border-radius: 20px
         background-color: $white
@@ -894,6 +926,9 @@ h5
             sf_pro_regular(16px)
             margin-bottom: 20px
             text-align: center
+        .action_cancel_btn
+            margin-left: 0
+            width: 100%
 
 #admin_container
     display: flex
@@ -1109,7 +1144,7 @@ h5
                 position: relative
                 list-style: none
                 padding: 0
-                height: 945px
+                height: 840px
                 overflow-x: hidden
                 overflow-y: auto
                 .item_wrapper
@@ -1259,20 +1294,20 @@ h5
                     outline: none
     .admin_flex
         flex: 1 0 50%
-        padding-left: 70px
-        transition: .3s ease-in-out
-        &.toggled
-            padding-left: 300px
-            transition: .3s ease-in-out .2s
-            .footer
-                padding: 20px 40px 20px 340px
-                transition: .3s ease-in-out .2s
         .content
             padding-top: 79px
             height: 100vh
             position: relative
             flex: 1 auto
             background-color: #F8F8FB
+            padding-left: 70px
+            transition: .3s ease-in-out
+            &.toggled
+                padding-left: 300px
+                transition: .3s ease-in-out .2s
+                .footer
+                    padding: 20px 40px 20px 340px
+                    transition: .3s ease-in-out .2s
     .footer
         position: fixed
         left: 0
@@ -1302,6 +1337,82 @@ h5
             line-height: 1.5
             color: $black
             text-transform: capitalize
+        &.table
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
+            padding-bottom: 30px
+            .action_wrapper
+                flex: 0 0 100%
+                display: flex
+                flex-flow: row wrap
+                justify-content: space-between
+                align-items: center
+                .actions
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    .action_btn
+                        display: flex
+                        flex-flow: row wrap
+                        justify-content: center
+                        align-items: center
+                        margin-right: 40px
+                        svg
+                            margin-right: 10px
+                            .add,
+                            .cart
+                                fill: $blue
+                                transition: .3s ease-in-out
+                            .add_sign
+                                fill: transparent
+                                stroke: $white
+                                transition: .3s ease-in-out
+                            .cart_sign
+                                fill: transparent
+                                stroke: $blue
+                                stroke-linecap: round
+                                stroke-miterlimit: 10
+                                transition: .3s ease-in-out
+                        &:hover,
+                        &:focus
+                            .add,
+                            .cart
+                                fill: $white
+                                transition: .3s ease-in-out
+                            .add_sign
+                                fill: transparent
+                                stroke: $blue
+                                transition: .3s ease-in-out
+                            .cart_sign
+                                fill: transparent
+                                stroke: $white
+                                stroke-linecap: round
+                                stroke-miterlimit: 10
+                                transition: .3s ease-in-out
+                .total
+                    sf_pro_medium(22px)
+                    color: $black
+                    padding: 0 25px 0 0
+                .toggler
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    .status
+                        background-color: $white
+                        padding: 12px 40px
+                        text-align: center
+                        sf_pro_medium(16px)
+                        color: $black
+                        border-radius: 0px
+                        box-shadow: 3px 3px 20px transparent
+                        transition: .3s ease-in-out
+                        &.active
+                            position: relative
+                            z-index: 0
+                            color: $white
+                            background-color: $green
+                            border-radius: 5px
+                            box-shadow: 3px 3px 20px rgba(0,0,0,0.3)
+                            transition: .3s ease-in-out
     #content
         padding: 40px
         position: relative
@@ -1334,6 +1445,15 @@ h5
 .page-leave-to
     transform: translateY(100px)
     opacity: 0
+
+.slide-enter-active,
+.slide-leave-active
+    transition: all .3s ease-in-out
+
+.slide-enter,
+.slide-leave-to
+    opacity: 0
+    transform: translateY(-20px)
 
 /**
  * Slide In */

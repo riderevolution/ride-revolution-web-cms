@@ -1,10 +1,9 @@
 <template>
     <div id="admin_container" >
-        <navbar />
+        <navbar v-if="$store.state.isAuth" />
         <div class="admin_flex">
-            <headerNav />
+            <headerNav v-if="$store.state.isAuth" />
             <nuxt />
-            <foot />
         </div>
     </div>
 </template>
@@ -12,14 +11,14 @@
 <script>
     import Navbar from '../components/Navbar'
     import HeaderNav from '../components/HeaderNav'
-    import Foot from '../components/Foot'
     export default {
         components: {
             Navbar,
-            HeaderNav,
-            Foot
+            HeaderNav
         },
-        mounted () {
+        async mounted () {
+            const me = this
+            await me.validateToken()
             document.addEventListener('contextmenu', event => event.preventDefault())
             document.body.classList.add('cms')
         },

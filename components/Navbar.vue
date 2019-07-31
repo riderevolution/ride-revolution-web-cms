@@ -125,7 +125,7 @@
             resetHoverToggle () {
                 const me = this
                 const elements = document.querySelectorAll('.toggled .sub_wrapper')
-                document.querySelector('.admin_flex').classList.add('toggled')
+                document.querySelector('.admin_flex .content').classList.add('toggled')
                 elements.forEach((element, index) => {
                     setTimeout( () => {
                         const length = element.querySelectorAll('.sub_nav_list').length
@@ -138,7 +138,7 @@
             resetLeaveToggle () {
                 const me = this
                 const elements = document.querySelectorAll('.toggled .sub_wrapper')
-                document.querySelector('.admin_flex').classList.remove('toggled')
+                document.querySelector('.admin_flex .content').classList.remove('toggled')
                 elements.forEach((element, index) => {
                     setTimeout( () => {
                         const length = element.querySelectorAll('.sub_nav_list').length

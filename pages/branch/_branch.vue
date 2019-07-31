@@ -78,11 +78,16 @@
                 </div>
             </section>
         </div>
+        <foot v-if="$store.state.isAuth" />
     </div>
 </template>
 
 <script>
+    import Foot from '../../components/Foot'
     export default {
+        components: {
+            Foot
+        },
         data () {
             return {
                 res: {
