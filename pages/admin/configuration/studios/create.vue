@@ -63,28 +63,40 @@
                         </div>
                     </div>
                     <div class="form_wrapper">
-                        <h2 class="form_title">Bokking Restrictions</h2>
+                        <h2 class="form_title">Booking Restrictions</h2>
                         <div class="form_main_group">
                             <div class="form_flex">
                                 <div class="form_group flex">
                                     <label>Allowed time for booking before class starts:<span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="number" name="booking_hours" class="default_text" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="number" name="booking_hours" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <div class="placeholder">hours</div>
+                                        <div class="up"></div>
+                                        <div class="down"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('booking_hours')">{{ errors.first('booking_hours') }}</span></transition>
                                     </div>
                                     <div class="form_flex_input">
-                                        <input type="number" name="booking_minutes" class="default_text" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="number" name="booking_minutes" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <div class="placeholder">mins.</div>
+                                        <div class="up"></div>
+                                        <div class="down"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('booking_minutes')">{{ errors.first('booking_minutes') }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group flex">
                                     <label>Allowed time to cancel before class starts:<span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="number" name="cancel_hours" class="default_text" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="number" name="cancel_hours" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <div class="placeholder">hours</div>
+                                        <div class="up"></div>
+                                        <div class="down"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('cancel_hours')">{{ errors.first('cancel_hours') }}</span></transition>
                                     </div>
                                     <div class="form_flex_input">
-                                        <input type="number" name="cancel_minutes" class="default_text" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="number" name="cancel_minutes" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <div class="placeholder">mins.</div>
+                                        <div class="up"></div>
+                                        <div class="down"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('cancel_minutes')">{{ errors.first('cancel_minutes') }}</span></transition>
                                     </div>
                                 </div>
@@ -93,11 +105,17 @@
                                 <div class="form_group flex">
                                     <label>Time before customer is marked no show before class starts:<span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="number" name="no_show_hours" class="default_text" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="number" name="no_show_hours" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <div class="placeholder">hours</div>
+                                        <div class="up"></div>
+                                        <div class="down"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('no_show_hours')">{{ errors.first('no_show_hours') }}</span></transition>
                                     </div>
                                     <div class="form_flex_input">
-                                        <input type="number" name="no_show_minutes" class="default_text" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="number" name="no_show_minutes" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <div class="placeholder">mins.</div>
+                                        <div class="up"></div>
+                                        <div class="down"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('no_show_minutes')">{{ errors.first('no_show_minutes') }}</span></transition>
                                     </div>
                                 </div>
