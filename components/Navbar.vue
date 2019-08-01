@@ -158,7 +158,7 @@
                     setTimeout( () => {
                         target.nextElementSibling.style.height = 0
                         target.parentNode.classList.remove('toggled')
-                    }, 300)
+                    }, 600)
                 }
             }
         }

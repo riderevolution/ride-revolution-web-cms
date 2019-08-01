@@ -2,15 +2,15 @@
     <div class="content">
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table">
-                <nuxt-link :to="`/admin/${lastRoute}`" class="action_back_btn">{{ lastRoute }}</nuxt-link>
+                <nuxt-link :to="`/admin/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg" /><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
                     <h1 class="header_title">Studios</h1>
                     <div class="actions">
                         <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Studio</nuxt-link>
                         <div class="total">Total: {{ res.length }}</div>
                         <div class="toggler">
-                            <div :class="`status ${(status) ? 'active' : ''}`" @click="toggleStatus()">Activate</div>
-                            <div :class="`status ${(status) ? '' : 'active'}`" @click="toggleStatus()">Deactivated</div>
+                            <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activate</div>
+                            <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
                             <th>Studio</th>
                             <th>Purchases Email Sender</th>
                             <th>Reservations Email Sender</th>
-                            <th></th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="res.length > 0">
@@ -55,7 +55,7 @@
             return {
                 lastRoute: '',
                 rowCount: 0,
-                status: true,
+                status: 1,
                 res: []
             }
         },
@@ -65,15 +65,26 @@
                     return this.$moment(value).format('MMM DD, YYYY')
                 }
             },
-            toggleStatus () {
+            toggleOnOff (value) {
                 const me = this
-                me.status ^= true
+                me.status = value
+                me.getStudios(value)
+            },
+            async getStudios (value) {
+                const me = this
+                me.loader(true)
+                me.$axios.get(`api/studios?enabled=${value}`).then(res => {
+                    me.res = res.data.studios
+                }).catch(err => {
+                    console.log(err)
+                }).then(() => {
+                    me.loader(false)
+                })
             }
         },
         async mounted () {
             const me = this
-            const res = await me.$axios.get('api/studios')
-            me.res = res.data.studios
+            me.res = me.getStudios(1)
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

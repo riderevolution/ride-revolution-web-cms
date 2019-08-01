@@ -30,13 +30,13 @@ Vue.mixin({
             }
             return slug
         },
-        loader () {
-            this.$store.state.isLoaderShow = true
-            document.body.classList.add('no_click')
-            setTimeout( () => {
-                this.$store.state.isLoaderShow = false
+        loader (data) {
+            this.$store.state.isLoading = data
+            if (data) {
+                document.body.classList.add('no_click')
+            } else {
                 document.body.classList.remove('no_click')
-            }, 500)
+            }
         },
         logout () {
             let token = this.$cookies.get('token')

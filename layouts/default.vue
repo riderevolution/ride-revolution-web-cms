@@ -1,19 +1,29 @@
 <template>
     <div id="admin_container" >
+        <transition name="slide">
+            <div id="success" class="cms_alert" v-if="$store.state.isNotify">
+                Content has been {{ $store.state.notificationMessage }}!
+            </div>
+        </transition>
         <navbar v-if="$store.state.isAuth" />
         <div class="admin_flex">
             <headerNav v-if="$store.state.isAuth" />
             <nuxt />
         </div>
+        <transition name="fade">
+            <loading v-if="$store.state.isLoading" />
+        </transition>
     </div>
 </template>
 
 <script>
     import Navbar from '../components/Navbar'
+    import Loading from '../components/Loading'
     import HeaderNav from '../components/HeaderNav'
     export default {
         components: {
             Navbar,
+            Loading,
             HeaderNav
         },
         async mounted () {

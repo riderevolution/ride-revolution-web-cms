@@ -7,7 +7,6 @@ const createStore = () => {
             isAuth: false,
             isNotify: false,
             notificationMessage: '',
-            isLoaderShow: false,
             isDeleteShow: false,
             contentLoaded: false,
             isLoading: false,

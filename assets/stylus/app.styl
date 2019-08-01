@@ -4,7 +4,8 @@ $light_green = #E2FDF9
 $green = #33B09D
 $light_blue = #E3F7FF
 $blue = #00B1FF
-$red = #F3525C
+$orange = #FFA069
+$red = #FC565F
 $light_red = #FFE5E6
 $white = #FFF
 $black = #383D40
@@ -52,46 +53,61 @@ h4,
 h5
     font-weight: normal
 
+img
+    height: auto
+    vertical-align: middle
+
 /**
  * Default Loader */
 .loader_wrapper
-    display: flex
-    align-items: center
     position: fixed
-    top: 50%
-    left: 50%
-    z-index: 99
-    text-align: center
-    background-color: $green
-    box-shadow: 0px 10px 25px rgba(0,0,0,0.15)
-    padding: 0 40px
-    border-radius: 5px
-    transform: translate(-50%, -50%)
-    .loader
-        display: inline-block
-        position: relative
-        width: 64px
-        height: 64px
-        div
+    z-index: 999
+    .background
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        z-index: 2
+        background-color: rgba(0, 0, 0, 0.5)
+    .wrapper
+        display: flex
+        align-items: center
+        position: fixed
+        top: 50%
+        left: 50%
+        z-index: 3
+        text-align: center
+        background-image: linear-gradient(to right, $red, $orange)
+        box-shadow: 0px 10px 25px rgba(0,0,0,0.15)
+        padding: 0 40px
+        border-radius: 5px
+        transform: translate(-50%, -50%)
+        .loader
             display: inline-block
-            position: absolute
-            left: 6px
-            width: 13px
-            background-color: $white
-            animation: loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite
-            &:nth-child(1)
+            position: relative
+            width: 64px
+            height: 64px
+            div
+                display: inline-block
+                position: absolute
                 left: 6px
-                animation-delay: -0.24s
-            &:nth-child(2)
-                left: 26px
-                animation-delay: -0.12s
-            &:nth-child(3)
-                left: 45px
-                animation-delay: 0
-    .loader_text
-        sf_pro_regular(18px)
-        color: $white
-        margin-left: 10px
+                width: 13px
+                background-color: $white
+                animation: loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite
+                &:nth-child(1)
+                    left: 6px
+                    animation-delay: -0.20s
+                &:nth-child(2)
+                    left: 26px
+                    animation-delay: -0.10s
+                &:nth-child(3)
+                    left: 45px
+                    animation-delay: 0
+        .loader_text
+            sf_pro_regular(18px)
+            color: $white
+            margin-left: 10px
 
 @keyframes loader
     0% {
@@ -103,98 +119,6 @@ h5
         height: 26px
     }
 
-/**
- * Default Buttons */
-.action_success_btn
-    display: inline-block
-    width: 150px
-    sf_pro_regular(16px)
-    text-decoration: none
-    outline: none
-    color: $green
-    padding: 17px
-    background-color: $light_green
-    border: 1px solid $green
-    position: relative
-    text-align: center
-    cursor: pointer
-    user-select: none
-    transition: .3s ease-in-out
-    &:hover,
-    &:focus
-        color: $light_green
-        background-color: $green
-        transition: .3s ease-in-out
-.action_cancel_btn
-    display: inline-block
-    width: 150px
-    sf_pro_regular(16px)
-    text-decoration: none
-    outline: none
-    color: $red
-    padding: 17px
-    background-color: $light_red
-    border: 1px solid $red
-    position: relative
-    text-align: center
-    margin-left: 20px
-    cursor: pointer
-    user-select: none
-    transition: .3s ease-in-out
-    &:hover,
-    &:focus
-        color: $light_red
-        background-color: $red
-        transition: .3s ease-in-out
-.action_back_btn
-    display: inline-block
-    sf_pro_medium(18px)
-    text-decoration: none
-    outline: none
-    color: $black
-    padding: 10px
-    background-color: transparent
-    border: 1px solid transparent
-    position: relative
-    text-align: center
-    cursor: pointer
-    user-select: none
-    text-transform: capitalize
-    transition: .3s ease-in-out
-    &:hover,
-    &:focus
-        color: $green
-        background-color: $light_green
-        border: 1px solid $light_green
-        transition: .3s ease-in-out
-.action_btn
-    display: inline-block
-    width: 200px
-    sf_pro_regular(16px)
-    text-decoration: none
-    outline: none
-    color: $blue
-    padding: 17px
-    background-color: $light_blue
-    border: 1px solid $light_blue
-    position: relative
-    text-align: center
-    cursor: pointer
-    user-select: none
-    transition: .3s ease-in-out
-    &:hover,
-    &:focus
-        border: 1px solid $blue
-        background-color: $blue
-        color: $white
-        transition: .3s ease-in-out
-.action_highlight
-    sf_pro_regular(15px)
-    color: $green
-    background-color: $light_green
-    padding: 10px 15px
-    span
-        sf_pro_regular(12px)
 
 /**
  * Default Notification */
@@ -305,6 +229,116 @@ h5
             transition: .3s ease-in-out
 
 /**
+ * Default Buttons */
+.action_success_btn
+    display: inline-block
+    width: 150px
+    sf_pro_medium(16px)
+    text-decoration: none
+    outline: none
+    color: $green
+    padding: 17px
+    background-color: $light_green
+    border: 1px solid $green
+    border-radius: 3px
+    position: relative
+    text-align: center
+    cursor: pointer
+    user-select: none
+    transition: .3s ease-in-out
+    &:hover,
+    &:focus
+        color: $light_green
+        background-color: $green
+        transition: .3s ease-in-out
+.action_cancel_btn
+    display: inline-block
+    width: 150px
+    sf_pro_medium(16px)
+    text-decoration: none
+    outline: none
+    color: $red
+    padding: 17px
+    background-color: $light_red
+    border: 1px solid $red
+    border-radius: 3px
+    position: relative
+    text-align: center
+    margin-left: 20px
+    cursor: pointer
+    user-select: none
+    transition: .3s ease-in-out
+    &:hover,
+    &:focus
+        color: $light_red
+        background-color: $red
+        transition: .3s ease-in-out
+.action_back_btn
+    display: inline-block
+    sf_pro_medium(18px)
+    text-decoration: none
+    outline: none
+    color: $black
+    padding: 10px
+    background-color: transparent
+    border: 1px solid transparent
+    border-radius: 3px
+    position: relative
+    text-align: center
+    cursor: pointer
+    user-select: none
+    text-transform: capitalize
+    transition: .3s ease-in-out
+    img
+        margin-right: 10px
+        margin-bottom: 3px
+    &:hover,
+    &:focus
+        color: $green
+        background-color: $light_green
+        border: 1px solid $light_green
+        transition: .3s ease-in-out
+.action_btn
+    display: inline-block
+    width: 200px
+    sf_pro_medium(16px)
+    text-decoration: none
+    outline: none
+    color: $blue
+    padding: 17px
+    background-color: $light_blue
+    border: 1px solid $light_blue
+    border-radius: 3px
+    position: relative
+    text-align: center
+    cursor: pointer
+    user-select: none
+    transition: .3s ease-in-out
+    &.alternate
+        margin-left: 20px
+        background-color: $blue
+        border: 1px solid $blue
+        color: $white
+        &:hover,
+        &:focus
+            background-color: $light_blue
+            border: 1px solid $light_blue
+            color: $blue
+    &:hover,
+    &:focus
+        border: 1px solid $blue
+        background-color: $blue
+        color: $white
+        transition: .3s ease-in-out
+.action_highlight
+    sf_pro_regular(15px)
+    color: $green
+    background-color: $light_green
+    padding: 10px 15px
+    span
+        sf_pro_regular(12px)
+
+/**
  * Default Form */
 .default_select
     padding: 10px 40px 10px 15px
@@ -316,6 +350,9 @@ h5
     border: 1px solid $border
     background-color: $white
     border-radius: 3px
+    background-image: url('/icons/default-select-icon.svg')
+    background-position: calc(100% - 15px) center
+    background-repeat: no-repeat
 
 .default_text
     width: 100%
@@ -344,11 +381,12 @@ h5
 #default_form
     width: 100%
     max-width: 50%
-    margin: 0 auto
-    background-color: $white
+    margin: 20px auto 0
     .form_wrapper
+        background-color: $white
         box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.05)
         margin-bottom: 60px
+        border-radius: 5px
         .form_title
             sf_pro_bold(22px)
             color: $black
@@ -356,6 +394,8 @@ h5
             border-bottom: 1px solid $border
         .form_main_group
             padding: 30px
+    .form_footer_wrapper
+        margin-bottom: 60px
 
 .form_flex
     display: flex
@@ -407,6 +447,32 @@ h5
                     transform: translateY(-50%)
                     cursor: pointer
 
+.form_check
+    position: relative
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    label
+        flex: 0 auto
+        margin-left: 10px
+        margin-bottom: 0
+        sf_pro_regular(15px)
+        font-weight: normal
+        color: $black
+    .action_check
+        -webkit-appearance: none
+        outline: none
+        width: 21px
+        height: 21px
+        background-image: url('/icons/uncheck-icon.svg')
+        background-position: center
+        background-repeat: no-repeat
+        background-size: cover
+        transition: .3s ease-in-out
+        &:checked
+            background-image: url('/icons/check-icon.svg')
+            transition: .3s ease-in-out
+
 .form_group
     position: relative
     margin-bottom: 30px
@@ -441,6 +507,12 @@ h5
             border-bottom: 7px solid $red
             left: 17px
             z-index: 1
+
+.button_group
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: flex-end
 
 .note-tooltip
     sf_pro_regular(14px)
@@ -559,6 +631,7 @@ h5
     border-collapse: collapse
     width: 100%
     border-radius: 10px
+    margin-bottom: 60px
     thead
         th
             sf_pro_semibold(16px)
@@ -856,7 +929,7 @@ h5
         text-align: center
         sf_pro_regular(18px)
         color: $white
-        background-color: $green
+        background-image: linear-gradient(to right, $red, $orange)
         padding: 20px
         border-radius: 5px
         box-shadow: 0px 10px 12px rgba(0,0,0,0.15)
@@ -870,8 +943,7 @@ h5
     margin: 0 auto
     width: 425px
     text-align: center
-    font-family: SFProDisplay-Regular
-    font-size: 18px
+    sf_pro_regular(18px)
     background-color: $white
     padding: 20px
     border-radius: 5px
@@ -931,7 +1003,7 @@ h5
 #login_container
     position: relative
     height: 100vh
-    background-image: linear-gradient(to right, #FC565F, #FFA069)
+    background-image: linear-gradient(to right, $red, $orange)
     .cms_login
         position: absolute
         top: 50%
@@ -1054,7 +1126,7 @@ h5
                 align-items: center
                 cursor: pointer
                 .user_picture
-                    background-image: linear-gradient(137deg, #FC565F, #FFA069)
+                    background-image: linear-gradient(137deg, $red, $orange)
                     border-radius: 50%
                     margin-right: 15px
                     padding: 10px 15px
@@ -1081,7 +1153,7 @@ h5
                     display: block
                 .select_header
                     padding: 20px
-                    background-image: linear-gradient(to right, #FC565F, #FFA069)
+                    background-image: linear-gradient(to right, $red, $orange)
                     border-radius: 5px 5px 0 0
                     .header_name
                         sf_pro_regular(18px)
@@ -1460,6 +1532,7 @@ h5
             .default_select
                 width: 210px
                 sf_pro_regular(22px)
+                background-image: url('/icons/custom-select-icon.svg')
         .information
             padding: 40px
 

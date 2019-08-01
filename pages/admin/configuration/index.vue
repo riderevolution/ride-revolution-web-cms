@@ -6,7 +6,7 @@
             </section>
             <section id="content">
                 <div class="cms_col_three">
-                    <nuxt-link :to="data.link" class="wrapper" v-for="(data, key) in res.today">
+                    <nuxt-link :to="data.link" class="wrapper" v-for="(data, key) in res.today" :key="key">
                         <div class="total_image">
                             <img class="front" :src="data.imgSrc" />
                             <img class="back" :src="data.imgSrc" />

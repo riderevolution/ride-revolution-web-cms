@@ -2,7 +2,7 @@
     <div class="content">
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table">
-                <nuxt-link :to="`/admin/${lastRoute}`" class="action_back_btn">{{ lastRoute }}</nuxt-link>
+                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
                     <h1 class="header_title">Add a New Studio</h1>
                 </div>
@@ -69,34 +69,34 @@
                                 <div class="form_group flex">
                                     <label>Allowed time for booking before class starts:<span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="number" name="booking_hours" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="text" name="booking_hours" class="default_text number" autocomplete="off" v-model="form.booking.hour" maxlength="2" v-validate="'required|numeric|max_value:24|min_value:0'">
                                         <div class="placeholder">hours</div>
-                                        <div class="up"></div>
-                                        <div class="down"></div>
+                                        <div class="up" @click="addCount('booking', 'hour')"></div>
+                                        <div class="down" @click="subtractCount('booking', 'hour')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('booking_hours')">{{ errors.first('booking_hours') }}</span></transition>
                                     </div>
                                     <div class="form_flex_input">
-                                        <input type="number" name="booking_minutes" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="text" name="booking_minutes" class="default_text number" autocomplete="off" v-model="form.booking.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
                                         <div class="placeholder">mins.</div>
-                                        <div class="up"></div>
-                                        <div class="down"></div>
+                                        <div class="up" @click="addCount('booking', 'mins')"></div>
+                                        <div class="down" @click="subtractCount('booking', 'mins')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('booking_minutes')">{{ errors.first('booking_minutes') }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group flex">
                                     <label>Allowed time to cancel before class starts:<span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="number" name="cancel_hours" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="text" name="cancel_hours" class="default_text number" autocomplete="off" v-model="form.cancel.hour" maxlength="2" v-validate="'required|numeric|max_value:24|min_value:0'">
                                         <div class="placeholder">hours</div>
-                                        <div class="up"></div>
-                                        <div class="down"></div>
+                                        <div class="up" @click="addCount('cancel', 'hour')"></div>
+                                        <div class="down" @click="subtractCount('cancel', 'hour')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('cancel_hours')">{{ errors.first('cancel_hours') }}</span></transition>
                                     </div>
                                     <div class="form_flex_input">
-                                        <input type="number" name="cancel_minutes" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="text" name="cancel_minutes" class="default_text number" autocomplete="off" v-model="form.cancel.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
                                         <div class="placeholder">mins.</div>
-                                        <div class="up"></div>
-                                        <div class="down"></div>
+                                        <div class="up" @click="addCount('cancel', 'mins')"></div>
+                                        <div class="down" @click="subtractCount('cancel', 'mins')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('cancel_minutes')">{{ errors.first('cancel_minutes') }}</span></transition>
                                     </div>
                                 </div>
@@ -105,20 +105,32 @@
                                 <div class="form_group flex">
                                     <label>Time before customer is marked no show before class starts:<span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="number" name="no_show_hours" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="text" name="no_show_hours" class="default_text number" autocomplete="off" v-model="form.noShow.hour" maxlength="2" v-validate="'required|numeric|max_value:24|min_value:0'">
                                         <div class="placeholder">hours</div>
-                                        <div class="up"></div>
-                                        <div class="down"></div>
+                                        <div class="up" @click="addCount('noShow', 'hour')"></div>
+                                        <div class="down" @click="subtractCount('noShow', 'hour')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('no_show_hours')">{{ errors.first('no_show_hours') }}</span></transition>
                                     </div>
                                     <div class="form_flex_input">
-                                        <input type="number" name="no_show_minutes" class="default_text number" max="24" min="0" value="0" v-validate="'required|numeric'">
+                                        <input type="text" name="no_show_minutes" class="default_text number" autocomplete="off" v-model="form.noShow.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
                                         <div class="placeholder">mins.</div>
-                                        <div class="up"></div>
-                                        <div class="down"></div>
+                                        <div class="up" @click="addCount('noShow', 'mins')"></div>
+                                        <div class="down" @click="subtractCount('noShow', 'mins')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('no_show_minutes')">{{ errors.first('no_show_minutes') }}</span></transition>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form_footer_wrapper">
+                        <div class="form_flex">
+                            <div class="form_check">
+                                <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
+                                <label for="enabled">Activate</label>
+                            </div>
+                            <div class="button_group">
+                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_btn">Discard</nuxt-link>
+                                <button type="submit" name="submit" class="action_btn alternate">Submit</button>
                             </div>
                         </div>
                     </div>
@@ -137,43 +149,193 @@
         },
         data () {
             return {
-                lastRoute: ''
+                lastRoute: '',
+                prevRoute: '',
+                form: {
+                    booking: {
+                        hour: 0,
+                        mins: 0
+                    },
+                    cancel: {
+                        hour: 0,
+                        mins: 0
+                    },
+                    noShow: {
+                        hour: 0,
+                        mins: 0
+                    },
+                }
             }
         },
         methods: {
             submissionSuccess () {
                 const me = this
-                // me.$validator.validateAll().then(valid => {
-                //     if (valid) {
-                //         let formData = new FormData(document.getElementById('default_form'))
-                //         formData.append('date', me.$moment(me.form.date).format('YYYY-MM-DD HH:mm:ss'))
-                //         me.$axios.post(`admin/news-contents/${me.$route.params.category}?id=${me.$store.state.user.id}`, formData).then(res => {
-                //             me.loader()
-                //             setTimeout( () => {
-                //                 if (res.data == 201) {
-                //                     me.notify('Added')
-                //                 } else {
-                //                     alert('Sorry. Something went wrong.')
-                //                 }
-                //             }, 500)
-                //         }).catch(err => {
-                //             alert('Sorry. Something went wrong.')
-                //         }).then(() => {
-                //             setTimeout( () => {
-                //                 me.$router.push(`/xsn-panel/campus-life/${me.$route.params.category}`)
-                //             }, 500)
-                //         })
-                //     } else {
-                //         me.$scrollTo('.validation_errors', {
-				// 			offset: -250
-				// 		})
-                //     }
-                // })
-            }
+                me.$validator.validateAll().then(valid => {
+                    if (valid) {
+                        let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('allowed_time_booking', `${(me.form.booking.hour * 3600) + (me.form.booking.mins * 60) + (0 * 1)}+${me.form.booking.hour}:${me.form.booking.mins}`)
+                        formData.append('allowed_time_cancel', `${(me.form.cancel.hour * 3600) + (me.form.cancel.mins * 60) + (0 * 1)}+${me.form.cancel.hour}:${me.form.cancel.mins}`)
+                        formData.append('allowed_time_no_show', `${(me.form.noShow.hour * 3600) + (me.form.noShow.mins * 60) + (0 * 1)}+${me.form.noShow.hour}:${me.form.noShow.mins}`)
+                        me.loader(true)
+                        me.$axios.post('api/studios', formData).then(res => {
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Added')
+                                } else {
+                                    alert('Sorry. Something went wrong.')
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            console.log(err);
+                            alert('Sorry. Something went wrong.')
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                me.loader(false)
+                            }, 500)
+                        })
+                    } else {
+                        me.$scrollTo('.validation_errors', {
+							offset: -250
+						})
+                    }
+                })
+            },
+            validateAdd (data, value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'booking':
+                                data != 0 && (me.form.booking.hour = 0)
+                                data < 24 && (me.form.booking.hour = (data += 1))
+                                break
+                            case 'cancel':
+                                data != 0 && (me.form.cancel.hour = 0)
+                                data < 24 && (me.form.cancel.hour = (data += 1))
+                                break
+                            case 'noShow':
+                                data != 0 && (me.form.noShow.hour = 0)
+                                data < 24 && (me.form.noShow.hour = (data += 1))
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'booking':
+                                data != 0 && (me.form.booking.mins = 0)
+                                data < 60 && (me.form.booking.mins = (data += 1))
+                                break
+                            case 'cancel':
+                                data != 0 && (me.form.cancel.mins = 0)
+                                data < 60 && (me.form.cancel.mins = (data += 1))
+                                break
+                            case 'noShow':
+                                data != 0 && (me.form.noShow.mins = 0)
+                                data < 60 && (me.form.noShow.mins = (data += 1))
+                                break
+                        }
+                        break
+                }
+            },
+            validateSubtract (data, value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'booking':
+                                data > 0 && (me.form.booking.hour = (data -= 1))
+                                break
+                            case 'cancel':
+                                data > 0 && (me.form.cancel.hour = (data -= 1))
+                                break
+                            case 'noShow':
+                                data > 0 && (me.form.noShow.hour = (data -= 1))
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'booking':
+                                data > 0 && (me.form.booking.mins = (data -= 1))
+                                break
+                            case 'cancel':
+                                data > 0 && (me.form.cancel.mins = (data -= 1))
+                                break
+                            case 'noShow':
+                                data > 0 && (me.form.noShow.mins = (data -= 1))
+                                break
+                        }
+                        break
+                }
+            },
+            addCount (value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'booking':
+                                me.validateAdd(parseInt(me.form.booking.hour), value, type)
+                                break
+                            case 'cancel':
+                                me.validateAdd(parseInt(me.form.cancel.hour), value, type)
+                                break
+                            case 'noShow':
+                                me.validateAdd(parseInt(me.form.noShow.hour), value, type)
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'booking':
+                                me.validateAdd(parseInt(me.form.booking.mins), value, type)
+                                break
+                            case 'cancel':
+                                me.validateAdd(parseInt(me.form.cancel.mins), value, type)
+                                break
+                            case 'noShow':
+                                me.validateAdd(parseInt(me.form.noShow.mins), value, type)
+                                break
+                        }
+                        break
+                }
+            },
+            subtractCount (value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'booking':
+                                me.validateSubtract(parseInt(me.form.booking.hour), value, type)
+                                break
+                            case 'cancel':
+                                me.validateSubtract(parseInt(me.form.cancel.hour), value, type)
+                                break
+                            case 'noShow':
+                                me.validateSubtract(parseInt(me.form.noShow.hour), value, type)
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'booking':
+                                me.validateSubtract(parseInt(me.form.booking.mins), value, type)
+                                break
+                            case 'cancel':
+                                me.validateSubtract(parseInt(me.form.cancel.mins), value, type)
+                                break
+                            case 'noShow':
+                                me.validateSubtract(parseInt(me.form.noShow.mins), value, type)
+                                break
+                        }
+                        break
+                }
+            },
         },
         async mounted () {
             const me = this
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
         }
     }
 </script>
