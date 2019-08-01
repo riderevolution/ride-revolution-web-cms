@@ -30,7 +30,11 @@
                             <td>{{ data.name }}</td>
                             <td>{{ data.purchase_email }}</td>
                             <td>{{ data.reservations_email }}</td>
-                            <td class="table_actions"><nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link><a class="table_action_cancel" v-if="$store.state.user.role.id == 1 || $store.state.user.role.id == 2" @click.self="showDelete($event, data.id)" href="javascript:void(0)"> Deactivate</a></td>
+                            <td class="table_actions">
+                                <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
+                                <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0)" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
+                                <a class="table_action_success" @click.self="toggleStatus(data.id, 1)" href="javascript:void(0)" v-if="status == 0">Activate</a>
+                            </td>
                         </tr>
                     </tbody>
                     <tbody class="no_results" v-else>
@@ -64,6 +68,24 @@
                 if (value) {
                     return this.$moment(value).format('MMM DD, YYYY')
                 }
+            },
+            async toggleStatus (id, status) {
+                const me = this
+                me.loader(true)
+                me.$axios.patch(`api/studios/toggle-active-status/${id}?enabled=${status}`).then(res => {
+                    if (res.data) {
+                        me.notify('Updated')
+                        setTimeout( () => {
+                            me.getStudios(me.status)
+                        }, 250)
+                    } else {
+                        alert('Sorry. Something went wrong.')
+                    }
+                }).catch(err => {
+                    console.log(err)
+                }).then(() => {
+                    me.loader(false)
+                })
             },
             toggleOnOff (value) {
                 const me = this
