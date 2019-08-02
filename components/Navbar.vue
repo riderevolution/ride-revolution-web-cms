@@ -10,12 +10,12 @@
             </div>
             <ul class="nav_list">
                 <li class="item_wrapper" v-for="(navItem, parent_key) in navItems" :key="parent_key">
-                    <nuxt-link :class="`nav_item ${navItem.class} ${(navItem.subItems) ? 'nav_parent' : ''}`" :to="navItem.link" v-if="navItem.hasLink">{{ navItem.title }}</nuxt-link>
+                    <nuxt-link :class="`nav_item ${navItem.class} ${(navItem.subItems) ? 'nav_parent' : ''}`" :to="navItem.link" v-if="navItem.hasLink" @click.native.self="resetToggle()">{{ navItem.title }}</nuxt-link>
                     <nuxt-link :event="''" :class="`nav_item ${navItem.class} ${(navItem.subItems) ? 'nav_parent' : ''}`" :to="navItem.link" v-else @click.native.self="toggleChild($event)">{{ navItem.title }}</nuxt-link>
                     <div class="sub_wrapper" v-if="navItem.subItems">
                         <ul class="sub_nav_list" v-for="(subItem, sub_key) in navItem.subItems" :key="sub_key">
                             <li class="sub_item_wrapper">
-                                <nuxt-link class="sub_nav_item" :to="subItem.link">{{ subItem.title }}</nuxt-link>
+                                <nuxt-link class="sub_nav_item" :to="subItem.link" @click.native.self="resetToggle()">{{ subItem.title }}</nuxt-link>
                             </li>
                         </ul>
                     </div>
@@ -124,7 +124,8 @@
         methods: {
             resetHoverToggle () {
                 const me = this
-                const elements = document.querySelectorAll('.toggled .sub_wrapper')
+                const elements = document.querySelectorAll('.nav_list .toggled .sub_wrapper')
+                document.querySelector('.navbar_container').classList.add('toggled')
                 document.querySelector('.admin_flex .content').classList.add('toggled')
                 elements.forEach((element, index) => {
                     setTimeout( () => {
@@ -137,7 +138,8 @@
             },
             resetLeaveToggle () {
                 const me = this
-                const elements = document.querySelectorAll('.toggled .sub_wrapper')
+                const elements = document.querySelectorAll('.nav_list .toggled .sub_wrapper')
+                document.querySelector('.navbar_container').classList.remove('toggled')
                 document.querySelector('.admin_flex .content').classList.remove('toggled')
                 elements.forEach((element, index) => {
                     setTimeout( () => {
@@ -147,6 +149,10 @@
                         element.style.height = `${currentHeight}px`
                     }, 300)
                 })
+            },
+            resetToggle () {
+                document.querySelector('.navbar_container').classList.remove('toggled')
+                document.querySelector('.admin_flex .content').classList.remove('toggled')
             },
             toggleChild(event) {
                 const me = this

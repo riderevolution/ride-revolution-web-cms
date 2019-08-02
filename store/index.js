@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 const createStore = () => {
     return new Vuex.Store({
         state: () => ({
+            userForm: false,
             hiddenMobile: true,
             isAuth: false,
             isNotify: false,
@@ -13,8 +14,10 @@ const createStore = () => {
             token: '',
             user: {
                 name: '',
-                role: {
-                    display_name: ''
+                staff_details: {
+                    role: {
+                        display_name: ''
+                    }
                 }
             }
         })

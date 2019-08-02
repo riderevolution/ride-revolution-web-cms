@@ -129,8 +129,8 @@
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
-                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_btn">Discard</nuxt-link>
-                                <button type="submit" name="submit" class="action_btn alternate">Save</button>
+                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Discard</nuxt-link>
+                                <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                             </div>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
                                 }
                             }, 500)
                         }).catch(err => {
-                            console.log(err);
+                            console.log(err)
                             alert('Sorry. Something went wrong.')
                         }).then(() => {
                             setTimeout( () => {

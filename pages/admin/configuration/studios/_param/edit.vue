@@ -130,7 +130,7 @@
                             </div>
                             <div class="button_group">
                                 <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Discard</nuxt-link>
-                                <button type="submit" name="submit" class="action_btn alternate">Save</button>
+                                <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                             </div>
                         </div>
                     </div>

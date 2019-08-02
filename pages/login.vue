@@ -35,7 +35,8 @@
             return {
                 form: {
                     email: 'superadmin@admin.com',
-                    password: 'admin'
+                    password: 'admin',
+                    type: 0
                 },
                 error: false,
             }

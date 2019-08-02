@@ -9,7 +9,7 @@
             </section>
             <section id="content" class="alternate">
                 <div class="header_selector">
-                    <select class="default_select">
+                    <select class="default_select alternate">
                         <option value="greenbelt">Greenbelt</option>
                         <option value="shangri-la-plaza">Shangri-la Plaza</option>
                     </select>
