@@ -8,13 +8,13 @@
                 </div>
             </section>
             <section id="content">
-                <form method="POST" id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+                <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
                         <h2 class="form_title">Studio Details</h2>
                         <div class="form_main_group">
                             <div class="form_group">
                                 <label for="name">Studio Name <span>*</span></label>
-                                <input type="text" name="name" autocomplete="off" class="default_text" v-validate="'required'">
+                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
                             <div class="form_group">
@@ -130,7 +130,7 @@
                             </div>
                             <div class="button_group">
                                 <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_btn">Discard</nuxt-link>
-                                <button type="submit" name="submit" class="action_btn alternate">Submit</button>
+                                <button type="submit" name="submit" class="action_btn alternate">Save</button>
                             </div>
                         </div>
                     </div>

@@ -8,56 +8,56 @@
                 </div>
             </section>
             <section id="content">
-                <form method="POST" id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+                <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
                         <h2 class="form_title">Studio Details</h2>
                         <div class="form_main_group">
                             <div class="form_group">
                                 <label for="name">Studio Name <span>*</span></label>
-                                <input type="text" name="name" autocomplete="off" class="default_text" v-validate="'required'">
+                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="res.name">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="address_line_1">Address Line 1<span>*</span></label>
-                                <input type="text" name="address_line_1" autocomplete="off" class="default_text" v-validate="'required'">
+                                <input type="text" name="address_line_1" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.address_line_1">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('address_line_1')">{{ errors.first('address_line_1') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="address_line_2">Address Line 2</label>
-                                <input type="text" name="address_line_2" autocomplete="off" class="default_text">
+                                <input type="text" name="address_line_2" autocomplete="off" class="default_text" v-model="res.address_line_2">
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
                                     <label for="city">City<span>*</span></label>
-                                    <input type="text" name="city" autocomplete="off" class="default_text" v-validate="'required'">
+                                    <input type="text" name="city" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.city">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('city')">{{ errors.first('city') }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="state">State</label>
-                                    <input type="text" name="state" autocomplete="off" class="default_text" v-validate="'required'">
+                                    <input type="text" name="state" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.state">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('state')">{{ errors.first('state') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
                                     <label for="country">Country<span>*</span></label>
-                                    <input type="text" name="country" autocomplete="off" class="default_text" v-validate="'required'">
+                                    <input type="text" name="country" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.country">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('country')">{{ errors.first('country') }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="phone">Phone</label>
-                                    <input type="text" name="phone" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <input type="text" name="phone" autocomplete="off" class="default_text" v-validate="'required|numeric'" v-model="res.phone">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('phone')">{{ errors.first('phone') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_group">
                                 <label for="purchase_email">Purchase Email<span>*</span></label>
-                                <input type="email" name="purchase_email" autocomplete="off" class="default_text" v-validate="'required|email'">
+                                <input type="email" name="purchase_email" autocomplete="off" class="default_text" v-validate="'required|email'" v-model="res.purchase_email">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('purchase_email')">{{ errors.first('purchase_email') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="reservations_email">Reservations Email<span>*</span></label>
-                                <input type="email" name="reservations_email" autocomplete="off" class="default_text" v-validate="'required|email'">
+                                <input type="email" name="reservations_email" autocomplete="off" class="default_text" v-validate="'required|email'" v-model="res.reservations_email">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('reservations_email')">{{ errors.first('reservations_email') }}</span></transition>
                             </div>
                         </div>
@@ -125,12 +125,12 @@
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
                             <div class="form_check">
-                                <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
+                                <input type="checkbox" id="enabled" name="enabled" class="action_check" :checked="res.enabled == 1">
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
-                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_btn">Discard</nuxt-link>
-                                <button type="submit" name="submit" class="action_btn alternate">Submit</button>
+                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Discard</nuxt-link>
+                                <button type="submit" name="submit" class="action_btn alternate">Save</button>
                             </div>
                         </div>
                     </div>
@@ -165,7 +165,13 @@
                         hour: 0,
                         mins: 0
                     },
-                }
+                },
+                sample: [
+                    {
+                        name: '',
+                        phone: 'asdasdasd'
+                    }
+                ]
             }
         },
         methods: {
@@ -178,10 +184,11 @@
                         formData.append('allowed_time_cancel', `${(me.form.cancel.hour * 3600) + (me.form.cancel.mins * 60) + (0 * 1)}+${me.form.cancel.hour}:${me.form.cancel.mins}`)
                         formData.append('allowed_time_no_show', `${(me.form.noShow.hour * 3600) + (me.form.noShow.mins * 60) + (0 * 1)}+${me.form.noShow.hour}:${me.form.noShow.mins}`)
                         me.loader(true)
-                        me.$axios.post('api/studios', formData).then(res => {
+                        formData = me.toJSON(formData)
+                        me.$axios.patch(`api/studios/${me.$route.params.param}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
-                                    me.notify('Added')
+                                    me.notify('Updated')
                                 } else {
                                     alert('Sorry. Something went wrong.')
                                 }
@@ -337,9 +344,15 @@
             const me = this
             me.$axios.get(`api/studios/${me.$route.params.param}`).then(res => {
                 me.res = res.data.studio
+
                 me.form.booking.hour = me.res.allowed_time_booking.split('+')[1].split(':')[0]
                 me.form.booking.mins = me.res.allowed_time_booking.split('+')[1].split(':')[1]
-                console.log(me.form.booking);
+
+                me.form.cancel.hour = me.res.allowed_time_cancel.split('+')[1].split(':')[0]
+                me.form.cancel.mins = me.res.allowed_time_cancel.split('+')[1].split(':')[1]
+
+                me.form.noShow.hour = me.res.allowed_time_no_show.split('+')[1].split(':')[0]
+                me.form.noShow.mins = me.res.allowed_time_no_show.split('+')[1].split(':')[1]
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]

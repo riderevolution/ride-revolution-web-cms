@@ -11,6 +11,11 @@ Vue.mixin({
                 this.$store.state.isNotify = false
             }, 2000)
         },
+        toJSON (data) {
+            if (data) {
+                return JSON.parse(JSON.stringify(Object.fromEntries(data)))
+            }
+        },
         parser (data) {
             if (data) {
                 return JSON.parse(data)

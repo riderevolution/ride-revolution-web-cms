@@ -32,8 +32,8 @@
                             <td>{{ data.reservations_email }}</td>
                             <td class="table_actions">
                                 <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
-                                <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0)" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
-                                <a class="table_action_success" @click.self="toggleStatus(data.id, 1)" href="javascript:void(0)" v-if="status == 0">Activate</a>
+                                <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
+                                <a class="table_action_success" @click.self="toggleStatus(data.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
                             </td>
                         </tr>
                     </tbody>
@@ -69,12 +69,12 @@
                     return this.$moment(value).format('MMM DD, YYYY')
                 }
             },
-            async toggleStatus (id, status) {
+            async toggleStatus (id, status, type) {
                 const me = this
                 me.loader(true)
                 me.$axios.patch(`api/studios/toggle-active-status/${id}?enabled=${status}`).then(res => {
                     if (res.data) {
-                        me.notify('Updated')
+                        me.notify(type)
                         setTimeout( () => {
                             me.getStudios(me.status)
                         }, 250)
