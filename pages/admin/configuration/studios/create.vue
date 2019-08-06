@@ -129,7 +129,7 @@
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
-                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Discard</nuxt-link>
+                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
                                 <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                             </div>
                         </div>

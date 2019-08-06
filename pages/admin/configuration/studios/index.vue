@@ -46,60 +46,46 @@
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
+        <transition name="fade">
+            <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" />
+        </transition>
     </div>
 </template>
 
 <script>
     import Foot from '../../../../components/Foot'
+    import ConfirmStatus from '../../../../components/modals/ConfirmStatus'
     export default {
         components: {
-            Foot
+            Foot,
+            ConfirmStatus,
         },
         data () {
             return {
                 lastRoute: '',
                 rowCount: 0,
                 status: 1,
-                res: [],
-                data: {
-                    table_name: 'studios',
-                    id: 0,
-                    enabled: 0
-                }
+                res: []
             }
         },
         methods: {
-            formatDate (value) {
-                if (value) {
-                    return this.$moment(value).format('MMM DD, YYYY')
-                }
-            },
-            async toggleStatus (id, status, type) {
+            async toggleStatus (id, enabled, status) {
                 const me = this
-                me.data.id = id
-                me.data.enabled = status
-                me.loader(true)
-                me.$axios.patch(`api/extras/toggle-status`, me.data).then(res => {
-                    if (res.data) {
-                        me.notify(type)
-                        setTimeout( () => {
-                            me.getStudios(me.status)
-                        }, 250)
-                    } else {
-                        alert('Sorry. Something went wrong.')
-                    }
-                }).catch(err => {
-                    console.log(err)
-                }).then(() => {
-                    me.loader(false)
-                })
+                me.$store.state.confirmStatus = true
+                setTimeout( () => {
+                    me.$refs.enabled.confirm.table_name = 'studios'
+                    me.$refs.enabled.confirm.id = id
+                    me.$refs.enabled.confirm.enabled = enabled
+                    me.$refs.enabled.confirm.status = status
+                    me.$refs.enabled.confirm.type = 'studio'
+                }, 100)
             },
             toggleOnOff (value) {
                 const me = this
                 me.status = value
-                me.getStudios(value)
+                me.fetchData(value)
             },
-            async getStudios (value) {
+            async fetchData (value) {
                 const me = this
                 me.loader(true)
                 me.$axios.get(`api/studios?enabled=${value}`).then(res => {
@@ -107,13 +93,15 @@
                 }).catch(err => {
                     console.log(err)
                 }).then(() => {
-                    me.loader(false)
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 300)
                 })
             }
         },
         async mounted () {
             const me = this
-            me.res = me.getStudios(1)
+            me.res = me.fetchData(1)
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

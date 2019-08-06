@@ -161,10 +161,8 @@
                     target.nextElementSibling.style.height = `${target.nextElementSibling.scrollHeight}px`
                     target.parentNode.classList.add('toggled')
                 } else {
-                    setTimeout( () => {
-                        target.nextElementSibling.style.height = 0
-                        target.parentNode.classList.remove('toggled')
-                    }, 600)
+                    target.nextElementSibling.style.height = 0
+                    target.parentNode.classList.remove('toggled')
                 }
             }
         }
