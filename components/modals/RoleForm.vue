@@ -34,7 +34,7 @@
         </form>
         <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()" enctype="multipart/form-data" v-else>
             <div class="modal_wrapper">
-                <h2 class="form_title">Edit {{ res.display_name }}</h2>
+                <h2 class="form_title">Update {{ res.display_name }}</h2>
                 <div class="modal_main_group">
                     <div class="form_group">
                         <label for="display_name">Role Name <span>*</span></label>
@@ -181,20 +181,27 @@
                                 if (res.data) {
                                     me.notify('Added')
                                 } else {
-                                    alert('Sorry. Something went wrong.')
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
                                 }
                             }, 500)
                         }).catch(err => {
-                            console.log(err)
-                            alert('Sorry. Something went wrong.')
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
                         }).then(() => {
+                            me.$store.state.roleForm = false
                             setTimeout( () => {
-                                me.$store.state.roleForm = false
-                                me.loader(false)
+                                if (!me.$store.state.errorStatus) {
+                                    me.$parent.fetchData(1)
+                                }
                             }, 500)
+                            setTimeout( () => {
+                                me.loader(false)
+                            }, 1000)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
+                            container: '.default_modal',
                             offset: -250
                         })
                     }
@@ -213,21 +220,27 @@
                                 if (res.data) {
                                     me.notify('Updated')
                                 } else {
-                                    alert('Sorry. Something went wrong.')
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
                                 }
                             }, 500)
                         }).catch(err => {
-                            console.log(err)
-                            alert('Sorry. Something went wrong.')
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
                         }).then(() => {
+                            me.$store.state.roleForm = false
                             setTimeout( () => {
-                                me.$store.state.roleForm = false
-                                me.$parent.fetchData(1)
-                                me.loader(false)
+                                if (!me.$store.state.errorStatus) {
+                                    me.$parent.fetchData(1)
+                                }
                             }, 500)
+                            setTimeout( () => {
+                                me.loader(false)
+                            }, 1000)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
+                            container: '.default_modal',
                             offset: -250
                         })
                     }

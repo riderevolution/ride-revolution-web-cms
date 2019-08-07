@@ -60,7 +60,7 @@ export default {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: (process.env.NODE_ENV == "development") ? 'http://api.riderevolution.test' : 'https://beta-api.xsn.edu.ph/',
+    baseURL: (process.env.NODE_ENV == "development") ? 'http://api.riderevolution.test' : 'http://api.riderevolution.test',
     credentials: false
   },
   env: {

@@ -190,15 +190,18 @@
                                 if (res.data) {
                                     me.notify('Updated')
                                 } else {
-                                    alert('Sorry. Something went wrong.')
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
                                 }
                             }, 500)
                         }).catch(err => {
-                            console.log(err);
-                            alert('Sorry. Something went wrong.')
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
                         }).then(() => {
                             setTimeout( () => {
-                                me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                }
                                 me.loader(false)
                             }, 500)
                         })

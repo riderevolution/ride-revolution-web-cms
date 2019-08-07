@@ -15,6 +15,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="filter_wrapper">
+                    <div class="filter_flex">
+                        <div class="form_group">
+                            <label for="q">Find a user</label>
+                            <input type="text" name="q" autocomplete="off" class="default_text" v-model="form_search.user" @change="search()">
+                        </div>
+                        <div class="form_group margin">
+                            <label for="studio_id">Studio</label>
+                            <select class="default_select alternate" name="studio_id" v-model="form_search.studio" @change="search()">
+                                <option value="All" selected disabled>All Studios</option>
+                                <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </section>
             <section id="content">
                 <!-- Accordion Role -->
@@ -32,7 +47,7 @@
                             <div class="accordion_content">{{ countActivatedUsers(role.staff_details) }}</div>
                             <div class="accordion_content">{{ countPermissions(parser(role.permissions)) }}</div>
                             <div class="accordion_actions action">
-                                <a class="accordion_action_edit" href="javascript:void(0)" @click="toggleRole(role.id, 1)">Edit Role</a>
+                                <a class="accordion_action_edit" href="javascript:void(0)" @click="toggleForm(role.id, 1, 'role')">Edit Role</a>
                                 <a class="accordion_action_cancel" @click.self="toggleStatus(role.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate Role</a>
                                 <a class="accordion_action_success" @click.self="toggleStatus(role.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate Role</a>
                             </div>
@@ -54,7 +69,7 @@
                                         <td>{{ staff.user.first_name }}</td>
                                         <td>{{ staff.user.last_name }}</td>
                                         <td class="table_actions">
-                                            <a class="table_action_edit" href="javascript:void(0)" @click="toggleRole(staff.user.id, 1)">Edit User</a>
+                                            <a class="table_action_edit" href="javascript:void(0)" @click="toggleForm(staff.user.id, 1, 'user')">Edit User</a>
                                             <a class="table_action_cancel" @click.self="toggleUserStatus(staff.user.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate User</a>
                                             <a class="table_action_success" @click.self="toggleUserStatus(staff.user.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate User</a>
                                         </td>
@@ -85,7 +100,7 @@
                             <td>{{ role.staff_details.length }}</td>
                             <td>{{ countPermissions(parser(role.permissions)) }}</td>
                             <td class="table_actions">
-                                <a class="table_action_edit" href="javascript:void(0)" @click="toggleRole(role.id, 1)">Edit Role</a>
+                                <a class="table_action_edit" href="javascript:void(0)" @click="toggleForm(role.id, 1, 'role')">Edit Role</a>
                                 <a class="table_action_success" @click.self="toggleStatus(role.id, 1, 'Activated')" href="javascript:void(0)">Activate Role</a>
                             </td>
                         </tr>
@@ -112,7 +127,7 @@
                             <td>{{ staff.first_name }}</td>
                             <td>{{ staff.last_name }}</td>
                             <td class="table_actions">
-                                <a class="table_action_edit" href="javascript:void(0)" @click="toggleRole(staff.id, 1)">Edit User</a>
+                                <a class="table_action_edit" href="javascript:void(0)" @click="toggleForm(staff.id, 1, 'user')">Edit User</a>
                                 <a class="table_action_success" @click.self="toggleUserStatus(staff.id, 1, 'Activated')" href="javascript:void(0)">Activate User</a>
                             </td>
                         </tr>
@@ -134,6 +149,9 @@
         <transition name="fade">
             <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" />
         </transition>
+        <transition name="fade">
+            <error-status v-if="$store.state.errorStatus" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
@@ -143,12 +161,14 @@
     import UserForm from '../../../components/modals/UserForm'
     import RoleForm from '../../../components/modals/RoleForm'
     import ConfirmStatus from '../../../components/modals/ConfirmStatus'
+    import ErrorStatus from '../../../components/modals/Error'
     export default {
         components: {
             Foot,
             UserForm,
             RoleForm,
-            ConfirmStatus
+            ConfirmStatus,
+            ErrorStatus
         },
         data () {
             return {
@@ -156,10 +176,20 @@
                 type: 0,
                 rowCount: 0,
                 status: 1,
-                res: []
+                res: [],
+                studios: [],
+                form_search: {
+                    user: '',
+                    studio: 'All'
+                }
             }
         },
         methods: {
+            search () {
+                const me = this
+                console.log(me.form_search.user);
+                console.log(me.form_search.studio);
+            },
             /**
              * Count Permissions per role
              * @param  {[array]} values
@@ -284,7 +314,8 @@
                     me.$axios.get(`api/roles?enabled=${value}`).then(res => {
                         me.res = res.data.roles
                     }).catch(err => {
-                        console.log(err)
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
                     }).then(() => {
                         setTimeout( () => {
                             me.loader(false)
@@ -298,18 +329,26 @@
                     me.$axios.get(`api/staff?enabled=0`).then(res => {
                         me.res = res.data.staff.data
                     }).catch(err => {
-                        console.log(err)
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
                     }).then(() => {
                         setTimeout( () => {
                             me.loader(false)
                         }, 500)
                     })
                 }
+            },
+            async fetchStudios () {
+                const me = this
+                me.$axios.get('api/studios').then(res => {
+                    me.studios = res.data.studios
+                })
             }
         },
         async mounted () {
             const me = this
             me.res = me.fetchData(1)
+            me.fetchStudios()
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

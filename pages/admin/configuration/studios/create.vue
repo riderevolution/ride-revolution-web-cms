@@ -18,7 +18,7 @@
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
                             <div class="form_group">
-                                <label for="address_line_1">Address Line 1<span>*</span></label>
+                                <label for="address_line_1">Address Line 1 <span>*</span></label>
                                 <input type="text" name="address_line_1" autocomplete="off" class="default_text" v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('address_line_1')">{{ errors.first('address_line_1') }}</span></transition>
                             </div>
@@ -28,7 +28,7 @@
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
-                                    <label for="city">City<span>*</span></label>
+                                    <label for="city">City <span>*</span></label>
                                     <input type="text" name="city" autocomplete="off" class="default_text" v-validate="'required'">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('city')">{{ errors.first('city') }}</span></transition>
                                 </div>
@@ -40,23 +40,23 @@
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
-                                    <label for="country">Country<span>*</span></label>
+                                    <label for="country">Country <span>*</span></label>
                                     <input type="text" name="country" autocomplete="off" class="default_text" v-validate="'required'">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('country')">{{ errors.first('country') }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="phone">Phone</label>
+                                    <label for="phone">Phone <span>*</span></label>
                                     <input type="text" name="phone" autocomplete="off" class="default_text" v-validate="'required|numeric'">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('phone')">{{ errors.first('phone') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_group">
-                                <label for="purchase_email">Purchase Email<span>*</span></label>
+                                <label for="purchase_email">Purchase Email <span>*</span></label>
                                 <input type="email" name="purchase_email" autocomplete="off" class="default_text" v-validate="'required|email'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('purchase_email')">{{ errors.first('purchase_email') }}</span></transition>
                             </div>
                             <div class="form_group">
-                                <label for="reservations_email">Reservations Email<span>*</span></label>
+                                <label for="reservations_email">Reservations Email <span>*</span></label>
                                 <input type="email" name="reservations_email" autocomplete="off" class="default_text" v-validate="'required|email'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('reservations_email')">{{ errors.first('reservations_email') }}</span></transition>
                             </div>
@@ -67,7 +67,7 @@
                         <div class="form_main_group">
                             <div class="form_flex">
                                 <div class="form_group flex">
-                                    <label>Allowed time for booking before class starts:<span>*</span></label>
+                                    <label>Allowed time for booking before class starts: <span>*</span></label>
                                     <div class="form_flex_input">
                                         <input type="text" name="booking_hours" class="default_text number" autocomplete="off" v-model="form.booking.hour" maxlength="2" v-validate="'required|numeric|max_value:24|min_value:0'">
                                         <div class="placeholder">hours</div>
@@ -84,7 +84,7 @@
                                     </div>
                                 </div>
                                 <div class="form_group flex">
-                                    <label>Allowed time to cancel before class starts:<span>*</span></label>
+                                    <label>Allowed time to cancel before class starts: <span>*</span></label>
                                     <div class="form_flex_input">
                                         <input type="text" name="cancel_hours" class="default_text number" autocomplete="off" v-model="form.cancel.hour" maxlength="2" v-validate="'required|numeric|max_value:24|min_value:0'">
                                         <div class="placeholder">hours</div>
@@ -103,7 +103,7 @@
                             </div>
                             <div class="form_flex">
                                 <div class="form_group flex">
-                                    <label>Time before customer is marked no show before class starts:<span>*</span></label>
+                                    <label>Time before customer is marked no show before class starts: <span>*</span></label>
                                     <div class="form_flex_input">
                                         <input type="text" name="no_show_hours" class="default_text number" autocomplete="off" v-model="form.noShow.hour" maxlength="2" v-validate="'required|numeric|max_value:24|min_value:0'">
                                         <div class="placeholder">hours</div>
@@ -182,15 +182,18 @@
                                 if (res.data) {
                                     me.notify('Added')
                                 } else {
-                                    alert('Sorry. Something went wrong.')
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
                                 }
                             }, 500)
                         }).catch(err => {
-                            console.log(err)
-                            alert('Sorry. Something went wrong.')
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
                         }).then(() => {
                             setTimeout( () => {
-                                me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                }
                                 me.loader(false)
                             }, 500)
                         })
