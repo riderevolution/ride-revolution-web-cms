@@ -14,6 +14,13 @@
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('role')">{{ errors.first('role') }}</span></transition>
                     </div>
                     <div class="form_flex">
+                        <label class="flex_label">Restrict access to studios:</label>
+                        <div class="form_check" v-for="(studio, key) in studios" :key="key">
+                            <input type="checkbox" :id="`studio_${key}`" name="studios" :class="`action_check ${studio.class}`" v-model="studio.checked">
+                            <label :for="`studio_${key}`">{{ studio.name }}</label>
+                        </div>
+                    </div>
+                    <div class="form_flex">
                         <div class="form_group">
                             <label for="first_name">First Name <span>*</span></label>
                             <input type="text" name="first_name" autocomplete="off" class="default_text" v-validate="'required'">
@@ -32,7 +39,7 @@
                     </div>
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
-                            <div class="form_check">
+                            <div class="form_check default">
                                 <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
                                 <label for="enabled">Activate</label>
                             </div>
@@ -50,9 +57,20 @@
 
 <script>
     export default {
+        props: {
+            type: {
+                type: Number,
+                default: 0
+            },
+            id: {
+                type: Number
+            }
+        },
         data () {
             return {
-                roles: []
+                res: [],
+                roles: [],
+                studios: []
             }
         },
         methods: {
@@ -65,6 +83,9 @@
             const me = this
             me.$axios.get('api/roles').then(res => {
                 me.roles = res.data.roles
+            })
+            me.$axios.get('api/studios').then(res => {
+                me.studios = res.data.studios
             })
         }
     }
