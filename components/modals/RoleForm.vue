@@ -213,9 +213,9 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('permissions', JSON.stringify(me.permissions))
-                        formData = me.toJSON(formData)
+                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.patch(`api/roles/${me.id}`, formData).then(res => {
+                        me.$axios.post(`api/roles/${me.id}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Updated')

@@ -255,9 +255,9 @@
                         if (formData.get('password').length <= 0) {
                             formData.delete('password')
                         }
-                        formData = me.toJSON(formData)
+                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.patch(`api/staff/${me.id}`, formData).then(res => {
+                        me.$axios.post(`api/staff/${me.id}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Updated')
@@ -273,7 +273,7 @@
                             me.$store.state.userForm = false
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
-                                    me.$parent.fetchData(-1)
+                                    me.$parent.fetchData(1)
                                 }
                             }, 500)
                             setTimeout( () => {

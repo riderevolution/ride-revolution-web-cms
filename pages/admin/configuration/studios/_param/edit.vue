@@ -183,9 +183,9 @@
                         formData.append('allowed_time_booking', `${(me.form.booking.hour * 3600) + (me.form.booking.mins * 60) + (0 * 1)}+${me.form.booking.hour}:${me.form.booking.mins}`)
                         formData.append('allowed_time_cancel', `${(me.form.cancel.hour * 3600) + (me.form.cancel.mins * 60) + (0 * 1)}+${me.form.cancel.hour}:${me.form.cancel.mins}`)
                         formData.append('allowed_time_no_show', `${(me.form.noShow.hour * 3600) + (me.form.noShow.mins * 60) + (0 * 1)}+${me.form.noShow.hour}:${me.form.noShow.mins}`)
-                        formData = me.toJSON(formData)
+                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.patch(`api/studios/${me.$route.params.param}`, formData).then(res => {
+                        me.$axios.post(`api/studios/${me.$route.params.param}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Updated')
