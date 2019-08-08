@@ -23,7 +23,7 @@
                             <label for="studio_id">Customer Type</label>
                             <select class="default_select alternate" name="studio_id" v-model="form_search.studio" @change="search()">
                                 <option value="All" selected disabled>All Customer Types</option>
-                                <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
+                                <option :value="type.id" v-for="(type, key) in types" :key="key">{{ type.name }}</option>
                             </select>
                         </div>
                     </div>
@@ -39,18 +39,20 @@
                             <th>Rewards</th>
                             <th>Email Address</th>
                             <th>Contact No.</th>
-                            <th>Action</th>
+                            <th>Pending Payment</th>
                         </tr>
                     </thead>
                     <tbody v-if="res.length > 0">
                         <tr v-for="(data, key) in res" :key="key">
-                            <td>{{ data.last_name }}</td>
-                            <td>{{ data.first_name }}</td>
-                            <td>{{ data.id }}</td>
+                            <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.last_name }}</a></td>
+                            <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.first_name }}</a></td>
+                            <td>First Timer</td>
+                            <td>Teal</td>
+                            <td>{{ data.email }}</td>
+                            <td>{{ (data.customer_details != null) ? data.customer_details.co_contact_number : '-' }}</td>
                             <td class="table_actions">
-                                <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
-                                <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
-                                <a class="table_action_success" @click.self="toggleStatus(data.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
+                                <div class="table_action_text red">Php 120.00</div>
+                                <a class="table_action_success" href="javascript:void(0)">Pay Now</a>
                             </td>
                         </tr>
                     </tbody>
@@ -87,9 +89,14 @@
                 type: 0,
                 rowCount: 0,
                 status: 1,
-                res: [],
+                res: {
+                    customer_details: {
+                        user_id: '',
+                        co_contact_number: ''
+                    }
+                },
                 total_count: 0,
-                studios: [],
+                types: [],
                 form_search: {
                     user: '',
                     studio: 'All'
@@ -128,7 +135,7 @@
             },
             async fetchData (value) {
                 const me = this
-                // me.loader(true)
+                me.loader(true)
                 me.$axios.get(`api/customers?enabled=${value}`).then(res => {
                     me.res = res.data.customers.data
                     me.total_count = me.res.length
@@ -143,8 +150,8 @@
             },
             async fetchStudios () {
                 const me = this
-                me.$axios.get('api/studios').then(res => {
-                    me.studios = res.data.studios
+                me.$axios.get('api/extras/customer-types').then(res => {
+                    me.types = res.data.customerTypes
                 })
             }
         },
