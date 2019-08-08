@@ -58,35 +58,28 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        let jsonData = {}
-                        me.$refs.handler.files.forEach((file, index) => {
-                            formData.append(`image[]`, file)
-                        })
-                        console.log(formData.get('image[]'));
-                        // jsonData = me.toJSON(formData)
-                        // console.log(formData.values());
-                        // me.loader(true)
-                        me.$axios.patch(`api/extras/customer-types/${me.res.id}`, formData).then(res => {
-                            console.log(res.data);
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.notify('Updated')
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 500)
-                        // }).catch(err => {
-                        //     console.log(err);
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
-                        //         }
-                        //         me.loader(false)
-                        //     }, 500)
+                        formData.append('_method', 'PATCH')
+                        me.loader(true)
+                        me.$axios.post(`api/extras/customer-types/${me.res.id}`, formData).then(res => {
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Updated')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            console.log(err);
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
