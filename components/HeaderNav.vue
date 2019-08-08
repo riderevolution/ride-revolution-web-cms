@@ -32,8 +32,8 @@
                     <div class="header_role">{{ $store.state.user.staff_details.role.display_name }}</div>
                 </div>
                 <div class="select_footer">
-                    <nuxt-link to="/my-account" class="select_item">My Account</nuxt-link>
-                    <a href="javascript:void(0)" class="select_item" @click="logout()">Sign Out</a>
+                    <nuxt-link to="/my-account" class="select_item account">My Account</nuxt-link>
+                    <a href="javascript:void(0)" class="select_item logout" @click="logout()">Sign Out</a>
                 </div>
             </div>
         </div>

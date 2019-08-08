@@ -404,7 +404,7 @@ img
             .text
                 neutra_text(1.8vh)
                 color: $red
-                margin-bottom: 20px
+                margin-bottom: 10px
         .button_group
             margin-top: 50px
             justify-content: center
@@ -619,114 +619,108 @@ img
 .note-tooltip
     sf_pro_regular(1.4vh)
 
-#action_form
-    .form_image_group
-        margin-bottom: 20px
-        label
-          strong
-            color: $black
-        .action_image
+.form_image_group
+    margin-bottom: 20px
+    label
+        user-select: none
+        display: block
+        sf_pro_regular(1.6vh)
+        font-weight: normal
+        color: $black
+        margin-bottom: 10px
+      strong
+        sf_pro_semibold(1.4vh)
+        font-weight: normal
+    .action_image
+        position: absolute
+        bottom: 10px
+        opacity: 0
+    .action_image_label
+        position: relative
+        text-transform: none
+        cursor: pointer
+        &::before
+            content: 'Browse'
+            color: $blue
             position: absolute
-            bottom: 10px
-            opacity: 0
-        .action_image_label
-            position: relative
-            text-transform: none
-            cursor: pointer
-            &::before
-                content: 'Browse'
-                color: $green
-                position: absolute
-                top: 50%
-                right: 0
-                padding: 20px 25px
-                background-color: $light_green
-                border-left: 1px solid #ccc
-                transform: translateY(-51%)
-                transition: .3s ease-in-out
-            &:hover,
-            &:focus
-                &::before
-                    color: $light_green
-                    background-color: $green
-                    border-left: 1px solid $black
-                    transition: .3s ease-in-out
-                & ~ .action_image_remove
-                    border-left: 1px solid $black
-                    border-right: 1px solid $black
-                    transition: .3s ease-in-out
-            & ~ .action_image_remove
-                sf_pro_regular(1.8vh)
-                color: $red
-                position: absolute
-                top: 50%
-                right: 0
-                padding: 20px 25px
-                background-color: #FFE5E6
-                transform: translateY(-51%)
-                border-left: 1px solid #ccc
-                border-right: 1px solid #ccc
-                border-top: none
-                border-bottom: none
-                outline: none
-                transition: 0.3s ease-in-out
-                &:hover,
-                &:focus
-                    background-color: $red
-                    color: #FFE5E6
-                    transition: .3s ease-in-out
-        .action_image_add
-            display: inline-block
-            width: 150px
-            text-decoration: none
-            outline: none
-            sf_pro_regular(1.6vh)
-            color: #295AAE
-            padding: 17px
-            background-color: #d3e3ff
-            border: 1px solid #295AAE
-            position: relative
-            text-align: center
-            cursor: pointer
+            top: 50%
+            right: 0
+            padding: 15px 25px
+            border-radius: 0 3px 3px 0
+            background-color: $light_blue
+            border-left: 1px solid $border
+            transform: translateY(-51%)
             transition: .3s ease-in-out
-            &:hover,
-            &:focus
+        &:hover,
+        &:focus
+            &::before
                 color: $white
-                background-color: #295AAE
+                background-color: $blue
+                border-left: 1px solid $black
                 transition: .3s ease-in-out
-        .form_tags_group
-            display: flex
-            flex-flow: row wrap
-            align-items: flex-start
-            justify-content: space-between
-            margin-bottom: 20px
-            .preview_group
-                flex: 0 0 30%
-                img
-                    width: 100%
-                    height: 200px
-                    background-color: $white
-                    border-left: 1px solid #ccc
-                    object-fit: cover
-            .tags_group
-                flex: 0 0 68%
-                .form_group
-                    &:last-child
-                        margin-bottom: 0
-    .note-editor
-        &.note-frame
-                border: 1px solid #ccc
-                transition: 0.3s ease-in-out
+            & ~ .action_image_remove
+                border-left: 1px solid $black
+                border-right: 1px solid $black
+                transition: .3s ease-in-out
+        & ~ .action_image_remove
+            sf_pro_regular(1.8vh)
+            color: $red
+            position: absolute
+            top: 50%
+            right: 0
+            padding: 20px 25px
+            background-color: #FFE5E6
+            transform: translateY(-51%)
+            border-left: 1px solid #ccc
+            border-right: 1px solid #ccc
+            border-top: none
+            border-bottom: none
+            outline: none
+            transition: 0.3s ease-in-out
             &:hover,
             &:focus
-                border: 1px solid $black
-                transition: 0.3s ease-in-out
-            .note-toolbar
-                background-color: #F8F8FB
-            .note-editing-area
-                .note-editable
-                    sf_pro_regular(1.8vh)
-                    padding: 20px 25px
+                background-color: $red
+                color: #FFE5E6
+                transition: .3s ease-in-out
+    .action_image_add
+        display: inline-block
+        width: 150px
+        text-decoration: none
+        outline: none
+        sf_pro_regular(1.6vh)
+        color: #295AAE
+        padding: 17px
+        background-color: #d3e3ff
+        border: 1px solid #295AAE
+        position: relative
+        text-align: center
+        cursor: pointer
+        transition: .3s ease-in-out
+        &:hover,
+        &:focus
+            color: $white
+            background-color: #295AAE
+            transition: .3s ease-in-out
+    .form_tags_group
+        display: flex
+        flex-flow: row wrap
+        align-items: flex-start
+        justify-content: space-between
+        margin-bottom: 20px
+        .preview_group
+            flex: 0 0 30%
+            img
+                width: 100%
+                height: 200px
+                background-color: $white
+                border-left: 1px solid #ccc
+                object-fit: cover
+        .tags_group
+            flex: 0 0 68%
+            .form_group
+                &:last-child
+                    margin-bottom: 0
+
 /**
  * Default Table */
 .cms_table
@@ -1040,7 +1034,7 @@ img
             sf_pro_light(1.6vh)
             color: $black
         .total_title
-            sf_pro_bold(1.8vh)
+            sf_pro_bold(2.2vh)
             color: $black
             margin-top: 15px
         &:hover
@@ -1338,6 +1332,8 @@ img
                 align-items: center
                 cursor: pointer
                 .user_picture
+                    position: relative
+                    text-transform: uppercase
                     background-image: linear-gradient(137deg, $red, $orange)
                     border-radius: 50%
                     margin-right: 15px
@@ -1375,12 +1371,59 @@ img
                         color: #F8F8FB
                         margin-top: 5px
                 .select_footer
-                    padding: 10px 20px
                     display: flex
                     justify-content: space-between
                     .select_item
+                        position: relative
                         sf_pro_regular(1.6vh)
                         color: $black_alternate
+                        transition: .3s ease-in-out
+                        &.account
+                            padding: 10px 20px 10px 40px
+                            &::before
+                                content: ''
+                                position: absolute
+                                top: 48%
+                                left: calc(0%)
+                                width: 15px
+                                height: 15px
+                                z-index: 2
+                                background-image: url('/icons/default-select-icon.svg')
+                                background-position: center
+                                background-repeat: no-repeat
+                                opacity: 0
+                                transform: translateY(-50%) rotate(90deg)
+                                transition: .3s ease-in-out
+                            &:hover
+                                &::before
+                                    left: calc(0% + 15px)
+                                    opacity: 1
+                                    transition: .3s ease-in-out
+                        &.logout
+                            padding: 10px 40px 10px 20px
+                            &::before
+                                content: ''
+                                position: absolute
+                                top: 48%
+                                right: calc(0%)
+                                width: 15px
+                                height: 15px
+                                z-index: 2
+                                background-image: url('/icons/default-select-icon.svg')
+                                background-position: center
+                                background-repeat: no-repeat
+                                opacity: 0
+                                transform: translateY(-50%) rotate(-90deg)
+                                transition: .3s ease-in-out
+                            &:hover
+                                &::before
+                                    right: calc(0% + 15px)
+                                    opacity: 1
+                                    transition: .3s ease-in-out
+                        &:hover
+                            color: $orange
+                            transition: .3s ease-in-out
+
             &.active
                 &::before
                     transform: translateY(-50%) rotate(180deg)
@@ -1523,8 +1566,11 @@ img
                                 opacity: 0
                                 visibility: hidden
                                 transition: .3s ease-in-out
+                            &.nuxt-link-active
+                                background-color: $light_green
+                                border-left: 2px solid $green
+                                transition: .3s ease-in-out .1s
                         &.nuxt-link-exact-active,
-                        &.nuxt-link-active,
                         &:hover,
                         &:focus
                             background-color: $light_green
@@ -1743,10 +1789,9 @@ img
                     .form_group
                         margin-top: 30px
                         margin-bottom: 0
-                        .default_select
-                            width: 250px
+                        .default_select,
                         .default_text
-                            width: 320px
+                            width: 250px
     #content
         padding: 40px
         position: relative

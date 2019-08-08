@@ -5,7 +5,7 @@
                 <h1 class="header_title">Configuration</h1>
             </section>
             <section id="content">
-                <div class="cms_col_three">
+                <div class="cms_col_four">
                     <nuxt-link :to="data.link" class="wrapper" v-for="(data, key) in res.today" :key="key">
                         <div class="total_image">
                             <img class="front" :src="data.imgSrc" />
@@ -34,6 +34,11 @@
                             label: 'Studios',
                             imgSrc: '/icons/studio-icon.svg',
                             link: '/admin/configuration/studios'
+                        },
+                        {
+                            label: 'Customer Types',
+                            imgSrc: '/icons/types-icon.svg',
+                            link: '/admin/configuration/customer-types'
                         },
                         {
                             label: 'System Emails',

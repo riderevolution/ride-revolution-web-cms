@@ -13,6 +13,9 @@
         <transition name="fade">
             <loading v-if="$store.state.isLoading" />
         </transition>
+        <transition name="fade">
+            <error-status v-if="$store.state.errorStatus" />
+        </transition>
     </div>
 </template>
 
@@ -20,11 +23,13 @@
     import Navbar from '../components/Navbar'
     import Loading from '../components/Loading'
     import HeaderNav from '../components/HeaderNav'
+    import ErrorStatus from '../components/modals/Error'
     export default {
         components: {
             Navbar,
             Loading,
-            HeaderNav
+            HeaderNav,
+            ErrorStatus
         },
         async mounted () {
             const me = this

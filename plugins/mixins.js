@@ -2,6 +2,9 @@ import Vue from 'vue'
 
 Vue.mixin({
     methods: {
+        totalCount (value) {
+                return value.toLocaleString()
+        },
         notify (action) {
             this.$store.state.notificationMessage = action
             setTimeout( () => {
