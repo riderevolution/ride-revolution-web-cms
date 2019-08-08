@@ -1,23 +1,23 @@
 <template>
     <div v-if="enabled">
         <div class="form_group">
-            <input type="file" class="action_image" :id="`icon${unique}`" name="icon" ref="file" @change="getFile($event)" v-validate="`image|ext:svg,png${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`" :required="item.key == null">
-            <label class="action_image_label default_text" :for="`icon${unique}`">{{ (item.key != null) ? item.name : 'Choose File' }}</label>
-            <transition name="slide"><span class="validation_errors" v-if="errors.has('icon')">{{ errors.first('icon') }}</span></transition>
+            <input type="file" class="action_image" :id="`image${unique}`" name="image[]" ref="file" @change="getFile($event)" v-validate="`image${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`" :required="item.path == null">
+            <label class="action_image_label default_text" :for="`image${unique}`">Choose File</label>
+            <transition name="slide"><span class="validation_errors" v-if="errors.has('image')">{{ errors.first('image') }}</span></transition>
         </div>
         <div class="form_tags_group" v-if="showTags">
             <div class="preview_group">
-                <img :id="`preview_icon${unique}`" :src="`${(item != null) ? item.path : ''}`" />
+                <img :id="`preview_image${unique}`" :src="`${(item != null) ? item.path : ''}`" />
             </div>
             <div class="tags_group">
                 <div class="form_group">
-                    <label :for="`icon_title${unique}`">Icon Title</label>
-                    <input type="text" name="icon_title[]" :id="`icon_title${unique}`" autocomplete="off" class="action_form default_text" v-model="dataImage.title">
+                    <label :for="`image_title${unique}`">Icon Title</label>
+                    <input type="text" name="image_title[]" :id="`image_title${unique}`" autocomplete="off" class="action_form default_text" v-model="dataImage.title">
                 </div>
                 <div class="form_group">
-                    <label :for="`icon_alt${unique}`">Icon Alt</label>
-                    <input type="text" name="icon_alt[]" :id="`icon_alt${unique}`" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
-                    <input type="hidden" name="icon_key[]" :value="`${(item.key) ? item.key : ''}`">
+                    <label :for="`image_alt${unique}`">Icon Alt</label>
+                    <input type="text" name="image_alt[]" :id="`image_alt${unique}`" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
+                    <input type="hidden" name="image_id[]" :value="`${(item.id) ? item.id : ''}`">
                 </div>
             </div>
         </div>
@@ -72,7 +72,7 @@
                 if (element.files && element.files[0]) {
                     let reader = new FileReader()
                     reader.onload = function () {
-                        let image = document.getElementById(`preview_icon${me.unique}`)
+                        let image = document.getElementById(`preview_image${me.unique}`)
                         image.src = reader.result
                     }
                     reader.readAsDataURL(element.files[0])

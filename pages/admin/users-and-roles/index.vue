@@ -19,7 +19,7 @@
                     <div class="filter_flex">
                         <div class="form_group">
                             <label for="q">Find a user</label>
-                            <input type="text" name="q" autocomplete="off" class="default_text" v-model="form_search.user" @change="search()">
+                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
                         </div>
                         <div class="form_group margin">
                             <label for="studio_id">Studio</label>

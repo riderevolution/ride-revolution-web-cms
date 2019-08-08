@@ -16,13 +16,13 @@
                 <div class="filter_wrapper">
                     <div class="filter_flex">
                         <div class="form_group">
-                            <label for="q">Find a user</label>
-                            <input type="text" name="q" autocomplete="off" class="default_text" v-model="form_search.user" @change="search()">
+                            <label for="q">Find a Customer</label>
+                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
                         </div>
                         <div class="form_group margin">
                             <label for="studio_id">Customer Type</label>
                             <select class="default_select alternate" name="studio_id" v-model="form_search.studio" @change="search()">
-                                <option value="All" selected disabled>All Studios</option>
+                                <option value="All" selected disabled>All Customer Types</option>
                                 <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
                         </div>
@@ -30,103 +30,27 @@
                 </div>
             </section>
             <section id="content">
-                <!-- Accordion Role -->
-                <div class="cms_table_accordion" v-if="status == 1">
-                    <div class="header_wrapper">
-                        <div class="accordion_header">Role Name</div>
-                        <div class="accordion_header">Users</div>
-                        <div class="accordion_header">Permissions</div>
-                        <div class="accordion_header action">Action</div>
-                    </div>
-                    <div :class="`content_wrapper ${(role.open) ? 'toggled' : ''}`" v-for="(role, key) in res">
-                        <div class="toggler" @click="toggleAccordion($event, key)"></div>
-                        <div class="content_headers">
-                            <div class="accordion_content">{{ role.display_name }}</div>
-                            <div class="accordion_content">{{ countActivatedUsers(role.staff_details) }}</div>
-                            <div class="accordion_content">{{ countPermissions(parser(role.permissions)) }}</div>
-                            <div class="accordion_actions action">
-                                <a class="accordion_action_edit" href="javascript:void(0)" @click="toggleForm(role.id, 1, 'role')">Edit Role</a>
-                                <a class="accordion_action_cancel" @click.self="toggleStatus(role.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate Role</a>
-                                <a class="accordion_action_success" @click.self="toggleStatus(role.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate Role</a>
-                            </div>
-                        </div>
-                        <!-- Accordion User per Role -->
-                        <div class="accordion_table">
-                            <table class="cms_table">
-                                <thead>
-                                    <tr>
-                                        <th class="padding_left">Email Address</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="role.staff_details.length > 0">
-                                    <tr v-for="(staff, key) in role.staff_details" :key="key" v-if="staff.user.enabled == 1">
-                                        <td class="padding_left">{{ staff.user.email }}</td>
-                                        <td>{{ staff.user.first_name }}</td>
-                                        <td>{{ staff.user.last_name }}</td>
-                                        <td class="table_actions">
-                                            <a class="table_action_edit" href="javascript:void(0)" @click="toggleForm(staff.user.id, 1, 'user')">Edit User</a>
-                                            <a class="table_action_cancel" @click.self="toggleUserStatus(staff.user.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate User</a>
-                                            <a class="table_action_success" @click.self="toggleUserStatus(staff.user.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate User</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody class="no_results" v-else>
-                                    <tr>
-                                        <td :colspan="rowCount">No Result(s) Found.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <!-- Roles Table -->
-                <table class="cms_table" v-else-if="status == 0">
+                <table class="cms_table">
                     <thead>
                         <tr>
-                            <th>Role Name</th>
-                            <th>Users</th>
-                            <th>Permissions</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody v-if="res.length > 0">
-                        <tr v-for="(role, key) in res" :key="key">
-                            <td>{{ role.display_name }}</td>
-                            <td>{{ role.staff_details.length }}</td>
-                            <td>{{ countPermissions(parser(role.permissions)) }}</td>
-                            <td class="table_actions">
-                                <a class="table_action_edit" href="javascript:void(0)" @click="toggleForm(role.id, 1, 'role')">Edit Role</a>
-                                <a class="table_action_success" @click.self="toggleStatus(role.id, 1, 'Activated')" href="javascript:void(0)">Activate Role</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody class="no_results" v-else>
-                        <tr>
-                            <td :colspan="rowCount">No Result(s) Found.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <!-- Users Table -->
-                <table class="cms_table" v-else-if="status == -1">
-                    <thead>
-                        <tr>
-                            <th>Email Address</th>
-                            <th>First Name</th>
                             <th>Last Name</th>
+                            <th>First Name</th>
+                            <th>Type</th>
+                            <th>Rewards</th>
+                            <th>Email Address</th>
+                            <th>Contact No.</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody v-if="res.length > 0">
-                        <tr v-for="(staff, key) in res" :key="key">
-                            <td>{{ staff.email }}</td>
-                            <td>{{ staff.first_name }}</td>
-                            <td>{{ staff.last_name }}</td>
+                        <tr v-for="(data, key) in res" :key="key">
+                            <td>{{ data.last_name }}</td>
+                            <td>{{ data.first_name }}</td>
+                            <td>{{ data.id }}</td>
                             <td class="table_actions">
-                                <a class="table_action_edit" href="javascript:void(0)" @click="toggleForm(staff.id, 1, 'user')">Edit User</a>
-                                <a class="table_action_success" @click.self="toggleUserStatus(staff.id, 1, 'Activated')" href="javascript:void(0)">Activate User</a>
+                                <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
+                                <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
+                                <a class="table_action_success" @click.self="toggleStatus(data.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
                             </td>
                         </tr>
                     </tbody>
@@ -138,12 +62,6 @@
                 </table>
             </section>
         </div>
-        <transition name="fade">
-            <user-form v-if="$store.state.userForm" :type="type" :id="id" />
-        </transition>
-        <transition name="fade">
-            <role-form v-if="$store.state.roleForm" :type="type" :id="id" />
-        </transition>
         <transition name="fade">
             <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" />
         </transition>
@@ -185,88 +103,6 @@
                 console.log(me.form_search.studio);
             },
             /**
-             * Count Permissions per role
-             * @param  {[array]} values
-             * @return {[ctr]}
-             */
-            countPermissions (values) {
-                const me = this
-                if (values !== undefined) {
-                    let ctr = 0
-                    values.forEach((value, index) => {
-                        if (value.checked) {
-                            ctr++
-                        }
-                    })
-                    if (ctr == 16) {
-                        return 'All'
-                    } else {
-                        return ctr
-                    }
-                }
-            },
-            /**
-             * Count Activated Users
-             * @param  {[array]} values
-             * @return {[ctr]}
-             */
-            countActivatedUsers (values) {
-                const me = this
-                if (values.length > 0) {
-                    if (values !== undefined) {
-                        let ctr = 0
-                        values.forEach((value, index) => {
-                            if (value !== undefined) {
-                                if (value.user.enabled) {
-                                    ctr++
-                                }
-                            }
-                        })
-                        return ctr
-                    }
-                } else {
-                    return 0
-                }
-            },
-            /**
-             * Custom toggler for accordion
-             * @param  {[object]} event
-             * @param  {[int]} key
-             * @return {[css]}
-             */
-            toggleAccordion (event, key) {
-                const me = this
-                const target = event.target
-                me.res[key].open ^= true
-                if (me.res[key].open) {
-                    target.parentNode.querySelector('.accordion_table').style.height = `${target.parentNode.querySelector('.accordion_table').scrollHeight}px`
-                } else {
-                    target.parentNode.querySelector('.accordion_table').style.height = 0
-                }
-            },
-            /**
-             * Toggle User and Role Form
-             * @param  {[int]} value id
-             * @param  {[int]} type method
-             * @param  {[string]} category
-             * @return {[boolean]}
-             */
-            toggleForm (value, type, category) {
-                const me = this
-                switch (category) {
-                    case 'role':
-                        me.$store.state.roleForm = true
-                        break
-                    case 'user':
-                        me.$store.state.userForm = true
-                        break
-                }
-                me.type = type
-                if (value != 0) {
-                    me.id = value
-                }
-            },
-            /**
              * Toggle Confirm Status for Role
              * @param  {[int]}  id role.id
              * @param  {[boolean]}  enabled
@@ -284,17 +120,6 @@
                     me.$refs.enabled.confirm.type = 'role'
                 }, 100)
             },
-            async toggleUserStatus (id, enabled, status) {
-                const me = this
-                me.$store.state.confirmStatus = true
-                setTimeout( () => {
-                    me.$refs.enabled.confirm.table_name = 'users'
-                    me.$refs.enabled.confirm.id = id
-                    me.$refs.enabled.confirm.enabled = enabled
-                    me.$refs.enabled.confirm.status = status
-                    me.$refs.enabled.confirm.type = 'user'
-                }, 100)
-            },
             toggleOnOff (value) {
                 const me = this
                 me.status = value
@@ -303,35 +128,18 @@
             },
             async fetchData (value) {
                 const me = this
-                me.loader(true)
-                if (value != -1) {
-                    me.$axios.get(`api/roles?enabled=${value}`).then(res => {
-                        me.res = res.data.roles
-                        me.total_count = me.res.length
-                    }).catch(err => {
-                        me.$store.state.errorList = err.response.data.errors
-                        me.$store.state.errorStatus = true
-                    }).then(() => {
-                        setTimeout( () => {
-                            me.loader(false)
-                            const elements = document.querySelectorAll('.cms_table_accordion .content_wrapper')
-                            elements.forEach((element, index) => {
-                                element.querySelector('.accordion_table').style.height = 0
-                            })
-                        }, 500)
-                    })
-                } else {
-                    me.$axios.get(`api/staff?enabled=0`).then(res => {
-                        me.res = res.data.staff.data
-                    }).catch(err => {
-                        me.$store.state.errorList = err.response.data.errors
-                        me.$store.state.errorStatus = true
-                    }).then(() => {
-                        setTimeout( () => {
-                            me.loader(false)
-                        }, 500)
-                    })
-                }
+                // me.loader(true)
+                me.$axios.get(`api/customers?enabled=${value}`).then(res => {
+                    me.res = res.data.customers.data
+                    me.total_count = me.res.length
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             },
             async fetchStudios () {
                 const me = this

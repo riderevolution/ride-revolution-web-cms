@@ -1,6 +1,6 @@
 <template>
 	<div class="form_image_group">
-        <label>Icon <strong v-if="dimension.imageWidth != 0">( Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
+        <label>Image <strong v-if="dimension.imageWidth != 0">( Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
 		<icon-handler v-for="(image, key) in images" :key="key" :unique="key" :item="image" ref="imagePicker" :parent="parent" :tableName="tableName" :dimension="dimension" />
 	</div>
 </template>

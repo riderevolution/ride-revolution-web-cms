@@ -4,7 +4,7 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">{{ res.name }}</h1>
+                    <h1 class="header_title">Update {{ res.name }}</h1>
                 </div>
             </section>
             <section id="content">
