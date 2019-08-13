@@ -8,16 +8,21 @@
                     Revolution
                 </div>
             </div>
-            <form id="forgot_form" class="forgot_form" @submit.prevent="submissionSuccess()">
-                <div class="form_disclaimer">Please enter your email address where we can send your request.</div>
+            <form id="reset_form" class="reset_form" @submit.prevent="submissionSuccess()">
+                <div class="form_disclaimer">Please enter your new password.</div>
                 <div class="form_group">
-                    <label for="email">Email Address <span>*</span></label>
-                    <input type="text" name="email" autocomplete="off" class="default_text" v-model="form.email" v-validate="'required|email'">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('email')">{{ errors.first('email') }}</span></transition>
+                    <label for="password">Password <span>*</span></label>
+                    <input type="password" name="password" autocomplete="off" class="default_text" ref="password" v-validate="'required|min:8'">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('password')">{{ errors.first('password') }}</span></transition>
+                </div>
+                <div class="form_group">
+                    <label for="password_confirmation">Password Confirmation <span>*</span></label>
+                    <input type="password" name="password_confirmation" autocomplete="off" class="default_text" v-validate="'required|confirmed:password'">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('password_confirmation')">{{ errors.first('password_confirmation') }}</span></transition>
                 </div>
                 <div class="button_group alternate">
-                    <nuxt-link to="/login" class="action_cancel_btn"><span>Go Back</span></nuxt-link>
-                    <button type="submit" name="submit" class="action_success_btn"><span>Send</span></button>
+                    <nuxt-link to="/login" class="action_cancel_btn"><span>Cancel</span></nuxt-link>
+                    <button type="submit" name="submit" class="action_success_btn"><span>Submit</span></button>
                 </div>
             </form>
         </div>
@@ -45,10 +50,13 @@
                 const me = this
                 me.$validator.validateAll().then(res => {
                     if (res) {
+                        let formData = new FormData(document.getElementById('reset_form'))
+                        formData.append('token', me.$route.query.token)
+                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.post('api/forgot-password', me.form).then(res => {
+                        me.$axios.post('api/forgot-password', formData).then(res => {
                             if (res.data) {
-                                me.$store.state.resetStatus = true
+                                me.$store.state.resetSuccessfulStatus = true
                             } else {
                                 me.$store.state.errorList.push('Sorry, Something went wrong')
                                 me.$store.state.errorStatus = true

@@ -21,7 +21,7 @@
                     <nuxt-link to="/forgot-password" class="action_forgot_text">Forgot your password?</nuxt-link>
                 </div>
                 <div class="button_group">
-                    <button type="submit" name="submit" class="action_cancel_btn"><span>Login</span></button>
+                    <button type="submit" name="submit" class="action_success_btn"><span>Login</span></button>
                 </div>
             </form>
         </div>
@@ -59,6 +59,8 @@
                                 me.$cookies.set('token', res.data.token)
                                 me.$store.state.isAuth = true
                                 me.$store.state.token = res.data.token
+                                me.validateToken()
+                                me.$router.push('/')
                             } else {
                                 me.$store.state.errorList.push('Sorry, Something went wrong')
                                 me.$store.state.errorStatus = true
@@ -67,12 +69,7 @@
                             me.$store.state.errorList = me.errorTexts
                             me.$store.state.errorStatus = true
                         }).then(() => {
-                            setTimeout( () => {
-                                if (!me.$store.state.errorStatus) {
-                                    me.$router.push('/')
-                                }
-                                me.loader(false)
-                            }, 500)
+                            me.loader(false)
                         })
                     }
                 })

@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 const createStore = () => {
     return new Vuex.Store({
         state: () => ({
+            resetSuccessfulStatus: false,
+            resetStatus: false,
             deleteStatus: false,
             errorStatus: false,
             errorList: [],
@@ -18,10 +20,10 @@ const createStore = () => {
             isLoading: false,
             token: '',
             user: {
-                name: '',
+                first_name: '',
                 staff_details: {
                     role: {
-                        display_name: ''
+                        display_name: '',
                     }
                 }
             }

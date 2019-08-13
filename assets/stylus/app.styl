@@ -396,6 +396,11 @@ img
         background-color: $white
         padding: 80px 100px
         transform: translate(-50%, -50%)
+        .confirmation_title
+            neutra_text(2.5vh)
+            color: $black
+            text-align: center
+            margin-bottom: 20px
         .confirmation_text
             neutra_text(2.5vh)
             color: $black
@@ -404,6 +409,12 @@ img
                 neutra_text(1.8vh)
                 color: $red
                 margin-bottom: 10px
+        .confirmation_default
+            user-select: none
+            display: block
+            sf_pro_regular(1.6vh)
+            color: $black
+            text-align: center
         .button_group
             margin-top: 50px
             justify-content: center
@@ -479,15 +490,29 @@ img
         margin-bottom: 60px
         border-radius: 5px
         .form_header_wrapper
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: space-between
+            padding: 30px
+            border-bottom: 1px solid $border
             .form_title
+                flex: 0 0 auto
                 sf_pro_bold(2.2vh)
                 color: $black
-                padding: 30px
-                border-bottom: 1px solid $border
         .form_main_group
             padding: 30px
+            &.alternate
+                padding: 30px 30px 10px
+                border-bottom: 1px solid $border
     .form_footer_wrapper
         margin-bottom: 60px
+        .form_check
+            margin-bottom: 30px
+        .form_flex
+            align-items: center
+            .form_check
+                margin-bottom: 0px
 
 .form_flex
     display: flex
@@ -564,7 +589,7 @@ img
     label
         flex: 0 auto
         margin-left: 10px
-        margin-bottom: 0
+        margin-bottom: 0 !important
         sf_pro_regular(1.5vh)
         font-weight: normal
         color: $black
@@ -620,6 +645,50 @@ img
                 background-image: url('/icons/selected-icon.svg')
                 transition: .3s ease-in-out
 
+.form_flex_radio_alternate
+    position: relative
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 30px
+    &:last-child
+        margin-bottom: 0
+    label
+        flex: 0 0 65%
+        margin-left: 0
+        margin-bottom: 0 !important
+        sf_pro_regular(1.8vh)
+        font-weight: normal
+        color: $black
+    .radio_wrapper
+        flex: 0 0 30%
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: space-between
+        .form_radio
+            flex: 0 0 47.33%
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            label
+                margin-bottom: 0
+                margin-left: 10px
+            .action_radio
+                -webkit-appearance: none
+                outline: none
+                width: 21px
+                height: 21px
+                background-image: url('/icons/unselected-icon.svg')
+                background-position: center
+                background-repeat: no-repeat
+                background-size: cover
+                transition: .3s ease-in-out
+                &:checked
+                    background-image: url('/icons/selected-icon.svg')
+                    transition: .3s ease-in-out
+
 .form_group
     position: relative
     margin-bottom: 30px
@@ -633,8 +702,22 @@ img
         margin-top: 5px
         transition: .3s ease-in-out
         &:hover
-            color: $green
+            color: $red
             transition: .3s ease-in-out
+    .form_group_header
+        sf_pro_bold(1.8vh)
+        color: $black
+        margin-bottom: 30px
+    .form_group_body
+        padding: 25px
+        border: 1px solid $border
+        border-radius: 5px
+        sf_pro_regular(1.8vh)
+        color: $black
+        line-height: 1.5
+        height: 100%
+        max-height: 520px
+        overflow-y: scroll
     label
         user-select: none
         display: block
@@ -666,6 +749,14 @@ img
             border-bottom: 7px solid $red
             left: 17px
             z-index: 1
+
+.form_disclaimer
+    user-select: none
+    display: block
+    sf_pro_regular(1.6vh)
+    color: $black
+    margin-bottom: 40px
+    text-align: center
 
 .button_group
     display: flex
@@ -1299,12 +1390,13 @@ img
                 padding-left: 10px
     .button_group
         flex-flow: column
-        .error
-            color: $red
-            sf_pro_regular(1.6vh)
-            margin-bottom: 20px
-            text-align: center
-        .action_cancel_btn
+        &.alternate
+            flex-flow: row wrap
+            justify-content: space-between
+            .action_cancel_btn,
+            .action_success_btn
+                width: 150px
+        .action_success_btn
             margin-left: 0
             width: 100%
 

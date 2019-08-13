@@ -16,6 +16,12 @@
         <transition name="fade">
             <error-status v-if="$store.state.errorStatus" />
         </transition>
+        <transition name="fade">
+            <password-sent v-if="$store.state.resetStatus" />
+        </transition>
+        <transition name="fade">
+            <reset-successful v-if="$store.state.resetSuccessfulStatus" />
+        </transition>
     </div>
 </template>
 
@@ -24,16 +30,31 @@
     import Loading from '../components/Loading'
     import HeaderNav from '../components/HeaderNav'
     import ErrorStatus from '../components/modals/Error'
+    import PasswordSent from '../components/modals/PasswordSent'
+    import ResetSuccessful from '../components/modals/ResetSuccessful'
     export default {
         components: {
             Navbar,
             Loading,
             HeaderNav,
-            ErrorStatus
+            ErrorStatus,
+            PasswordSent,
+            ResetSuccessful
+        },
+        data () {
+            return {
+                routes: [
+                    '/login',
+                    '/forgot-password',
+                    '/reset-password'
+                ]
+            }
         },
         async mounted () {
             const me = this
-            await me.validateToken()
+            if (!me.routes.includes(me.$route.path)) {
+                await me.validateToken()
+            }
             document.addEventListener('contextmenu', event => event.preventDefault())
             document.body.classList.add('cms')
         },
