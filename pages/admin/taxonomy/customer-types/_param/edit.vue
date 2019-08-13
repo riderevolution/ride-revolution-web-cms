@@ -4,20 +4,22 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Add a New Customer Type</h1>
+                    <h1 class="header_title">Update {{ res.name }}</h1>
                 </div>
             </section>
             <section id="content">
                 <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
-                        <h2 class="form_title">Type Details</h2>
+                        <div class="form_header_wrapper">
+                            <h2 class="form_title">Type Details</h2>
+                        </div>
                         <div class="form_main_group">
                             <div class="form_group">
                                 <label for="name">Name <span>*</span></label>
-                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'">
+                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="res.name">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
-                            <icon-handler-container ref="handler"></icon-handler-container>
+                            <icon-handler-container ref="handler" :data="res.images" :parent="res.id"></icon-handler-container>
                         </div>
                     </div>
                     <div class="form_footer_wrapper">
@@ -34,8 +36,8 @@
 </template>
 
 <script>
-    import Foot from '../../../../components/Foot'
-    import IconHandlerContainer from '../../../../components/IconHandlerContainer'
+    import Foot from '../../../../../components/Foot'
+    import IconHandlerContainer from '../../../../../components/IconHandlerContainer'
     export default {
         components: {
             Foot,
@@ -43,6 +45,7 @@
         },
         data () {
             return {
+                res: [],
                 lastRoute: '',
                 prevRoute: '',
                 iconDimensions: {
@@ -57,11 +60,12 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.post('api/extras/customer-types', formData).then(res => {
+                        me.$axios.post(`api/extras/customer-types/${me.res.id}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
-                                    me.notify('Added')
+                                    me.notify('Updated')
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
@@ -90,8 +94,11 @@
         },
         async mounted () {
             const me = this
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
-            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
+            me.$axios.get(`api/extras/customer-types/${me.$route.params.param}`).then(res => {
+                me.res = res.data.customerType
+            })
         }
     }
 </script>

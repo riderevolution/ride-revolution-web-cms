@@ -148,7 +148,7 @@
                     }, 500)
                 })
             },
-            async fetchStudios () {
+            async fetchTypes () {
                 const me = this
                 me.$axios.get('api/extras/customer-types').then(res => {
                     me.types = res.data.customerTypes
@@ -158,7 +158,7 @@
         async mounted () {
             const me = this
             me.fetchData(1)
-            me.fetchStudios()
+            me.fetchTypes()
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

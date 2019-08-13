@@ -18,9 +18,9 @@
                     <label for="password">Password</label>
                     <input type="password" name="password" autocomplete="off" class="default_text" v-model="form.password" v-validate="'required'">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('password')">{{ errors.first('password') }}</span></transition>
-                    <nuxt-link to="/forgot-password" class="action_forgot_text">Forgot your password?</nuxt-link>
                 </div>
                 <div class="button_group">
+                    <p class="error" v-if="error">Wrong username or password. <br> Please try again.</p>
                     <button type="submit" name="submit" class="action_cancel_btn"><span>Login</span></button>
                 </div>
             </form>
@@ -38,9 +38,7 @@
                     password: '@F1r33x1t',
                     type: 0
                 },
-                errorTexts: [
-                    'Wrong username or password. Please Try Again'
-                ]
+                error: false,
             }
         },
         mounted () {
@@ -53,26 +51,18 @@
                 const me = this
                 me.$validator.validateAll().then(res => {
                     if (res) {
-                        me.loader(true)
+                        me.$store.state.isLoaderShow = true
                         me.$axios.post('api/login', me.form).then(res => {
-                            if (res.data) {
-                                me.$cookies.set('token', res.data.token)
-                                me.$store.state.isAuth = true
-                                me.$store.state.token = res.data.token
-                            } else {
-                                me.$store.state.errorList.push('Sorry, Something went wrong')
-                                me.$store.state.errorStatus = true
-                            }
+                            me.$cookies.set('token', res.data.token)
+                            me.$store.state.isAuth = true
+                            me.error = false
+                            me.$router.push('/')
+                            me.$store.state.token = res.data.token
                         }).catch(err => {
-                            me.$store.state.errorList = me.errorTexts
-                            me.$store.state.errorStatus = true
+                            console.log(err)
+                            me.error = true
                         }).then(() => {
-                            setTimeout( () => {
-                                if (!me.$store.state.errorStatus) {
-                                    me.$router.push('/')
-                                }
-                                me.loader(false)
-                            }, 500)
+                            me.$store.state.isLoaderShow = false
                         })
                     }
                 })

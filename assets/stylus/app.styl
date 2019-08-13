@@ -136,16 +136,16 @@ img
             transition: .3s ease-in-out
         .notif_icon_alt
             fill: #abadb9
-            transition: .3s ease-in-out
         &.active
             .notif_icon
                 fill: $green
                 stroke: $green
                 transition: .3s ease-in-out
-            .notif_icon_no_fill,
-            .notif_icon_alt
+            .notif_icon_no_fill
                 fill: $green
                 transition: .3s ease-in-out
+            .notif_icon_alt
+                fill: $green
     &::before
         content: '●'
         position: absolute
@@ -381,7 +381,6 @@ img
                 sf_pro_bold(2.2vh)
                 color: $black
                 padding: 40px
-                padding: 40px
                 border-bottom: 1px solid $border
             .modal_main_group
                 padding: 40px
@@ -442,6 +441,8 @@ img
     color: $black
     outline: none
     transition: .3s ease-in-out
+    &.date
+        padding: 13px
     &.search
         background-image: url('/icons/search-icon.svg')
         background-position: calc(100% - 10px) center
@@ -477,11 +478,12 @@ img
         box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.05)
         margin-bottom: 60px
         border-radius: 5px
-        .form_title
-            sf_pro_bold(2.2vh)
-            color: $black
-            padding: 30px
-            border-bottom: 1px solid $border
+        .form_header_wrapper
+            .form_title
+                sf_pro_bold(2.2vh)
+                color: $black
+                padding: 30px
+                border-bottom: 1px solid $border
         .form_main_group
             padding: 30px
     .form_footer_wrapper
@@ -490,7 +492,7 @@ img
 .form_flex
     display: flex
     flex-flow: row wrap
-    align-items: center
+    align-items: flex-start
     justify-content: space-between
     .flex_label
         flex: 0 0 100%
@@ -505,6 +507,8 @@ img
         .action_check
             &.child
                 margin-left: 30px
+    .form_flex_radio
+        flex: 0 0 48.33%
     .form_group
         flex: 0 0 48.33%
         &.flex
@@ -578,11 +582,59 @@ img
             background-image: url('/icons/check-icon.svg')
             transition: .3s ease-in-out
 
+.form_flex_radio
+    position: relative
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: space-between
+    &.default
+        flex: 0 0 auto
+    label
+        flex: 0 auto
+        margin-left: 10px
+        margin-bottom: 0
+        sf_pro_regular(1.5vh)
+        font-weight: normal
+        color: $black
+    .radio_label
+        flex: 0 0 100%
+        margin-left: 0px
+        margin-bottom: 20px
+    .form_radio
+        flex: 0 0 47.33%
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        .action_radio
+            -webkit-appearance: none
+            outline: none
+            width: 21px
+            height: 21px
+            background-image: url('/icons/unselected-icon.svg')
+            background-position: center
+            background-repeat: no-repeat
+            background-size: cover
+            transition: .3s ease-in-out
+            &:checked
+                background-image: url('/icons/selected-icon.svg')
+                transition: .3s ease-in-out
+
 .form_group
     position: relative
     margin-bottom: 30px
     &.margin
         margin-left: 20px
+    .action_forgot_text
+        display: inline-block
+        sf_pro_regular(1.3vh)
+        color: $gray
+        text-decoration: none
+        margin-top: 5px
+        transition: .3s ease-in-out
+        &:hover
+            color: $green
+            transition: .3s ease-in-out
     label
         user-select: none
         display: block

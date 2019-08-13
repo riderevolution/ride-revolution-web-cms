@@ -2,7 +2,7 @@
     <div class="content">
         <div id="admin" class="cms_dashboard">
             <section id="top_content">
-                <h1 class="header_title">Configuration</h1>
+                <h1 class="header_title">Configuraciones</h1>
             </section>
             <section id="content">
                 <div class="cms_col_three">
@@ -31,20 +31,15 @@
                 res: {
                     today: [
                         {
-                            label: 'Studios',
-                            imgSrc: '/icons/studio-icon.svg',
-                            link: '/admin/configuration/studios'
+                            label: 'Customer Typuh',
+                            imgSrc: '/icons/types-icon.svg',
+                            link: '/admin/taxonomy/customer-types'
                         },
                         {
-                            label: 'System Emails',
-                            imgSrc: '/icons/system-emails-icon.svg',
-                            link: '/admin/configuration/system-emails'
+                            label: 'Occupaciones',
+                            imgSrc: '/icons/types-icon.svg',
+                            link: '/admin/taxonomy/customer-types'
                         },
-                        {
-                            label: 'MailChimp',
-                            imgSrc: '/icons/mailchimp-icon.svg',
-                            link: '/admin/configuration/mailchimp'
-                        }
                     ]
                 }
             }

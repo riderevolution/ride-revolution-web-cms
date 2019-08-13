@@ -115,6 +115,10 @@
                             {
                                 title: 'Configuration',
                                 link: '/admin/configuration'
+                            },
+                            {
+                                title: 'Taxonomy',
+                                link: '/admin/taxonomy'
                             }
                         ]
                     }

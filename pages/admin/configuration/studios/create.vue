@@ -10,7 +10,9 @@
             <section id="content">
                 <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
-                        <h2 class="form_title">Studio Details</h2>
+                        <div class="form_header_wrapper">
+                            <h2 class="form_title">Studio Details</h2>
+                        </div>
                         <div class="form_main_group">
                             <div class="form_group">
                                 <label for="name">Studio Name <span>*</span></label>
