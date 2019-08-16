@@ -233,16 +233,18 @@
                                     </div>
                                 </div>
                                 <div class="form_check">
-                                    <input type="checkbox" id="acknowledge" name="acknowledge" class="action_check">
+                                    <input type="checkbox" id="acknowledge" name="acknowledge" class="action_check" v-validate="'required'">
                                     <label for="acknowledge">I acknowledge and fully understand the terms and conditions stated above and that all information stated are true.</label>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('acknowledge')">{{ errors.first('acknowledge') }}</span></transition>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form_footer_wrapper">
                         <div class="form_check">
-                            <input type="checkbox" id="i_agree" name="i_agree" class="action_check">
+                            <input type="checkbox" id="i_agree" name="i_agree" class="action_check" v-validate="'required'">
                             <label for="i_agree">I agree to the <a href="javascript:void(0)" target="_blank">Terms &amp; Conditions</a> and <a href="javascript:void(0)" target="_blank">Privacy Policy</a> of Ride Revolution.</label>
+                            <transition name="slide"><span class="validation_errors" v-if="errors.has('i_agree')">{{ errors.first('i_agree') }}</span></transition>
                         </div>
                         <div class="form_check">
                             <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription" class="action_check">
@@ -310,6 +312,9 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        if (formData.get('acknowledge') != null) {
+
+                        }
                         me.loader(true)
                         me.$axios.post('api/customers', formData).then(res => {
                             setTimeout( () => {

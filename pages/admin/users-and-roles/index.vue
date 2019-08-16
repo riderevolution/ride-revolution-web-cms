@@ -141,10 +141,10 @@
             </section>
         </div>
         <transition name="fade">
-            <user-form v-if="$store.state.userForm" :type="type" :id="id" />
+            <user-form v-if="$store.state.userForm" :type="type" :id="id" :status="status" />
         </transition>
         <transition name="fade">
-            <role-form v-if="$store.state.roleForm" :type="type" :id="id" />
+            <role-form v-if="$store.state.roleForm" :type="type" :id="id" :status="status" />
         </transition>
         <transition name="fade">
             <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" />
@@ -306,6 +306,7 @@
             async fetchData (value) {
                 const me = this
                 me.loader(true)
+                me.rowCount = 4
                 if (value != -1) {
                     me.$axios.get(`api/roles?enabled=${value}`).then(res => {
                         me.res = res.data.roles

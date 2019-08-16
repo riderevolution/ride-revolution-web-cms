@@ -145,6 +145,10 @@
                 type: Number,
                 default: 0
             },
+            status: {
+                type: Number,
+                default: 0
+            },
             id: {
                 type: Number
             }
@@ -230,7 +234,7 @@
                             me.$store.state.userForm = false
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
-                                    me.$parent.fetchData(-1)
+                                    me.$parent.fetchData(me.status)
                                 }
                             }, 500)
                             setTimeout( () => {
@@ -273,7 +277,7 @@
                             me.$store.state.userForm = false
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
-                                    me.$parent.fetchData(1)
+                                    me.$parent.fetchData(me.status)
                                 }
                             }, 500)
                             setTimeout( () => {
