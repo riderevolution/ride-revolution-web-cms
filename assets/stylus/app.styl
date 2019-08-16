@@ -14,6 +14,7 @@ $gray = #91939B
 $gray_alternate = #ABADB9
 $border = #DEDEDE
 $border_alt = #EDEEF0
+$border_alt2 = #9C9EAA
 
 image_default =
     height: auto
@@ -505,6 +506,9 @@ img
             &.alternate
                 padding: 30px 30px 10px
                 border-bottom: 1px solid $border
+                .form_group
+                    .validation_errors
+                        top: calc(0% + 25px)
     .form_footer_wrapper
         margin-bottom: 60px
         .form_check
@@ -592,6 +596,14 @@ img
         sf_pro_regular(1.5vh)
         font-weight: normal
         color: $black
+        a
+            sf_pro_regular(1.8vh)
+            color: $blue
+            text-decoration: none
+            transition: .3s ease-in-out
+            &:hover
+                color: $black
+                transition: .3s ease-in-out
     .action_check
         -webkit-appearance: none
         outline: none
@@ -647,6 +659,8 @@ img
         flex: 0 0 100%
         margin-left: 0px
         margin-bottom: 20px
+        span
+            color: $green
     .form_radio
         flex: 0 0 47.33%
         display: flex
@@ -682,6 +696,28 @@ img
         sf_pro_regular(1.8vh)
         font-weight: normal
         color: $black
+    .validation_errors
+        position: absolute
+        top: calc(100% + 5px)
+        background-color: $red
+        color: $white
+        sf_pro_medium(1.4vh)
+        z-index: 1
+        padding: 5px 10px
+        border-radius: 5px
+        user-select: none
+        left: 0
+        &::before
+            content: ""
+            position: absolute
+            bottom: calc(100% - 1px)
+            width: 0
+            height: 0
+            border-left: 7px solid transparent
+            border-right: 7px solid transparent
+            border-bottom: 7px solid $red
+            left: 17px
+            z-index: 1
     .radio_wrapper
         flex: 0 0 30%
         display: flex
@@ -770,6 +806,83 @@ img
             border-bottom: 7px solid $red
             left: 17px
             z-index: 1
+.form_photo
+    position: relative
+    .validation_errors
+        position: absolute
+        top: calc(100% + 5px)
+        background-color: $red
+        color: $white
+        sf_pro_medium(1.4vh)
+        z-index: 1
+        padding: 5px 10px
+        border-radius: 5px
+        user-select: none
+        left: 0
+        &::before
+            content: ""
+            position: absolute
+            bottom: calc(100% - 1px)
+            width: 0
+            height: 0
+            border-left: 7px solid transparent
+            border-right: 7px solid transparent
+            border-bottom: 7px solid $red
+            left: 17px
+            z-index: 1
+    #preview_image
+        position: absolute
+        top: 0
+        z-index: 0
+        width: 125px
+        height: 125px
+        border-radius: 6px
+    .action_photo
+        opacity: 0
+        visibility: hidden
+        position: absolute
+        width: 0
+    label
+        position: relative
+        z-index: 1
+        display: block
+        width: 125px
+        height: 125px
+        border: 2px dashed $border
+        background-color: transparent
+        border-radius: 6px
+        sf_pro_regular(1.6vh)
+        color: $blue
+        opacity: 1
+        transition: .3s ease-in-out
+        &.active
+            background-color: rgba(255, 255, 255, 0.8)
+            opacity: 0
+            transition: .3s ease-in-out
+        &::before
+            content: url('/icons/add-icon.svg')
+            position: absolute
+            z-index: 1
+            width: 30px
+            height: 30px
+            top: 40%
+            left: 0
+            right: 0
+            margin: 0 auto
+            transform: translateY(-50%)
+        span
+            position: absolute
+            z-index: 1
+            top: 60%
+            right: 0
+            left: 0
+            text-align: center
+        &:hover
+            border: 2px dashed $blue
+            transition: .3s ease-in-out
+            &.active
+                opacity: 1
+                transition: .3s ease-in-out
 
 .form_disclaimer
     user-select: none
@@ -916,6 +1029,12 @@ img
             border-bottom: 2px dashed $border
             transition: .3s ease-in-out
             td
+                &.thumb
+                    padding: 20px 0 20px 30px
+                    img
+                        width: 32px
+                        height: 32px
+                        border-radius: 50%
                 sf_pro_regular(1.6vh)
                 color: $black
                 padding: 20px 30px

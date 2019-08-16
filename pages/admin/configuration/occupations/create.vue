@@ -4,14 +4,14 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Add a New Customer Type</h1>
+                    <h1 class="header_title">Add a New Occupation</h1>
                 </div>
             </section>
             <section id="content">
                 <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
-                            <h2 class="form_title">Type Details</h2>
+                            <h2 class="form_title">Occupation Details</h2>
                         </div>
                         <div class="form_main_group">
                             <div class="form_group">
@@ -19,7 +19,6 @@
                                 <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
-                            <icon-handler-container ref="handler"></icon-handler-container>
                         </div>
                     </div>
                     <div class="form_footer_wrapper">
@@ -37,20 +36,14 @@
 
 <script>
     import Foot from '../../../../components/Foot'
-    import IconHandlerContainer from '../../../../components/IconHandlerContainer'
     export default {
         components: {
-            Foot,
-            IconHandlerContainer
+            Foot
         },
         data () {
             return {
                 lastRoute: '',
-                prevRoute: '',
-                iconDimensions: {
-                    imageWidth: 36,
-                    imageHeight: 36
-                }
+                prevRoute: ''
             }
         },
         methods: {
@@ -60,7 +53,7 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         me.loader(true)
-                        me.$axios.post('api/extras/customer-types', formData).then(res => {
+                        me.$axios.post('api/extras/occupations', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Added')
@@ -70,6 +63,7 @@
                                 }
                             }, 500)
                         }).catch(err => {
+                            console.log(err);
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
                         }).then(() => {

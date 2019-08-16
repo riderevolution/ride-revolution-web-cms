@@ -3,9 +3,9 @@
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table">
                 <div class="action_wrapper">
-                    <h1 class="header_title">Customers</h1>
+                    <h1 class="header_title">Instructors</h1>
                     <div class="actions">
-                        <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add New Customer</nuxt-link>
+                        <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add New Instructor</nuxt-link>
                         <div class="total">Total: {{ totalCount(total_count) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
@@ -16,15 +16,8 @@
                 <div class="filter_wrapper">
                     <div class="filter_flex">
                         <div class="form_group">
-                            <label for="q">Find a Customer</label>
+                            <label for="q">Find a Instructor</label>
                             <input type="text" name="q" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
-                        </div>
-                        <div class="form_group margin">
-                            <label for="studio_id">Customer Type</label>
-                            <select class="default_select alternate" name="studio_id" v-model="form_search.studio" @change="search()">
-                                <option value="All" selected disabled>All Customer Types</option>
-                                <option :value="type.id" v-for="(type, key) in types" :key="key">{{ type.name }}</option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -36,26 +29,19 @@
                             <th></th>
                             <th>Last Name</th>
                             <th>First Name</th>
-                            <th>Type</th>
-                            <th>Rewards</th>
+                            <th>Nickname</th>
                             <th>Email Address</th>
                             <th>Contact No.</th>
-                            <th>Pending Payment</th>
                         </tr>
                     </thead>
                     <tbody v-if="res.length > 0">
                         <tr v-for="(data, key) in res" :key="key">
-                            <td class="thumb" width="10"><img :src="data.customer_details.images[0].path_resized" /></td>
+                            <td class="thumb" width="10"><img :src="data.instructor_details.images[0].path_resized" /></td>
                             <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.last_name }}</a></td>
                             <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.first_name }}</a></td>
-                            <td>First Timer</td>
-                            <td>Teal</td>
+                            <td>{{ data.instructor_details.nickname }}</td>
                             <td>{{ data.email }}</td>
-                            <td>{{ (data.customer_details != null) ? data.customer_details.co_contact_number : '-' }}</td>
-                            <td class="table_actions">
-                                <div class="table_action_text red">Php 120.00</div>
-                                <a class="table_action_success" href="javascript:void(0)">Pay Now</a>
-                            </td>
+                            <td>{{ (data.instructor_details != null) ? data.instructor_details.io_contact_number : '-' }}</td>
                         </tr>
                     </tbody>
                     <tbody class="no_results" v-else>
@@ -92,9 +78,9 @@
                 rowCount: 0,
                 status: 1,
                 res: {
-                    customer_details: {
+                    instructor_details: {
                         user_id: '',
-                        co_contact_number: ''
+                        io_contact_number: ''
                     }
                 },
                 total_count: 0,
@@ -138,8 +124,8 @@
             async fetchData (value) {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/customers?enabled=${value}`).then(res => {
-                    me.res = res.data.customers.data
+                me.$axios.get(`api/instructors?enabled=${value}`).then(res => {
+                    me.res = res.data.instructors.data
                     me.total_count = me.res.length
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
@@ -149,18 +135,11 @@
                         me.loader(false)
                     }, 500)
                 })
-            },
-            async fetchTypes () {
-                const me = this
-                me.$axios.get('api/extras/customer-types').then(res => {
-                    me.types = res.data.customerTypes
-                })
             }
         },
         async mounted () {
             const me = this
             me.fetchData(1)
-            me.fetchTypes()
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

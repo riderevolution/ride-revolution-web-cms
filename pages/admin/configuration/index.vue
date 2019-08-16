@@ -43,6 +43,11 @@
                             link: '/admin/configuration/customer-types'
                         },
                         {
+                            label: 'Occupations',
+                            imgSrc: '/icons/types-icon.svg',
+                            link: '/admin/configuration/occupations'
+                        },
+                        {
                             label: 'System Emails',
                             imgSrc: '/icons/system-emails-icon.svg',
                             link: '/admin/configuration/system-emails'

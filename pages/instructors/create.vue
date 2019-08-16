@@ -4,14 +4,14 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Add New Customer</h1>
+                    <h1 class="header_title">Add New Instructor</h1>
                 </div>
             </section>
             <section id="content">
                 <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
-                            <h2 class="form_title">Customer Overview</h2>
+                            <h2 class="form_title">Instructor Overview</h2>
                             <div class="form_photo">
                                 <input type="file" id="image" name="image[]" class="action_photo" @change="getFile($event)" v-validate="'required|image|dimensions:600,600'">
                                 <label for="image" :class="`${(previewImage) ? 'active' : ''}`"><span>Upload Photo</span></label>
@@ -39,32 +39,32 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('email')">{{ errors.first('email') }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="co_contact_number">Contact Number <span>*</span></label>
-                                    <input type="text" name="co_contact_number" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('co_contact_number')">{{ errors.first('co_contact_number') }}</span></transition>
+                                    <label for="io_contact_number">Contact Number <span>*</span></label>
+                                    <input type="text" name="io_contact_number" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('io_contact_number')">{{ errors.first('io_contact_number') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
-                                    <label for="co_birthdate">Birthdate <span>*</span></label>
-                                    <input type="date" name="co_birthdate" autocomplete="off" class="default_text date" v-validate="'required'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('co_birthdate')">{{ errors.first('co_birthdate') }}</span></transition>
+                                    <label for="io_birthdate">Birthdate <span>*</span></label>
+                                    <input type="date" name="io_birthdate" autocomplete="off" class="default_text date" v-validate="'required'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('io_birthdate')">{{ errors.first('io_birthdate') }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="co_weight">Weight (in kilograms) <span>*</span></label>
-                                    <input type="text" name="co_weight" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('co_weight')">{{ errors.first('co_weight') }}</span></transition>
+                                    <label for="io_weight">Weight (in kilograms) <span>*</span></label>
+                                    <input type="text" name="io_weight" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('io_weight')">{{ errors.first('io_weight') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_flex">
                                 <div class="form_flex_radio">
                                     <label class="radio_label">Sex <span>*</span></label>
                                     <div class="form_radio">
-                                        <input type="radio" id="female" value="Female" name="co_sex" class="action_radio">
+                                        <input type="radio" id="female" value="Female" name="io_sex" class="action_radio">
                                         <label for="female">Female</label>
                                     </div>
                                     <div class="form_radio">
-                                        <input type="radio" id="male" value="Male" name="co_sex" class="action_radio">
+                                        <input type="radio" id="male" value="Male" name="io_sex" class="action_radio">
                                         <label for="male">Male</label>
                                     </div>
                                 </div>
@@ -79,9 +79,14 @@
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
-                                    <label for="co_shoe_size">Shoe Size</label>
-                                    <input type="text" name="co_shoe_size" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('co_shoe_size')">{{ errors.first('co_shoe_size') }}</span></transition>
+                                    <label for="io_nickname">Nickname <span>*</span></label>
+                                    <input type="text" name="io_nickname" autocomplete="off" class="default_text" v-validate="'required'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('io_nickname')">{{ errors.first('io_nickname') }}</span></transition>
+                                </div>
+                                <div class="form_group">
+                                    <label for="io_shoe_size">Shoe Size</label>
+                                    <input type="text" name="io_shoe_size" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('io_shoe_size')">{{ errors.first('io_shoe_size') }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -145,21 +150,6 @@
                             <div class="form_group">
                                 <label for="ba_city">City</label>
                                 <input type="text" name="ba_city" autocomplete="off" class="default_text" v-model="form.ba_city">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form_wrapper">
-                        <div class="form_header_wrapper">
-                            <h2 class="form_title">Customer Management</h2>
-                        </div>
-                        <div class="form_main_group">
-                            <div class="form_group">
-                                <label for="name">Choose a Type <span>*</span></label>
-                                <select class="default_select alternate" name="type" v-validate="'required'">
-                                    <option value="" selected disabled>Choose a Type</option>
-                                    <option :value="type.id" v-for="(type, index) in types">{{ type.name }}</option>
-                                </select>
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('type')">{{ errors.first('type') }}</span></transition>
                             </div>
                         </div>
                     </div>
@@ -231,10 +221,6 @@
                             <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription" class="action_check">
                             <label for="newsletter_subscription">Subscribe to newsletter</label>
                         </div>
-                        <div class="form_check">
-                            <input type="checkbox" id="before_saving" name="before_saving" class="action_check">
-                            <label for="before_saving">Buy credits after saving.</label>
-                        </div>
                         <div class="form_flex">
                             <div class="form_check">
                                 <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
@@ -289,7 +275,6 @@
                         value: 0
                     }
                 ],
-                types: [],
                 occupations: []
             }
         },
@@ -340,7 +325,7 @@
                         if (formData.get('acknowledge') != null && formData.get('i_agree') != null) {
                             formData.append('medical_history', JSON.stringify(me.form.medical_history))
                             me.loader(true)
-                            me.$axios.post('api/customers', formData).then(res => {
+                            me.$axios.post('api/instructors', formData).then(res => {
                                 setTimeout( () => {
                                     if (res.data) {
                                         me.notify('Added')
@@ -371,9 +356,6 @@
         },
         async mounted () {
             const me = this
-            me.$axios.get('api/extras/customer-types').then(res => {
-                me.types = res.data.customerTypes
-            })
             me.$axios.get('api/extras/occupations').then(res => {
                 me.occupations = res.data.occupations
             })
