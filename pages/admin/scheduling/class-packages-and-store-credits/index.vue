@@ -26,9 +26,9 @@
             </section>
             <section id="content" v-if="loaded">
                 <div class="cms_table_toggler">
-                    <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Regular</div>
-                    <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Promo</div>
-                    <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Store Credits</div>
+                    <div :class="`status ${(package_status == 1) ? 'active' : ''}`" @click="togglePackages(1)">Regular</div>
+                    <div :class="`status ${(package_status == 2) ? 'active' : ''}`" @click="togglePackages(2)">Promo</div>
+                    <div :class="`status ${(package_status == 3) ? 'active' : ''}`" @click="togglePackages(3)">Store Credits</div>
                 </div>
                 <table class="cms_table">
                     <thead>
@@ -85,6 +85,7 @@
                 lastRoute: '',
                 rowCount: 0,
                 status: 1,
+                package_status: 1,
                 res: [],
                 form_search: {
                     user: ''
@@ -111,12 +112,31 @@
             toggleOnOff (value) {
                 const me = this
                 me.status = value
-                me.fetchData(value)
+                me.fetchData(value, me.package_status)
             },
-            fetchData (value) {
+            togglePackages (value) {
                 const me = this
+                me.package_status = value
+                switch (value) {
+                    case 1:
+                    case 2:
+                        me.fetchData(me.status, value)
+                        break
+                    case 3:
+                        console.log('store credits')
+                        break
+                }
+            },
+            fetchData (value, packageStatus) {
+                const me = this
+                let apiRoute = ''
+                if (packageStatus == 1) {
+                    apiRoute = `api/packages/class-packages?enabled=${value}`
+                } else {
+                    apiRoute = `api/packages/class-packages?enabled=${value}&promo=${packageStatus}`
+                }
                 me.loader(true)
-                me.$axios.get(`api/packages/class-packages?enabled=${value}`).then(res => {
+                me.$axios.get(apiRoute).then(res => {
                     me.res = res.data
                     me.loaded = true
                 }).catch(err => {
@@ -132,7 +152,7 @@
         },
         async mounted () {
             const me = this
-            me.fetchData(1)
+            me.fetchData(1, 1)
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)
