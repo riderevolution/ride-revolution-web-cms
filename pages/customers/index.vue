@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </section>
-            <section id="content">
+            <section id="content" v-if="loaded">
                 <table class="cms_table">
                     <thead>
                         <tr>
@@ -43,8 +43,8 @@
                             <th>Pending Payment</th>
                         </tr>
                     </thead>
-                    <tbody v-if="res.length > 0">
-                        <tr v-for="(data, key) in res" :key="key">
+                    <tbody v-if="res.customers.data.length > 0">
+                        <tr v-for="(data, key) in res.customers.data" :key="key">
                             <td class="thumb" width="10"><img :src="data.customer_details.images[0].path_resized" /></td>
                             <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.last_name }}</a></td>
                             <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.first_name }}</a></td>
@@ -64,6 +64,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <pagination :apiRoute="res.customers.path" :current="res.customers.current_page" :last="res.customers.total" />
             </section>
         </div>
         <transition name="fade">
@@ -78,25 +79,23 @@
     import UserForm from '../../components/modals/UserForm'
     import RoleForm from '../../components/modals/RoleForm'
     import ConfirmStatus from '../../components/modals/ConfirmStatus'
+    import Pagination from '../../components/Pagination'
     export default {
         components: {
             Foot,
             UserForm,
             RoleForm,
-            ConfirmStatus
+            ConfirmStatus,
+            Pagination
         },
         data () {
             return {
+                loaded: false,
                 id: 0,
                 type: 0,
                 rowCount: 0,
                 status: 1,
-                res: {
-                    customer_details: {
-                        user_id: '',
-                        co_contact_number: ''
-                    }
-                },
+                res: [],
                 total_count: 0,
                 types: [],
                 form_search: {
@@ -135,22 +134,23 @@
                 me.fetchData(value)
                 me.rowCount = document.getElementsByTagName('th').length
             },
-            async fetchData (value) {
+            fetchData (value) {
                 const me = this
                 me.loader(true)
                 me.$axios.get(`api/customers?enabled=${value}`).then(res => {
-                    me.res = res.data.customers.data
-                    me.total_count = me.res.length
+                    me.res = res.data
+                    me.loaded = true
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
                 }).then(() => {
                     setTimeout( () => {
                         me.loader(false)
+                        me.total_count = me.res.customers.data.length
                     }, 500)
                 })
             },
-            async fetchTypes () {
+            fetchTypes () {
                 const me = this
                 me.$axios.get('api/extras/customer-types').then(res => {
                     me.types = res.data.customerTypes
