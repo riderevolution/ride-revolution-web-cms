@@ -34,7 +34,7 @@
                                     <label for="select_all">Select All</label>
                                 </div>
                                 <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studios" class="action_check" :value="studio.id" @change="toggleStudio(studio.id)" :checked="(res.studio_access[key]) ? (res.studio_access[key].studio_id == studio.id) ? true : false : false">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studios" class="action_check" :value="studio.id" @change="toggleStudio(studio.id)" :checked="studio.checked">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -117,6 +117,7 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         me.form.studios.sort()
+                        console.log(me.form.studios)
                         formData.append('studio_access', JSON.stringify(me.form.studios))
                         formData.append('_method', 'patch')
                         me.loader(true)
@@ -156,17 +157,22 @@
         },
         async mounted () {
             const me = this
+            me.fetchStudios()
             me.$axios.get(`api/packages/package-types/${me.$route.params.param}`).then(res => {
                 me.res = res.data.packageType
-                me.res.studio_access.forEach((studio, index) => {
-                    me.form.studios.push(studio.studio_id)
+                me.studios.forEach((studio, index) => {
+                    me.res.studio_access.forEach((compare, index) => {
+                        if (studio.id == compare.studio_id) {
+                            me.form.studios.push(compare.studio_id)
+                            studio.checked = true
+                        }
+                    })
                 })
                 if (me.studios.length == me.form.studios.length) {
                     me.all = true
                 }
                 me.loaded = true
             })
-            me.fetchStudios()
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }

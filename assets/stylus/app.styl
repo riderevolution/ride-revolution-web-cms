@@ -233,7 +233,7 @@ img
  * Default Buttons */
 .action_success_btn
     display: inline-block
-    width: 200px
+    width: 225px
     sf_pro_medium(1.6vh)
     text-decoration: none
     outline: none
@@ -267,7 +267,7 @@ img
         transition: .3s ease-in-out
 .action_cancel_btn
     display: inline-block
-    width: 200px
+    width: 225px
     sf_pro_medium(1.6vh)
     text-decoration: none
     outline: none
@@ -316,7 +316,7 @@ img
         transition: .3s ease-in-out
 .action_btn
     display: inline-block
-    width: 200px
+    width: 225px
     sf_pro_medium(1.6vh)
     text-decoration: none
     outline: none
@@ -443,6 +443,15 @@ img
         border: 1px solid $black
         transition: .3s ease-in-out
 
+input::-webkit-input-placeholder
+    color: $gray
+
+input:-ms-input-placeholder
+    color: $gray
+
+input::placeholder
+    color: $gray
+
 .default_text
     width: 100%
     background-color: $white
@@ -456,6 +465,7 @@ img
     transition: .3s ease-in-out
     &.date
         padding: 13px
+        resize: none
     &.search
         background-image: url('/icons/search-icon.svg')
         background-position: calc(100% - 10px) center
@@ -522,7 +532,7 @@ img
 .form_flex
     display: flex
     flex-flow: row wrap
-    align-items: flex-start
+    align-items: center
     justify-content: space-between
     .flex_label
         flex: 0 0 100%
@@ -530,7 +540,7 @@ img
         color: $black
         margin-bottom: 20px
     .form_check
-        flex: 0 0 48.33%
+        flex: 1 0 40%
         margin-bottom: 30px
         &.select_all
             flex: 0 0 100%
@@ -541,6 +551,8 @@ img
         flex: 0 0 48.33%
     .form_group
         flex: 0 0 48.33%
+        &.check
+            margin-bottom: 0
         &.flex
             display: flex
             flex-flow: row wrap
@@ -548,9 +560,20 @@ img
             justify-content: space-between
             label
                 flex: 0 0 100%
+            .form_check
+                margin-bottom: 0
             .form_flex_input
                 position: relative
                 flex: 0 0 48.33%
+                &.active
+                    pointer-events: all
+                &.not_active
+                    pointer-events: none
+                    opacity: 0.5
+                &.full
+                    flex: 0 0 100%
+                    .placeholder
+                        right: calc(0px + 15px)
                 .placeholder
                     position: absolute
                     top: 50%
@@ -588,6 +611,44 @@ img
     position: relative
     display: flex
     align-items: center
+    &.toggler
+        flex: 0 0 120px
+        justify-content: flex-end
+        label
+            sf_pro_regular(1.8vh)
+            margin-bottom: 0
+            margin-left: 0
+        .action_check
+            visibility: hidden
+        .toggle
+            position: absolute
+            width: 55px
+            height: 30px
+            top: 50%
+            left: 0
+            z-index: 1
+            background-color: $border_alt
+            border-radius: 16px
+            transform: translateY(-50%)
+            transition: .3s ease-in-out
+            &.active
+                background-color: $light_green
+                transition: .3s ease-in-out
+                &::before
+                    left: calc(100% - 30px)
+                    background-color: $green
+                    transition: .3s ease-in-out
+            &::before
+                content: ''
+                position: absolute
+                top: 0
+                left: 0
+                width: 31px
+                height: 31px
+                background-color: $gray
+                border-radius: 50%
+                box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16)
+                transition: .3s ease-in-out
     &.default
         flex: 0 0 auto
     label
@@ -608,6 +669,7 @@ img
     .action_check
         -webkit-appearance: none
         outline: none
+        flex: 0 0 21px
         width: 21px
         height: 21px
         background-image: url('/icons/uncheck-icon.svg')
@@ -691,7 +753,7 @@ img
     &:last-child
         margin-bottom: 0
     label
-        flex: 0 0 65%
+        flex: 0 0 auto
         margin-left: 0
         margin-bottom: 0 !important
         sf_pro_regular(1.8vh)
@@ -730,6 +792,7 @@ img
             display: flex
             flex-flow: row wrap
             align-items: center
+            justify-content: flex-end
             label
                 margin-bottom: 0
                 margin-left: 10px
@@ -750,8 +813,7 @@ img
 .form_group_disclaimer
     .form_disclaimer
         display: flex
-        flex-flow: row wrap
-        align-items: center
+        align-items: flex-start
         sf_pro_regular(14px)
         color: $gray
         text-align: left
@@ -1014,6 +1076,33 @@ img
             .form_group
                 &:last-child
                     margin-bottom: 0
+
+.cms_table_toggler
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: flex-end
+    margin-bottom: 40px
+    .status
+        background-color: $white
+        padding: 12px 40px
+        text-align: center
+        sf_pro_medium(1.6vh)
+        color: $black
+        border-radius: 0px
+        border-right: 1px solid $border
+        box-shadow: 3px 3px 20px transparent
+        transition: .3s ease-in-out
+        &:last-child
+            border-right: 1px solid transparent
+        &.active
+            position: relative
+            z-index: 0
+            color: $white
+            background-color: $green
+            border-radius: 5px
+            box-shadow: 3px 3px 20px rgba(0,0,0,0.3)
+            transition: .3s ease-in-out
 
 /**
  * Default Table */
@@ -2014,7 +2103,6 @@ img
             line-height: 1.5
             color: $black
             text-transform: capitalize
-            padding-left: 15px
         &.table
             box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
             padding-bottom: 30px
@@ -2080,8 +2168,11 @@ img
                         sf_pro_medium(1.6vh)
                         color: $black
                         border-radius: 0px
+                        border-right: 1px solid $border
                         box-shadow: 3px 3px 20px transparent
                         transition: .3s ease-in-out
+                        &:last-child
+                            border-right: 1px solid transparent
                         &.active
                             position: relative
                             z-index: 0
@@ -2096,7 +2187,7 @@ img
                     display: flex
                     flex-flow: row wrap
                     align-items: center
-                    justify-content: flex-end
+                    justify-content: flex-start
                     .form_group
                         margin-top: 30px
                         margin-bottom: 0

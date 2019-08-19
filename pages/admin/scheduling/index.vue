@@ -40,7 +40,7 @@
                         {
                             label: 'Class Packages',
                             imgSrc: '/icons/package-icon.svg',
-                            link: '/admin/scheduling/class-packages'
+                            link: '/admin/scheduling/class-packages-and-store-credits'
                         },
                         {
                             label: 'Package Type',
