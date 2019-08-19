@@ -1,12 +1,12 @@
 <template>
     <div class="content">
         <div id="admin" class="cms_dashboard">
-            <section id="top_content" class="table">
+            <section id="top_content" class="table" v-if="loaded">
                 <div class="action_wrapper">
                     <h1 class="header_title">Instructors</h1>
                     <div class="actions">
                         <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add New Instructor</nuxt-link>
-                        <div class="total">Total: {{ totalCount(total_count) }}</div>
+                        <div class="total">Total: {{ totalCount(res.instructors.total) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </section>
-            <section id="content">
+            <section id="content" v-if="loaded">
                 <table class="cms_table">
                     <thead>
                         <tr>
@@ -34,8 +34,8 @@
                             <th>Contact No.</th>
                         </tr>
                     </thead>
-                    <tbody v-if="res.length > 0">
-                        <tr v-for="(data, key) in res" :key="key">
+                    <tbody v-if="res.instructors.data.length > 0">
+                        <tr v-for="(data, key) in res.instructors.data" :key="key">
                             <td class="thumb" width="10"><img :src="data.instructor_details.images[0].path_resized" /></td>
                             <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.last_name }}</a></td>
                             <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.first_name }}</a></td>
@@ -50,6 +50,7 @@
                         </tr>
                     </tbody>
                 </table>
+                <pagination :apiRoute="res.instructors.path" :current="res.instructors.current_page" :last="res.instructors.total" />
             </section>
         </div>
         <transition name="fade">
@@ -64,25 +65,23 @@
     import UserForm from '../../components/modals/UserForm'
     import RoleForm from '../../components/modals/RoleForm'
     import ConfirmStatus from '../../components/modals/ConfirmStatus'
+    import Pagination from '../../components/Pagination'
     export default {
         components: {
             Foot,
             UserForm,
             RoleForm,
-            ConfirmStatus
+            ConfirmStatus,
+            Pagination
         },
         data () {
             return {
+                loaded: false,
                 id: 0,
                 type: 0,
                 rowCount: 0,
                 status: 1,
-                res: {
-                    instructor_details: {
-                        user_id: '',
-                        io_contact_number: ''
-                    }
-                },
+                res: [],
                 total_count: 0,
                 types: [],
                 form_search: {
@@ -125,8 +124,8 @@
                 const me = this
                 me.loader(true)
                 me.$axios.get(`api/instructors?enabled=${value}`).then(res => {
-                    me.res = res.data.instructors.data
-                    me.total_count = me.res.length
+                    me.res = res.data
+                    me.loaded = true
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true

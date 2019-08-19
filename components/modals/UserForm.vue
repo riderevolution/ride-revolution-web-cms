@@ -304,10 +304,12 @@
             if (me.id != 0) {
                 me.$axios.get(`api/staff/${me.id}`).then(res => {
                     me.res = res.data.user
-                    console.log(me.studios);
                     me.res.staff_details.studio_access.forEach((studio, index) => {
                         me.form.studios.push(studio.studio_id)
                     })
+                    if (me.studios.length == me.form.studios.length) {
+                        me.all = true
+                    }
                 })
             }
         }

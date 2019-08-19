@@ -452,6 +452,7 @@ img
     sf_pro_regular(1.5vh)
     color: $black
     outline: none
+    resize: vertical
     transition: .3s ease-in-out
     &.date
         padding: 13px
@@ -745,6 +746,17 @@ img
                 &:checked
                     background-image: url('/icons/selected-icon.svg')
                     transition: .3s ease-in-out
+
+.form_group_disclaimer
+    .form_disclaimer
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        sf_pro_regular(14px)
+        color: $gray
+        text-align: left
+        span
+            margin-left: 10px
 
 .form_group
     position: relative

@@ -41,6 +41,7 @@ export default {
   */
   plugins: [
       { src: '~/plugins/vue-scrollto', ssr: false },
+      { src: '~/plugins/vue-line-clamp', ssr: false },
       { src: '~/plugins/vue-moment' },
       { src: '~/plugins/vue-click-outside' },
       { src: '~/plugins/vue-cookie' },

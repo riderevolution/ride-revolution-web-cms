@@ -34,18 +34,18 @@
                     today: [
                         {
                             label: 'Class Types',
-                            imgSrc: '/icons/package-icon.svg',
-                            link: '/admin/configuration/class-types'
+                            imgSrc: '/icons/class-types-icon.svg',
+                            link: '/admin/scheduling/class-types'
                         },
                         {
                             label: 'Class Packages',
                             imgSrc: '/icons/package-icon.svg',
-                            link: '/admin/configuration/class-packages'
+                            link: '/admin/scheduling/class-packages'
                         },
                         {
                             label: 'Package Type',
                             imgSrc: '/icons/package-icon.svg',
-                            link: '/admin/configuration/package-type'
+                            link: '/admin/scheduling/package-types'
                         }
                     ]
                 }
