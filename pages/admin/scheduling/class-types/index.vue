@@ -37,7 +37,7 @@
                     </tbody>
                     <tbody class="no_results" v-else>
                         <tr>
-                            <td :colspan="rowCount">No Resulasdt(s) Found.</td>
+                            <td :colspan="rowCount">No Result(s) Found.</td>
                         </tr>
                     </tbody>
                 </table>
