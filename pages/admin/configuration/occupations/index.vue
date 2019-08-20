@@ -1,18 +1,20 @@
 <template>
     <div class="content">
         <div id="admin" class="cms_dashboard">
-            <section id="top_content" class="table">
+            <section id="top_content" class="table" v-if="loaded">
                 <nuxt-link :to="`/admin/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg" /><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
                     <h1 class="header_title">Occupations</h1>
                     <div class="actions">
-                        <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add Occupation</nuxt-link>
                         <div class="total">Total: {{ totalCount(count) }}</div>
                     </div>
                 </div>
+                <div class="action_buttons">
+                    <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add Occupation</nuxt-link>
+                </div>
             </section>
             <section id="content">
-                <table class="cms_table">
+                <table class="cms_table" v-if="loaded">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -55,6 +57,7 @@
         },
         data () {
             return {
+                loaded: false,
                 lastRoute: '',
                 rowCount: 0,
                 res: [],
@@ -80,6 +83,7 @@
                 me.$axios.get('api/extras/occupations').then(res => {
                     me.res = res.data.occupations
                     me.count = me.res.length
+                    me.loaded = true
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
