@@ -1,0 +1,113 @@
+<template>
+    <div class="content">
+        <div id="admin" class="cms_dashboard">
+            <section id="top_content" class="table">
+                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
+                <div class="action_wrapper">
+                    <h1 class="header_title">Add New Store Credits</h1>
+                </div>
+            </section>
+            <section id="content">
+                <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+                    <div class="form_wrapper">
+                        <div class="form_header_wrapper">
+                            <h2 class="form_title">Store Credits Overview</h2>
+                        </div>
+                        <div class="form_main_group">
+                            <div class="form_group">
+                                <label for="name">Store Credits Name <span>*</span></label>
+                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
+                            </div>
+                            <div class="form_flex">
+                                <div class="form_group flex">
+                                    <label for="amount">Store Credits Amount <span>*</span></label>
+                                    <div class="form_flex_input full">
+                                        <input type="text" name="amount" autocomplete="off" class="default_text" autofocus v-validate="'required|numeric|min_value:0|max_value:9999999999'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('amount')">{{ errors.first('amount') }}</span></transition>
+                                    </div>
+                                </div>
+                                <div class="form_group flex">
+                                    <label for="price">Price <span>*</span></label>
+                                    <div class="form_flex_input full">
+                                        <input type="text" name="price" class="default_text number" autocomplete="off"v-validate="'required|numeric|max_value:9999999999|min_value:0'">
+                                        <div class="placeholder">PHP</div>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('price')">{{ errors.first('price') }}</span></transition>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form_footer_wrapper">
+                        <div class="form_flex">
+                            <div class="form_check">
+                                <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
+                                <label for="enabled">Activate</label>
+                            </div>
+                            <div class="button_group">
+                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
+                                <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <foot v-if="$store.state.isAuth" />
+    </div>
+</template>
+
+<script>
+    import Foot from '../../../../../components/Foot'
+    export default {
+        components: {
+            Foot
+        },
+        data () {
+            return {
+                lastRoute: '',
+                prevRoute: ''
+            }
+        },
+        methods: {
+            submissionSuccess () {
+                const me = this
+                me.$validator.validateAll().then(valid => {
+                    if (valid) {
+                        let formData = new FormData(document.getElementById('default_form'))
+                        me.loader(true)
+                        me.$axios.post('api/packages/store-credits', formData).then(res => {
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Added')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
+                        })
+                    } else {
+                        me.$scrollTo('.validation_errors', {
+							offset: -250
+						})
+                    }
+                })
+            }
+        },
+        async mounted () {
+            const me = this
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
+        }
+    }
+</script>

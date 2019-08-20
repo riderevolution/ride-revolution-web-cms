@@ -23,6 +23,9 @@
             status: {
                 type: Number,
                 default: 1
+            },
+            packageStatus: {
+                type: Number
             }
         },
         data () {
@@ -45,17 +48,23 @@
                 const me = this
                 me.loader(true)
                 me.$axios.patch(`api/extras/toggle-status`, me.confirm).then(res => {
-                    if (res.data) {
-                        setTimeout( () => {
-                            me.$store.state.confirmStatus = false
-                            me.notify(me.confirm.status)
+                    setTimeout( () => {
+                        me.$store.state.confirmStatus = false
+                        me.notify(me.confirm.status)
+                        if (me.packageStatus) {
+                            me.$parent.fetchData(me.status, me.packageStatus)
+                        } else {
                             me.$parent.fetchData(me.status)
-                        }, 300)
-                    } else {
-                        alert('Sorry. Something went wrong.')
-                    }
+                        }
+                    }, 300)
                 }).catch(err => {
-                    console.log(err)
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    me.rowCount = document.getElementsByTagName('th').length
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 300)
                 })
             },
             cancelDelete () {

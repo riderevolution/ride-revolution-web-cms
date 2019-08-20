@@ -34,7 +34,7 @@
                             </div>
                             <div class="form_flex">
                                 <div class="form_group flex">
-                                    <label>Class Count <span>*</span></label>
+                                    <label for="class_count">Class Count <span>*</span></label>
                                     <div class="form_flex_input">
                                         <input type="text" name="class_count" class="default_text number" autocomplete="off" v-model="form.classCount" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
                                         <div class="up" @click="addCount('classCount')"></div>
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                                 <div class="form_group flex">
-                                    <label>Package Price <span>*</span></label>
+                                    <label for="package_price">Package Price <span>*</span></label>
                                     <div class="form_flex_input full">
                                         <input type="text" name="package_price" class="default_text number" autocomplete="off"v-validate="'required|numeric|max_value:9999999999|min_value:0'">
                                         <div class="placeholder">PHP</div>

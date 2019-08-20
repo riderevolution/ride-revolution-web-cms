@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                                 <div class="form_group flex">
-                                    <label>Package Price <span>*</span></label>
+                                    <label for="package_price">Package Price <span>*</span></label>
                                     <div class="form_flex_input full">
                                         <input type="text" name="package_price" class="default_text number" v-model="res.package_price" autocomplete="off" v-validate="'required|numeric|min_value:0|max_value:9999999999'">
                                         <div class="placeholder">PHP</div>
