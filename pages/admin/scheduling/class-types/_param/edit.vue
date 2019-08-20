@@ -8,17 +8,14 @@
                 </div>
             </section>
             <section id="content">
-                <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data" v-if="loaded">
+                <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
-                            <h2 class="form_title">Package Type Overview</h2>
+                            <h2 class="form_title">Class Type Overview</h2>
                         </div>
                         <div class="form_main_group">
-                            <div class="form_group_disclaimer">
-                                <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>After saving, you will be redirected to the Package page to create a package under this type.</span></div>
-                            </div>
                             <div class="form_group">
-                                <label for="name">Package Type Name <span>*</span></label>
+                                <label for="name">Class Name <span>*</span></label>
                                 <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="res.name">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
@@ -26,6 +23,38 @@
                                 <label for="description">Description <span>*</span></label>
                                 <textarea name="description" rows="8" class="default_text" v-validate="'required'" v-model="res.description"></textarea>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') }}</span></transition>
+                            </div>
+                            <div class="form_flex">
+                                <div class="form_group flex">
+                                    <label>Class Length <span>*</span></label>
+                                    <div class="form_flex_input">
+                                        <input type="text" name="class_length_hours" class="default_text number" autocomplete="off" v-model="form.classLength.hour" maxlength="10" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
+                                        <div class="placeholder">hours</div>
+                                        <div class="up" @click="addCount('classLength', 'hour')"></div>
+                                        <div class="down" @click="subtractCount('classLength', 'hour')"></div>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('class_length_hours')">{{ errors.first('class_length_hours') }}</span></transition>
+                                    </div>
+                                    <div class="form_flex_input">
+                                        <input type="text" name="class_length_minutes" class="default_text number" autocomplete="off" v-model="form.classLength.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
+                                        <div class="placeholder">mins.</div>
+                                        <div class="up" @click="addCount('classLength', 'mins')"></div>
+                                        <div class="down" @click="subtractCount('classLength', 'mins')"></div>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('class_length_minutes')">{{ errors.first('class_length_minutes') }}</span></transition>
+                                    </div>
+                                </div>
+                                <div class="form_group">
+                                    <div class="form_flex_radio">
+                                        <label class="radio_label">Is this bookable? <span>*</span></label>
+                                        <div class="form_radio">
+                                            <input type="radio" id="bookable_yes" value="Yes" name="bookable" class="action_radio" :checked="res.bookable == 1">
+                                            <label for="bookable_yes">Yes</label>
+                                        </div>
+                                        <div class="form_radio">
+                                            <input type="radio" id="bookable_no" value="No" name="bookable" class="action_radio" :checked="res.bookable == 0">
+                                            <label for="bookable_no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form_flex select_all">
                                 <label class="flex_label">Restrict access to studios:</label>
@@ -68,17 +97,98 @@
         data () {
             return {
                 all: false,
-                loaded: false,
                 lastRoute: '',
                 prevRoute: '',
-                studios: [],
                 res: [],
+                studios: [],
                 form: {
-                    studios: []
+                    studios: [],
+                    classLength: {
+                        hour: 0,
+                        mins: 0
+                    }
                 },
             }
         },
         methods: {
+            validateAdd (data, value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'classLength':
+                                data != 0 && (me.form.classLength.hour = 0)
+                                me.form.classLength.hour = (data += 1)
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'classLength':
+                                data != 0 && (me.form.classLength.mins = 0)
+                                data < 60 && (me.form.classLength.mins = (data += 1))
+                                break
+                        }
+                        break
+                }
+            },
+            validateSubtract (data, value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'classLength':
+                                data > 0 && (me.form.classLength.hour = (data -= 1))
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'classLength':
+                                data > 0 && (me.form.classLength.mins = (data -= 1))
+                                break
+                        }
+                        break
+                }
+            },
+            addCount (value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'classLength':
+                                me.validateAdd(parseInt(me.form.classLength.hour), value, type)
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'classLength':
+                                me.validateAdd(parseInt(me.form.classLength.mins), value, type)
+                                break
+                        }
+                        break
+                }
+            },
+            subtractCount (value, type) {
+                const me = this
+                switch (type) {
+                    case 'hour':
+                        switch (value) {
+                            case 'classLength':
+                                me.validateSubtract(parseInt(me.form.classLength.hour), value, type)
+                                break
+                        }
+                        break
+                    case 'mins':
+                        switch (value) {
+                            case 'classLength':
+                                me.validateSubtract(parseInt(me.form.classLength.mins), value, type)
+                                break
+                        }
+                        break
+                }
+            },
             toggleAll () {
                 const me = this
                 const elements = document.querySelectorAll('.select_all .form_check')
@@ -117,11 +227,11 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         me.form.studios.sort()
-                        console.log(me.form.studios)
                         formData.append('studio_access', JSON.stringify(me.form.studios))
-                        formData.append('_method', 'patch')
+                        formData.append('class_length', `${(me.form.classLength.hour * 3600) + (me.form.classLength.mins * 60) + (0 * 1)}+${me.form.classLength.hour}:${me.form.classLength.mins}`)
+                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.post(`api/packages/package-types/${me.$route.params.param}`, formData).then(res => {
+                        me.$axios.post(`api/packages/class-types/${me.$route.params.param}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Updated')
@@ -158,8 +268,11 @@
         async mounted () {
             const me = this
             me.fetchStudios()
-            me.$axios.get(`api/packages/package-types/${me.$route.params.param}`).then(res => {
-                me.res = res.data.packageType
+            me.$axios.get(`api/packages/class-types/${me.$route.params.param}`).then(res => {
+                console.log(res.data.classType)
+                me.res = res.data.classType
+                me.form.classLength.hour = me.res.class_length.split('+')[1].split(':')[0]
+                me.form.classLength.mins = me.res.class_length.split('+')[1].split(':')[1]
                 me.studios.forEach((studio, index) => {
                     me.res.studio_access.forEach((compare, index) => {
                         if (studio.id == compare.studio_id) {
@@ -171,7 +284,6 @@
                 if (me.studios.length == me.form.studios.length) {
                     me.all = true
                 }
-                me.loaded = true
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
