@@ -40,7 +40,7 @@
                             <td>{{ data.email }}</td>
                             <td>{{ data.contact_number }}</td>
                             <td class="table_actions">
-                                <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Add a Product</nuxt-link>
+                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/create?s=${data.id}`">Add a Product</nuxt-link>
                                 <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
                             </td>
                         </tr>
@@ -68,7 +68,7 @@
         data () {
             return {
                 loaded: false,
-                lastRoute: '',
+                prevRoute: '',
                 rowCount: 0,
                 status: 1,
                 res: [],
@@ -111,7 +111,7 @@
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
         }
     }
 </script>

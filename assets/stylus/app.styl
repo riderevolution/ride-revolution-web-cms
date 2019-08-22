@@ -463,6 +463,10 @@ input::placeholder
     outline: none
     resize: none
     transition: .3s ease-in-out
+    &.disabled
+        pointer-events: none
+        user-select: none
+        background-color: $border_alt
     &.date
         padding: 13px
         resize: none
@@ -497,10 +501,16 @@ input::placeholder
             justify-content: space-between
             .form_wrapper
                 &.main
-                    flex: 0 0 75%
+                    flex: 0 0 70%
                 &.side
-                    flex: 1 0 20%
+                    flex: 1 0 25%
                     margin-left: 40px
+                .form_flex_radio_alternate
+                    .radio_wrapper
+                        flex: 0 0 100%
+                        margin-top: 10px
+                        .form_radio
+                            justify-content: flex-start
     &.overlay
         position: fixed
         width: 700px
@@ -538,6 +548,9 @@ input::placeholder
                         top: calc(0% + 25px)
             &.alternate_2
                 padding: 30px 0 30px
+                height: 100%
+                max-height: 500px
+                overflow-y: auto
     .form_footer_wrapper
         margin-bottom: 60px
         .form_check
@@ -567,6 +580,7 @@ input::placeholder
                 margin-left: 30px
     .form_flex_radio
         flex: 0 0 48.33%
+        margin-bottom: 30px
     .form_group
         flex: 0 0 48.33%
         &.check
@@ -776,9 +790,11 @@ input::placeholder
         flex: 0 0 auto
         margin-left: 0
         margin-bottom: 0 !important
-        sf_pro_regular(1.8vh)
+        sf_pro_regular(1.6vh)
         font-weight: normal
         color: $black
+        span
+            color: $green
     .validation_errors
         position: absolute
         top: calc(100% + 5px)
@@ -843,8 +859,10 @@ input::placeholder
 .form_group
     position: relative
     margin-bottom: 30px
-    &:last-child
-        margin-bottom: 0
+    .limit
+        sf_pro_regular(1.4vh)
+        color: $gray
+        text-align: right
     &.margin
         margin-left: 20px
     .action_forgot_text
@@ -1212,6 +1230,39 @@ input::placeholder
     .no_results
         text-align: center
 
+.cms_table_taxonomy
+    border-collapse: collapse
+    width: 100%
+    border-radius: 10px
+    thead
+        th
+            sf_pro_semibold(1.6vh)
+            color: $gray
+            text-align: left
+            padding: 15px 35px
+            background-color: transparent
+            &:first-child
+                border-radius: 10px 0 0 0
+            &:last-child
+                border-radius: 0 10px 0 0
+    tbody
+        background-color: $white
+        tr
+            background-color: transparent
+            border-bottom: 2px dashed $border
+            transition: .3s ease-in-out
+            td
+                sf_pro_regular(1.6vh)
+                color: $black
+                padding: 20px 35px
+            &:last-child
+                border-bottom: 2px dashed transparent
+            &:hover,
+            &:focus
+                background-color: #F8F8FB
+                transition: .3s ease-in-out
+    .no_results
+        text-align: center
 /**
  * Default Accordion */
 .cms_table_accordion
@@ -1483,6 +1534,90 @@ input::placeholder
                 flex: 0 0 100%
                 .wrapper
                     flex: 0 0 23%
+
+.cms_taxonomy
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    .taxonomy_wrapper
+        padding: 0 20px 40px
+        flex: 0 0 50%
+    .taxonomy_body
+        background-color: $white
+        box-shadow: 15px 25px 40px transparent
+        transition: .3s ease-in-out
+        &:hover
+            box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
+            transition: .3s ease-in-out
+        .taxonomy_header
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: space-between
+            padding: 20px 20px 20px 35px
+            border-bottom: 1px solid $border
+            .header_title
+                sf_pro_bold(2.2vh)
+                color: $black
+        .taxonomy_body
+            padding: 20px 0
+            height: 100%
+            max-height: 500px
+            overflow-y: auto
+        .taxonomy_footer
+            padding: 20px 35px
+    .taxonomy_actions
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: flex-end
+        .action_btn
+            width: auto
+            display: flex
+            flex-flow: row wrap
+            justify-content: center
+            align-items: center
+            background-color: transparent
+            border: 1px solid transparent
+            svg
+                margin-right: 10px
+                .add
+                    fill: $blue
+                    transition: .3s ease-in-out
+                .add_sign
+                    fill: transparent
+                    stroke: $white
+                    transition: .3s ease-in-out
+                .edit
+                    fill: transparent
+                    stroke: $blue
+                    stroke-miterlimit: 10
+                    stroke-width: 1.5
+                    transition: .3s ease-in-out
+                .edit_sign
+                    fill: transparent
+                    stroke: $blue
+                    stroke-miterlimit: 10
+                    stroke-width: 1.5
+                    transition: .3s ease-in-out
+            &:hover,
+            &:focus
+                background-color: $blue
+                color: $white
+                .add
+                    fill: $white
+                    transition: .3s ease-in-out
+                .add_sign
+                    fill: transparent
+                    stroke: $blue
+                    transition: .3s ease-in-out
+                .edit
+                    fill: $blue
+                    stroke: $white
+                    transition: .3s ease-in-out
+                .edit_sign
+                    stroke: $white
+                    transition: .3s ease-in-out
 
 .cms_summary
     display: block
@@ -2184,6 +2319,9 @@ input::placeholder
                     display: flex
                     flex-flow: row wrap
                     align-items: center
+                .action_buttons
+                    flex: 0 0 auto
+                    margin-top: 0
                 .total
                     sf_pro_medium(2.2vh)
                     color: $black
@@ -2226,10 +2364,12 @@ input::placeholder
                         .default_text
                             width: 300px
     #content
-        padding: 40px 40px
+        padding: 60px 40px
         position: relative
         &.alternate
             padding: 0
+        &.alternate_2
+            padding: 60px 20px
         .header_selector
             border-bottom: 1px solid $border
             padding: 0 40px 20px
