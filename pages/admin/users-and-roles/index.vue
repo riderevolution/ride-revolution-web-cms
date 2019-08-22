@@ -18,7 +18,7 @@
                     <a @click="toggleForm(id, 0, 'role')" href="javascript:void(0)" class="action_btn margin"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Role</a>
                 </div>
                 <div class="filter_wrapper">
-                    <div class="filter_flex">
+                    <form class="filter_flex" method="post">
                         <div class="form_group">
                             <label for="q">Find a user</label>
                             <input type="text" name="q" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
@@ -26,11 +26,12 @@
                         <div class="form_group margin">
                             <label for="studio_id">Studio</label>
                             <select class="default_select alternate" name="studio_id" v-model="form_search.studio" @change="search()">
-                                <option value="All" selected disabled>All Studios</option>
+                                <option value="All" selected>All Studios</option>
                                 <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
                         </div>
-                    </div>
+                        <button type="button" name="button" style="visibility: hidden;">S</button>
+                    </form>
                 </div>
             </section>
             <section id="content">

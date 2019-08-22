@@ -461,7 +461,7 @@ input::placeholder
     sf_pro_regular(1.5vh)
     color: $black
     outline: none
-    resize: vertical
+    resize: none
     transition: .3s ease-in-out
     &.date
         padding: 13px
@@ -489,6 +489,18 @@ input::placeholder
     width: 100%
     max-width: 50%
     margin: 20px auto 0
+    &.alternate
+        max-width: 100%
+        .form_flex_wrapper
+            display: flex
+            flex-flow: row wrap
+            justify-content: space-between
+            .form_wrapper
+                &.main
+                    flex: 0 0 75%
+                &.side
+                    flex: 1 0 20%
+                    margin-left: 40px
     &.overlay
         position: fixed
         width: 700px
@@ -501,6 +513,10 @@ input::placeholder
         box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.05)
         margin-bottom: 60px
         border-radius: 5px
+        .cms_table
+            margin-bottom: 0
+            tbody
+                box-shadow: none
         .form_header_wrapper
             display: flex
             flex-flow: row wrap
@@ -520,6 +536,8 @@ input::placeholder
                 .form_group
                     .validation_errors
                         top: calc(0% + 25px)
+            &.alternate_2
+                padding: 30px 0 30px
     .form_footer_wrapper
         margin-bottom: 60px
         .form_check
@@ -825,6 +843,8 @@ input::placeholder
 .form_group
     position: relative
     margin-bottom: 30px
+    &:last-child
+        margin-bottom: 0
     &.margin
         margin-left: 20px
     .action_forgot_text
@@ -2099,15 +2119,18 @@ input::placeholder
         flex-flow: row wrap
         justify-content: space-between
         align-items: center
-        padding: 60px 25px 0
+        padding: 60px 40px 0
         .header_title
             neutra_text(3.6vh)
             line-height: 1.5
             color: $black
             text-transform: capitalize
+            padding-left: 15px
         &.table
             box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
-            padding: 30px 25px
+            padding: 60px 40px 40px
+            .header_title
+                padding-left: 0px
             .action_buttons
                 flex: 0 0 100%
                 margin-top: 20px
@@ -2201,9 +2224,9 @@ input::placeholder
                         margin-bottom: 0
                         .default_select,
                         .default_text
-                            width: 250px
+                            width: 300px
     #content
-        padding: 40px 25px
+        padding: 40px 40px
         position: relative
         &.alternate
             padding: 0

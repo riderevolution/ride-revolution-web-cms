@@ -66,27 +66,27 @@
                         image: '/icons/navbar/instructors-unselected.png'
                     },
                     {
-                        title: 'Supplies',
-                        link: '/supplies',
+                        title: 'Retail',
+                        link: '/retail',
                         hasLink: false,
                         class: 'supplies',
                         image: '/icons/navbar/supplies-unselected.png',
                         subItems: [
                             {
+                                title: 'Suppliers',
+                                link: '/retail/suppliers'
+                            },
+                            {
                                 title: 'Inventory',
-                                link: '/supplies/inventory'
+                                link: '/retail/inventory'
                             },
                             {
                                 title: 'Purchase Order',
-                                link: '/supplies/purchase-order'
+                                link: '/retail/purchase-order'
                             },
                             {
-                                title: 'Studio Receiving',
-                                link: '/supplies/studio-receiving'
-                            },
-                            {
-                                title: 'Inventory Value Report',
-                                link: '/supplies/inventory-value-report'
+                                title: 'Product Categories',
+                                link: '/retail/product-categories'
                             }
                         ]
                     },
