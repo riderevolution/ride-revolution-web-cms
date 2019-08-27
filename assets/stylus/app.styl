@@ -39,6 +39,8 @@ body
         background-color: #f8f8fb
     &.no_click
         pointer-events: none
+    &.no_scroll
+        overflow-y: hidden
 
 *,
 *:before,
@@ -364,6 +366,7 @@ img
     left: 0
     z-index: 4
     width: 100%
+    height: 100%
     .background
         position: fixed
         z-index: 3
@@ -375,14 +378,40 @@ img
     #default_form
         margin: 0 auto
         .modal_wrapper
+            position: relative
             background-color: $white
             box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.05)
             border-radius: 5px
             .form_title
+                position: relative
                 sf_pro_bold(2.2vh)
                 color: $black
                 padding: 40px
                 border-bottom: 1px solid $border
+            .form_close
+                position: absolute
+                width: 20px
+                height: 20px
+                top: calc(0% + 10px)
+                right: calc(0% + 10px)
+                &::before
+                    content: ''
+                    position: absolute
+                    top: 0
+                    right: calc(0% + 8px)
+                    width: 2px
+                    height: 20px
+                    background-color: $border_alt2
+                    transform: rotate(45deg)
+                &::after
+                    content: ''
+                    position: absolute
+                    top: 0
+                    right: calc(0% + 8px)
+                    width: 2px
+                    height: 20px
+                    background-color: $border_alt2
+                    transform: rotate(-45deg)
             .modal_main_group
                 padding: 40px
                 .form_footer_wrapper
@@ -513,7 +542,7 @@ input::placeholder
                             justify-content: flex-start
     &.overlay
         position: fixed
-        width: 700px
+        width: 800px
         top: 50%
         z-index: 4
         left: 50%
@@ -534,10 +563,42 @@ input::placeholder
             justify-content: space-between
             padding: 30px
             border-bottom: 1px solid $border
+            .title_wrapper
+                flex: 0 0 auto
             .form_title
                 flex: 0 0 auto
                 sf_pro_bold(2.2vh)
                 color: $black
+            .form_label
+                sf_pro_regular(1.5vh)
+                color: $gray
+                margin-top: 10px
+            .action_success_btn
+                width: auto
+                display: flex
+                flex-flow: row wrap
+                justify-content: center
+                align-items: center
+                svg
+                    margin-right: 10px
+                    .add
+                        fill: $green
+                        transition: .3s ease-in-out
+                    .add_sign
+                        fill: transparent
+                        stroke: $white
+                        transition: .3s ease-in-out
+                &:hover,
+                &:focus
+                    background-color: $green
+                    color: $white
+                    .add
+                        fill: $white
+                        transition: .3s ease-in-out
+                    .add_sign
+                        fill: transparent
+                        stroke: $green
+                        transition: .3s ease-in-out
         .form_main_group
             padding: 30px
             &.alternate
@@ -920,8 +981,43 @@ input::placeholder
             border-bottom: 7px solid $red
             left: 17px
             z-index: 1
+
+.preview_image_wrapper
+    display: flex
+    flex-flow: row wrap
+    align-items: flex-start
+    margin-top: 20px
+    overflow-y: auto
+    &.scrollable
+        height: 500px
+    .preview
+        padding: 0 5px
+        flex: 0 0 33.33%
+        margin-bottom: 10px
+        img
+            width: 100%
+            height: 125px
+            object-fit: cover
+
 .form_photo
     position: relative
+    &.alternate
+        margin: 0 5px
+        #preview_image,
+        label
+            sf_pro_medium(2vh)
+            width: 100%
+            &::before
+                content: unset
+            span
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: center
+                top: 50%
+                transform: translateY(-50%)
+                svg
+                    margin-right: 10px
     .validation_errors
         position: absolute
         top: calc(100% + 5px)
@@ -1170,6 +1266,31 @@ input::placeholder
             border-bottom: 2px dashed $border
             transition: .3s ease-in-out
             td
+                &.image_upload
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    .action_btn
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        justify-content: center
+                        background-color: transparent
+                        border: 1px solid transparent
+                        svg
+                            margin-right: 10px
+                            .upload_image
+                                fill: transparent
+                                stroke: $blue
+                                stroke-width: 1
+                                transition: .3s ease-in-out
+                        &:hover
+                            background-color: $blue
+                            color: $white
+                            svg
+                                .upload_image
+                                    stroke: $white
+                                    transition: .3s ease-in-out
                 &.thumb
                     padding: 20px 0 20px 30px
                     img
@@ -1816,6 +1937,7 @@ input::placeholder
         justify-content: flex-end
         background-color: $white
         width: 100%
+        box-shadow: 0px 3px 10px rgba(0,0,0,0.09)
         .header_icons
             display: flex
             flex-flow: row wrap
@@ -2219,7 +2341,6 @@ input::placeholder
         flex: 1 0 50%
         .content
             padding-top: 79px
-            height: 100vh
             position: relative
             flex: 1 auto
             background-color: #F8F8FB
@@ -2363,6 +2484,8 @@ input::placeholder
                         .default_select,
                         .default_text
                             width: 300px
+                    .filter_submit
+                        visibility: hidden
     #content
         padding: 60px 40px
         position: relative

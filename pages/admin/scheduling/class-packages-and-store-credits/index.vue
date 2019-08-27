@@ -139,6 +139,7 @@
                     me.$refs.enabled.confirm.status = status
                     me.$refs.enabled.confirm.type = (me.res.classPackages) ? 'class package' : 'store credits'
                 }, 100)
+                document.body.classList.add('no_scroll')
             },
             toggleOnOff (value) {
                 const me = this

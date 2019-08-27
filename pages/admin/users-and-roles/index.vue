@@ -17,20 +17,20 @@
                     <a @click="toggleForm(id, 0, 'user')" href="javascript:void(0)" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a User</a>
                     <a @click="toggleForm(id, 0, 'role')" href="javascript:void(0)" class="action_btn margin"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Role</a>
                 </div>
-                <div class="filter_wrapper">
-                    <form class="filter_flex" method="post">
+                <div class="filter_wrapper" v-if="status != 0">
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
                             <label for="q">Find a user</label>
-                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
+                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate">
                         </div>
                         <div class="form_group margin">
                             <label for="studio_id">Studio</label>
-                            <select class="default_select alternate" name="studio_id" v-model="form_search.studio" @change="search()">
-                                <option value="All" selected>All Studios</option>
+                            <select class="default_select alternate" name="studio_id">
+                                <option value="" selected>All Studios</option>
                                 <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
                         </div>
-                        <button type="button" name="button" style="visibility: hidden;">S</button>
+                        <button type="button" name="button" class="filter_submit">S</button>
                     </form>
                 </div>
             </section>
@@ -176,18 +176,28 @@
                 status: 1,
                 res: [],
                 total_count: 0,
-                studios: [],
-                form_search: {
-                    user: '',
-                    studio: 'All'
-                }
+                studios: []
             }
         },
         methods: {
-            search () {
+            submissionSuccess () {
                 const me = this
-                console.log(me.form_search.user);
-                console.log(me.form_search.studio);
+                let formData = new FormData(document.getElementById('filter'))
+                me.$axios.post(`api/staff/search`, formData).then(res => {
+                    me.res = res.data.staff
+                })
+                // .catch(err => {
+                //     me.$store.state.errorList = err.response.data.errors
+                //     me.$store.state.errorStatus = true
+                // }).then(() => {
+                //     setTimeout( () => {
+                //         me.loader(false)
+                //         const elements = document.querySelectorAll('.cms_table_accordion .content_wrapper')
+                //         elements.forEach((element, index) => {
+                //             element.querySelector('.accordion_table').style.height = 0
+                //         })
+                //     }, 500)
+                // })
             },
             /**
              * Count Permissions per role
@@ -270,6 +280,7 @@
                 if (value != 0) {
                     me.id = value
                 }
+                document.body.classList.add('no_scroll')
             },
             /**
              * Toggle Confirm Status for Role
@@ -288,6 +299,7 @@
                     me.$refs.enabled.confirm.status = status
                     me.$refs.enabled.confirm.type = 'role'
                 }, 100)
+                document.body.classList.add('no_scroll')
             },
             async toggleUserStatus (id, enabled, status) {
                 const me = this
@@ -299,6 +311,7 @@
                     me.$refs.enabled.confirm.status = status
                     me.$refs.enabled.confirm.type = 'user'
                 }, 100)
+                document.body.classList.add('no_scroll')
             },
             toggleOnOff (value) {
                 const me = this

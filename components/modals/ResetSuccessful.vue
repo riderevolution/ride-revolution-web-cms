@@ -19,6 +19,7 @@
                 const me = this
                 me.$store.state.resetSuccessfulStatus = false
                 me.$router.push('/login')
+                document.body.classList.remove('no_scroll')
             }
         }
     }

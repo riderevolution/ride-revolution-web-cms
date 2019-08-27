@@ -83,6 +83,7 @@
                     me.$refs.enabled.confirm.status = status
                     me.$refs.enabled.confirm.type = 'studio'
                 }, 100)
+                document.body.classList.add('no_scroll')
             },
             toggleOnOff (value) {
                 const me = this

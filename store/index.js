@@ -9,6 +9,7 @@ const createStore = () => {
             errorStatus: false,
             errorList: [],
             confirmStatus: false,
+            variantImageForm: false,
             categoryForm: false,
             userForm: false,
             roleForm: false,

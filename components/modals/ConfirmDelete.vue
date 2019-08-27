@@ -47,6 +47,7 @@
             },
             toggleClose () {
                 this.$store.state.deleteStatus = false
+                document.body.classList.remove('no_scroll')
             }
         }
     }

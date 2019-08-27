@@ -18,6 +18,7 @@
             toggleClose () {
                 const me = this
                 me.$store.state.errorStatus = false
+                document.body.classList.remove('no_scroll')
             }
         }
     }

@@ -94,6 +94,7 @@
             toggleForm (value, type) {
                 const me = this
                 me.$store.state.categoryForm = true
+                document.body.classList.add('no_scroll')
                 me.type = type
                 if (value != 0) {
                     me.id = value
@@ -102,6 +103,7 @@
             toggleDelete (id) {
                 const me = this
                 me.$store.state.deleteStatus = true
+                document.body.classList.add('no_scroll')
                 setTimeout( () => {
                     me.$refs.delete.contentID = id
                 }, 100)

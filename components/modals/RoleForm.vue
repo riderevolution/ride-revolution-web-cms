@@ -4,6 +4,7 @@
         <form id="default_form" class="overlay" @submit.prevent="submissionAddSuccess()" enctype="multipart/form-data" v-if="type == 0">
             <div class="modal_wrapper">
                 <h2 class="form_title">Add a New Role</h2>
+                <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group">
                     <div class="form_group">
                         <label for="display_name">Role Name <span>*</span></label>
@@ -35,6 +36,7 @@
         <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()" enctype="multipart/form-data" v-else>
             <div class="modal_wrapper">
                 <h2 class="form_title">Update {{ res.display_name }}</h2>
+                <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group">
                     <div class="form_group">
                         <label for="display_name">Role Name <span>*</span></label>
@@ -172,6 +174,7 @@
             toggleClose () {
                 const me = this
                 me.$store.state.roleForm = false
+                document.body.classList.remove('no_scroll')
             },
             submissionAddSuccess () {
                 const me = this

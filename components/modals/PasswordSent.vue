@@ -20,6 +20,7 @@
                 const me = this
                 me.$store.state.resetStatus = false
                 me.$router.push('/login')
+                document.body.classList.remove('no_scroll')
             }
         }
     }

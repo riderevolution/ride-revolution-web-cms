@@ -6,7 +6,7 @@
                 Are you sure you want to {{ (confirm.status == 'Activated') ? 'activate' : 'deactivate' }} this {{ confirm.type }}?
             </div>
             <div class="button_group">
-                <div class="action_cancel_btn confirm" @click="cancelDelete()">Cancel</div>
+                <div class="action_cancel_btn confirm" @click="toggleClose()">Cancel</div>
                 <div class="action_success_btn confirm margin" @click="proceedStatus()">Proceed</div>
             </div>
         </div>
@@ -43,6 +43,7 @@
             toggleClose () {
                 const me = this
                 me.$store.state.confirmStatus = false
+                document.body.classList.remove('no_scroll')
             },
             async proceedStatus () {
                 const me = this
@@ -66,10 +67,6 @@
                         me.loader(false)
                     }, 300)
                 })
-            },
-            cancelDelete () {
-                const me = this
-                me.$store.state.confirmStatus = false
             }
         }
     }

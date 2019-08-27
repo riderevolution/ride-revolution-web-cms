@@ -83,6 +83,7 @@
                     me.$refs.enabled.confirm.status = status
                     me.$refs.enabled.confirm.type = 'package type'
                 }, 100)
+                document.body.classList.remove('no_scroll')
             },
             toggleOnOff (value) {
                 const me = this

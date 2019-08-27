@@ -73,6 +73,7 @@
             toggleDelete (id) {
                 const me = this
                 me.$store.state.deleteStatus = true
+                document.body.classList.add('no_scroll')
                 setTimeout( () => {
                     me.$refs.delete.contentID = id
                 }, 100)
