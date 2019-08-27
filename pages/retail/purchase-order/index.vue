@@ -17,33 +17,51 @@
                     <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>New Purchase Order</nuxt-link>
                 </div>
                 <div class="filter_wrapper">
-                    <div class="filter_flex">
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
-                            <label for="q">Find a Product</label>
-                            <input type="text" name="q" placeholder="Search for a product" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
+                            <label for="supplier_id">Supplier</label>
+                            <select class="default_select alternate" name="supplier_id">
+                                <option value="" selected>All Suppliers</option>
+                                <option :value="supplier.id" v-for="(supplier, key) in suppliers" :key="key">{{ supplier.name }}</option>
+                            </select>
                         </div>
-                    </div>
+                        <div class="form_group margin">
+                            <label for="studio_id">Studio</label>
+                            <select class="default_select alternate" name="studio_id">
+                                <option value="" selected>All Studios</option>
+                                <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
+                            </select>
+                        </div>
+                        <button type="submit" name="button" class="action_btn alternate margin">Search</button>
+                    </form>
                 </div>
             </section>
             <section id="content" v-if="loaded">
                 <table class="cms_table">
                     <thead>
                         <tr>
-                            <th>Supplier Name</th>
-                            <th>Email Address</th>
-                            <th>Contact Number</th>
-                            <th>Action</th>
+                            <th>P.O. Number</th>
+                            <th>Supplier</th>
+                            <th>Studio</th>
+                            <th>Subtotal</th>
+                            <th>Shipping Cost</th>
+                            <th>Additional Cost</th>
+                            <th>Total</th>
+                            <th>Requisition Date</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody v-if="res.suppliers.data.length > 0">
                         <tr v-for="(data, key) in res.suppliers.data" :key="key">
                             <td>{{ data.name }}</td>
-                            <td>{{ data.email }}</td>
-                            <td>{{ data.contact_number }}</td>
-                            <td class="table_actions">
-                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/create?s=${data.id}`">Add a Product</nuxt-link>
-                                <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
-                            </td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.name }}</td>
+                            <td>{{ data.name }}</td>
                         </tr>
                     </tbody>
                     <tbody class="no_results" v-else>
@@ -73,6 +91,8 @@
                 rowCount: 0,
                 status: 1,
                 res: [],
+                suppliers: [],
+                studios: [],
                 form_search: {
                     user: ''
                 }
@@ -104,11 +124,21 @@
                         me.loader(false)
                     }, 300)
                 })
+            },
+            async fetchStudiosSuppliers () {
+                const me = this
+                me.$axios.get('api/studios').then(res => {
+                    me.studios = res.data.studios
+                })
+                me.$axios.get('api/suppliers').then(res => {
+                    me.suppliers = res.data.suppliers.data
+                })
             }
         },
         async mounted () {
             const me = this
             me.fetchData(1)
+            me.fetchStudiosSuppliers()
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

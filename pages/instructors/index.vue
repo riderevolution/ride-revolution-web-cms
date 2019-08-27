@@ -16,12 +16,12 @@
                     <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add New Instructor</nuxt-link>
                 </div>
                 <div class="filter_wrapper">
-                    <div class="filter_flex">
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
                             <label for="q">Find a Instructor</label>
-                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
+                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate">
                         </div>
-                    </div>
+                    </form>
                 </div>
             </section>
             <section id="content" v-if="loaded">
@@ -52,7 +52,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <pagination :apiRoute="res.instructors.path" :current="res.instructors.current_page" :last="res.instructors.total" />
+                <pagination :apiRoute="res.instructors.path" :current="res.instructors.current_page" :last="res.instructors.last_page" />
             </section>
         </div>
         <transition name="fade">
@@ -85,18 +85,25 @@
                 status: 1,
                 res: [],
                 total_count: 0,
-                types: [],
-                form_search: {
-                    user: '',
-                    studio: 'All'
-                }
+                types: []
             }
         },
         methods: {
-            search () {
+            submissionSuccess () {
                 const me = this
-                console.log(me.form_search.user);
-                console.log(me.form_search.studio);
+                let formData = new FormData(document.getElementById('filter'))
+                formData.append('enabled', me.status)
+                me.loader(true)
+                me.$axios.post(`api/instructors/search`, formData).then(res => {
+                    me.res = res.data
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             },
             /**
              * Toggle Confirm Status for Role
@@ -121,7 +128,6 @@
                 const me = this
                 me.status = value
                 me.fetchData(value)
-                me.rowCount = document.getElementsByTagName('th').length
             },
             async fetchData (value) {
                 const me = this
@@ -136,6 +142,7 @@
                     setTimeout( () => {
                         me.loader(false)
                     }, 500)
+                    me.rowCount = document.getElementsByTagName('th').length
                 })
             }
         },

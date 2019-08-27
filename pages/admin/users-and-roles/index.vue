@@ -7,7 +7,7 @@
                     <div class="actions">
                         <div class="total">Total: {{ totalCount(total_count) }}</div>
                         <div class="toggler">
-                            <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
+                            <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated Roles</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated Roles</div>
                             <div :class="`status ${(status == -1) ? 'active' : ''}`" @click="toggleOnOff(-1)">Deactivated Users</div>
                         </div>
@@ -20,7 +20,7 @@
                 <div class="filter_wrapper" v-if="status != 0">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
-                            <label for="q">Find a user</label>
+                            <label for="q">Find a User</label>
                             <input type="text" name="q" autocomplete="off" class="default_text search_alternate">
                         </div>
                         <div class="form_group margin">
@@ -30,7 +30,7 @@
                                 <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
                         </div>
-                        <button type="button" name="button" class="filter_submit">S</button>
+                        <button type="submit" name="button" class="action_btn alternate margin">Search</button>
                     </form>
                 </div>
             </section>
@@ -43,7 +43,7 @@
                         <div class="accordion_header">Permissions</div>
                         <div class="accordion_header action">Action</div>
                     </div>
-                    <div :class="`content_wrapper ${(role.open) ? 'toggled' : ''}`" v-for="(role, key) in res">
+                    <div :class="`content_wrapper ${(role.open) ? 'toggled' : ''}`" v-for="(role, key) in res" v-if="res.length > 0">
                         <div class="toggler" @click="toggleAccordion($event, key)"></div>
                         <div class="content_headers">
                             <div class="accordion_content">{{ role.display_name }}</div>
@@ -85,6 +85,9 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="no_results" v-if="res.length == 0">
+                        No Result(s) Found.
                     </div>
                 </div>
                 <!-- Roles Table -->
@@ -183,21 +186,23 @@
             submissionSuccess () {
                 const me = this
                 let formData = new FormData(document.getElementById('filter'))
+                formData.append('enabled', me.status)
+                me.loader(true)
                 me.$axios.post(`api/staff/search`, formData).then(res => {
-                    me.res = res.data.staff
+                    me.res = res.data.roles
+                    me.rowCount = 4
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                        const elements = document.querySelectorAll('.cms_table_accordion .content_wrapper')
+                        elements.forEach((element, index) => {
+                            element.querySelector('.accordion_table').style.height = 0
+                        })
+                    }, 500)
                 })
-                // .catch(err => {
-                //     me.$store.state.errorList = err.response.data.errors
-                //     me.$store.state.errorStatus = true
-                // }).then(() => {
-                //     setTimeout( () => {
-                //         me.loader(false)
-                //         const elements = document.querySelectorAll('.cms_table_accordion .content_wrapper')
-                //         elements.forEach((element, index) => {
-                //             element.querySelector('.accordion_table').style.height = 0
-                //         })
-                //     }, 500)
-                // })
             },
             /**
              * Count Permissions per role
@@ -317,7 +322,9 @@
                 const me = this
                 me.status = value
                 me.fetchData(value)
-                me.rowCount = document.getElementsByTagName('th').length
+                setTimeout( () => {
+                    me.rowCount = document.getElementsByTagName('th').length
+                }, 10)
             },
             async fetchData (value) {
                 const me = this
