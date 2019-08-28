@@ -41,6 +41,7 @@
                                     <label for="product_category_name">Category <span>*</span></label>
                                     <input type="text" name="product_category_name" autocomplete="off" class="default_text disabled" v-validate="'required'" v-model="form.category.name">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('product_category_name')">{{ errors.first('product_category_name') }}</span></transition>
+                                    <input type="hidden" name="product_category_id" v-model="form.category.id">
                                 </div>
                                 <div class="form_group" v-if="$route.query.c">
                                     <label for="supplier_id">Supplier <span>*</span></label>
@@ -54,6 +55,7 @@
                                     <label for="supplier_name">Supplier <span>*</span></label>
                                     <input type="text" name="supplier_name" autocomplete="off" class="default_text disabled" v-validate="'required'" v-model="form.supplier.name">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('supplier_name')">{{ errors.first('supplier_name') }}</span></transition>
+                                    <input type="hidden" name="supplier_id" v-model="form.supplier.id">
                                 </div>
                                 <div class="form_group">
                                     <label for="studio_id">Restrict to which studios: <span>*</span></label>
@@ -88,30 +90,23 @@
                             <a href="javascript:void(0)" class="action_success_btn" @click="addVariant()"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Variant</a>
                         </div>
                         <div class="form_main_group alternate_2">
-                            <table class="cms_table">
-                                <thead>
-                                    <tr>
-                                        <th>Variant</th>
-                                        <th>SKU ID</th>
-                                        <th>Inventory Qty.</th>
-                                        <th>Reorder Point</th>
-                                        <th>Unit Price (PHP)</th>
-                                        <th>Sale Price (PHP)</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(variant, key) in variants" :key="key">
-                                        <td><input type="text" name="name[]" autocomplete="off" class="default_text"></td>
-                                        <td><input type="text" name="sku_id[]" autocomplete="off" class="default_text"></td>
-                                        <td><input type="text" name="qty[]" autocomplete="off" class="default_text"></td>
-                                        <td><input type="text" name="reorder_point[]" autocomplete="off" class="default_text"></td>
-                                        <td><input type="text" name="unit_price[]" autocomplete="off" class="default_text"></td>
-                                        <td><input type="text" name="sale_price[]" autocomplete="off" class="default_text"></td>
-                                        <td class="image_upload" width="300"><a href="javascript:void(0)" class="action_btn" @click="toggleVariantImage(id, 0)"><svg xmlns="http://www.w3.org/2000/svg" width="18.306" height="18.306" viewBox="0 0 18.306 18.306"> <g transform="translate(-1233.873 -1197.248) rotate(-9)"> <g transform="translate(1031 1378)" class="upload_image"> <rect width="16" height="16" rx="2" stroke="none" /> <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" fill="none" /> </g> <path d="M16305.061-1443.824l5.559-4.864,4.563,4.259,2.891-3.014,2.3,3.014" transform="translate(-15273.644 2834.915)" class="upload_image" /> <g transform="translate(1039 1380.909)" class="upload_image"> <circle cx="1.818" cy="1.818" r="1.818" stroke="none" /> <circle cx="1.818" cy="1.818" r="1.318" fill="none" /> </g> </g> </svg>Uploaded Image (0)</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="cms_table_input">
+                                <div class="header_wrapper">
+                                    <div class="input_header">Variant</div>
+                                    <div class="input_header">SKU ID</div>
+                                    <div class="input_header">Inventory Qty.</div>
+                                    <div class="input_header">Reorder Point</div>
+                                    <div class="input_header">Unit Price (PHP)</div>
+                                    <div class="input_header">Sale Price (PHP)</div>
+                                    <div class="input_header">Action</div>
+                                </div>
+                                <div class="content_wrapper" v-for="(variant, key) in variants" :key="key" v-if="variants.length > 0">
+                                    <variant :unique="key" />
+                                </div>
+                                <div class="no_results" v-if="variants.length == 0">
+                                    No Variant(s) Found. Please add a variant.
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form_footer_wrapper">
@@ -129,20 +124,17 @@
                 </form>
             </section>
         </div>
-        <transition name="fade">
-            <variant-image-form v-if="$store.state.variantImageForm" :type="type" :id="id" :parentTitle="form.title" />
-        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
 
 <script>
     import Foot from '../../../../components/Foot'
-    import VariantImageForm from '../../../../components/modals/VariantImageForm'
+    import Variant from '../../../../components/Variant'
     export default {
         components: {
             Foot,
-            VariantImageForm
+            Variant
         },
         data () {
             return {
@@ -158,7 +150,7 @@
                 studios: [],
                 categories: [],
                 suppliers: [],
-                variants: [0]
+                variants: []
             }
         },
         methods: {
@@ -195,26 +187,27 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.loader(true)
+                        // me.loader(true)
                         me.$axios.post('api/inventory/products', formData).then(res => {
-                            setTimeout( () => {
-                                if (res.data) {
-                                    me.notify('Added')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
-                                }
-                            }, 500)
+                            console.log(res.data)
+                        //     setTimeout( () => {
+                        //         if (res.data) {
+                        //             me.notify('Added')
+                        //         } else {
+                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
+                        //             me.$store.state.errorStatus = true
+                        //         }
+                        //     }, 500)
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
-                                if (!me.$store.state.errorStatus) {
-                                    me.$router.push(`/${me.lastRoute}`)
-                                }
-                                me.loader(false)
-                            }, 500)
+                        // }).then(() => {
+                        //     setTimeout( () => {
+                        //         if (!me.$store.state.errorStatus) {
+                        //             me.$router.push(`/${me.lastRoute}`)
+                        //         }
+                        //         me.loader(false)
+                        //     }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {

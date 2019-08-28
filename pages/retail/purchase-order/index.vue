@@ -56,10 +56,10 @@
                             <td>{{ data.name }}</td>
                             <td>{{ data.name }}</td>
                             <td>{{ data.name }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.name }}</td>
+                            <td>PHP 265.00</td>
+                            <td>PHP 0.00</td>
+                            <td>PHP 0.00</td>
+                            <td>PHP 265.00</td>
                             <td>{{ data.name }}</td>
                             <td>{{ data.name }}</td>
                         </tr>

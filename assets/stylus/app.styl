@@ -1240,6 +1240,72 @@ input::placeholder
             box-shadow: 3px 3px 20px rgba(0,0,0,0.3)
             transition: .3s ease-in-out
 
+.cms_table_input
+    .header_wrapper
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: flex-start
+        .input_header
+            flex: 1 0 14%
+            sf_pro_semibold(1.6vh)
+            color: $gray
+            text-align: left
+            padding: 20px 30px
+            background-color: transparent
+    .content_wrapper
+        background-color: transparent
+        border-bottom: 2px dashed $border
+        transition: .3s ease-in-out
+        .input_wrapper
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: flex-start
+            .input_content
+                flex: 1 0 14%
+                sf_pro_regular(1.6vh)
+                color: $black
+                padding: 20px 30px
+                &.image_upload
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    .action_btn
+                        width: auto
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        justify-content: center
+                        background-color: transparent
+                        border: 1px solid transparent
+                        svg
+                            margin-right: 10px
+                            .upload_image
+                                fill: transparent
+                                stroke: $blue
+                                stroke-width: 1
+                                transition: .3s ease-in-out
+                        &:hover,
+                        &:focus
+                            background-color: $blue
+                            color: $white
+                            svg
+                                .upload_image
+                                    stroke: $white
+                                    transition: .3s ease-in-out
+        &:last-child
+            border-bottom: 2px dashed transparent
+        &:hover,
+        &:focus
+            background-color: #F8F8FB
+            transition: .3s ease-in-out
+    .no_results
+        background-color: $white
+        sf_pro_regular(1.6vh)
+        color: $black
+        padding: 20px 35px
+        text-align: center
 /**
  * Default Table */
 .cms_table
@@ -2537,6 +2603,32 @@ input::placeholder
 .slide-leave-to
     opacity: 0
     transform: translateY(-20px)
+
+.fade_in
+    animation: fade_in .3s
+
+.fade_out
+    animation: fade_out .3s
+
+/**
+ * Fade */
+@keyframes fade_in {
+	from {
+		opacity: 0
+    }
+	to {
+		opacity: 1
+    }
+}
+
+@keyframes fade_out {
+	from {
+		opacity: 1
+    }
+	to {
+		opacity: 0
+    }
+}
 
 /**
  * Slide In */

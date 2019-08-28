@@ -117,7 +117,7 @@
             const me = this
             setTimeout( () => {
                 me.fetchData(me.$store.state.user.id)
-            }, 100)
+            }, 250)
         }
     }
 </script>
