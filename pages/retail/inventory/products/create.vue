@@ -242,8 +242,8 @@
                     me.form.category = res.data.productCategory
                 })
             }
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
-            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }
     }
 </script>
