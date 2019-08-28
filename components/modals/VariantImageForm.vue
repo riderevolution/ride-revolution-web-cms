@@ -57,6 +57,7 @@
                 const me = this
                 let element = event.target
                 me.images = []
+                me.$parent.parentKeys = []
                 if (element.files && element.files[0]) {
                     for (let i = 0; i < element.files.length; i++) {
                         me.images.push(i)

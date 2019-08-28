@@ -58,12 +58,16 @@
                                     <input type="hidden" name="supplier_id" v-model="form.supplier.id">
                                 </div>
                                 <div class="form_group">
-                                    <label for="studio_id">Restrict to which studios: <span>*</span></label>
-                                    <select class="default_select alternate" name="studio_id" v-validate="'required'">
-                                        <option value="" selected>All Studios</option>
-                                        <option :value="studio.id" v-for="(studio, key) in studios">{{ studio.name }}</option>
-                                    </select>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('studio_id')">{{ errors.first('studio_id') }}</span></transition>
+                                    <label>Restrict to which studios: <span>*</span></label>
+                                    <div class="form_select_custom" v-click-outside="closeCheckboxes">
+                                        <span @click="toggleCheckboxes ^= true">Select Studios</span>
+                                        <div :class="`form_check_custom ${(toggleCheckboxes) ? 'active' : ''}`">
+                                            <div class="check_custom" v-for="(studio, key) in studios" :key="key">
+                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" checked>
+                                                <label :for="`studio_${key}`">{{ studio.name }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form_flex_radio_alternate">
                                     <label>Is this sellable? <span>*</span></label>
@@ -98,7 +102,7 @@
                                     <div class="input_header">Reorder Point</div>
                                     <div class="input_header">Unit Price (PHP)</div>
                                     <div class="input_header">Sale Price (PHP)</div>
-                                    <div class="input_header">Action</div>
+                                    <div class="input_header image_upload">Action</div>
                                 </div>
                                 <div class="content_wrapper" v-for="(variant, key) in variants" :key="key" v-if="variants.length > 0">
                                     <variant ref="productVariant" :unique="key" />
@@ -138,6 +142,7 @@
         },
         data () {
             return {
+                toggleCheckboxes: false,
                 id: 0,
                 error: false,
                 lastRoute: '',
@@ -150,10 +155,14 @@
                 studios: [],
                 categories: [],
                 suppliers: [],
-                variants: []
+                variants: [0]
             }
         },
         methods: {
+            closeCheckboxes () {
+                const me = this
+                me.toggleCheckboxes = false
+            },
             /**
              * Count textarea character length */
             getCount (event) {
@@ -161,22 +170,6 @@
                     max = 1000,
                     total = max - count
                 document.querySelector('.field_limit').innerText = total
-            },
-            /**
-             * Toggle User and Role Form
-             * @param  {[int]} value id
-             * @param  {[int]} type method
-             * @param  {[string]} category
-             * @return {[boolean]}
-             */
-            toggleVariantImage (value, type) {
-                const me = this
-                me.$store.state.variantImageForm = true
-                document.body.classList.add('no_scroll')
-                me.type = type
-                if (value != 0) {
-                    me.id = value
-                }
             },
             addVariant () {
                 const me = this
@@ -192,27 +185,26 @@
                                 formData.append('image_parent_key[]', value)
                             })
                         })
-                        // me.loader(true)
+                        me.loader(true)
                         me.$axios.post('api/inventory/products', formData).then(res => {
-                            console.log(res.data)
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.notify('Added')
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 500)
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Added')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$router.push(`/${me.lastRoute}`)
-                        //         }
-                        //         me.loader(false)
-                        //     }, 500)
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {

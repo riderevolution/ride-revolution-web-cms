@@ -26,16 +26,17 @@
                                         <tr>
                                             <th>Product Name</th>
                                             <th>SKU ID</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="data.products.length > 0">
-                                        <tr>
-                                            <td>SampleSampleSampleSample</td>
-                                            <td>123123123</td>
-                                        </tr>
-                                        <tr>
-                                            <td>SampleSampleSampleSample</td>
-                                            <td>123123123</td>
+                                        <tr v-for="(product, key) in data.products" :key="key">
+                                            <td width="30%">{{ product.name }}</td>
+                                            <td width="30%">{{ product.id}}</td>
+                                            <td class="table_actions">
+                                                <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
+                                                <a class="table_action_cancel" href="javascript:void(0)">Remove</a>
+                                            </td>
                                         </tr>
                                     </tbody>
                                     <tbody class="no_results" v-else>
