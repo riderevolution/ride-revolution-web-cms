@@ -15,7 +15,6 @@
                              </span>
                         </label>
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('image[]')">{{ errors.first('image[]') }}</span></transition>
-                        <input type="hidden" name="image_parent_key[]" v-model="unique">
                     </div>
                     <div class="preview_image_wrapper" :id="`preview_image_wrapper_${unique}`">
                         <div class="preview" v-for="(data, key) in images" :key="key">
@@ -61,6 +60,7 @@
                 if (element.files && element.files[0]) {
                     for (let i = 0; i < element.files.length; i++) {
                         me.images.push(i)
+                        me.$parent.parentKeys.push(key)
                         let reader = new FileReader()
                         reader.onload = function () {
                             let image = document.getElementById(`preview_image_${key}_${i}`)

@@ -25,6 +25,7 @@
         },
         data () {
             return {
+                parentKeys: [],
                 showImages: false,
                 totalUploaded: 0
             }

@@ -60,7 +60,7 @@
                                 <div class="form_group">
                                     <label for="studio_id">Restrict to which studios: <span>*</span></label>
                                     <select class="default_select alternate" name="studio_id" v-validate="'required'">
-                                        <option value="all" selected>All Studios</option>
+                                        <option value="" selected>All Studios</option>
                                         <option :value="studio.id" v-for="(studio, key) in studios">{{ studio.name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('studio_id')">{{ errors.first('studio_id') }}</span></transition>
@@ -101,7 +101,7 @@
                                     <div class="input_header">Action</div>
                                 </div>
                                 <div class="content_wrapper" v-for="(variant, key) in variants" :key="key" v-if="variants.length > 0">
-                                    <variant :unique="key" />
+                                    <variant ref="productVariant" :unique="key" />
                                 </div>
                                 <div class="no_results" v-if="variants.length == 0">
                                     No Variant(s) Found. Please add a variant.
@@ -187,6 +187,11 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        me.$refs.productVariant.forEach((parent, pindex) => {
+                            parent.parentKeys.forEach((value, vindex) => {
+                                formData.append('image_parent_key[]', value)
+                            })
+                        })
                         // me.loader(true)
                         me.$axios.post('api/inventory/products', formData).then(res => {
                             console.log(res.data)
