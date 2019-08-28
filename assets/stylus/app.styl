@@ -1874,11 +1874,13 @@ input::placeholder
 .cms_taxonomy
     display: flex
     flex-flow: row wrap
-    align-items: center
     .taxonomy_wrapper
         padding: 0 20px 40px
         flex: 0 0 50%
+        display: flex
+        flex-flow: column wrap
     .taxonomy_body
+        flex: auto
         background-color: $white
         box-shadow: 15px 25px 40px transparent
         transition: .3s ease-in-out
