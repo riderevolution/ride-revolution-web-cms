@@ -35,7 +35,7 @@
                                             <td width="30%">{{ (product.sellable == 1) ? 'Yes' : 'No' }}</td>
                                             <td class="table_actions">
                                                 <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/${product.id}/edit`">Edit</nuxt-link>
-                                                <a class="table_action_cancel" href="javascript:void(0)">Remove</a>
+                                                <a class="table_action_cancel" href="javascript:void(0)">Deactivate</a>
                                             </td>
                                         </tr>
                                     </tbody>

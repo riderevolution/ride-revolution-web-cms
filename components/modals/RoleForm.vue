@@ -191,20 +191,18 @@
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
                                 }
-                            }, 500)
+                            }, 200)
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
                         }).then(() => {
                             setTimeout( () => {
+                                me.loader(false)
                                 if (!me.$store.state.errorStatus) {
                                     me.$parent.fetchData(me.status)
+                                    me.$store.state.roleForm = false
                                 }
-                            }, 500)
-                            if (!me.$store.state.errorStatus) {
-                                me.$store.state.roleForm = false
-                            }
-                            me.loader(false)
+                            }, 200)
                             document.body.classList.remove('no_scroll')
                         })
                     } else {
@@ -231,20 +229,18 @@
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
                                 }
-                            }, 500)
+                            }, 200)
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
                         }).then(() => {
-                            me.$store.state.roleForm = false
-                            setTimeout( () => {
-                                if (!me.$store.state.errorStatus) {
-                                    me.$parent.fetchData(me.status)
-                                }
-                            }, 500)
                             setTimeout( () => {
                                 me.loader(false)
-                            }, 1000)
+                                if (!me.$store.state.errorStatus) {
+                                    me.$parent.fetchData(me.status)
+                                    me.$store.state.roleForm = false
+                                }
+                            }, 200)
                             document.body.classList.remove('no_scroll')
                         })
                     } else {
