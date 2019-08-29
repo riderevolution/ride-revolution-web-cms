@@ -70,11 +70,11 @@
                                 <td>PHP 25,000</td>
                             </tr>
                         </tbody>
-                        <tbody class="no_results">
+                        <!-- <tbody class="no_results">
                             <tr>
                                 <td :colspan="rowCount">No Result(s) Found.</td>
                             </tr>
-                        </tbody>
+                        </tbody> -->
                     </table>
                 </form>
             </section>
