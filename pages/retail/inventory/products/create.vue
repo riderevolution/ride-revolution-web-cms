@@ -180,33 +180,32 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        console.log(formData.getAll('studio_access[]'))
-                        // me.$refs.productVariant.forEach((parent, pindex) => {
-                        //     parent.parentKeys.forEach((value, vindex) => {
-                        //         formData.append('image_parent_key[]', value)
-                        //     })
-                        // })
-                        // me.loader(true)
-                        // me.$axios.post('api/inventory/products', formData).then(res => {
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.notify('Added')
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 500)
-                        // }).catch(err => {
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
-                        //         }
-                        //         me.loader(false)
-                        //     }, 500)
-                        // })
+                        me.$refs.productVariant.forEach((parent, pindex) => {
+                            parent.parentKeys.forEach((value, vindex) => {
+                                formData.append('image_parent_key[]', value)
+                            })
+                        })
+                        me.loader(true)
+                        me.$axios.post('api/inventory/products', formData).then(res => {
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Added')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
 							offset: -250
