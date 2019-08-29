@@ -26,20 +26,21 @@
                                         <tr>
                                             <th>Product Name</th>
                                             <th>SKU ID</th>
+                                            <th>Qty.</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="variants.length > 0">
                                         <tr v-for="(variant, key) in variants" :key="key" v-if="variant.cid == data.id">
-                                            <td width="30%">{{ variant.product.variant }}</td>
-                                            <td width="30%">{{ variant.product.sku_id }}</td>
-                                            <td class="table_actions">
-                                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/${variant.pid}/edit`">Edit</nuxt-link>
-                                                <a class="table_action_cancel" href="javascript:void(0)">Deactivate</a>
+                                            <td>{{ variant.product.variant }}</td>
+                                            <td>{{ variant.product.sku_id }}</td>
+                                            <td>{{ variant.product.quantity }}</td>
+                                            <td class="table_actions full">
+                                                <a class="table_action_cancel" href="javascript:void(0)">Remove</a>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody class="no_results" v-else>
+                                    <tbody class="no_results" v-if="data.products.length == 0">
                                         <tr>
                                             <td :colspan="rowCount">No Result(s) Found.</td>
                                         </tr>
