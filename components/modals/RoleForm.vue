@@ -5,7 +5,7 @@
             <div class="modal_wrapper">
                 <h2 class="form_title">Add a New Role</h2>
                 <div class="form_close" @click="toggleClose()"></div>
-                <div class="modal_main_group">
+                <div class="modal_main_group alternate">
                     <div class="form_group">
                         <label for="display_name">Role Name <span>*</span></label>
                         <input type="text" name="display_name" autocomplete="off" autofocus class="default_text" v-validate="'required'">
@@ -196,15 +196,15 @@
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
                         }).then(() => {
-                            me.$store.state.roleForm = false
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
                                     me.$parent.fetchData(me.status)
                                 }
                             }, 500)
-                            setTimeout( () => {
-                                me.loader(false)
-                            }, 1000)
+                            if (!me.$store.state.errorStatus) {
+                                me.$store.state.roleForm = false
+                            }
+                            me.loader(false)
                             document.body.classList.remove('no_scroll')
                         })
                     } else {

@@ -441,6 +441,9 @@ img
                     transform: rotate(-45deg)
             .modal_main_group
                 padding: 40px
+                &.alternate
+                    height: 600px
+                    overflow-y: auto
                 .form_footer_wrapper
                     margin-top: 40px
                     margin-bottom: 0
@@ -1205,8 +1208,9 @@ input::placeholder
     align-items: center
     justify-content: flex-end
     .action_btn,
-    .action_cancel_btn
-        width: 200px
+    .action_cancel_btn,
+    .action_success_btn
+        width: 180px
 
 .note-tooltip
     sf_pro_regular(1.4vh)
@@ -2176,7 +2180,7 @@ input::placeholder
         position: fixed
         top: 0
         left: 0
-        z-index: 1
+        z-index: 2
         display: flex
         flex-flow: row wrap
         align-items: center
@@ -2361,7 +2365,7 @@ input::placeholder
      * Navbar Side */
     .navbar_container
         position: fixed
-        z-index: 2
+        z-index: 3
         flex: 0 0 70px
         width: 70px
         transition: .3s ease-in-out

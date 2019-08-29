@@ -5,7 +5,7 @@
             <div class="modal_wrapper">
                 <h2 class="form_title">Add a New User</h2>
                 <div class="form_close" @click="toggleClose()"></div>
-                <div class="modal_main_group">
+                <div class="modal_main_group alternate">
                     <div class="form_group">
                         <label for="name">Choose a Role <span>*</span></label>
                         <select class="default_select alternate" name="role_id" v-validate="'required'">
@@ -234,15 +234,15 @@
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
                         }).then(() => {
-                            me.$store.state.userForm = false
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
                                     me.$parent.fetchData(me.status)
                                 }
                             }, 500)
-                            setTimeout( () => {
-                                me.loader(false)
-                            }, 1000)
+                            if (!me.$store.state.errorStatus) {
+                                me.$store.state.userForm = false
+                            }
+                            me.loader(false)
                             document.body.classList.remove('no_scroll')
                         })
                     } else {
