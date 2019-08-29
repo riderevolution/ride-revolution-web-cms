@@ -50,11 +50,11 @@
                                 <th>Cost</th>
                             </tr>
                         </thead>
-                        <tbody v-if="res.suppliers.data.length > 0">
-                            <tr v-for="(data, key) in res.suppliers.data" :key="key">
-                                <td>{{ data.name }}</td>
-                                <td>{{ data.name }}</td>
-                                <td>{{ data.name }}</td>
+                        <tbody>
+                            <tr>
+                                <td>PHP 265.00</td>
+                                <td>PHP 265.00</td>
+                                <td>PHP 265.00</td>
                                 <td>PHP 265.00</td>
                                 <td>PHP 0.00</td>
                                 <td width="10%">
@@ -70,7 +70,7 @@
                                 <td>PHP 25,000</td>
                             </tr>
                         </tbody>
-                        <tbody class="no_results" v-else>
+                        <tbody class="no_results">
                             <tr>
                                 <td :colspan="rowCount">No Result(s) Found.</td>
                             </tr>
@@ -109,8 +109,8 @@
                 })
                 me.$axios.get('api/suppliers').then(res => {
                     me.suppliers = res.data.suppliers.data
-                    me.loaded = true
                 })
+                me.loaded = true
             }
         },
         async mounted () {
