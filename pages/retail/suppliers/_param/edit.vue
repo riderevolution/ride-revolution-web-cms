@@ -8,7 +8,7 @@
                 </div>
             </section>
             <section id="content">
-                <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+                <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data" v-if="loaded">
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
                             <h2 class="form_title">Supplier Information</h2>
@@ -41,7 +41,7 @@
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
                             <h2 class="form_title">Products</h2>
-                            <nuxt-link :to="`/${prevRoute}/inventory/products/${res.id}/create`" class="action_success_btn">Add Product</nuxt-link>
+                            <nuxt-link :to="`/${prevRoute}/inventory/products/create?s=${res.id}`" class="action_success_btn">Add Product</nuxt-link>
                         </div>
                         <div class="form_main_group alternate_2">
                             <table class="cms_table">
@@ -55,24 +55,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>asdasds</td>
-                                        <td>asdasds</td>
-                                        <td>asdasds</td>
-                                        <td>asdasds</td>
-                                        <td width="250" class="table_actions">
-                                            <nuxt-link class="table_action_edit" to="/">Edit</nuxt-link>
-                                            <nuxt-link class="table_action_cancel" to="/">Delete</nuxt-link>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>asdasds</td>
-                                        <td>asdasds</td>
-                                        <td>asdasds</td>
-                                        <td>asdasds</td>
-                                        <td width="250" class="table_actions">
-                                            <nuxt-link class="table_action_edit" to="/">Edit</nuxt-link>
-                                            <nuxt-link class="table_action_cancel" to="/">Delete</nuxt-link>
+                                    <tr v-for="(variant, key) in variants" :key="key">
+                                        <td>{{ variant.variant }}</td>
+                                        <td>{{ variant.sku_id }}</td>
+                                        <td>{{ variant.unit_price }}</td>
+                                        <td>{{ variant.sale_price }}</td>
+                                        <td class="table_actions full">
+                                            <a class="table_action_cancel" href="javascript:void(0)">Remove</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -106,9 +95,11 @@
         },
         data () {
             return {
+                loaded: false,
                 lastRoute: '',
                 prevRoute: '',
-                res: []
+                res: [],
+                variants: []
             }
         },
         methods: {
@@ -151,6 +142,12 @@
             const me = this
             me.$axios.get(`api/suppliers/${me.$route.params.param}`).then(res => {
                 me.res = res.data.supplier
+                me.res.products.forEach((product, pindex) => {
+                    product.product_variants.forEach((variant, vindex) => {
+                        me.variants.push(variant)
+                    })
+                })
+                me.loaded = true
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]

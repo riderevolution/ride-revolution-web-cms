@@ -25,16 +25,16 @@
                                     <thead>
                                         <tr>
                                             <th>Product Name</th>
-                                            <th>Sellable</th>
+                                            <th>SKU ID</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody v-if="data.products.length > 0">
-                                        <tr v-for="(product, key) in data.products" :key="key">
-                                            <td width="30%">{{ product.name }}</td>
-                                            <td width="30%">{{ (product.sellable == 1) ? 'Yes' : 'No' }}</td>
+                                    <tbody v-if="variants.length > 0">
+                                        <tr v-for="(variant, key) in variants" :key="key" v-if="variant.cid == data.id">
+                                            <td width="30%">{{ variant.product.variant }}</td>
+                                            <td width="30%">{{ variant.product.sku_id }}</td>
                                             <td class="table_actions">
-                                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/${product.id}/edit`">Edit</nuxt-link>
+                                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/${variant.pid}/edit`">Edit</nuxt-link>
                                                 <a class="table_action_cancel" href="javascript:void(0)">Deactivate</a>
                                             </td>
                                         </tr>
@@ -81,7 +81,8 @@
                 prevRoute: '',
                 rowCount: 0,
                 res: [],
-                type: 0
+                type: 0,
+                variants: []
             }
         },
         methods: {
@@ -114,6 +115,13 @@
                 me.loader(true)
                 me.$axios.get('api/inventory/product-categories').then(res => {
                     me.res = res.data
+                    me.res.productCategories.forEach((category, cindex) => {
+                        category.products.forEach((product, pindex) => {
+                            product.product_variants.forEach((variant, vindex) => {
+                                me.variants.push({cid: product.product_category_id, pid: product.id, product:variant})
+                            })
+                        })
+                    })
                     me.loaded = true
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
