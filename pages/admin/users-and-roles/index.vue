@@ -51,7 +51,7 @@
                             <div class="accordion_content">{{ countPermissions(parser(role.permissions)) }}</div>
                             <div class="accordion_actions action">
                                 <a class="accordion_action_edit" href="javascript:void(0)" @click="toggleForm(role.id, 1, 'role')">Edit Role</a>
-                                <a class="accordion_action_cancel" @click.self="toggleStatus(role.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate Role</a>
+                                <a class="accordion_action_cancel" @click.self="toggleStatus(role.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1 && role.id != 1">Deactivate Role</a>
                                 <a class="accordion_action_success" @click.self="toggleStatus(role.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate Role</a>
                             </div>
                         </div>

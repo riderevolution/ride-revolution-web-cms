@@ -24,7 +24,7 @@
                     <div class="form_footer_wrapper">
                         <div class="button_group">
                             <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleCancel(unique)">Cancel</a>
-                            <button type="button" name="button" class="action_btn margin alternate" @click="toggleClose(unique)">Done</button>
+                            <button type="button" name="button" class="action_btn margin alternate" @click="toggleClose(unique)">Proceed</button>
                         </div>
                     </div>
                 </div>

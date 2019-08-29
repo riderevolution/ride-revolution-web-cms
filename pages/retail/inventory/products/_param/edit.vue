@@ -4,22 +4,22 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Update </h1>
+                    <h1 class="header_title">Update {{ res.name }}</h1>
                 </div>
             </section>
             <section id="content">
-                <form id="default_form" class="alternate" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+                <form id="default_form" class="alternate" @submit.prevent="submissionSuccess()" enctype="multipart/form-data" v-if="loaded">
                     <div class="form_flex_wrapper">
                         <div class="form_wrapper main">
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="name">Product Name <span>*</span></label>
-                                    <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="form.title">
+                                    <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="form.title = res.name">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
-                                    <textarea name="description" rows="10" class="default_text" @input="getCount($event)" maxlength="1000" v-validate="'required|max:1000'"></textarea>
+                                    <textarea name="description" rows="10" class="default_text" @input="getCount($event)" maxlength="1000" v-model="res.description" v-validate="'required|max:1000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') }}</span></transition>
                                     <div class="limit">
                                         <span class="field_limit">1000</span> <span class="field_label">Characters</span>
@@ -29,11 +29,11 @@
                         </div>
                         <div class="form_wrapper side">
                             <div class="form_main_group">
-                                <div class="form_group" v-if="$route.query.s">
+                                <div class="form_group" v-if="!$route.query.s">
                                     <label for="product_category_id">Category <span>*</span></label>
                                     <select class="default_select alternate" name="product_category_id" v-validate="'required'">
-                                        <option value="" selected disabled>Choose a Category</option>
-                                        <option :value="category.id" v-for="(category, key) in categories">{{ category.name }}</option>
+                                        <option value="" disabled>Choose a Category</option>
+                                        <option :value="category.id" :selected="res.category_id == category.id" v-for="(category, key) in categories">{{ category.name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('product_category_id')">{{ errors.first('product_category_id') }}</span></transition>
                                 </div>
@@ -43,11 +43,11 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('product_category_name')">{{ errors.first('product_category_name') }}</span></transition>
                                     <input type="hidden" name="product_category_id" v-model="form.category.id">
                                 </div>
-                                <div class="form_group" v-if="$route.query.c">
+                                <div class="form_group" v-if="!$route.query.c">
                                     <label for="supplier_id">Supplier <span>*</span></label>
                                     <select class="default_select alternate" name="supplier_id" v-validate="'required'">
                                         <option value="" selected>Choose a Supplier</option>
-                                        <option :value="supplier.id" v-for="(supplier, key) in suppliers">{{ supplier.name }}</option>
+                                        <option :value="supplier.id" :selected="res.supplier_id == supplier.id" v-for="(supplier, key) in suppliers">{{ supplier.name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('supplier_id')">{{ errors.first('supplier_id') }}</span></transition>
                                 </div>
@@ -63,7 +63,7 @@
                                         <span @click="toggleCheckboxes ^= true">Select Studios</span>
                                         <div :class="`form_check_custom ${(toggleCheckboxes) ? 'active' : ''}`">
                                             <div class="check_custom" v-for="(studio, key) in studios" :key="key">
-                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" checked>
+                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="res.studio_access[key].studio.id == studio.id">
                                                 <label :for="`studio_${key}`">{{ studio.name }}</label>
                                             </div>
                                         </div>
@@ -142,6 +142,7 @@
         },
         data () {
             return {
+                loaded: false,
                 toggleCheckboxes: false,
                 id: 0,
                 error: false,
@@ -152,6 +153,7 @@
                     category: [],
                     supplier: []
                 },
+                res: [],
                 studios: [],
                 categories: [],
                 suppliers: [],
@@ -216,20 +218,25 @@
         },
         async mounted () {
             const me = this
+            me.$axios.get(`api/inventory/products/${me.$route.params.param}`).then(res => {
+                me.res = res.data.product
+                me.variants = me.res.product_variants
+                me.loaded = true
+            })
             me.$axios.get('api/studios').then(res => {
                 me.studios = res.data.studios
             })
+            me.$axios.get('api/inventory/product-categories').then(res => {
+                me.categories = res.data.productCategories
+            })
+            me.$axios.get('api/suppliers').then(res => {
+                me.suppliers = res.data.suppliers.data
+            })
             if (me.$route.query.s) {
-                me.$axios.get('api/inventory/product-categories').then(res => {
-                    me.categories = res.data.productCategories
-                })
                 me.$axios.get(`api/suppliers/${me.$route.query.s}`).then(res => {
                     me.form.supplier = res.data.supplier
                 })
             } else {
-                me.$axios.get('api/suppliers').then(res => {
-                    me.suppliers = res.data.suppliers.data
-                })
                 me.$axios.get(`api/inventory/product-categories/${me.$route.query.c}`).then(res => {
                     me.form.category = res.data.productCategory
                 })

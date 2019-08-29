@@ -195,22 +195,25 @@
                             </div>
                         </div>
                         <div class="form_main_group alternate">
-                            <div class="form_group">
+                            <div class="form_group alternate">
                                 <div class="form_group_header">Emergency Contact</div>
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="ec_full_name">Full Name</label>
-                                        <input type="text" name="ec_full_name" autocomplete="off" class="default_text">
+                                        <input type="text" name="ec_full_name" autocomplete="off" class="default_text" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('ec_full_name')">{{ errors.first('ec_full_name') }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="ec_contact_number">Contact Number</label>
-                                        <input type="text" name="ec_contact_number" autocomplete="off" class="default_text" v-validate="'numeric'">
+                                        <input type="text" name="ec_contact_number" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('ec_contact_number')">{{ errors.first('ec_contact_number') }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="ec_relationship">Relationship</label>
-                                        <input type="text" name="ec_relationship" autocomplete="off" class="default_text">
+                                        <input type="text" name="ec_relationship" autocomplete="off" class="default_text" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('ec_relationship')">{{ errors.first('ec_relationship') }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_check">

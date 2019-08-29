@@ -26,7 +26,7 @@
                             </div>
                             <div class="button_group">
                                 <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose()">Cancel</a>
-                                <button type="submit" name="submit" class="action_success_btn margin alternate">Add User</button>
+                                <button type="submit" name="submit" class="action_success_btn margin alternate">Add Role</button>
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
                             </div>
                             <div class="button_group">
                                 <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose()">Cancel</a>
-                                <button type="submit" name="submit" class="action_success_btn margin alternate">Update User</button>
+                                <button type="submit" name="submit" class="action_success_btn margin alternate">Update Role</button>
                             </div>
                         </div>
                     </div>

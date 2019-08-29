@@ -641,6 +641,9 @@ input::placeholder
                 padding: 30px 30px 10px
                 border-bottom: 1px solid $border
                 .form_group
+                    &.alternate
+                        .validation_errors
+                            top: calc(100% + 5px);
                     .validation_errors
                         top: calc(0% + 25px)
             &.alternate_2
@@ -670,8 +673,8 @@ input::placeholder
         color: $black
         margin-bottom: 20px
     .form_check
-        flex: 1 0 25%
-        margin-bottom: 10px
+        flex: 1 0 35%
+        margin-bottom: 20px
         &.select_all
             flex: 0 0 100%
         .action_check
@@ -1201,6 +1204,9 @@ input::placeholder
     flex-flow: row wrap
     align-items: center
     justify-content: flex-end
+    .action_btn,
+    .action_cancel_btn
+        width: 200px
 
 .note-tooltip
     sf_pro_regular(1.4vh)
@@ -1540,7 +1546,7 @@ input::placeholder
             sf_pro_semibold(1.6vh)
             color: $gray
             text-align: left
-            padding: 15px 35px
+            padding: 10px 20px
             background-color: transparent
             &:first-child
                 border-radius: 10px 0 0 0
@@ -1555,7 +1561,7 @@ input::placeholder
             td
                 sf_pro_regular(1.6vh)
                 color: $black
-                padding: 20px 35px
+                padding: 20px
                 &.table_actions
                     display: flex
                     flex-flow: row wrap
@@ -1906,6 +1912,8 @@ input::placeholder
             .header_title
                 sf_pro_bold(2.2vh)
                 color: $black
+        .taxonomy_content
+            padding: 20px
         .taxonomy_body
             padding: 20px 0
             height: 100%
