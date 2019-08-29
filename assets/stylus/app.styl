@@ -618,6 +618,13 @@ input::placeholder
                 &:hover
                     background-color: $green
                     color: $white
+                    .add
+                        fill: $white
+                        transition: .3s ease-in-out
+                    .add_sign
+                        fill: transparent
+                        stroke: $green
+                        transition: .3s ease-in-out
                 &:focus
                     background-color: $green_alt
                     color: $white
@@ -2611,6 +2618,10 @@ input::placeholder
             color: $black
             text-transform: capitalize
             padding-left: 15px
+            span
+                margin-left: 10px
+                sf_pro_bold(1.8vh)
+                color: $border_alt2
         &.table
             box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
             padding: 60px 40px 40px

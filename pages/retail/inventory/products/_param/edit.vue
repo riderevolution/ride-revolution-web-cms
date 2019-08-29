@@ -4,7 +4,7 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Add New Product</h1>
+                    <h1 class="header_title">Update </h1>
                 </div>
             </section>
             <section id="content">
@@ -133,8 +133,8 @@
 </template>
 
 <script>
-    import Foot from '../../../../components/Foot'
-    import Variant from '../../../../components/Variant'
+    import Foot from '../../../../../components/Foot'
+    import Variant from '../../../../../components/Variant'
     export default {
         components: {
             Foot,
@@ -180,33 +180,32 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        console.log(formData.getAll('studio_access[]'))
-                        // me.$refs.productVariant.forEach((parent, pindex) => {
-                        //     parent.parentKeys.forEach((value, vindex) => {
-                        //         formData.append('image_parent_key[]', value)
-                        //     })
-                        // })
-                        // me.loader(true)
-                        // me.$axios.post('api/inventory/products', formData).then(res => {
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.notify('Added')
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 500)
-                        // }).catch(err => {
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
-                        //         }
-                        //         me.loader(false)
-                        //     }, 500)
-                        // })
+                        me.$refs.productVariant.forEach((parent, pindex) => {
+                            parent.parentKeys.forEach((value, vindex) => {
+                                formData.append('image_parent_key[]', value)
+                            })
+                        })
+                        me.loader(true)
+                        me.$axios.post('api/inventory/products', formData).then(res => {
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Added')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
 							offset: -250
@@ -235,8 +234,8 @@
                     me.form.category = res.data.productCategory
                 })
             }
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
-            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]
         }
     }
 </script>

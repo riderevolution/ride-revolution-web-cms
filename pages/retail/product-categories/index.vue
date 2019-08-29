@@ -25,16 +25,16 @@
                                     <thead>
                                         <tr>
                                             <th>Product Name</th>
-                                            <th>SKU ID</th>
+                                            <th>Sellable</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody v-if="data.products.length > 0">
                                         <tr v-for="(product, key) in data.products" :key="key">
                                             <td width="30%">{{ product.name }}</td>
-                                            <td width="30%">{{ product.id}}</td>
+                                            <td width="30%">{{ (product.sellable == 1) ? 'Yes' : 'No' }}</td>
                                             <td class="table_actions">
-                                                <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
+                                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/${product.id}/edit`">Edit</nuxt-link>
                                                 <a class="table_action_cancel" href="javascript:void(0)">Remove</a>
                                             </td>
                                         </tr>

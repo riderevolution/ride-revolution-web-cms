@@ -4,7 +4,7 @@
             <section id="top_content" class="table" v-if="loaded">
                 <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">New Purchase Orders</h1>
+                    <h1 class="header_title">New Purchase Orders <span>ID: </span></h1>
                 </div>
                 <div class="filter_wrapper">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">

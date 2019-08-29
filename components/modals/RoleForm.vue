@@ -205,6 +205,7 @@
                             setTimeout( () => {
                                 me.loader(false)
                             }, 1000)
+                            document.body.classList.remove('no_scroll')
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
@@ -244,6 +245,7 @@
                             setTimeout( () => {
                                 me.loader(false)
                             }, 1000)
+                            document.body.classList.remove('no_scroll')
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {

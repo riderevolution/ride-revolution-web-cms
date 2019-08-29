@@ -66,6 +66,7 @@
                     setTimeout( () => {
                         me.loader(false)
                     }, 300)
+                    document.body.classList.remove('no_scroll')
                 })
             }
         }

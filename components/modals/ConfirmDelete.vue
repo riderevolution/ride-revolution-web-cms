@@ -42,6 +42,7 @@
                                 me.$parent.fetchData(1)
                             })
                         }
+                        document.body.classList.remove('no_scroll')
                     }
                 })
             },
