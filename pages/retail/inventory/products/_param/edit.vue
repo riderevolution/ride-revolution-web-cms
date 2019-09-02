@@ -220,7 +220,11 @@
             const me = this
             me.$axios.get(`api/inventory/products/${me.$route.params.param}`).then(res => {
                 me.res = res.data.product
-                me.variants = me.res.product_variants
+                if (me.res.product_variants.length > 0) {
+                    me.variants = me.res.product_variants
+                } else {
+                    me.variants = [0]
+                }
                 me.loaded = true
             })
             me.$axios.get('api/studios').then(res => {

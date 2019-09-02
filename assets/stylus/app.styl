@@ -384,6 +384,38 @@ img
     padding: 10px 15px
     span
         sf_pro_regular(1.2vh)
+.close_wrapper
+    position: absolute
+    top: 0
+    width: 100%
+    height: 100%
+    z-index: 1
+    background-color: rgba(0, 0, 0, 0.5)
+    .close_icon
+        position: absolute
+        width: 20px
+        height: 20px
+        top: calc(0% + 10px)
+        right: calc(0% + 10px)
+        z-index: 3
+        &::before
+            content: ''
+            position: absolute
+            top: 0
+            right: calc(0% + 8px)
+            width: 2px
+            height: 20px
+            background-color: $white
+            transform: rotate(45deg)
+        &::after
+            content: ''
+            position: absolute
+            top: 0
+            right: calc(0% + 8px)
+            width: 2px
+            height: 20px
+            background-color: $white
+            transform: rotate(-45deg)
 
 /**
  * Default Modal */
@@ -1050,6 +1082,7 @@ input::placeholder
     &.scrollable
         height: 500px
     .preview
+        position: relative
         padding: 0 5px
         flex: 0 0 33.33%
         margin-bottom: 10px
@@ -1932,10 +1965,7 @@ input::placeholder
     .taxonomy_wrapper
         padding: 0 20px 40px
         flex: 0 0 50%
-        display: flex
-        flex-flow: column wrap
     .taxonomy_body
-        flex: auto
         background-color: $white
         box-shadow: 15px 25px 40px transparent
         transition: .3s ease-in-out
@@ -2026,6 +2056,28 @@ input::placeholder
                     stroke: $white
                     transition: .3s ease-in-out
 
+.cms_autocomplete
+    position: absolute
+    top: 105%
+    z-index: 2
+    background-color: $white
+    width: 100%
+    padding: 10px 0
+    border-radius: 3px
+    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.16)
+    &.scrollable
+        height: 340px
+        overflow-y: auto
+    .autocomplete_title
+        padding: 10px 20px
+        sf_pro_medium(1.5vh)
+        color: $black
+        background-color: transparent
+        transition: .3s ease-in-out
+        &:hover
+            color: $green
+            background-color: $light_green
+            transition: .3s ease-in-out
 .cms_summary
     display: block
     background-color: $white
@@ -2165,6 +2217,12 @@ input::placeholder
             transition: .3s ease-in-out
         &.active
             pointer-events: none
+
+.no_contents
+    sf_pro_regular(3vh)
+    color: $border_alt2
+    text-align: center
+    padding-top: 100px
 
 /**
  * Login */

@@ -61,7 +61,7 @@
                                         <td>{{ variant.unit_price }}</td>
                                         <td>{{ variant.sale_price }}</td>
                                         <td class="table_actions full">
-                                            <a class="table_action_cancel" href="javascript:void(0)">Remove</a>
+                                            <a class="table_action_cancel" href="javascript:void(0)" @click="toggleDelete(variant.id)">Remove</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -83,15 +83,20 @@
                 </form>
             </section>
         </div>
+        <transition name="fade">
+            <confirm-delete v-if="$store.state.deleteStatus" ref="delete" :url="'api/inventory/product-variants'" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
 
 <script>
     import Foot from '../../../../components/Foot'
+    import ConfirmDelete from '../../../../components/modals/ConfirmDelete'
     export default {
         components: {
-            Foot
+            Foot,
+            ConfirmDelete
         },
         data () {
             return {
@@ -103,6 +108,14 @@
             }
         },
         methods: {
+            toggleDelete (id) {
+                const me = this
+                me.$store.state.deleteStatus = true
+                document.body.classList.add('no_scroll')
+                setTimeout( () => {
+                    me.$refs.delete.contentID = id
+                }, 100)
+            },
             submissionSuccess () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
@@ -142,6 +155,7 @@
             const me = this
             me.$axios.get(`api/suppliers/${me.$route.params.param}`).then(res => {
                 me.res = res.data.supplier
+                me.variants = []
                 me.res.products.forEach((product, pindex) => {
                     product.product_variants.forEach((variant, vindex) => {
                         me.variants.push(variant)

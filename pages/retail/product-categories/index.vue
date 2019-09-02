@@ -25,22 +25,21 @@
                                     <thead>
                                         <tr>
                                             <th>Product Name</th>
-                                            <th>SKU ID</th>
-                                            <th>Qty.</th>
+                                            <th>Sellable</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody v-if="variants.length > 0">
-                                        <tr v-for="(variant, key) in variants" :key="key" v-if="variant.cid == data.id">
-                                            <td>{{ variant.product.variant }}</td>
-                                            <td>{{ variant.product.sku_id }}</td>
-                                            <td>{{ variant.product.quantity }}</td>
-                                            <td class="table_actions full">
-                                                <a class="table_action_cancel" href="javascript:void(0)">Remove</a>
+                                    <tbody v-if="data.products.length > 0">
+                                        <tr v-for="(product, key) in data.products" :key="key">
+                                            <td>{{ product.name }}</td>
+                                            <td>{{ (product.sellable) ? 'Yes' : 'No' }}</td>
+                                            <td class="table_actions">
+                                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/${product.id}/edit?c=${data.id}`">Edit</nuxt-link>
+                                                <a class="table_action_cancel" href="javascript:void(0)">Deactivate</a>
                                             </td>
                                         </tr>
                                     </tbody>
-                                    <tbody class="no_results" v-if="data.products.length == 0">
+                                    <tbody class="no_results" v-else>
                                         <tr>
                                             <td :colspan="rowCount">No Result(s) Found.</td>
                                         </tr>
@@ -82,8 +81,7 @@
                 prevRoute: '',
                 rowCount: 0,
                 res: [],
-                type: 0,
-                variants: []
+                type: 0
             }
         },
         methods: {
@@ -116,13 +114,6 @@
                 me.loader(true)
                 me.$axios.get('api/inventory/product-categories').then(res => {
                     me.res = res.data
-                    me.res.productCategories.forEach((category, cindex) => {
-                        category.products.forEach((product, pindex) => {
-                            product.product_variants.forEach((variant, vindex) => {
-                                me.variants.push({cid: product.product_category_id, pid: product.id, product:variant})
-                            })
-                        })
-                    })
                     me.loaded = true
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors

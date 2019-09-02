@@ -42,6 +42,9 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('password_confirmation')">{{ errors.first('password_confirmation') }}</span></transition>
                                 </div>
                             </div>
+                            <div class="form_group_disclaimer">
+                                <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Leave blank if you don't want to change your <b>password</b>.</span></div>
+                            </div>
                         </div>
                     </div>
                     <div class="form_footer_wrapper">

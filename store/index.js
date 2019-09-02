@@ -6,6 +6,7 @@ const createStore = () => {
             resetSuccessfulStatus: false,
             resetStatus: false,
             deleteStatus: false,
+            deleteImageStatus: false,
             errorStatus: false,
             errorList: [],
             confirmStatus: false,

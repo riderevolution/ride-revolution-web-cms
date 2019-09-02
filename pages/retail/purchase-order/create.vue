@@ -24,17 +24,20 @@
                         </div>
                         <div class="form_group margin">
                             <label for="p_o_number">P.O. Number</label>
-                            <input type="text" name="p_o_number" autocomplete="off" class="default_text">
+                            <input type="text" name="p_o_number" placeholder="Enter P.O. Number" autocomplete="off" class="default_text">
                         </div>
-                        <div class="form_group margin">
-                            <label for="q">Search a Product</label>
-                            <input type="text" name="q" autocomplete="off" placeholder="Add a product" class="default_text search_alternate">
+                        <div class="form_group margin" v-click-outside="closeMe">
+                            <label>Search a Product</label>
+                            <input type="text" autocomplete="off" placeholder="Add a product" class="default_text search_alternate" @click="autocomplete ^= true">
+                            <div :class="`cms_autocomplete ${(variants.length >= 6) ? 'scrollable' : ''}`" v-if="autocomplete">
+                                <div class="autocomplete_title" v-for="(variant, key) in variants" :key="key" @click="addVariant(variant)">{{ variant.variant }}</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
             <section id="content" v-if="loaded">
-                <form class="form_table">
+                <form class="form_table" v-if="purchaseOrders.length > 0">
                     <table class="cms_table">
                         <thead>
                             <tr>
@@ -51,7 +54,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr v-for="(purchaseOrder, key) in purchaseOrders" :key="key">
                                 <td>PHP 265.00</td>
                                 <td>PHP 265.00</td>
                                 <td>PHP 265.00</td>
@@ -70,13 +73,11 @@
                                 <td>PHP 25,000</td>
                             </tr>
                         </tbody>
-                        <!-- <tbody class="no_results">
-                            <tr>
-                                <td :colspan="rowCount">No Result(s) Found.</td>
-                            </tr>
-                        </tbody> -->
                     </table>
                 </form>
+                <div class="no_contents" v-else>
+                    Select a supplier before entering any products.
+                </div>
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
@@ -91,18 +92,29 @@
         },
         data () {
             return {
+                autocomplete: false,
                 loaded: false,
                 randomID: 0,
                 lastRoute: '',
                 prevRoute: '',
-                rowCount: 0,
                 status: 1,
                 suppliers: [],
-                studios: []
+                studios: [],
+                variants: [],
+                purchaseOrders: []
             }
         },
         methods: {
-            fetchStudiosSuppliers () {
+            closeMe () {
+                const me = this
+                me.autocomplete = false
+            },
+            addVariant (data) {
+                const me = this
+                me.purchaseOrders.push(data)
+                me.autocomplete = false
+            },
+            fetchData () {
                 const me = this
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios
@@ -110,15 +122,18 @@
                 me.$axios.get('api/suppliers').then(res => {
                     me.suppliers = res.data.suppliers.data
                 })
+                me.$axios.get('api/inventory/product-variants').then(res => {
+                    me.variants = res.data.productVariants
+                })
+                me.$axios.get('api/extras/random-string').then(res => {
+                    me.randomID = res.data.randomString
+                })
                 me.loaded = true
             }
         },
         async mounted () {
             const me = this
-            me.fetchStudiosSuppliers()
-            me.$axios.get('api/extras/random-string').then(res => {
-                me.randomID = res.data.randomString
-            })
+            me.fetchData()
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

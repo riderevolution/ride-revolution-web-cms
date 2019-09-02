@@ -17,8 +17,14 @@
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('image[]')">{{ errors.first('image[]') }}</span></transition>
                     </div>
                     <div class="preview_image_wrapper" :id="`preview_image_wrapper_${unique}`">
-                        <div class="preview" v-for="(data, key) in images" :key="key">
+                        <div class="preview" v-for="(data, key) in images" :key="key" v-if="values == 0">
                             <img :id="`preview_image_${unique}_${key}`" src="/" v-if="previewImage"/>
+                        </div>
+                        <div class="preview" v-for="(data, key) in values" :key="key" v-if="values != 0">
+                            <img :id="`preview_image_${unique}_${key}`" :src="data.path_resized" />
+                            <div class="close_wrapper" v-if="values.length == 1">
+                                <div class="close_icon" @click="deleteImage(data)"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="form_footer_wrapper">
@@ -36,6 +42,12 @@
 <script>
     export default {
         props: {
+            values: {
+                type: Array,
+                default: function () {
+                    return 0
+                }
+            },
             unique: {
                 type: Number,
                 default: null
@@ -100,14 +112,6 @@
                     me.images = []
                 }, 300)
             }
-        },
-        async mounted () {
-            // const me = this
-            // if (me.id != 0) {
-            //     me.$axios.get(`api/inventory/product-categories/${me.id}`).then(res => {
-            //         me.res = res.data.productCategory
-            //     })
-            // }
         }
     }
 </script>

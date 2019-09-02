@@ -349,6 +349,7 @@
                 } else {
                     me.$axios.get(`api/staff?enabled=0`).then(res => {
                         me.res = res.data.staff.data
+                        me.total_count = me.res.length
                     }).catch(err => {
                         me.$store.state.errorList = err.response.data.errors
                         me.$store.state.errorStatus = true
