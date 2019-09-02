@@ -58,12 +58,8 @@
                             </div>
                             <div class="form_flex select_all">
                                 <label class="flex_label">Restrict access to studios:</label>
-                                <div class="form_check select_all">
-                                    <input type="checkbox" id="select_all" name="select_all" class="action_check" @change="toggleAll()" :checked="(all) ? true : false">
-                                    <label for="select_all">Select All</label>
-                                </div>
-                                <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studios" class="action_check" :value="studio.id" @change="toggleStudio(studio.id)" :checked="studio.checked">
+                                <div class="form_check studios" v-for="(studio, key) in studios" :key="key">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -102,7 +98,6 @@
                 res: [],
                 studios: [],
                 form: {
-                    studios: [],
                     classLength: {
                         hour: 0,
                         mins: 0
@@ -189,45 +184,12 @@
                         break
                 }
             },
-            toggleAll () {
-                const me = this
-                const elements = document.querySelectorAll('.select_all .form_check')
-                elements.forEach((element, index) => {
-                    if (document.getElementById(`select_all`).checked) {
-                        if (document.getElementById(`studio_${index}`)) {
-                            if (!document.getElementById(`studio_${index}`).checked) {
-                                document.getElementById(`studio_${index}`).checked = true
-                                me.form.studios.push(parseInt(document.getElementById(`studio_${index}`).value))
-                            }
-                        }
-                    } else {
-                        if (document.getElementById(`studio_${index}`)) {
-                            document.getElementById(`studio_${index}`).checked = false
-                            me.form.studios.splice((index - index), 1)
-                        }
-                    }
-                })
-            },
-            toggleStudio (id, key) {
-                const me = this
-                document.getElementById(`select_all`).checked = false
-                if (me.form.studios.indexOf(id) == -1) {
-                    me.form.studios.push(id)
-                } else {
-                    me.form.studios.forEach((studio, index) => {
-                        if (studio == id) {
-                            me.form.studios.splice(index, 1)
-                        }
-                    })
-                }
-            },
+
             submissionSuccess () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.form.studios.sort()
-                        formData.append('studio_access', JSON.stringify(me.form.studios))
                         formData.append('class_length', `${(me.form.classLength.hour * 3600) + (me.form.classLength.mins * 60) + (0 * 1)}+${me.form.classLength.hour}:${me.form.classLength.mins}`)
                         formData.append('_method', 'PATCH')
                         me.loader(true)
@@ -262,28 +224,24 @@
                 const me = this
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios
+                    me.studios.forEach((studio, index) => {
+                        studio.status = false
+                        me.res.studio_access.forEach((compare, index) => {
+                            if (studio.id == compare.studio_id) {
+                                studio.status = true
+                            }
+                        })
+                    })
                 })
             }
         },
         async mounted () {
             const me = this
-            me.fetchStudios()
             me.$axios.get(`api/packages/class-types/${me.$route.params.param}`).then(res => {
-                console.log(res.data.classType)
                 me.res = res.data.classType
                 me.form.classLength.hour = me.res.class_length.split('+')[1].split(':')[0]
                 me.form.classLength.mins = me.res.class_length.split('+')[1].split(':')[1]
-                me.studios.forEach((studio, index) => {
-                    me.res.studio_access.forEach((compare, index) => {
-                        if (studio.id == compare.studio_id) {
-                            me.form.studios.push(compare.studio_id)
-                            studio.checked = true
-                        }
-                    })
-                })
-                if (me.studios.length == me.form.studios.length) {
-                    me.all = true
-                }
+                me.fetchStudios()
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]

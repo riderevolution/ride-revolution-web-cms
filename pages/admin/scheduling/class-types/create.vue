@@ -58,12 +58,8 @@
                             </div>
                             <div class="form_flex select_all">
                                 <label class="flex_label">Restrict access to studios:</label>
-                                <div class="form_check select_all">
-                                    <input type="checkbox" id="select_all" name="select_all" class="action_check" @change="toggleAll()">
-                                    <label for="select_all">Select All</label>
-                                </div>
                                 <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studios" :value="studio.id" class="action_check" @change="toggleStudio(studio.id)">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" :value="studio.id" class="action_check">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -187,45 +183,11 @@
                         break
                 }
             },
-            toggleAll () {
-                const me = this
-                const elements = document.querySelectorAll('.select_all .form_check')
-                elements.forEach((element, index) => {
-                    if (document.getElementById(`select_all`).checked) {
-                        if (document.getElementById(`studio_${index}`)) {
-                            if (!document.getElementById(`studio_${index}`).checked) {
-                                document.getElementById(`studio_${index}`).checked = true
-                                me.form.studios.push(parseInt(document.getElementById(`studio_${index}`).value))
-                            }
-                        }
-                    } else {
-                        if (document.getElementById(`studio_${index}`)) {
-                            document.getElementById(`studio_${index}`).checked = false
-                            me.form.studios.splice((index - index), 1)
-                        }
-                    }
-                })
-            },
-            toggleStudio (id, key) {
-                const me = this
-                document.getElementById(`select_all`).checked = false
-                if (me.form.studios.indexOf(id) == -1) {
-                    me.form.studios.push(id)
-                } else {
-                    me.form.studios.forEach((studio, index) => {
-                        if (studio == id) {
-                            me.form.studios.splice(index, 1)
-                        }
-                    })
-                }
-            },
             submissionSuccess () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.form.studios.sort()
-                        formData.append('studio_access', JSON.stringify(me.form.studios))
                         formData.append('class_length', `${(me.form.classLength.hour * 3600) + (me.form.classLength.mins * 60) + (0 * 1)}+${me.form.classLength.hour}:${me.form.classLength.mins}`)
                         me.loader(true)
                         me.$axios.post('api/packages/class-types', formData).then(res => {
@@ -255,16 +217,19 @@
                     }
                 })
             },
-            fetchStudios () {
+            fetchStudios (studioStatus) {
                 const me = this
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios
+                    me.studios.forEach((studio, index) => {
+                        studio.status = studioStatus
+                    })
                 })
             }
         },
         async mounted () {
             const me = this
-            me.fetchStudios()
+            me.fetchStudios(false)
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
         }

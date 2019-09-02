@@ -1,10 +1,10 @@
 <template>
     <div class="default_modal" :id="`key_${unique}`">
-        <div class="background" @click="toggleCancel(unique)"></div>
+        <div class="background" @click="toggleClose(unique)"></div>
         <div id="default_form" class="overlay">
             <div class="modal_wrapper">
                 <h2 class="form_title">{{ parentTitle }}</h2>
-                <div class="form_close" @click="toggleCancel(unique)"></div>
+                <div class="form_close" @click="toggleClose(unique)"></div>
                 <div class="modal_main_group">
                     <div class="form_photo alternate">
                         <input type="file" :id="`image_${unique}`" name="image[]" class="action_photo" @change="getFile($event, unique)" v-validate="'required|image'" multiple>
@@ -17,33 +17,36 @@
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('image[]')">{{ errors.first('image[]') }}</span></transition>
                     </div>
                     <div class="preview_image_wrapper" :id="`preview_image_wrapper_${unique}`">
-                        <div class="preview" v-for="(data, key) in images" :key="key" v-if="values == 0">
-                            <img :id="`preview_image_${unique}_${key}`" src="/" v-if="previewImage"/>
-                        </div>
-                        <div class="preview" v-for="(data, key) in values" :key="key" v-if="values != 0">
-                            <img :id="`preview_image_${unique}_${key}`" :src="data.path_resized" />
-                            <div class="close_wrapper" v-if="values.length == 1">
-                                <div class="close_icon" @click="deleteImage(data)"></div>
+                        <div class="preview" v-for="(data, key) in images" :key="key">
+                            <img :id="`preview_image_${unique}_${key}`" :src="data.path_resized"/>
+                            <div class="close_wrapper">
+                                <div class="close_icon" @click="deleteImage(data.id)"></div>
                             </div>
                         </div>
                     </div>
                     <div class="form_footer_wrapper">
                         <div class="button_group">
-                            <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleCancel(unique)">Cancel</a>
+                            <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose(unique)">Cancel</a>
                             <button type="button" name="button" class="action_btn margin alternate" @click="toggleClose(unique)">Proceed</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <transition name="fade">
+            <delete-image v-if="$store.state.deleteImageStatus" ref="delete" :temp="$parent.tempID" />
+        </transition>
     </div>
 </template>
 
 <script>
+    import DeleteImage from './DeleteImage'
     export default {
+        components: {
+            DeleteImage
+        },
         props: {
             values: {
-                type: Array,
                 default: function () {
                     return 0
                 }
@@ -68,21 +71,28 @@
             getFile (event, key) {
                 const me = this
                 let element = event.target
-                me.images = []
-                me.$parent.parentKeys = []
+                let formData = new FormData()
+                formData.append('temporary_id', me.$parent.tempID)
                 if (element.files && element.files[0]) {
                     for (let i = 0; i < element.files.length; i++) {
-                        me.images.push(i)
-                        me.$parent.parentKeys.push(key)
-                        let reader = new FileReader()
-                        reader.onload = function () {
-                            let image = document.getElementById(`preview_image_${key}_${i}`)
-                            image.src = reader.result
-                        }
-                        reader.readAsDataURL(element.files[i])
+                        me.$parent.parentKeys.push(me.randomString())
+                        formData.append('image[]', element.files[i])
+                        formData.append('type', 'product-variant')
                     }
+                    me.loader(true)
+                    me.$axios.post('api/extras/images', formData).then(res => {
+                        if (res.data) {
+                            me.fetchImages(me.$parent.tempID)
+                        }
+                    }).catch(err => {
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
+                    }).then(() => {
+                        setTimeout( () => {
+                            me.loader(false)
+                        }, 500)
+                    })
                 }
-                me.previewImage = true
                 setTimeout( () => {
                     if (document.getElementById(`preview_image_wrapper_${key}`).scrollHeight >= 500) {
                         document.getElementById(`preview_image_wrapper_${key}`).classList.add('scrollable')
@@ -100,17 +110,23 @@
                     document.getElementById(`preview_image_wrapper_${key}`).classList.remove('scrollable')
                 }, 300)
             },
-            toggleCancel (key) {
+            fetchImages (id) {
                 const me = this
-                document.getElementById(`key_${key}`).classList.remove('fade_in')
-                document.getElementById(`key_${key}`).classList.add('fade_out')
-                document.body.classList.remove('no_scroll')
+                me.$axios.get(`api/extras/fetch-variant-images?temporary_id=${me.$parent.tempID}`).then(res => {
+                    if (res.data) {
+                        me.images = res.data.images
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                })
+            },
+            deleteImage (id) {
+                const me = this
+                me.$store.state.deleteImageStatus = true
                 setTimeout( () => {
-                    me.$parent.showImages = false
-                    me.$parent.totalUploaded = 0
-                    document.getElementById(`preview_image_wrapper_${key}`).classList.remove('scrollable')
-                    me.images = []
-                }, 300)
+                    me.$refs.delete.contentID = id
+                }, 100)
             }
         }
     }

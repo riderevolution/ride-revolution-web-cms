@@ -180,11 +180,6 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.$refs.productVariant.forEach((parent, pindex) => {
-                            parent.parentKeys.forEach((value, vindex) => {
-                                formData.append('image_parent_key[]', value)
-                            })
-                        })
                         me.loader(true)
                         me.$axios.post('api/inventory/products', formData).then(res => {
                             setTimeout( () => {

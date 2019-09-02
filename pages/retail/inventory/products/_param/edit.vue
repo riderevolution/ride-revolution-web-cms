@@ -29,7 +29,7 @@
                         </div>
                         <div class="form_wrapper side">
                             <div class="form_main_group">
-                                <div class="form_group" v-if="!$route.query.s">
+                                <div class="form_group" v-if="$route.query.s">
                                     <label for="product_category_id">Category <span>*</span></label>
                                     <select class="default_select alternate" name="product_category_id" v-validate="'required'">
                                         <option value="" disabled>Choose a Category</option>
@@ -43,7 +43,7 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('product_category_name')">{{ errors.first('product_category_name') }}</span></transition>
                                     <input type="hidden" name="product_category_id" v-model="form.category.id">
                                 </div>
-                                <div class="form_group" v-if="!$route.query.c">
+                                <div class="form_group" v-if="$route.query.c">
                                     <label for="supplier_id">Supplier <span>*</span></label>
                                     <select class="default_select alternate" name="supplier_id" v-validate="'required'">
                                         <option value="" selected>Choose a Supplier</option>
@@ -63,7 +63,7 @@
                                         <span @click="toggleCheckboxes ^= true">Select Studios</span>
                                         <div :class="`form_check_custom ${(toggleCheckboxes) ? 'active' : ''}`">
                                             <div class="check_custom" v-for="(studio, key) in studios" :key="key">
-                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="res.studio_access[key].studio.id == studio.id">
+                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
                                                 <label :for="`studio_${key}`">{{ studio.name }}</label>
                                             </div>
                                         </div>
@@ -105,7 +105,7 @@
                                     <div class="input_header image_upload">Action</div>
                                 </div>
                                 <div class="content_wrapper" v-for="(variant, key) in variants" :key="key" v-if="variants.length > 0">
-                                    <variant ref="productVariant" :value="variant" :unique="key" />
+                                    <variant ref="productVariant" :value="variant" :type="1" :unique="key" />
                                 </div>
                                 <div class="no_results" v-if="variants.length == 0">
                                     No Variant(s) Found. Please add a variant.
@@ -175,38 +175,43 @@
             },
             addVariant () {
                 const me = this
-                me.variants.push(0)
+                me.variants.push({
+                    variant: '',
+                    sku_id: '',
+                    quantity: '',
+                    unit_price: '',
+                    sale_price: '',
+                    images: [],
+                    temporary_id: me.randomString()
+                })
             },
             submissionSuccess () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.$refs.productVariant.forEach((parent, pindex) => {
-                            parent.parentKeys.forEach((value, vindex) => {
-                                formData.append('image_parent_key[]', value)
-                            })
-                        })
-                        me.loader(true)
-                        me.$axios.post('api/inventory/products', formData).then(res => {
-                            setTimeout( () => {
-                                if (res.data) {
-                                    me.notify('Added')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
-                                }
-                            }, 500)
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
-                                if (!me.$store.state.errorStatus) {
-                                    me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
-                                }
-                                me.loader(false)
-                            }, 500)
+                        formData.append('_method', 'PATCH')
+                        // me.loader(true)
+                        me.$axios.post(`api/inventory/products/${me.$route.params.param}`, formData).then(res => {
+                            console.log(res.data)
+                        //     setTimeout( () => {
+                        //         if (res.data) {
+                        //             me.notify('Updated')
+                        //         } else {
+                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
+                        //             me.$store.state.errorStatus = true
+                        //         }
+                        //     }, 500)
+                        // }).catch(err => {
+                        //     me.$store.state.errorList = err.response.data.errors
+                        //     me.$store.state.errorStatus = true
+                        // }).then(() => {
+                        //     setTimeout( () => {
+                        //         if (!me.$store.state.errorStatus) {
+                        //             me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
+                        //         }
+                        //         me.loader(false)
+                        //     }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
@@ -225,10 +230,18 @@
                 } else {
                     me.variants = [0]
                 }
+                me.$axios.get('api/studios').then(res => {
+                    me.studios = res.data.studios
+                    me.studios.forEach((studio, index) => {
+                        studio.status = false
+                        me.res.studio_access.forEach((access, index) => {
+                            if (studio.id == access.studio_id) {
+                                studio.status = true
+                            }
+                        })
+                    })
+                })
                 me.loaded = true
-            })
-            me.$axios.get('api/studios').then(res => {
-                me.studios = res.data.studios
             })
             me.$axios.get('api/inventory/product-categories').then(res => {
                 me.categories = res.data.productCategories

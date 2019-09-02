@@ -3,7 +3,7 @@
         <div class="background" @click="toggleClose()"></div>
         <div class="confirmation_wrapper" v-if="$store.state.deleteImageStatus">
             <div class="confirmation_text">
-                This action cannot be undone.
+                This image will be deleted from database as you proceed. Are you sure you want to continue?
             </div>
             <div class="button_group">
                 <div class="action_cancel_btn confirm" @click="toggleClose()">Cancel</div>
@@ -15,10 +15,9 @@
 
 <script>
     export default {
-        props: {
-            url: {
-                type: String,
-                default: ''
+        prop: {
+            temp: {
+                type: String
             }
         },
         data () {
@@ -29,17 +28,15 @@
         methods: {
             proceedDelete () {
                 const me = this
-                me.$store.state.deleteImageStatus = false
-                me.$axios.delete(`${me.url}/${me.contentID}`).then(res => {
-                    if (res.data) {
-                        me.$parent.fetchData(1)
-                    }
+                me.loader(true)
+                me.$axios.delete(`api/extras/images/${me.contentID}`).then(res => {
+                    me.$parent.fetchImages(me.temp)
+                    me.$store.state.deleteImageStatus = false
+                    me.loader(false)
                 })
-                document.body.classList.remove('no_scroll')
             },
             toggleClose () {
                 this.$store.state.deleteImageStatus = false
-                document.body.classList.remove('no_scroll')
             }
         }
     }

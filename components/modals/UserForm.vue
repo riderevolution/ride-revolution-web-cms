@@ -1,7 +1,7 @@
 <template>
     <div class="default_modal">
         <div class="background" @click="toggleClose()"></div>
-        <form id="default_form" class="overlay" @submit.prevent="submissionAddSuccess()" enctype="multipart/form-data" v-if="type == 0">
+        <form id="default_form" class="overlay" @submit.prevent="submissionAddSuccess()" enctype="multipart/form-data" v-if="type == 0 && loaded">
             <div class="modal_wrapper">
                 <h2 class="form_title">Add a New User</h2>
                 <div class="form_close" @click="toggleClose()"></div>
@@ -16,12 +16,8 @@
                     </div>
                     <div class="form_flex select_all">
                         <label class="flex_label">Restrict access to studios:</label>
-                        <div class="form_check select_all">
-                            <input type="checkbox" id="select_all" name="select_all" class="action_check" @change="toggleAll()">
-                            <label for="select_all">Select All</label>
-                        </div>
                         <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                            <input type="checkbox" :id="`studio_${key}`" name="studios" :value="studio.id" class="action_check" @change="toggleStudio(studio.id)">
+                            <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" :value="studio.id" class="action_check">
                             <label :for="`studio_${key}`">{{ studio.name }}</label>
                         </div>
                     </div>
@@ -69,7 +65,7 @@
                 </div>
             </div>
         </form>
-        <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()" enctype="multipart/form-data" v-else>
+        <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()" enctype="multipart/form-data" v-if="type == 1 && loaded">
             <div class="modal_wrapper">
                 <h2 class="form_title">Update {{ res.first_name }} {{ res.last_name }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
@@ -84,12 +80,8 @@
                     </div>
                     <div class="form_flex select_all">
                         <label class="flex_label">Restrict access to studios:</label>
-                        <div class="form_check select_all">
-                            <input type="checkbox" id="select_all" name="select_all" class="action_check" @change="toggleAll()" :checked="(all) ? true : false">
-                            <label for="select_all">Select All</label>
-                        </div>
-                        <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                            <input type="checkbox" :id="`studio_${key}`" name="studios" class="action_check" :value="studio.id" @change="toggleStudio(studio.id)" :checked="(res.staff_details.studio_access[key]) ? (res.staff_details.studio_access[key].studio_id == studio.id) ? true : false : false">
+                        <div class="form_check studios" v-for="(studio, key) in studios" :key="key">
+                            <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
                             <label :for="`studio_${key}`">{{ studio.name }}</label>
                         </div>
                     </div>
@@ -152,11 +144,13 @@
                 default: 0
             },
             id: {
-                type: Number
+                type: Number,
+                default: 0
             }
         },
         data () {
             return {
+                loaded: false,
                 res: {
                     staff_details: {
                         role_id: '',
@@ -169,45 +163,10 @@
                 },
                 roles: [],
                 studios: [],
-                form: {
-                    studios: []
-                },
-                all: false
+                studioLength: 0
             }
         },
         methods: {
-            toggleAll () {
-                const me = this
-                const elements = document.querySelectorAll('.select_all .form_check')
-                elements.forEach((element, index) => {
-                    if (document.getElementById(`select_all`).checked) {
-                        if (document.getElementById(`studio_${index}`)) {
-                            if (!document.getElementById(`studio_${index}`).checked) {
-                                document.getElementById(`studio_${index}`).checked = true
-                                me.form.studios.push(parseInt(document.getElementById(`studio_${index}`).value))
-                            }
-                        }
-                    } else {
-                        if (document.getElementById(`studio_${index}`)) {
-                            document.getElementById(`studio_${index}`).checked = false
-                            me.form.studios.splice((index - index), 1)
-                        }
-                    }
-                })
-            },
-            toggleStudio (id, key) {
-                const me = this
-                document.getElementById(`select_all`).checked = false
-                if (me.form.studios.indexOf(id) == -1) {
-                    me.form.studios.push(id)
-                } else {
-                    me.form.studios.forEach((studio, index) => {
-                        if (studio == id) {
-                            me.form.studios.splice(index, 1)
-                        }
-                    })
-                }
-            },
             toggleClose () {
                 const me = this
                 me.$store.state.userForm = false
@@ -218,8 +177,6 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.form.studios.sort()
-                        formData.append('studio_access', JSON.stringify(me.form.studios))
                         me.loader(true)
                         me.$axios.post('api/staff', formData).then(res => {
                             setTimeout( () => {
@@ -256,8 +213,6 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.form.studios.sort()
-                        formData.append('studio_access', JSON.stringify(me.form.studios))
                         if (formData.get('password').length <= 0) {
                             formData.delete('password')
                         }
@@ -292,6 +247,26 @@
                         })
                     }
                 })
+            },
+            fetchStudios (studioStatus) {
+                const me = this
+                me.$axios.get('api/studios').then(res => {
+                    me.studios = res.data.studios
+                    if (me.id != 0) {
+                        me.studios.forEach((studio, index) => {
+                            studio.status = false
+                            me.res.staff_details.studio_access.forEach((access, index) => {
+                                if (studio.id == access.studio_id) {
+                                    studio.status = true
+                                }
+                            })
+                        })
+                    } else {
+                        me.studios.forEach((studio, index) => {
+                            studio.status = studioStatus
+                        })
+                    }
+                })
             }
         },
         async mounted () {
@@ -299,20 +274,15 @@
             me.$axios.get('api/roles').then(res => {
                 me.roles = res.data.roles
             })
-            me.$axios.get('api/studios').then(res => {
-                me.studios = res.data.studios
-            })
             if (me.id != 0) {
                 me.$axios.get(`api/staff/${me.id}`).then(res => {
                     me.res = res.data.user
-                    me.res.staff_details.studio_access.forEach((studio, index) => {
-                        me.form.studios.push(studio.studio_id)
-                    })
-                    if (me.studios.length == me.form.studios.length) {
-                        me.all = true
-                    }
+                    me.fetchStudios(false)
                 })
+            } else {
+                me.fetchStudios(false)
             }
+            me.loaded = true
         }
     }
 </script>

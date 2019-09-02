@@ -29,12 +29,8 @@
                             </div>
                             <div class="form_flex select_all">
                                 <label class="flex_label">Restrict access to studios:</label>
-                                <div class="form_check select_all">
-                                    <input type="checkbox" id="select_all" name="select_all" class="action_check" @change="toggleAll()" :checked="(all) ? true : false">
-                                    <label for="select_all">Select All</label>
-                                </div>
-                                <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studios" class="action_check" :value="studio.id" @change="toggleStudio(studio.id)" :checked="studio.checked">
+                                <div class="form_check studios" v-for="(studio, key) in studios" :key="key">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -72,10 +68,7 @@
                 lastRoute: '',
                 prevRoute: '',
                 studios: [],
-                res: [],
-                form: {
-                    studios: []
-                },
+                res: []
             }
         },
         methods: {
@@ -116,9 +109,6 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.form.studios.sort()
-                        console.log(me.form.studios)
-                        formData.append('studio_access', JSON.stringify(me.form.studios))
                         formData.append('_method', 'patch')
                         me.loader(true)
                         me.$axios.post(`api/packages/package-types/${me.$route.params.param}`, formData).then(res => {
@@ -152,29 +142,26 @@
                 const me = this
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios
+                    me.studios.forEach((studio, index) => {
+                        studio.status = false
+                        me.res.studio_access.forEach((access, index) => {
+                            if (studio.id == access.studio_id) {
+                                studio.status = true
+                            }
+                        })
+                    })
                 })
             }
         },
         async mounted () {
             const me = this
-            me.fetchStudios()
             me.$axios.get(`api/packages/package-types/${me.$route.params.param}`).then(res => {
                 me.res = res.data.packageType
-                me.studios.forEach((studio, index) => {
-                    me.res.studio_access.forEach((compare, index) => {
-                        if (studio.id == compare.studio_id) {
-                            me.form.studios.push(compare.studio_id)
-                            studio.checked = true
-                        }
-                    })
-                })
-                if (me.studios.length == me.form.studios.length) {
-                    me.all = true
-                }
-                me.loaded = true
+                me.fetchStudios()
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
+            me.loaded = true
         }
     }
 </script>

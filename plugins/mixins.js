@@ -2,6 +2,9 @@ import Vue from 'vue'
 
 Vue.mixin({
     methods: {
+        randomString () {
+            return Math.random().toString(36).substring(2)
+        },
         totalCount (value) {
                 return value.toLocaleString()
         },
