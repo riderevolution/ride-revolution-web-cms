@@ -73,9 +73,9 @@
                 let element = event.target
                 let formData = new FormData()
                 formData.append('temporary_id', me.$parent.tempID)
+                formData.append('parent_id', me.$parent.parentID)
                 if (element.files && element.files[0]) {
                     for (let i = 0; i < element.files.length; i++) {
-                        me.$parent.parentKeys.push(me.randomString())
                         formData.append('image[]', element.files[i])
                         formData.append('type', 'product-variant')
                     }
@@ -93,11 +93,6 @@
                         }, 500)
                     })
                 }
-                setTimeout( () => {
-                    if (document.getElementById(`preview_image_wrapper_${key}`).scrollHeight >= 500) {
-                        document.getElementById(`preview_image_wrapper_${key}`).classList.add('scrollable')
-                    }
-                }, 10)
             },
             toggleClose (key) {
                 const me = this
@@ -115,6 +110,7 @@
                 me.$axios.get(`api/extras/fetch-variant-images?temporary_id=${me.$parent.tempID}`).then(res => {
                     if (res.data) {
                         me.images = res.data.images
+                        me.$parent.totalUploaded = me.images.length
                     }
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
@@ -127,6 +123,12 @@
                 setTimeout( () => {
                     me.$refs.delete.contentID = id
                 }, 100)
+            }
+        },
+        mounted () {
+            const me = this
+            if (me.values != 0) {
+                me.images = me.values
             }
         }
     }

@@ -41,7 +41,7 @@
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
                             <h2 class="form_title">Products</h2>
-                            <nuxt-link :to="`/${prevRoute}/inventory/products/create?s=${res.id}`" class="action_success_btn">Add Product</nuxt-link>
+                            <nuxt-link :to="`/${prevRoute}/inventory/products/create?s=${res.id}`" class="action_success_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg> Add Product</nuxt-link>
                         </div>
                         <div class="form_main_group alternate_2">
                             <table class="cms_table">
@@ -149,20 +149,24 @@
 						})
                     }
                 })
+            },
+            fetchData (status) {
+                const me = this
+                me.$axios.get(`api/suppliers/${me.$route.params.param}`).then(res => {
+                    me.res = res.data.supplier
+                    me.variants = []
+                    me.res.products.forEach((product, pindex) => {
+                        product.product_variants.forEach((variant, vindex) => {
+                            me.variants.push(variant)
+                        })
+                    })
+                    me.loaded = true
+                })
             }
         },
         async mounted () {
             const me = this
-            me.$axios.get(`api/suppliers/${me.$route.params.param}`).then(res => {
-                me.res = res.data.supplier
-                me.variants = []
-                me.res.products.forEach((product, pindex) => {
-                    product.product_variants.forEach((variant, vindex) => {
-                        me.variants.push(variant)
-                    })
-                })
-                me.loaded = true
-            })
+            me.fetchData(1)
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }

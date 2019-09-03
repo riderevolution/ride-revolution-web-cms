@@ -105,7 +105,7 @@
                                     <div class="input_header image_upload">Action</div>
                                 </div>
                                 <div class="content_wrapper" v-for="(variant, key) in variants" :key="key" v-if="variants.length > 0">
-                                    <variant ref="productVariant" :unique="key" />
+                                    <variant ref="productVariant" :unique="key" :type="0" />
                                 </div>
                                 <div class="no_results" v-if="variants.length == 0">
                                     No Variant(s) Found. Please add a variant.
@@ -142,6 +142,7 @@
         },
         data () {
             return {
+                showClose: false,
                 toggleCheckboxes: false,
                 id: 0,
                 error: false,
@@ -174,6 +175,19 @@
             addVariant () {
                 const me = this
                 me.variants.push(0)
+                me.determineIfShowCloser()
+            },
+            determineIfShowCloser () {
+                const me = this
+                let enabledCount = 0
+                setTimeout(() => {
+                    me.$refs.productVariant.forEach((item, index) => {
+                        if (item.show == true) {
+                            enabledCount++
+                        }
+                    })
+                    me.showClose = (enabledCount > 1) ? true : false
+                }, 10)
             },
             submissionSuccess () {
                 const me = this

@@ -4,9 +4,16 @@
             <section id="top_content" class="table" v-if="loaded">
                 <div class="action_wrapper">
                     <h1 class="header_title">Product Categories</h1>
-                    <div class="action_buttons">
-                        <a @click="toggleForm(id, 0)" href="javascript:void(0)" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add New Category</a>
+                    <div class="actions">
+                        <div class="total">Total: {{ totalCount(res.productCategories.length) }}</div>
+                        <div class="toggler">
+                            <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
+                            <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
+                        </div>
                     </div>
+                </div>
+                <div class="action_buttons">
+                    <a @click="toggleForm(id, 0)" href="javascript:void(0)" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add New Category</a>
                 </div>
             </section>
             <section id="content" class="alternate_2" v-if="loaded">
@@ -35,7 +42,8 @@
                                             <td>{{ (product.sellable) ? 'Yes' : 'No' }}</td>
                                             <td class="table_actions">
                                                 <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/${product.id}/edit?c=${data.id}`">Edit</nuxt-link>
-                                                <a class="table_action_cancel" href="javascript:void(0)">Deactivate</a>
+                                                <a class="table_action_cancel" @click.self="toggleStatus(product.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
+                                                <a class="table_action_success" @click.self="toggleStatus(product.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -60,6 +68,9 @@
         <transition name="fade">
             <category-form v-if="$store.state.categoryForm" :type="type" :id="id" />
         </transition>
+        <transition name="fade">
+            <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
@@ -68,14 +79,17 @@
     import Foot from '../../../components/Foot'
     import CategoryForm from '../../../components/modals/CategoryForm'
     import ConfirmDelete from '../../../components/modals/ConfirmDelete'
+    import ConfirmStatus from '../../../components/modals/ConfirmStatus'
     export default {
         components: {
             Foot,
             CategoryForm,
-            ConfirmDelete
+            ConfirmDelete,
+            ConfirmStatus
         },
         data () {
             return {
+                status: 1,
                 id: 0,
                 loaded: false,
                 prevRoute: '',
@@ -85,13 +99,23 @@
             }
         },
         methods: {
-            /**
-             * Toggle User and Role Form
-             * @param  {[int]} value id
-             * @param  {[int]} type method
-             * @param  {[string]} category
-             * @return {[boolean]}
-             */
+            toggleStatus (id, enabled, status) {
+                const me = this
+                me.$store.state.confirmStatus = true
+                setTimeout( () => {
+                    me.$refs.enabled.confirm.table_name = 'products'
+                    me.$refs.enabled.confirm.id = id
+                    me.$refs.enabled.confirm.enabled = enabled
+                    me.$refs.enabled.confirm.status = status
+                    me.$refs.enabled.confirm.type = 'product'
+                }, 100)
+                document.body.classList.remove('no_scroll')
+            },
+            toggleOnOff (status) {
+                const me = this
+                me.status = status
+                me.fetchData(status)
+            },
             toggleForm (value, type) {
                 const me = this
                 me.$store.state.categoryForm = true
@@ -109,10 +133,10 @@
                     me.$refs.delete.contentID = id
                 }, 100)
             },
-            fetchData () {
+            fetchData (status) {
                 const me = this
                 me.loader(true)
-                me.$axios.get('api/inventory/product-categories').then(res => {
+                me.$axios.get(`api/inventory/product-categories?enabled=${status}`).then(res => {
                     me.res = res.data
                     me.loaded = true
                 }).catch(err => {
@@ -128,7 +152,7 @@
         },
         async mounted () {
             const me = this
-            me.fetchData()
+            me.fetchData(1)
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)

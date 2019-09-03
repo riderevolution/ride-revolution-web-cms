@@ -49,6 +49,7 @@
                 const me = this
                 me.loader(true)
                 me.$axios.patch(`api/extras/toggle-status`, me.confirm).then(res => {
+                    console.log(me.confirm)
                     setTimeout( () => {
                         me.$store.state.confirmStatus = false
                         me.notify(me.confirm.status)

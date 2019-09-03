@@ -73,11 +73,11 @@
                                     <label>Is this sellable? <span>*</span></label>
                                     <div class="radio_wrapper">
                                         <div class="form_radio">
-                                            <input type="radio" id="sellable_yes" value="Yes" name="sellable" class="action_radio" checked>
+                                            <input type="radio" id="sellable_yes" value="Yes" name="sellable" class="action_radio" :checked="res.sellable == 1">
                                             <label for="sellable_yes">Yes</label>
                                         </div>
                                         <div class="form_radio">
-                                            <input type="radio" id="sellable_no" value="No" name="sellable" class="action_radio">
+                                            <input type="radio" id="sellable_no" value="No" name="sellable" class="action_radio" :checked="res.sellable == 0">
                                             <label for="sellable_no">No</label>
                                         </div>
                                     </div>
@@ -116,12 +116,12 @@
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
                             <div class="form_check">
-                                <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
+                                <input type="checkbox" id="enabled" name="enabled" class="action_check" :checked="res.enabled">
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
                                 <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
-                                <button type="submit" name="submit" class="action_btn alternate margin">Upload</button>
+                                <button type="submit" name="submit" class="action_btn alternate margin">Update</button>
                             </div>
                         </div>
                     </div>
@@ -142,6 +142,7 @@
         },
         data () {
             return {
+                showClose: false,
                 loaded: false,
                 toggleCheckboxes: false,
                 id: 0,
@@ -157,7 +158,7 @@
                 studios: [],
                 categories: [],
                 suppliers: [],
-                variants: [0]
+                variants: []
             }
         },
         methods: {
@@ -182,8 +183,10 @@
                     unit_price: '',
                     sale_price: '',
                     images: [],
-                    temporary_id: me.randomString()
+                    temporary_id: me.randomString(),
+                    variant_id: null
                 })
+                me.determineIfShowCloser()
             },
             submissionSuccess () {
                 const me = this
@@ -191,27 +194,26 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')
-                        // me.loader(true)
+                        me.loader(true)
                         me.$axios.post(`api/inventory/products/${me.$route.params.param}`, formData).then(res => {
-                            console.log(res.data)
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.notify('Updated')
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 500)
-                        // }).catch(err => {
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
-                        //         }
-                        //         me.loader(false)
-                        //     }, 500)
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Updated')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
@@ -219,45 +221,62 @@
 						})
                     }
                 })
+            },
+            determineIfShowCloser () {
+                const me = this
+                let enabledCount = 0
+                setTimeout(() => {
+                    me.$refs.productVariant.forEach((item, index) => {
+                        if (item.show == true) {
+                            enabledCount++
+                        }
+                    })
+                    me.showClose = (enabledCount > 1) ? true : false
+                }, 10)
+            },
+            fetchData () {
+                const me = this
+                me.$axios.get(`api/inventory/products/${me.$route.params.param}`).then(res => {
+                    me.res = res.data.product
+                    if (me.res.product_variants.length > 0) {
+                        me.variants = me.res.product_variants
+                        me.determineIfShowCloser()
+                    } else {
+                        me.variants = [0]
+                    }
+                    me.$axios.get('api/studios').then(res => {
+                        me.studios = res.data.studios
+                        me.studios.forEach((studio, index) => {
+                            studio.status = false
+                            me.res.studio_access.forEach((access, index) => {
+                                if (studio.id == access.studio_id) {
+                                    studio.status = true
+                                }
+                            })
+                        })
+                    })
+                    me.loaded = true
+                })
+                me.$axios.get('api/inventory/product-categories').then(res => {
+                    me.categories = res.data.productCategories
+                })
+                me.$axios.get('api/suppliers').then(res => {
+                    me.suppliers = res.data.suppliers.data
+                })
+                if (me.$route.query.s) {
+                    me.$axios.get(`api/suppliers/${me.$route.query.s}`).then(res => {
+                        me.form.supplier = res.data.supplier
+                    })
+                } else {
+                    me.$axios.get(`api/inventory/product-categories/${me.$route.query.c}`).then(res => {
+                        me.form.category = res.data.productCategory
+                    })
+                }
             }
         },
         async mounted () {
             const me = this
-            me.$axios.get(`api/inventory/products/${me.$route.params.param}`).then(res => {
-                me.res = res.data.product
-                if (me.res.product_variants.length > 0) {
-                    me.variants = me.res.product_variants
-                } else {
-                    me.variants = [0]
-                }
-                me.$axios.get('api/studios').then(res => {
-                    me.studios = res.data.studios
-                    me.studios.forEach((studio, index) => {
-                        studio.status = false
-                        me.res.studio_access.forEach((access, index) => {
-                            if (studio.id == access.studio_id) {
-                                studio.status = true
-                            }
-                        })
-                    })
-                })
-                me.loaded = true
-            })
-            me.$axios.get('api/inventory/product-categories').then(res => {
-                me.categories = res.data.productCategories
-            })
-            me.$axios.get('api/suppliers').then(res => {
-                me.suppliers = res.data.suppliers.data
-            })
-            if (me.$route.query.s) {
-                me.$axios.get(`api/suppliers/${me.$route.query.s}`).then(res => {
-                    me.form.supplier = res.data.supplier
-                })
-            } else {
-                me.$axios.get(`api/inventory/product-categories/${me.$route.query.c}`).then(res => {
-                    me.form.category = res.data.productCategory
-                })
-            }
+            me.fetchData()
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]
         }

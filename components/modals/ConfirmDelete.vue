@@ -31,6 +31,9 @@
             proceedDelete () {
                 const me = this
                 me.$store.state.deleteStatus = false
+                if (me.$parent.isDelete) {
+                    me.$parent.isDelete = false
+                }
                 me.$axios.delete(`${me.url}/${me.contentID}`).then(res => {
                     if (res.data) {
                         me.$parent.fetchData(1)
@@ -39,7 +42,11 @@
                 document.body.classList.remove('no_scroll')
             },
             toggleClose () {
-                this.$store.state.deleteStatus = false
+                const me = this
+                me.$store.state.deleteStatus = false
+                if (me.$parent.isDelete) {
+                    me.$parent.isDelete = false
+                }
                 document.body.classList.remove('no_scroll')
             }
         }

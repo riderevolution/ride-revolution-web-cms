@@ -73,7 +73,7 @@
             }
         },
         methods: {
-            async toggleStatus (id, enabled, status) {
+            toggleStatus (id, enabled, status) {
                 const me = this
                 me.$store.state.confirmStatus = true
                 setTimeout( () => {
