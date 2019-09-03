@@ -4,31 +4,38 @@
             <section id="top_content" class="table" v-if="loaded">
                 <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">New Purchase Orders <span>ID: {{ randomID }}</span></h1>
+                    <h1 class="header_title">
+                        <div>New Purchase Orders</div>
+                        <span class="header_id">ID: {{ randomID }}</span>
+                        <div class="form_check alternate">
+                            <input type="checkbox" id="paid" name="paid" class="action_check">
+                            <label for="paid">Paid</label>
+                        </div>
+                    </h1>
                 </div>
                 <div class="filter_wrapper">
                     <div class="filter_flex" id="filter">
                         <div class="form_group">
                             <label for="supplier_id">Supplier</label>
-                            <select class="default_select alternate" name="supplier_id">
-                                <option value="" selected>Select a Supplier</option>
+                            <select class="default_select alternate" name="supplier_id" @change="isSupplier = true">
+                                <option value="" selected disabled>Select a Supplier</option>
                                 <option :value="supplier.id" v-for="(supplier, key) in suppliers" :key="key">{{ supplier.name }}</option>
                             </select>
                         </div>
                         <div class="form_group margin">
                             <label for="studio_id">Studio</label>
-                            <select class="default_select alternate" name="studio_id">
-                                <option value="" selected>Select a Studio</option>
+                            <select :class="`default_select alternate ${(!isSupplier) ? 'disabled' : '' }`" name="studio_id" @change="isStudio = true">
+                                <option value="" selected disabled>Select a Studio</option>
                                 <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
                         </div>
                         <div class="form_group margin">
                             <label for="p_o_number">P.O. Number</label>
-                            <input type="text" name="p_o_number" placeholder="Enter P.O. Number" autocomplete="off" class="default_text">
+                            <input type="text" name="p_o_number" placeholder="Enter P.O. Number" autocomplete="off" :class="`default_text ${(!isStudio) ? 'disabled' : '' }`">
                         </div>
                         <div class="form_group margin" v-click-outside="closeMe">
                             <label>Search a Product</label>
-                            <input type="text" autocomplete="off" placeholder="Add a product" class="default_text search_alternate" @click="autocomplete ^= true">
+                            <input type="text" autocomplete="off" placeholder="Add a product" :class="`default_text search_alternate ${(!isStudio) ? 'disabled' : '' }`" @click="autocomplete ^= true">
                             <div :class="`cms_autocomplete ${(variants.length >= 6) ? 'scrollable' : ''}`" v-if="autocomplete">
                                 <div class="autocomplete_title" v-for="(variant, key) in variants" :key="key" @click="addVariant(variant)">{{ variant.variant }}</div>
                             </div>
@@ -92,6 +99,8 @@
         },
         data () {
             return {
+                isSupplier: false,
+                isStudio: false,
                 autocomplete: false,
                 loaded: false,
                 randomID: 0,

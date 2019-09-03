@@ -529,6 +529,11 @@ img
     background-position: calc(100% - 15px) center
     background-repeat: no-repeat
     transition: .3s ease-in-out
+    &.disabled
+        user-select: none
+        pointer-events: none
+        background-color: $border_alt
+        transition: .3s ease-in-out
     &.alternate
         background-image: url('/icons/custom-select-icon.svg')
     &:hover,
@@ -2789,6 +2794,14 @@ input::placeholder
                 display: flex
                 justify-content: space-between
                 align-items: center
+                .header_title
+                    flex: 0 0 auto
+                    display: flex
+                    align-items: center
+                    .header_id
+                        margin-left: 20px
+                    .form_check
+                        margin-left: 20px
                 .actions
                     display: flex
                     flex-flow: row wrap
