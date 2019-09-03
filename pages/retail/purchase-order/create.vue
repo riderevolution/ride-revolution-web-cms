@@ -36,7 +36,7 @@
                         <div class="form_group margin" v-click-outside="closeMe">
                             <label>Search a Product</label>
                             <input type="text" autocomplete="off" placeholder="Add a product" :class="`default_text search_alternate ${(!isStudio) ? 'disabled' : '' }`" @click="autocomplete ^= true">
-                            <div :class="`cms_autocomplete ${(variants.length >= 6) ? 'scrollable' : ''}`" v-if="autocomplete">
+                            <div class="cms_autocomplete ${(variants.length >= 6) ? 'scrollable' : ''}`" v-if="autocomplete">
                                 <div class="autocomplete_title" v-for="(variant, key) in variants" :key="key" @click="addVariant(variant)">{{ variant.variant }}</div>
                             </div>
                         </div>
@@ -61,23 +61,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(purchaseOrder, key) in purchaseOrders" :key="key">
-                                <td>PHP 265.00</td>
-                                <td>PHP 265.00</td>
-                                <td>PHP 265.00</td>
-                                <td>PHP 265.00</td>
-                                <td>PHP 0.00</td>
+                            <tr v-for="(data, key) in purchaseOrders" :key="key">
+                                <td>{{ data.variant }}</td>
+                                <td>{{ data.sku_id }}</td>
+                                <td>{{ (data.sellable) ? 'Yes' : 'No' }}</td>
+                                <td>{{ (data.sellable) ? 'Yes' : 'No' }}</td>
+                                <td>{{ data.quantity }}</td>
                                 <td width="10%">
-                                    <input type="text" name="quantity[]" class="default_text">
+                                    <input type="number" name="quantity[]" class="default_text" v-model="form.quantity">
                                 </td>
-                                <td>PHP 265.00</td>
+                                <td>PHP {{ totalCount(data.unit_price) }}</td>
                                 <td width="10%">
                                     <input type="text" name="shipping_cost[]" class="default_text">
                                 </td>
                                 <td width="10%">
                                     <input type="text" name="additional_cost[]" class="default_text">
                                 </td>
-                                <td>PHP 25,000</td>
+                                <td>PHP 0.00</td>
                             </tr>
                         </tbody>
                     </table>
@@ -110,7 +110,10 @@
                 suppliers: [],
                 studios: [],
                 variants: [],
-                purchaseOrders: []
+                purchaseOrders: [],
+                form: {
+                    quantity: 0
+                }
             }
         },
         methods: {

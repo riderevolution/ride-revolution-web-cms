@@ -6,7 +6,7 @@ Vue.mixin({
             return Math.random().toString(36).substring(2)
         },
         totalCount (value) {
-                return value.toLocaleString()
+            return parseInt(value.toLocaleString())
         },
         notify (action) {
             this.$store.state.notificationMessage = action
