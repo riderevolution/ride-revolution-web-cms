@@ -59,7 +59,12 @@
                             <div class="input_header">Cost</div>
                         </div>
                         <div class="content_wrapper" v-if="purchaseOrders.length > 0">
-                            <purchase-order :value="data" v-for="(data, key) in purchaseOrders" :key="key" />
+                            <purchase-order ref="orders" :unique="key" :value="data" v-for="(data, key) in purchaseOrders" :key="key" />
+                            <div class="footer_wrapper">
+                                <div class="footer_cost">Total Additional Cost: PHP {{ computeAdditional }}</div>
+                                <div class="footer_cost">Total Shipping Cost: PHP {{ computeShipping }}</div>
+                                <div class="footer_total_cost">Total: <span class="total_cost">PHP {{ getAllCost }}</span></div>
+                            </div>
                         </div>
                         <div class="no_results" v-if="purchaseOrders.length == 0">
                             No Variant(s) Found. Please add a variant.
@@ -103,8 +108,42 @@
                 variants: [],
                 purchaseOrders: [],
                 form: {
-                    quantity: 0
+                    additional: [],
+                    shipping: [],
+                    total: []
                 }
+            }
+        },
+        computed: {
+            getAllCost () {
+                const me = this
+                let total = 0.00
+                me.form.total.forEach((item, index) => {
+                    if (item.unique !== undefined) {
+                        total = total + parseFloat(item.value)
+                    }
+                })
+                return me.totalCount(total)
+            },
+            computeShipping () {
+                const me = this
+                let shipping = 0.00
+                me.form.shipping.forEach((item, index) => {
+                    if (item.unique !== undefined) {
+                        shipping = shipping + parseFloat(item.value)
+                    }
+                })
+                return me.totalCount(shipping)
+            },
+            computeAdditional () {
+                const me = this
+                let additional = 0.00
+                me.form.additional.forEach((item, index) => {
+                    if (item.unique !== undefined) {
+                        additional = additional + parseFloat(item.value)
+                    }
+                })
+                return me.totalCount(additional)
             }
         },
         methods: {
@@ -115,6 +154,32 @@
             addVariant (data) {
                 const me = this
                 me.purchaseOrders.push(data)
+                if (me.purchaseOrders.length > 0) {
+                    for (let i = me.form.shipping.length; i < me.purchaseOrders.length; i++) {
+                        me.form.shipping.push(
+                            {
+                                unique: i,
+                                value: 0.00
+                            }
+                        )
+                    }
+                    for (let j = me.form.additional.length; j < me.purchaseOrders.length; j++) {
+                        me.form.additional.push(
+                            {
+                                unique: j,
+                                value: 0.00
+                            }
+                        )
+                    }
+                    for (let k = me.form.total.length; k < me.purchaseOrders.length; k++) {
+                        me.form.total.push(
+                            {
+                                unique: k,
+                                value: 0.00
+                            }
+                        )
+                    }
+                }
                 me.autocomplete = false
             },
             fetchData () {
@@ -134,7 +199,7 @@
                 me.loaded = true
             },
             submissionSuccess () {
-
+                const me = this
             }
         },
         async mounted () {

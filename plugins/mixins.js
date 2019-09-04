@@ -8,7 +8,7 @@ Vue.mixin({
         totalCount (value) {
             let count = 0
             if (value) {
-                count = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                count = parseFloat(value).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
             return count
         },
