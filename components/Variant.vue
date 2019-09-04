@@ -1,5 +1,5 @@
 <template>
-    <form class="input_content_wrapper" :data-vv-scope="`variant_form_${unique}`">
+    <div class="input_content_wrapper" :data-vv-scope="`variant_form_${unique}`">
         <div class="input_wrapper" v-show="show" v-if="type == 0">
             <div class="input_content">
                 <input type="text" name="variant[]" autocomplete="off" class="default_text" v-validate="'required'">
@@ -18,11 +18,11 @@
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.reorder_point[]`)">{{ errors.first(`variant_form_${unique}.reorder_point[]`) }}</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="unit_price[]" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                <input type="text" name="unit_price[]" autocomplete="off" class="default_text" v-validate="'required|decimal:2'">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.unit_price[]`)">{{ errors.first(`variant_form_${unique}.unit_price[]`) }}</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="sale_price[]" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                <input type="text" name="sale_price[]" autocomplete="off" class="default_text" v-validate="'required|decimal:2'">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sale_price[]`)">{{ errors.first(`variant_form_${unique}.sale_price[]`) }}</span></transition>
             </div>
             <div class="input_content image_upload">
@@ -51,11 +51,11 @@
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.reorder_point[]`)">{{ errors.first(`variant_form_${unique}.reorder_point[]`) }}</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="unit_price[]" autocomplete="off" class="default_text" v-model="value.unit_price" v-validate="'required|numeric'">
+                <input type="text" name="unit_price[]" autocomplete="off" class="default_text" v-model="value.unit_price" v-validate="'required|decimal:2'">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.unit_price[]`)">{{ errors.first(`variant_form_${unique}.unit_price[]`) }}</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="sale_price[]" autocomplete="off" class="default_text" v-model="value.sale_price" v-validate="'required|numeric'">
+                <input type="text" name="sale_price[]" autocomplete="off" class="default_text" v-model="value.sale_price" v-validate="'required|decimal:2'">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sale_price[]`)">{{ errors.first(`variant_form_${unique}.sale_price[]`) }}</span></transition>
             </div>
             <div class="input_content image_upload">
@@ -70,7 +70,7 @@
                 <confirm-delete v-if="isDelete" ref="delete" :url="'api/inventory/product-variants'" />
             </transition>
         </div>
-    </form>
+    </div>
 </template>
 
 <script>

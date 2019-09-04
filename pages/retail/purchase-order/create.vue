@@ -18,27 +18,29 @@
                         <div class="filter_flex" id="filter">
                             <div class="form_group">
                                 <label for="supplier_id">Supplier</label>
-                                <select class="default_select alternate" name="supplier_id" @change="isSupplier = true">
+                                <select class="default_select alternate" name="supplier_id" @change="isSupplier = true" v-model="form.supplier">
                                     <option value="" selected disabled>Select a Supplier</option>
                                     <option :value="supplier.id" v-for="(supplier, key) in suppliers" :key="key">{{ supplier.name }}</option>
                                 </select>
                             </div>
                             <div class="form_group margin">
                                 <label for="studio_id">Studio</label>
-                                <select :class="`default_select alternate ${(!isSupplier) ? 'disabled' : '' }`" name="studio_id" @change="isStudio = true">
+                                <select :class="`default_select alternate ${(!isSupplier) ? 'disabled' : '' }`" name="studio_id" v-model="form.studio" @change="searchVariants()">
                                     <option value="" selected disabled>Select a Studio</option>
                                     <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                                 </select>
                             </div>
                             <div class="form_group margin">
-                                <label for="p_o_number">P.O. Number</label>
-                                <input type="text" name="p_o_number" placeholder="Enter P.O. Number" autocomplete="off" :class="`default_text ${(!isStudio) ? 'disabled' : '' }`">
+                                <label for="po_number">P.O. Number</label>
+                                <input type="text" name="po_number" placeholder="Enter P.O. Number" autocomplete="off" :class="`default_text ${(!isStudio) ? 'disabled' : '' }`" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('po_number')">{{ errors.first('po_number') }}</span></transition>
                             </div>
                             <div class="form_group margin" v-click-outside="closeMe">
                                 <label>Search a Product</label>
                                 <input type="text" autocomplete="off" placeholder="Add a product" :class="`default_text search_alternate ${(!isStudio) ? 'disabled' : '' }`" @click="autocomplete ^= true">
                                 <div class="cms_autocomplete ${(variants.length >= 6) ? 'scrollable' : ''}`" v-if="autocomplete">
-                                    <div class="autocomplete_title" v-for="(variant, key) in variants" :key="key" @click="addVariant(variant)">{{ variant.variant }}</div>
+                                    <div class="autocomplete_title" v-for="(variant, key) in variants" :key="key" @click="addVariant(variant)" v-if="variants.length > 0">{{ variant.variant }}</div>
+                                    <div class="autocomplete_title" v-if="variants.length == 0">No Product(s) Found.</div>
                                 </div>
                             </div>
                         </div>
@@ -68,6 +70,12 @@
                         </div>
                         <div class="no_results" v-if="purchaseOrders.length == 0">
                             No Variant(s) Found. Please add a variant.
+                        </div>
+                        <div class="form_footer_wrapper">
+                            <div class="button_group">
+                                <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
+                                <button type="submit" name="submit" class="action_btn alternate margin">Create P.O.</button>
+                            </div>
                         </div>
                     </div>
                     <div class="no_contents" v-else>
@@ -108,6 +116,8 @@
                 variants: [],
                 purchaseOrders: [],
                 form: {
+                    supplier: '',
+                    studio: '',
                     additional: [],
                     shipping: [],
                     total: []
@@ -154,7 +164,19 @@
             addVariant (data) {
                 const me = this
                 me.purchaseOrders.push(data)
+                me.fetchItems()
+                me.autocomplete = false
+            },
+            fetchItems () {
+                const me = this
                 if (me.purchaseOrders.length > 0) {
+                    me.purchaseOrders.forEach((purchaseOrder, pindex) => {
+                        me.variants.forEach((variant, vindex) => {
+                            if (purchaseOrder.id == variant.id) {
+                                me.variants.splice(vindex, 1)
+                            }
+                        })
+                    })
                     for (let i = me.form.shipping.length; i < me.purchaseOrders.length; i++) {
                         me.form.shipping.push(
                             {
@@ -180,7 +202,19 @@
                         )
                     }
                 }
-                me.autocomplete = false
+            },
+            searchVariants () {
+                const me = this
+                me.$axios.get(`api/extras/purchase-orders-products-filter?supplier_id=${me.form.supplier}&studio_id=${me.form.studio}`).then(res => {
+                    me.variants = res.data.productVariants
+                    me.variants.forEach((variant, vindex) => {
+                        if (variant.quantity < variant.reorder_point) {
+                            me.purchaseOrders.push(variant)
+                        }
+                    })
+                    me.fetchItems()
+                    me.isStudio = true
+                })
             },
             fetchData () {
                 const me = this
@@ -190,9 +224,6 @@
                 me.$axios.get('api/suppliers').then(res => {
                     me.suppliers = res.data.suppliers.data
                 })
-                me.$axios.get('api/inventory/product-variants').then(res => {
-                    me.variants = res.data.productVariants
-                })
                 me.$axios.get('api/extras/random-string').then(res => {
                     me.randomID = res.data.randomString
                 })
@@ -200,6 +231,38 @@
             },
             submissionSuccess () {
                 const me = this
+                me.$validator.validateAll().then(valid => {
+                    if (valid) {
+                        let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('po_id', me.randomID)
+                        me.loader(true)
+                        me.$axios.post('api/inventory/purchase-orders', formData).then(res => {
+                            console.log(res.data)
+                        //     setTimeout( () => {
+                        //         if (res.data) {
+                        //             me.notify('Added')
+                        //         } else {
+                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
+                        //             me.$store.state.errorStatus = true
+                        //         }
+                        //     }, 500)
+                        // }).catch(err => {
+                        //     me.$store.state.errorList = err.response.data.errors
+                        //     me.$store.state.errorStatus = true
+                        // }).then(() => {
+                        //     setTimeout( () => {
+                        //         if (!me.$store.state.errorStatus) {
+                        //             me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
+                        //         }
+                        //         me.loader(false)
+                        //     }, 500)
+                        })
+                    } else {
+                        me.$scrollTo('.validation_errors', {
+							offset: -250
+						})
+                    }
+                })
             }
         },
         async mounted () {

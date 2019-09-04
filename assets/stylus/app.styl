@@ -1465,6 +1465,8 @@ input::placeholder
                 .input_wrapper
                     .input_content
                         color: $red
+                        .default_content
+                            color: $red
             .input_wrapper
                 padding: 0 30px
                 display: flex
@@ -1477,6 +1479,26 @@ input::placeholder
                     sf_pro_regular(1.6vh)
                     color: $black
                     padding: 20px 20px 20px 0
+                    &.alternate
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        span
+                            flex: 0 1 auto
+                        .default_content
+                            flex: 1 1 75%;
+                            width: 100%;
+                            margin-left: 5px;
+                    .default_content
+                        display: inline-block
+                        background-color: transparent
+                        border: none
+                        box-shadow: none
+                        outline: none
+                        pointer-events: none
+                        user-select: none
+                        sf_pro_regular(1.6vh)
+                        color: $black
                     .validation_errors
                         position: absolute
                         top: calc(100% - 15px)
@@ -1560,6 +1582,8 @@ input::placeholder
                 color: $black
                 .total_cost
                     color: $green
+    .form_footer_wrapper
+        margin-top: 40px
     .no_results
         background-color: $white
         sf_pro_regular(1.6vh)

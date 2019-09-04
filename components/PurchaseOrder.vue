@@ -1,5 +1,5 @@
 <template>
-    <form :class="`input_content_wrapper ${(value.quantity < value.reorder_point) ? 'threshold' : ''}`" :data-vv-scope="`purchase_order_form_${unique}`">
+    <div :class="`input_content_wrapper ${(value.quantity < value.reorder_point) ? 'threshold' : ''}`" :data-vv-scope="`purchase_order_form_${unique}`">
         <div class="input_wrapper">
             <div class="input_content">{{ value.variant }}</div>
             <div class="input_content">{{ value.sku_id }}</div>
@@ -19,14 +19,15 @@
                 <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional"  @change="updateTotal($event, 'additional', unique)">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.additional_cost[]`) }}</span></transition>
             </div>
-            <div class="input_content">
-                PHP {{ computeTotal }}
-                <div class="close_wrapper alternate">
+            <div class="input_content alternate">
+                <span>PHP</span>
+                <input type="text" name="total_cost[]" class="default_content" v-model="computeTotal">
+                <div class="close_wrapper alternate" @click="removeOrder(value, unique)">
                     <div class="close_icon"></div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </template>
 
 <script>
@@ -45,6 +46,7 @@
         inject: ['$validator'],
         data () {
             return {
+                show: true,
                 isQuantity: false,
                 quantity: 0,
                 shipping: 0,
@@ -82,6 +84,18 @@
             }
         },
         methods: {
+            removeOrder (value, unique) {
+                const me = this
+                me.$parent.purchaseOrders.forEach((purchaseOrder, pindex) => {
+                    if (unique == pindex) {
+                        me.$parent.variants.push(value)
+                        me.$parent.purchaseOrders.splice(pindex, 1)
+                        me.$parent.form.shipping.splice(pindex, 1)
+                        me.$parent.form.additional.splice(pindex, 1)
+                        me.$parent.form.total.splice(pindex, 1)
+                    }
+                })
+            },
             updateTotal (event, type, unique) {
                 const me = this
                 let element = event.target
