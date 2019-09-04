@@ -8,7 +8,7 @@
                 </div>
             </section>
             <section id="content">
-                <form id="default_form" class="alternate" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+                <form id="default_form" class="alternate" @submit.prevent="submissionSuccess()" enctype="multipart/form-data" v-if="loaded">
                     <div class="form_flex_wrapper">
                         <div class="form_wrapper main">
                             <div class="form_main_group">
@@ -140,8 +140,14 @@
             Foot,
             Variant
         },
+        provide () {
+            return {
+                $validator: this.$validator
+            }
+        },
         data () {
             return {
+                loaded: false,
                 showClose: false,
                 toggleCheckboxes: false,
                 id: 0,
@@ -243,6 +249,7 @@
                     me.form.category = res.data.productCategory
                 })
             }
+            me.loaded = true
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }

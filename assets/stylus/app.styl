@@ -1403,6 +1403,9 @@ input::placeholder
             transition: .3s ease-in-out
 
 .cms_table_input
+    &.alternate
+        .content_wrapper
+            background-color: $white
     .header_wrapper
         display: flex
         flex-flow: row wrap
@@ -1431,10 +1434,33 @@ input::placeholder
             align-items: center
             justify-content: flex-start
             .input_content
+                position: relative
                 flex: 1 0 10%
                 sf_pro_regular(1.6vh)
                 color: $black
                 padding: 20px 20px 20px 0
+                .validation_errors
+                    position: absolute
+                    top: calc(100% - 15px)
+                    background-color: $red
+                    color: $white
+                    sf_pro_medium(1.4vh)
+                    z-index: 1
+                    padding: 5px 10px
+                    border-radius: 5px
+                    user-select: none
+                    left: 0
+                    &::before
+                        content: ""
+                        position: absolute
+                        bottom: calc(100% - 1px)
+                        width: 0
+                        height: 0
+                        border-left: 7px solid transparent
+                        border-right: 7px solid transparent
+                        border-bottom: 7px solid $red
+                        left: 17px
+                        z-index: 1
                 &:last-child
                     padding: 20px 0
                 &.image_upload
