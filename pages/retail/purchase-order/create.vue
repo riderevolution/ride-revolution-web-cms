@@ -58,8 +58,8 @@
                             <div class="input_header">Additional Cost</div>
                             <div class="input_header">Cost</div>
                         </div>
-                        <div class="content_wrapper" v-for="(data, key) in purchaseOrders" :key="key" v-if="purchaseOrders.length > 0">
-                            <purchase-order :value="data" />
+                        <div class="content_wrapper" v-if="purchaseOrders.length > 0">
+                            <purchase-order :value="data" v-for="(data, key) in purchaseOrders" :key="key" />
                         </div>
                         <div class="no_results" v-if="purchaseOrders.length == 0">
                             No Variant(s) Found. Please add a variant.

@@ -1,29 +1,29 @@
 <template>
-    <div>
+    <form class="input_content_wrapper" :data-vv-scope="`variant_form_${unique}`">
         <div class="input_wrapper" v-show="show" v-if="type == 0">
             <div class="input_content">
                 <input type="text" name="variant[]" autocomplete="off" class="default_text" v-validate="'required'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('variant[]')">{{ errors.first('variant[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.variant[]`)">{{ errors.first(`variant_form_${unique}.variant[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="sku_id[]" autocomplete="off" class="default_text" v-validate="'required'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('sku_id[]')">{{ errors.first('sku_id[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sku_id[]`)">{{ errors.first(`variant_form_${unique}.sku_id[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="quantity[]" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity[]')">{{ errors.first('quantity[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.quantity[]`)">{{ errors.first(`variant_form_${unique}.quantity[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="reorder_point[]" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('reorder_point[]')">{{ errors.first('reorder_point[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.reorder_point[]`)">{{ errors.first(`variant_form_${unique}.reorder_point[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="unit_price[]" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('unit_price[]')">{{ errors.first('unit_price[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.unit_price[]`)">{{ errors.first(`variant_form_${unique}.unit_price[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="sale_price[]" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('sale_price[]')">{{ errors.first('sale_price[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sale_price[]`)">{{ errors.first(`variant_form_${unique}.sale_price[]`) }}</span></transition>
             </div>
             <div class="input_content image_upload">
                 <a href="javascript:void(0)" class="action_btn" @click="toggleVariantImage(unique)"><svg xmlns="http://www.w3.org/2000/svg" width="18.306" height="18.306" viewBox="0 0 18.306 18.306"> <g transform="translate(-1233.873 -1197.248) rotate(-9)"> <g transform="translate(1031 1378)" class="upload_image"> <rect width="16" height="16" rx="2" stroke="none" /> <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" fill="none" /> </g> <path d="M16305.061-1443.824l5.559-4.864,4.563,4.259,2.891-3.014,2.3,3.014" transform="translate(-15273.644 2834.915)" class="upload_image" /> <g transform="translate(1039 1380.909)" class="upload_image"> <circle cx="1.818" cy="1.818" r="1.818" stroke="none" /> <circle cx="1.818" cy="1.818" r="1.318" fill="none" /> </g> </g> </svg>Upload Images ({{ totalUploaded }})</a>
@@ -36,27 +36,27 @@
         <div class="input_wrapper" v-show="show" v-else>
             <div class="input_content">
                 <input type="text" name="variant[]" autocomplete="off" class="default_text" v-model="value.variant" v-validate="'required'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('variant[]')">{{ errors.first('variant[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.variant[]`)">{{ errors.first(`variant_form_${unique}.variant[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="sku_id[]" autocomplete="off" class="default_text" v-model="value.sku_id" v-validate="'required'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('sku_id[]')">{{ errors.first('sku_id[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sku_id[]`)">{{ errors.first(`variant_form_${unique}.sku_id[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="quantity[]" autocomplete="off" class="default_text" v-model="value.quantity" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity[]')">{{ errors.first('quantity[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.quantity[]`)">{{ errors.first(`variant_form_${unique}.quantity[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="reorder_point[]" autocomplete="off" class="default_text" v-model="value.reorder_point" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('reorder_point[]')">{{ errors.first('reorder_point[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.reorder_point[]`)">{{ errors.first(`variant_form_${unique}.reorder_point[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="unit_price[]" autocomplete="off" class="default_text" v-model="value.unit_price" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('unit_price[]')">{{ errors.first('unit_price[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.unit_price[]`)">{{ errors.first(`variant_form_${unique}.unit_price[]`) }}</span></transition>
             </div>
             <div class="input_content">
                 <input type="text" name="sale_price[]" autocomplete="off" class="default_text" v-model="value.sale_price" v-validate="'required|numeric'">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('sale_price[]')">{{ errors.first('sale_price[]') }}</span></transition>
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sale_price[]`)">{{ errors.first(`variant_form_${unique}.sale_price[]`) }}</span></transition>
             </div>
             <div class="input_content image_upload">
                 <a href="javascript:void(0)" class="action_btn" @click="toggleVariantImage(unique)"><svg xmlns="http://www.w3.org/2000/svg" width="18.306" height="18.306" viewBox="0 0 18.306 18.306"> <g transform="translate(-1233.873 -1197.248) rotate(-9)"> <g transform="translate(1031 1378)" class="upload_image"> <rect width="16" height="16" rx="2" stroke="none" /> <rect x="0.5" y="0.5" width="15" height="15" rx="1.5" fill="none" /> </g> <path d="M16305.061-1443.824l5.559-4.864,4.563,4.259,2.891-3.014,2.3,3.014" transform="translate(-15273.644 2834.915)" class="upload_image" /> <g transform="translate(1039 1380.909)" class="upload_image"> <circle cx="1.818" cy="1.818" r="1.818" stroke="none" /> <circle cx="1.818" cy="1.818" r="1.318" fill="none" /> </g> </g> </svg>{{ (value.images.length > 0) ? 'Manage Images' : 'Upload Images' }} ({{ totalUploaded }})</a>
@@ -70,7 +70,7 @@
                 <confirm-delete v-if="isDelete" ref="delete" :url="'api/inventory/product-variants'" />
             </transition>
         </div>
-    </div>
+    </form>
 </template>
 
 <script>

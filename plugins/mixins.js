@@ -6,7 +6,11 @@ Vue.mixin({
             return Math.random().toString(36).substring(2)
         },
         totalCount (value) {
-            return parseInt(value.toLocaleString())
+            let count = 0
+            if (value) {
+                count = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            return count
         },
         notify (action) {
             this.$store.state.notificationMessage = action
