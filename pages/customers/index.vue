@@ -119,14 +119,7 @@
                     }, 500)
                 })
             },
-            /**
-             * Toggle Confirm Status for Role
-             * @param  {[int]}  id role.id
-             * @param  {[boolean]}  enabled
-             * @param  {[string]}  status
-             * @return {boolean}
-             */
-            async toggleStatus (id, enabled, status) {
+            toggleStatus (id, enabled, status) {
                 const me = this
                 me.$store.state.confirmStatus = true
                 setTimeout( () => {

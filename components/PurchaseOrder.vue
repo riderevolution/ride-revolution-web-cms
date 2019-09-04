@@ -4,7 +4,7 @@
             <div class="input_content">{{ value.variant }}</div>
             <div class="input_content">{{ value.sku_id }}</div>
             <div class="input_content">{{ (value.sellable) ? 'Yes' : 'No' }}</div>
-            <div class="input_content">{{ value.sku_id }}</div>
+            <div class="input_content">{{ value.product.category.name }}</div>
             <div class="input_content">{{ value.quantity }}</div>
             <div class="input_content">
                 <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="quantity" @change="isQuantity = true">
