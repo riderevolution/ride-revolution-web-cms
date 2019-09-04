@@ -5,7 +5,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Purchase Orders</h1>
                     <div class="actions">
-                        <div class="total">Total: {{ totalCount(res.suppliers.total) }}</div>
+                        <div class="total">Total: {{ totalItems(res.purchaseOrders.total) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Paid</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Unpaid</div>
@@ -43,7 +43,6 @@
                             <th>P.O. Number</th>
                             <th>Supplier</th>
                             <th>Studio</th>
-                            <th>Subtotal</th>
                             <th>Shipping Cost</th>
                             <th>Additional Cost</th>
                             <th>Total</th>
@@ -51,17 +50,16 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody v-if="res.suppliers.data.length > 0">
-                        <tr v-for="(data, key) in res.suppliers.data" :key="key">
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.name }}</td>
-                            <td>PHP 265.00</td>
-                            <td>PHP 0.00</td>
-                            <td>PHP 0.00</td>
-                            <td>PHP 265.00</td>
-                            <td>{{ data.name }}</td>
-                            <td>{{ data.name }}</td>
+                    <tbody v-if="res.purchaseOrders.data.length > 0">
+                        <tr v-for="(data, key) in res.purchaseOrders.data" :key="key">
+                            <td>{{ data.purchase_order_number }}</td>
+                            <td>{{ data.studio.name }}</td>
+                            <td>{{ data.supplier.name }}</td>
+                            <td>PHP {{ totalCount(data.total_shipping_cost) }}</td>
+                            <td>PHP {{ totalCount(data.total_additional_cost) }}</td>
+                            <td>PHP {{ totalCount(data.total_cost) }}</td>
+                            <td>{{ formatDate(data.created_at) }}</td>
+                            <td :class="`${(data.paid == 1) ? 'green' : 'red'}`" v-if="status != -1">{{ (data.paid == 1) ? 'Paid' : 'Unpaid' }}</td>
                         </tr>
                     </tbody>
                     <tbody class="no_results" v-else>
@@ -70,7 +68,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <pagination :apiRoute="res.suppliers.path" :current="res.suppliers.current_page" :last="res.suppliers.last_page" />
+                <pagination :apiRoute="res.purchaseOrders.path" :current="res.purchaseOrders.current_page" :last="res.purchaseOrders.last_page" />
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
@@ -83,7 +81,8 @@
     export default {
         components: {
             Foot,
-            Pagination        },
+            Pagination
+        },
         data () {
             return {
                 loaded: false,
@@ -104,6 +103,11 @@
                 console.log(me.form_search.user);
                 console.log(me.form_search.studio);
             },
+            formatDate (value) {
+                if (value) {
+                    return this.$moment(value).format('MMM DD, YYYY')
+                }
+            },
             toggleOnOff (value) {
                 const me = this
                 me.status = value
@@ -112,7 +116,7 @@
             fetchData (value) {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/suppliers?enabled=${value}`).then(res => {
+                me.$axios.get(`api/inventory/purchase-orders?status=${value}`).then(res => {
                     me.res = res.data
                     me.loaded = true
                 }).catch(err => {

@@ -26,6 +26,7 @@
                     <div class="close_icon"></div>
                 </div>
             </div>
+            <input type="hidden" name="variant_id[]" v-model="value.id">
         </div>
     </div>
 </template>

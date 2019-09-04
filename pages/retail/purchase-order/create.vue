@@ -32,7 +32,7 @@
                             </div>
                             <div class="form_group margin">
                                 <label for="po_number">P.O. Number</label>
-                                <input type="text" name="po_number" placeholder="Enter P.O. Number" autocomplete="off" :class="`default_text ${(!isStudio) ? 'disabled' : '' }`" v-validate="'required'">
+                                <input type="text" name="po_number" placeholder="Enter P.O. Number" autocomplete="off" :class="`uppercase default_text ${(!isStudio) ? 'disabled' : '' }`" v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('po_number')">{{ errors.first('po_number') }}</span></transition>
                             </div>
                             <div class="form_group margin" v-click-outside="closeMe">
@@ -120,7 +120,10 @@
                     studio: '',
                     additional: [],
                     shipping: [],
-                    total: []
+                    total: [],
+                    total_additional: 0,
+                    total_shipping: 0,
+                    total_cost: 0
                 }
             }
         },
@@ -133,6 +136,7 @@
                         total = total + parseFloat(item.value)
                     }
                 })
+                me.form.total_cost = total
                 return me.totalCount(total)
             },
             computeShipping () {
@@ -143,6 +147,7 @@
                         shipping = shipping + parseFloat(item.value)
                     }
                 })
+                me.form.total_shipping = shipping
                 return me.totalCount(shipping)
             },
             computeAdditional () {
@@ -153,6 +158,7 @@
                         additional = additional + parseFloat(item.value)
                     }
                 })
+                me.form.total_additional = additional
                 return me.totalCount(additional)
             }
         },
@@ -235,27 +241,29 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('po_id', me.randomID)
+                        formData.append('total_additional_cost', me.form.total_additional)
+                        formData.append('total_shipping_cost',  me.form.total_shipping)
+                        formData.append('total_cost', me.form.total_cost)
                         me.loader(true)
                         me.$axios.post('api/inventory/purchase-orders', formData).then(res => {
-                            console.log(res.data)
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.notify('Added')
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 500)
-                        // }).catch(err => {
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
-                        //         }
-                        //         me.loader(false)
-                        //     }, 500)
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Added')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {

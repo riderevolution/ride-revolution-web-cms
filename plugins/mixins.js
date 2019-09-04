@@ -5,6 +5,11 @@ Vue.mixin({
         randomString () {
             return Math.random().toString(36).substring(2)
         },
+        totalItems (value) {
+            if (value) {
+                return parseFloat(value).toFixed().toLocaleString()
+            }
+        },
         totalCount (value) {
             let count = 0
             if (value) {

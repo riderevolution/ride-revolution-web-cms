@@ -6,7 +6,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Class Packages &amp; Store Credits</h1>
                     <div class="actions">
-                        <div class="total">Total: {{ totalCount((res.classPackages) ? res.classPackages.total : res.storeCredits.total) }}</div>
+                        <div class="total">Total: {{ totalItems((res.classPackages) ? res.classPackages.total : res.storeCredits.total) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>

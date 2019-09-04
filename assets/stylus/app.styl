@@ -588,6 +588,8 @@ input::placeholder
     outline: none
     resize: none
     transition: .3s ease-in-out
+    &.uppercase
+        text-transform: uppercase
     &.disabled
         pointer-events: none
         user-select: none
@@ -1626,6 +1628,15 @@ input::placeholder
             border-bottom: 2px dashed $border
             transition: .3s ease-in-out
             td
+                sf_pro_regular(1.6vh)
+                color: $black
+                padding: 20px 30px
+                &.green
+                    sf_pro_bold(1.6vh)
+                    color: $green
+                &.red
+                    sf_pro_bold(1.6vh)
+                    color: $red
                 &.image_upload
                     display: flex
                     flex-flow: row wrap
@@ -1657,9 +1668,6 @@ input::placeholder
                         width: 32px
                         height: 32px
                         border-radius: 50%
-                sf_pro_regular(1.6vh)
-                color: $black
-                padding: 20px 30px
                 .table_data_link
                     sf_pro_regular(1.6vh)
                     color: $blue
