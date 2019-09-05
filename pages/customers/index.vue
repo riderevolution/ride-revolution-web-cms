@@ -49,8 +49,8 @@
                     <tbody v-if="res.customers.data.length > 0">
                         <tr v-for="(data, key) in res.customers.data" :key="key">
                             <td class="thumb" width="10"><img :src="data.customer_details.images[0].path_resized" /></td>
-                            <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.last_name }}</a></td>
-                            <td><a class="table_data_link" :href="`${$route.path}/${data.id}`" table_action_text>{{ data.first_name }}</a></td>
+                            <td><nuxt-link class="table_data_link" :to="`${$route.path}/${data.id}`" table_action_text>{{ data.last_name }}</nuxt-link></td>
+                            <td><nuxt-link class="table_data_link" :to="`${$route.path}/${data.id}`" table_action_text>{{ data.first_name }}</nuxt-link></td>
                             <td>First Timer</td>
                             <td>Teal</td>
                             <td>{{ data.email }}</td>

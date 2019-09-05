@@ -12,11 +12,11 @@
             </div>
             <div class="input_content">PHP {{ value.unit_price }}</div>
             <div class="input_content">
-                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping" @change="updateTotal($event, 'shipping', unique)">
+                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping" @input="updateTotal($event, 'shipping', unique)">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.shipping_cost[]`) }}</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional"  @change="updateTotal($event, 'additional', unique)">
+                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional"  @input="updateTotal($event, 'additional', unique)">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.additional_cost[]`) }}</span></transition>
             </div>
             <div class="input_content alternate">

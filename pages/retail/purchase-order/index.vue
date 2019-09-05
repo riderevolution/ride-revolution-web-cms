@@ -52,7 +52,7 @@
                     </thead>
                     <tbody v-if="res.purchaseOrders.data.length > 0">
                         <tr v-for="(data, key) in res.purchaseOrders.data" :key="key">
-                            <td>{{ data.purchase_order_number }}</td>
+                            <td><nuxt-link class="table_data_link" :to="`${$route.path}/${data.id}`" table_action_text>{{ data.purchase_order_number }}</nuxt-link></td>
                             <td>{{ data.studio.name }}</td>
                             <td>{{ data.supplier.name }}</td>
                             <td>PHP {{ totalCount(data.total_shipping_cost) }}</td>
@@ -98,10 +98,21 @@
             }
         },
         methods: {
-            search () {
+            submissionSuccess () {
                 const me = this
-                console.log(me.form_search.user);
-                console.log(me.form_search.studio);
+                let formData = new FormData(document.getElementById('filter'))
+                formData.append('status', me.status)
+                me.loader(true)
+                me.$axios.post(`api/inventory/purchase-orders/search`, formData).then(res => {
+                    me.res = res.data
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             },
             formatDate (value) {
                 if (value) {
