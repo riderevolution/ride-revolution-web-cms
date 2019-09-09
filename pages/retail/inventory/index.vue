@@ -18,7 +18,7 @@
                     <nuxt-link :to="`/${lastRoute}/purchase-order`" class="action_btn margin"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>New Purchase Order</nuxt-link>
                 </div>
                 <div class="action_buttons" v-if="package_status == 2">
-                    <nuxt-link :to="`/${lastRoute}/promotion/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Promotion</nuxt-link>
+                    <nuxt-link :to="`${$route.path}/promotions/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Promotion</nuxt-link>
                 </div>
                 <div class="filter_wrapper">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess('products')" v-if="package_status == 1">
@@ -64,7 +64,7 @@
                     <div :class="`status ${(package_status == 2) ? 'active' : ''}`" @click="togglePackages(2)">Promotions</div>
                     <div :class="`status ${(package_status == 3) ? 'active' : ''}`" @click="togglePackages(3)">Gift Cards</div>
                 </div>
-                <table class="cms_table" v-if="package_status == 1">
+                <table class="cms_table" v-if="res.productVariants && package_status == 1">
                     <thead>
                         <tr>
                             <th>Product Name</th>
