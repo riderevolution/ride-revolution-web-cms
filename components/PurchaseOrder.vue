@@ -35,7 +35,7 @@
             <div class="input_content">{{ (value.product_variant.product.sellable == 1) ? 'Yes' : 'No' }}</div>
             <div class="input_content">{{ value.product_variant.product.category.name }}</div>
             <div class="input_content">{{ value.product_variant.quantity }}</div>
-            <div class="input_content">{{ value.product_variant.quantity }}</div>
+            <div class="input_content">{{ value.quantity }}</div>
             <div class="input_content">PHP {{ value.product_variant.unit_price }}</div>
             <div class="input_content">PHP {{ value.shipping_cost }}</div>
             <div class="input_content">PHP {{ value.additional_cost }}</div>
@@ -70,8 +70,9 @@
                     <div class="close_icon"></div>
                 </div>
             </div>
-            <input type="hidden" name="variant_id[]" v-model="value.id">
+            <input type="hidden" name="variant_id[]" v-model="value.variant_id">
             <input type="hidden" name="product_id[]" v-model="value.product_id">
+            <input type="hidden" name="id[]" v-model="value.id">
         </div>
     </div>
 </template>
