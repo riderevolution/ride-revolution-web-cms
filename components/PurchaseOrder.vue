@@ -74,6 +74,36 @@
             <input type="hidden" name="product_id[]" v-model="value.product_id">
             <input type="hidden" name="id[]" v-model="value.id">
         </div>
+        <div class="input_wrapper" :data-vv-scope="`purchase_order_form_${unique}`" v-if="type == 'duplicate'">
+            <div class="input_content">{{ value.product_variant.variant }}</div>
+            <div class="input_content">{{ value.product_variant.sku_id }}</div>
+            <div class="input_content">{{ (value.product_variant.product.sellable == 1) ? 'Yes' : 'No' }}</div>
+            <div class="input_content">{{ value.product_variant.product.category.name }}</div>
+            <div class="input_content">{{ value.product_variant.quantity }}</div>
+            <div class="input_content">
+                <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="quantity = value.quantity" @change="isQuantity = true">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.quantity[]`)">{{ errors.first(`purchase_order_form_${unique}.quantity[]`) }}</span></transition>
+            </div>
+            <div class="input_content">PHP {{ totalCount(value.product_variant.unit_price) }}</div>
+            <div class="input_content">
+                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping = value.shipping_cost" @input="updateTotal($event, 'shipping', unique)">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.shipping_cost[]`) }}</span></transition>
+            </div>
+            <div class="input_content">
+                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional = value.additional_cost"  @input="updateTotal($event, 'additional', unique)">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.additional_cost[]`) }}</span></transition>
+            </div>
+            <div class="input_content alternate">
+                <span>PHP</span>
+                <input type="text" name="cost[]" class="default_content" v-model="computeTotal">
+                <div class="close_wrapper alternate" @click="removeOrder(value, unique)" v-if="$parent.res.purchase_order_products.length > 1">
+                    <div class="close_icon"></div>
+                </div>
+            </div>
+            <input type="hidden" name="variant_id[]" v-model="value.variant_id">
+            <input type="hidden" name="product_id[]" v-model="value.product_id">
+            <input type="hidden" name="id[]" v-model="value.id">
+        </div>
     </div>
 </template>
 
@@ -186,17 +216,20 @@
         },
         mounted () {
             const me = this
-            if (me.type == 'edit') {
-                me.$parent.form.shipping.findIndex((item, index) => {
-                    if (item.unique == me.unique) {
-                        item.value = me.shipping
-                    }
-                })
-                me.$parent.form.additional.findIndex((item, index) => {
-                    if (item.unique == me.unique) {
-                        item.value = me.additional
-                    }
-                })
+            switch (me.type) {
+                case 'edit':
+                case 'duplicate':
+                    me.$parent.form.shipping.findIndex((item, index) => {
+                        if (item.unique == me.unique) {
+                            item.value = me.shipping
+                        }
+                    })
+                    me.$parent.form.additional.findIndex((item, index) => {
+                        if (item.unique == me.unique) {
+                            item.value = me.additional
+                        }
+                    })
+                    break
             }
         }
     }
