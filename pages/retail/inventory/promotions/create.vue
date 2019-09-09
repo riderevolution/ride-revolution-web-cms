@@ -141,7 +141,7 @@
                                     <div class="form_group">
                                         <label for="products">Select Products</label>
                                         <select class="default_select alternate" name="products">
-                                            <option value="" selected>All Products</option>
+                                            <option value="" selected>All {{ (filterType == 'class_packages') ? 'Class Packages' : 'Products' }}</option>
                                             <option :value="data.id" v-for="(data, key) in filters">{{ data.name }}</option>
                                         </select>
                                     </div>
@@ -180,6 +180,7 @@
                 lastRoute: '',
                 prevRoute: '',
                 filters: [],
+                filterType: '',
                 form: {
                     start: {
                         hour: 0,
@@ -198,6 +199,7 @@
             getData (type) {
                 const me = this
                 let apiRoute = ''
+                me.filterType = type
                 switch (type) {
                     case 'class_packages':
                         apiRoute = 'api/packages/class-packages?enabled=1'
