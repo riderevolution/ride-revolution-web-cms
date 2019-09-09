@@ -1653,6 +1653,12 @@ input::placeholder
             background-color: transparent
             border-bottom: 2px dashed $border
             transition: .3s ease-in-out
+            &.threshold
+                background-color: $light_red
+                td
+                    color: $red
+                &:hover
+                    background-color: $light_red
             td
                 sf_pro_regular(1.6vh)
                 color: $black
@@ -3022,7 +3028,7 @@ input::placeholder
                         margin-bottom: 0
                         .default_select,
                         .default_text
-                            width: 300px
+                            width: 250px
                     .action_btn
                         display: inline-block
                         width: auto
