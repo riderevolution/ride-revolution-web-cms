@@ -3,7 +3,7 @@
         <div class="background" @click="toggleClose()"></div>
         <div class="confirmation_wrapper">
             <div class="confirmation_text">
-                Are you sure you want to {{ (confirm.status == 'Activated') ? 'activate' : 'deactivate' }} this {{ confirm.type }}?
+                {{ (isUser == 1) ? 'This will deactivate the users made by this account. Are you sure you want to deactivate this account?' : `Are you sure you want to ${(confirm.status == 'Activated') ? 'activate this ' : 'deactivate this '} ${confirm.type}?` }}
             </div>
             <div class="button_group">
                 <div class="action_cancel_btn confirm" @click="toggleClose()">Cancel</div>
@@ -26,6 +26,9 @@
             },
             packageStatus: {
                 type: Number
+            },
+            isUser: {
+                default: 0
             }
         },
         data () {

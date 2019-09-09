@@ -1,6 +1,6 @@
 <template>
-    <div :class="`input_content_wrapper ${(value.quantity < value.reorder_point) ? 'threshold' : ''}`" :data-vv-scope="`purchase_order_form_${unique}`">
-        <div class="input_wrapper">
+    <div>
+        <div class="input_wrapper" :data-vv-scope="`purchase_order_form_${unique}`" v-if="type == 'create'">
             <div class="input_content">{{ value.variant }}</div>
             <div class="input_content">{{ value.sku_id }}</div>
             <div class="input_content">{{ (value.sellable) ? 'Yes' : 'No' }}</div>
@@ -27,6 +27,28 @@
                 </div>
             </div>
             <input type="hidden" name="variant_id[]" v-model="value.id">
+            <input type="hidden" name="product_id[]" v-model="value.product_id">
+        </div>
+        <div class="input_wrapper" v-if="type == 'show'">
+            {{ variant }}
+            <div class="input_content">{{ value.variant }}</div>
+            <div class="input_content">{{ value.sku_id }}</div>
+            <div class="input_content">{{ (value.sellable) ? 'Yes' : 'No' }}</div>
+            <div class="input_content">{{ value.category.name }}</div>
+            <div class="input_content">{{ value.quantity }}</div>
+            <div class="input_content">
+
+            </div>
+            <div class="input_content">PHP {{ value.unit_price }}</div>
+            <div class="input_content">
+
+            </div>
+            <div class="input_content">
+
+            </div>
+            <div class="input_content alternate">
+                <span>PHP</span>
+            </div>
         </div>
     </div>
 </template>
@@ -34,6 +56,9 @@
 <script>
     export default {
         props: {
+            type: {
+                default: null
+            },
             value: {
                 default: function () {
                     return 0

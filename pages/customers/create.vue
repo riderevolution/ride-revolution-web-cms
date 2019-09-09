@@ -9,11 +9,14 @@
             </section>
             <section id="content">
                 <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+                    <div class="form_group_disclaimer">
+                        <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Fields with asterisks(*) are required.</span></div>
+                    </div>
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
                             <h2 class="form_title">Customer Overview</h2>
                             <div class="form_photo">
-                                <input type="file" id="image" name="image[]" class="action_photo" @change="getFile($event)" v-validate="'required|image|dimensions:600,600'">
+                                <input type="file" id="image" name="image[]" class="action_photo" @change="getFile($event)" v-validate="'image|dimensions:600,600'">
                                 <label for="image" :class="`${(previewImage) ? 'active' : ''}`"><span>Upload Photo</span></label>
                                 <img id="preview_image" src="/" v-if="previewImage" />
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('image[]')">{{ errors.first('image[]') }}</span></transition>
@@ -51,8 +54,8 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('co_birthdate')">{{ errors.first('co_birthdate') }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="co_weight">Weight (in kilograms) <span>*</span></label>
-                                    <input type="text" name="co_weight" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <label for="co_weight">Weight (in kilograms)</label>
+                                    <input type="text" name="co_weight" autocomplete="off" class="default_text" v-validate="'numeric'">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('co_weight')">{{ errors.first('co_weight') }}</span></transition>
                                 </div>
                             </div>
@@ -60,13 +63,14 @@
                                 <div class="form_flex_radio">
                                     <label class="radio_label">Sex <span>*</span></label>
                                     <div class="form_radio">
-                                        <input type="radio" id="female" value="Female" name="co_sex" class="action_radio">
+                                        <input type="radio" id="female" value="F" name="co_sex" class="action_radio" @change="searchShoeSize(true, 'F')">
                                         <label for="female">Female</label>
                                     </div>
                                     <div class="form_radio">
-                                        <input type="radio" id="male" value="Male" name="co_sex" class="action_radio">
+                                        <input type="radio" id="male" value="M" name="co_sex" class="action_radio" @change="searchShoeSize(true, 'M')">
                                         <label for="male">Male</label>
                                     </div>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('co_sex')">{{ errors.first('co_sex') }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="occupation_id">Occupation</label>
@@ -78,11 +82,16 @@
                                 </div>
                             </div>
                             <div class="form_flex">
-                                <div class="form_group">
-                                    <label for="co_shoe_size">Shoe Size</label>
-                                    <input type="text" name="co_shoe_size" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('co_shoe_size')">{{ errors.first('co_shoe_size') }}</span></transition>
-                                </div>
+                                <transition name="fade">
+                                    <div class="form_group" v-if="genderStatus">
+                                        <label for="co_shoe_size">Shoe Size <span>*</span></label>
+                                        <select class="default_select alternate" name="co_shoe_size" v-validate="'required'">
+                                            <option value="" selected disabled>Choose Shoe Size</option>
+                                            <option :value="size.size" v-for="(size, index) in sizes">{{ size.size }}</option>
+                                        </select>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('co_shoe_size')">{{ errors.first('co_shoe_size') }}</span></transition>
+                                    </div>
+                                </transition>
                             </div>
                         </div>
                     </div>
@@ -165,7 +174,7 @@
                     </div>
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
-                            <h2 class="form_title">Health Waiver</h2>
+                            <h2 class="form_title">Health Waiver <span>*</span></h2>
                         </div>
                         <div class="form_main_group alternate">
                             <div class="form_group">
@@ -215,6 +224,11 @@
                                         <input type="text" name="ec_relationship" autocomplete="off" class="default_text" v-validate="'required'">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('ec_relationship')">{{ errors.first('ec_relationship') }}</span></transition>
                                     </div>
+                                </div>
+                                <div class="form_group">
+                                    <label for="signature">Signature <span>*</span></label>
+                                    <input type="text" name="signature" autocomplete="off" placeholder="Enter your full name" class="default_text" v-validate="'required'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('signature')">{{ errors.first('signature') }}</span></transition>
                                 </div>
                                 <div class="form_check">
                                     <input type="checkbox" id="acknowledge" name="acknowledge" class="action_check" v-validate="'required'">
@@ -266,6 +280,7 @@
             return {
                 error: false,
                 previewImage: false,
+                genderStatus: false,
                 lastRoute: '',
                 prevRoute: '',
                 form: {
@@ -293,7 +308,8 @@
                     }
                 ],
                 types: [],
-                occupations: []
+                occupations: [],
+                sizes: []
             }
         },
         methods: {
@@ -370,6 +386,17 @@
 						})
                     }
                 })
+            },
+            searchShoeSize (status, gender) {
+                const me = this
+                let formData = new FormData()
+                formData.append('gender', gender)
+                me.genderStatus = status
+                me.$axios.post('api/extras/shoe-sizes/search', formData).then(res => {
+                    if (res.data) {
+                        me.sizes = res.data.shoeSizes
+                    }
+                })
             }
         },
         async mounted () {
@@ -380,6 +407,7 @@
             me.$axios.get('api/extras/occupations').then(res => {
                 me.occupations = res.data.occupations
             })
+            me.searchShoeSize(false, '')
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
         }

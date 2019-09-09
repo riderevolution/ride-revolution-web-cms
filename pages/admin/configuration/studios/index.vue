@@ -6,7 +6,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Studios</h1>
                     <div class="actions">
-                        <div class="total">Total: {{ totalCount(total_count) }}</div>
+                        <div class="total">Total: {{ totalItems(total_count) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>

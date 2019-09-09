@@ -153,7 +153,7 @@
             <role-form v-if="$store.state.roleForm" :type="type" :id="id" :status="status" />
         </transition>
         <transition name="fade">
-            <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" />
+            <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" :isUser="isUser" />
         </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
@@ -173,6 +173,7 @@
         },
         data () {
             return {
+                isUser: 0,
                 id: 0,
                 type: 0,
                 rowCount: 0,
@@ -298,6 +299,7 @@
              */
             async toggleStatus (id, enabled, status) {
                 const me = this
+                me.isUser = 1
                 me.$store.state.confirmStatus = true
                 setTimeout( () => {
                     me.$refs.enabled.confirm.table_name = 'roles'
@@ -310,6 +312,7 @@
             },
             async toggleUserStatus (id, enabled, status) {
                 const me = this
+                me.isUser = 0
                 me.$store.state.confirmStatus = true
                 setTimeout( () => {
                     me.$refs.enabled.confirm.table_name = 'users'

@@ -61,7 +61,7 @@
                             <div class="input_header">Cost</div>
                         </div>
                         <div class="content_wrapper" v-if="purchaseOrders.length > 0">
-                            <purchase-order ref="orders" :unique="key" :value="data" v-for="(data, key) in purchaseOrders" :key="key" />
+                            <purchase-order :type="'create'" :class="`input_content_wrapper ${(data.quantity < data.reorder_point) ? 'threshold' : ''}`" ref="orders" :unique="key" :value="data" v-for="(data, key) in purchaseOrders" :key="key" />
                             <div class="footer_wrapper">
                                 <div class="footer_cost">Total Additional Cost: PHP {{ computeAdditional }}</div>
                                 <div class="footer_cost">Total Shipping Cost: PHP {{ computeShipping }}</div>

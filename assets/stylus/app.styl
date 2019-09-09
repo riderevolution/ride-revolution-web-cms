@@ -124,7 +124,6 @@ img
         height: 26px
     }
 
-
 /**
  * Default Notification */
 .notification
@@ -668,6 +667,8 @@ input::placeholder
                 flex: 0 0 auto
                 sf_pro_bold(2.2vh)
                 color: $black
+                span
+                    color: $green
             .form_label
                 sf_pro_regular(1.5vh)
                 color: $gray
@@ -965,6 +966,28 @@ input::placeholder
             &:checked
                 background-image: url('/icons/selected-icon.svg')
                 transition: .3s ease-in-out
+    .validation_errors
+        position: absolute
+        top: calc(100% + 15px)
+        background-color: $red
+        color: $white
+        sf_pro_medium(1.4vh)
+        z-index: 1
+        padding: 5px 10px
+        border-radius: 5px
+        user-select: none
+        left: 0
+        &::before
+            content: ""
+            position: absolute
+            bottom: calc(100% - 1px)
+            width: 0
+            height: 0
+            border-left: 7px solid transparent
+            border-right: 7px solid transparent
+            border-bottom: 7px solid $red
+            left: 17px
+            z-index: 1
 
 .form_flex_radio_alternate
     position: relative
@@ -1631,12 +1654,6 @@ input::placeholder
                 sf_pro_regular(1.6vh)
                 color: $black
                 padding: 20px 30px
-                &.green
-                    sf_pro_bold(1.6vh)
-                    color: $green
-                &.red
-                    sf_pro_bold(1.6vh)
-                    color: $red
                 &.image_upload
                     display: flex
                     flex-flow: row wrap
@@ -1668,6 +1685,15 @@ input::placeholder
                         width: 32px
                         height: 32px
                         border-radius: 50%
+                    .table_image_default
+                        position: relative
+                        text-transform: uppercase
+                        background-image: linear-gradient(137deg, $red, $orange)
+                        sf_pro_regular(1.6vh)
+                        border-radius: 50%
+                        margin-right: 15px
+                        padding: 10px
+                        color: $white
                 .table_data_link
                     sf_pro_regular(1.6vh)
                     color: $blue
@@ -2028,7 +2054,6 @@ input::placeholder
     margin-bottom: 30px
     .cms_col
         flex: 0 0 25%
-        margin-bottom: 30px
         padding: 15px
         .wrapper
             display: block
@@ -2905,14 +2930,29 @@ input::placeholder
                 display: flex
                 justify-content: space-between
                 align-items: center
+                &.alternate
+                    .header_title,
+                    .action_buttons
+                        flex: 0 0 auto
                 .header_title
                     flex: 0 0 auto
                     display: flex
                     align-items: center
+                    .uppercase
+                        text-transform: uppercase
                     .header_id
                         margin-left: 20px
                     .form_check
                         margin-left: 20px
+                    span
+                        &.green,
+                        &.red
+                            sf_pro_bold(1.8vh)
+                            margin-left: 20px
+                        &.green
+                            color: $green
+                        &.red
+                            color: $red
                 .actions
                     display: flex
                     flex-flow: row wrap
@@ -2955,6 +2995,11 @@ input::placeholder
                     flex-flow: row wrap
                     align-items: flex-end
                     justify-content: flex-start
+                    .filter_label
+                        sf_pro_medium(1.8vh)
+                        color: $black
+                        &.margin
+                            margin-left: 20px
                     .form_group
                         margin-top: 20px
                         margin-bottom: 0

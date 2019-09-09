@@ -6,7 +6,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Occupations</h1>
                     <div class="actions">
-                        <div class="total">Total: {{ totalCount(count) }}</div>
+                        <div class="total">Total: {{ totalItems(count) }}</div>
                     </div>
                 </div>
                 <div class="action_buttons">
