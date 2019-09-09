@@ -213,6 +213,7 @@
                 const me = this
                 me.$axios.get(`api/extras/purchase-orders-products-filter?supplier_id=${me.form.supplier}&studio_id=${me.form.studio}`).then(res => {
                     me.variants = res.data.productVariants
+                    me.purchaseOrders = []
                     me.variants.forEach((variant, vindex) => {
                         if (variant.quantity < variant.reorder_point) {
                             me.purchaseOrders.push(variant)

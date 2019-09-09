@@ -10,8 +10,8 @@
                         <span :class="`${(res.paid == 1) ? 'green' : 'red'}`">{{ (res.paid == 1) ? 'Paid' : 'Unpaid' }}</span>
                     </h1>
                     <div class="action_buttons">
-                        <a href="javascript:void(0)" class="action_btn">Duplicate P.O.</a>
-                        <a href="javascript:void(0)" class="action_btn alternate margin">Edit P.O.</a>
+                        <nuxt-link :to="`/${prevRoute}/${lastRoute}/${res.id}/duplicate`" class="action_btn">Duplicate P.O.</nuxt-link>
+                        <nuxt-link :to="`/${prevRoute}/${lastRoute}/${res.id}/edit`" class="action_btn alternate margin">Edit P.O.</nuxt-link>
                     </div>
                 </div>
                 <div class="filter_wrapper">
@@ -36,18 +36,12 @@
                         <div class="input_header">Additional Cost</div>
                         <div class="input_header">Cost</div>
                     </div>
-                    <div class="content_wrapper" v-if="variants.length > 0">
-                        <purchase-order class="input_content_wrapper" :type="'show'" :unique="key" :value="data" v-for="(data, key) in variants" :key="key" />
+                    <div class="content_wrapper" v-if="res.purchase_order_products.length > 0">
+                        <purchase-order class="input_content_wrapper" :type="'show'" :unique="key" :value="data" v-for="(data, key) in res.purchase_order_products" :key="key" />
                         <div class="footer_wrapper">
-                            <div class="footer_cost">Total Additional Cost: PHP 0</div>
-                            <div class="footer_cost">Total Shipping Cost: PHP 0</div>
-                            <div class="footer_total_cost">Total: <span class="total_cost">PHP 0</span></div>
-                        </div>
-                    </div>
-                    <div class="form_footer_wrapper">
-                        <div class="button_group">
-                            <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
-                            <button type="submit" name="submit" class="action_btn alternate margin">Create P.O.</button>
+                            <div class="footer_cost">Total Additional Cost: PHP {{ totalCount(res.total_additional_cost) }}</div>
+                            <div class="footer_cost">Total Shipping Cost: PHP {{ totalCount(res.total_shipping_cost) }}</div>
+                            <div class="footer_total_cost">Total: <span class="total_cost">PHP {{ totalCount(res.total_cost) }}</span></div>
                         </div>
                     </div>
                 </div>
@@ -86,11 +80,6 @@
                     if (res.data) {
                         me.res = res.data.purchaseOrder
                         me.loaded = true
-                        me.res.purchase_order_products.forEach((product, pindex) => {
-                            product.variants.forEach((variant, vindex) => {
-                                me.variants.push(variant)
-                            })
-                        })
                     }
                 })
             },

@@ -52,7 +52,7 @@
                     </thead>
                     <tbody v-if="res.purchaseOrders.data.length > 0">
                         <tr v-for="(data, key) in res.purchaseOrders.data" :key="key">
-                            <td><nuxt-link class="table_data_link" :to="`${$route.path}/${data.id}/show`" table_action_text>{{ data.purchase_order_number }}</nuxt-link></td>
+                            <td><nuxt-link class="table_data_link alternate" :to="`${$route.path}/${data.id}/show`" table_action_text>{{ data.purchase_order_number }}</nuxt-link></td>
                             <td>{{ data.studio.name }}</td>
                             <td>{{ data.supplier.name }}</td>
                             <td>PHP {{ totalCount(data.total_shipping_cost) }}</td>

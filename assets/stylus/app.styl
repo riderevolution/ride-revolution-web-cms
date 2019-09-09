@@ -1654,6 +1654,12 @@ input::placeholder
                 sf_pro_regular(1.6vh)
                 color: $black
                 padding: 20px 30px
+                &.green
+                    sf_pro_bold(1.6vh)
+                    color: $green
+                &.red
+                    sf_pro_bold(1.6vh)
+                    color: $red
                 &.image_upload
                     display: flex
                     flex-flow: row wrap
@@ -1698,6 +1704,8 @@ input::placeholder
                     sf_pro_regular(1.6vh)
                     color: $blue
                     text-decoration: none
+                    &.alternate
+                        text-transform: uppercase
                 &.table_actions
                     &.full
                         a
@@ -1707,6 +1715,8 @@ input::placeholder
                     align-items: center
                     justify-content: space-between
                     .table_action_text
+                        &.green
+                            color: $green
                         &.red
                             color: $red
                     a
@@ -2934,6 +2944,10 @@ input::placeholder
                     .header_title,
                     .action_buttons
                         flex: 0 0 auto
+                    .action_buttons
+                        a,
+                        button
+                            width: 200px
                 .header_title
                     flex: 0 0 auto
                     display: flex
