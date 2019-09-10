@@ -7,7 +7,7 @@ Vue.mixin({
         },
         totalItems (value) {
             if (value) {
-                return parseFloat(value).toFixed().toLocaleString()
+                return parseFloat(value).toFixed().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
         },
         totalCount (value) {
