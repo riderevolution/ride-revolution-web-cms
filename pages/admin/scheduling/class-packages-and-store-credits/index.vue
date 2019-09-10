@@ -18,12 +18,17 @@
                     <nuxt-link :to="`${$route.path}/class-packages/create`" class="action_btn margin"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add Class Package</nuxt-link>
                 </div>
                 <div class="filter_wrapper">
-                    <div class="filter_flex">
-                        <div class="form_group">
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)">
+                        <div class="form_group" v-if="package_status == 1">
                             <label for="q">Find a package</label>
-                            <input type="text" name="q" placeholder="Search for a class package" autocomplete="off" class="default_text search_alternate" v-model="form_search.user" @change="search()">
+                            <input type="text" name="q" placeholder="Search for a class packages" autocomplete="off" class="default_text search_alternate">
                         </div>
-                    </div>
+                        <div class="form_group" v-if="package_status == 3">
+                            <label for="q">Find a credit</label>
+                            <input type="text" name="q" placeholder="Search for a credits" autocomplete="off" class="default_text search_alternate">
+                        </div>
+                        <button type="submit" name="button" class="action_btn alternate margin">Search</button>
+                    </form>
                 </div>
             </section>
             <section id="content" v-if="loaded">
@@ -47,7 +52,7 @@
                             <td>{{ data.name }}</td>
                             <td>{{ data.sku_id }}</td>
                             <td>{{ data.class_count }}</td>
-                            <td>PHP {{ data.package_price }}</td>
+                            <td>PHP {{ totalCount(data.package_price) }}</td>
                             <td class="table_actions">
                                 <nuxt-link class="table_action_edit" :to="`${$route.path}/class-packages/${data.id}/edit`">Edit</nuxt-link>
                                 <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
@@ -75,8 +80,8 @@
                         <tr v-for="(data, key) in res.storeCredits.data" :key="key">
                             <td>{{ data.name }}</td>
                             <td>{{ data.sku_id }}</td>
-                            <td>PHP {{ data.amount }}</td>
-                            <td>PHP {{ data.price }}</td>
+                            <td>PHP {{ totalCount(data.amount) }}</td>
+                            <td>PHP {{ totalCount(data.price) }}</td>
                             <td class="table_actions">
                                 <nuxt-link class="table_action_edit" :to="`${$route.path}/store-credits/${data.id}/edit`">Edit</nuxt-link>
                                 <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
@@ -117,17 +122,36 @@
                 rowCount: 0,
                 status: 1,
                 package_status: 1,
-                res: [],
-                form_search: {
-                    user: ''
-                }
+                res: []
             }
         },
         methods: {
-            search () {
+            submissionSuccess (packageStatus) {
                 const me = this
-                console.log(me.form_search.user);
-                console.log(me.form_search.studio);
+                let apiRoute = ''
+                let formData = new FormData(document.getElementById('filter'))
+                formData.append('enabled', me.status)
+                switch (packageStatus) {
+                    case 1:
+                        apiRoute = 'api/packages/class-packages/search'
+                        break
+                    case 3:
+                        apiRoute = 'api/packages/store-credits/search'
+                        break
+                }
+                me.loader(true)
+                me.$axios.post(apiRoute, formData).then(res => {
+                    if (res.data) {
+                        me.res = res.data
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             },
             async toggleStatus (id, enabled, status) {
                 const me = this

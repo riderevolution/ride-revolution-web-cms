@@ -4,7 +4,7 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Add a Promo</h1>
+                    <h1 class="header_title">Update {{ res.name }}</h1>
                 </div>
             </section>
             <section id="content">
@@ -16,42 +16,42 @@
                         <div class="form_main_group">
                             <div class="form_group">
                                 <label for="name">Promo Name <span>*</span></label>
-                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'">
+                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="res.name">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
                             <div class="form_flex">
                                 <div class="form_flex_radio">
                                     <label class="radio_label">Discount Type <span>*</span></label>
                                     <div class="form_radio">
-                                        <input type="radio" id="percent" value="percent" name="discount_type" class="action_radio" checked @change="isDiscount = true">
+                                        <input type="radio" id="percent" value="percent" name="discount_type" class="action_radio" @change="isDiscount = true" :checked="(res.discount_type == 'percent') ? true : false">
                                         <label for="percent">Percent</label>
                                     </div>
                                     <div class="form_radio">
-                                        <input type="radio" id="flat_rate" value="flat_rate" name="discount_type" class="action_radio" @change="isDiscount = false">
+                                        <input type="radio" id="flat_rate" value="flat_rate" name="discount_type" class="action_radio" @change="isDiscount = false" :checked="(res.discount_type == 'flat_rate') ? true : false">
                                         <label for="flat_rate">Flat Rate</label>
                                     </div>
                                 </div>
                                 <div class="form_group" v-if="isDiscount">
                                     <label for="discount">Percent Discount <span>*</span></label>
                                     <div class="violator">%</div>
-                                    <input type="text" name="discount" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <input type="text" name="discount_percent" autocomplete="off" class="default_text" v-validate="'required|numeric'" v-model="res.discount_percent">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('discount')">{{ errors.first('discount') }}</span></transition>
                                 </div>
                                 <div class="form_group" v-else>
                                     <label for="discount">Flat Rate Discount <span>*</span></label>
-                                    <input type="text" name="discount" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <input type="text" name="discount_flat_rate" autocomplete="off" class="default_text" v-validate="'required|numeric'" v-model="res.discount_flat_rate">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('discount')">{{ errors.first('discount') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_group">
                                 <label for="promo_code">Promo Code <span>*</span></label>
-                                <input type="text" name="promo_code" autocomplete="off" class="default_text" v-validate="'required'">
+                                <input type="text" name="promo_code" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.promo_code">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('promo_code')">{{ errors.first('promo_code') }}</span></transition>
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
                                     <label for="start_date">Start Date <span>*</span></label>
-                                    <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                    <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.start_date">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
                                 </div>
                                 <div class="form_group flex alternate">
@@ -76,7 +76,7 @@
                             <div class="form_flex">
                                 <div class="form_group">
                                     <label for="end_date">End Date <span>*</span></label>
-                                    <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                    <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.end_date">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
                                 </div>
                                 <div class="form_group flex alternate">
@@ -101,17 +101,17 @@
                             <div class="form_flex">
                                 <div class="form_group">
                                     <label for="redemption_limit">Redemption Limit <span>*</span></label>
-                                    <input type="text" name="redemption_limit" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <input type="text" name="redemption_limit" autocomplete="off" class="default_text" v-validate="'required|numeric'" v-model="res.redemption_limit">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('redemption_limit')">{{ errors.first('redemption_limit') }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="per_customer_limit">Per Customer Limit <span>*</span></label>
-                                    <input type="text" name="per_customer_limit" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <input type="text" name="per_customer_limit" autocomplete="off" class="default_text" v-validate="'required|numeric'" v-model="res.per_customer_limit">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('per_customer_limit')">{{ errors.first('per_customer_limit') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_check">
-                                <input type="checkbox" id="restrict_to_new_customers" name="restrict_to_new_customers" class="action_check" checked>
+                                <input type="checkbox" id="restrict_to_new_customers" name="restrict_to_new_customers" class="action_check" :checked="(res.restrict_to_new_customers == 1) ? true : false">
                                 <label for="restrict_to_new_customers">Restrict to New Customers</label>
                             </div>
                         </div>
@@ -122,14 +122,14 @@
                             <div class="form_flex_radio">
                                 <label class="radio_label">Apply this promo code to:</label>
                                 <div class="form_radio">
-                                    <input type="radio" id="class_packages" value="class_packages" name="apply_promo" class="action_radio" v-validate="'required'" @change="getFilter('class_packages')">
+                                    <input type="radio" id="class_packages" value="class_packages" :checked="(res.affected_type == 'class_packages') ? true : false" name="affected_type" class="action_radio" v-validate="'required'" @change="getFilter('class_packages')">
                                     <label for="class_packages">Class Packages</label>
                                 </div>
                                 <div class="form_radio">
-                                    <input type="radio" id="products" value="products" name="apply_promo" class="action_radio" v-validate="'required'" @change="getFilter('products')">
+                                    <input type="radio" id="products" value="products" name="affected_type" :checked="(res.affected_type == 'products') ? true : false" class="action_radio" v-validate="'required'" @change="getFilter('products')">
                                     <label for="products">Products</label>
                                 </div>
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('apply_promo')">{{ errors.first('apply_promo') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('affected_type')">{{ errors.first('affected_type') }}</span></transition>
                             </div>
                         </div>
                         <transition name="fade">
@@ -173,7 +173,7 @@
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
-                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
+                                <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
                                 <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                             </div>
                         </div>
@@ -197,6 +197,7 @@
                 isDiscount: true,
                 lastRoute: '',
                 prevRoute: '',
+                res: [],
                 filters: [],
                 filterType: '',
                 filterValues: [],
@@ -260,7 +261,7 @@
                 me.filterType = type
                 switch (type) {
                     case 'class_packages':
-                        apiRoute = 'api/packages/class-packages?promotion=1'
+                        apiRoute = `api/packages/class-packages?promotion=1&promo_id=${me.res.id}`
                         break
                     case 'products':
                         apiRoute = 'api/inventory/product-categories'
@@ -273,7 +274,7 @@
                         } else {
                             me.filters = res.data.productCategories
                             formData.append('promotion', 1)
-                            me.$axios.post('api/inventory/products/search', formData).then(res => {
+                            me.$axios.post(`api/inventory/products/search?promo_id=${me.res.id}`, formData).then(res => {
                                 if (res.data) {
                                     me.filterData = res.data.products
                                 }
@@ -322,14 +323,15 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
                         formData.append('affecteds', JSON.stringify(me.filterData))
                         formData.append('start_time', `${me.form.start.hour}:${me.form.start.mins} ${me.form.start.convention}`)
                         formData.append('end_time', `${me.form.end.hour}:${me.form.end.mins} ${me.form.end.convention}`)
                         me.loader(true)
-                        me.$axios.post('api/inventory/promos', formData).then(res => {
+                        me.$axios.post(`api/inventory/promos/${me.$route.params.param}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
-                                    me.notify('Added')
+                                    me.notify('Updated')
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
@@ -356,6 +358,18 @@
         },
         async mounted () {
             const me = this
+            me.$axios.get(`api/inventory/promos/${me.$route.params.param}`).then(res => {
+                if (res.data) {
+                    me.res = res.data.promo
+                    me.form.start.hour = me.res.start_time.split(':')[0]
+                    me.form.start.mins = me.res.start_time.split(':')[1].split(' ')[0]
+                    me.form.end.hour = me.res.end_time.split(':')[0]
+                    me.form.end.mins = me.res.end_time.split(':')[1].split(' ')[0]
+                    me.isDiscount = (me.res.discount_type == 'percent') ? true : false
+                    me.getFilter(me.res.affected_type)
+                    me.filterType = me.res.affected_type
+                }
+            })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]
         }

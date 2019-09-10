@@ -33,7 +33,7 @@
                             </select>
                         </div>
                         <div class="form_group margin">
-                            <label for="q">Find a Purchase Order</label>
+                            <label for="q">Find a purchase rrder</label>
                             <input type="text" name="q" autocomplete="off" placeholder="Search for a purchase order" class="default_text search_alternate">
                         </div>
                         <button type="submit" name="button" class="action_btn alternate margin">Search</button>

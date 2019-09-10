@@ -20,8 +20,8 @@
                 <div class="filter_wrapper" v-if="status != 0">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
-                            <label for="q">Find a User</label>
-                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate">
+                            <label for="q">Find a user</label>
+                            <input type="text" name="q" placeholder="Search for a user" autocomplete="off" class="default_text search_alternate">
                         </div>
                         <div class="form_group margin">
                             <label for="studio_id">Studio</label>

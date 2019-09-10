@@ -44,7 +44,7 @@
                             </select>
                         </div>
                         <div class="form_group margin">
-                            <label for="q">Find a Product</label>
+                            <label for="q">Find a product</label>
                             <input type="text" name="q" autocomplete="off" placeholder="Search for a product" class="default_text search_alternate">
                         </div>
                         <button type="submit" name="button" class="action_btn alternate margin">Search</button>
@@ -118,7 +118,7 @@
                     <tbody v-if="res.promos.data.length > 0">
                         <tr v-for="(data, key) in res.promos.data" :key="key">
                             <td>{{ data.name }}</td>
-                            <td>{{ (data.discount_type == 'percent') ? `${data.discount}  %` : `PHP ${data.discount}` }}</td>
+                            <td>{{ (data.discount_type == 'percent') ? `${data.discount_percent}  %` : `PHP ${totalCount(data.discount_flat_rate)}` }}</td>
                             <td>{{ data.promo_code }}</td>
                             <td>{{ formatDate(data.start_date) }}</td>
                             <td>{{ formatDate(data.end_date) }}</td>

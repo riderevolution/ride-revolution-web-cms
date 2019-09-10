@@ -34,12 +34,12 @@
                                 <div class="form_group" v-if="isDiscount">
                                     <label for="discount">Percent Discount <span>*</span></label>
                                     <div class="violator">%</div>
-                                    <input type="text" name="discount" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <input type="text" name="discount_percent" autocomplete="off" class="default_text" v-validate="'required|numeric'">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('discount')">{{ errors.first('discount') }}</span></transition>
                                 </div>
                                 <div class="form_group" v-else>
                                     <label for="discount">Flat Rate Discount <span>*</span></label>
-                                    <input type="text" name="discount" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <input type="text" name="discount_flat_rate" autocomplete="off" class="default_text" v-validate="'required|numeric'">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('discount')">{{ errors.first('discount') }}</span></transition>
                                 </div>
                             </div>
@@ -122,14 +122,14 @@
                             <div class="form_flex_radio">
                                 <label class="radio_label">Apply this promo code to:</label>
                                 <div class="form_radio">
-                                    <input type="radio" id="class_packages" value="class_packages" name="apply_promo" class="action_radio" v-validate="'required'" @change="getFilter('class_packages')">
+                                    <input type="radio" id="class_packages" value="class_packages" name="affected_type" class="action_radio" v-validate="'required'" @change="getFilter('class_packages')">
                                     <label for="class_packages">Class Packages</label>
                                 </div>
                                 <div class="form_radio">
-                                    <input type="radio" id="products" value="products" name="apply_promo" class="action_radio" v-validate="'required'" @change="getFilter('products')">
+                                    <input type="radio" id="products" value="products" name="affected_type" class="action_radio" v-validate="'required'" @change="getFilter('products')">
                                     <label for="products">Products</label>
                                 </div>
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('apply_promo')">{{ errors.first('apply_promo') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('affected_type')">{{ errors.first('affected_type') }}</span></transition>
                             </div>
                         </div>
                         <transition name="fade">
