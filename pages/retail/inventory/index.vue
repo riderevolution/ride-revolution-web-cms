@@ -210,11 +210,11 @@
                 const me = this
                 me.$store.state.confirmStatus = true
                 setTimeout( () => {
-                    me.$refs.enabled.confirm.table_name = (me.res.classPackages) ? 'class_packages' : 'store_credits'
+                    me.$refs.enabled.confirm.table_name = (me.res.promos) ? 'promos' : 'gift_cards'
                     me.$refs.enabled.confirm.id = id
                     me.$refs.enabled.confirm.enabled = enabled
                     me.$refs.enabled.confirm.status = status
-                    me.$refs.enabled.confirm.type = (res.productVariants) ? (res.promos ? 'promo' : 'product variant' ) : 'gift card'
+                    me.$refs.enabled.confirm.type = (me.res.promos) ? 'promo' : 'gift card'
                 }, 100)
                 document.body.classList.add('no_scroll')
             },
