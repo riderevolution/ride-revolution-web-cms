@@ -2,7 +2,7 @@
     <div class="content">
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table">
-                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
+                <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="action_wrapper">
                     <h1 class="header_title">Add a Promo</h1>
                 </div>
@@ -32,20 +32,20 @@
                                     </div>
                                 </div>
                                 <div class="form_group" v-if="isDiscount">
-                                    <label for="discount_field">Percent Discount <span>*</span></label>
+                                    <label for="discount">Percent Discount <span>*</span></label>
                                     <div class="violator">%</div>
-                                    <input type="text" name="discount_field" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('discount_field')">{{ errors.first('discount_field') }}</span></transition>
+                                    <input type="text" name="discount" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('discount')">{{ errors.first('discount') }}</span></transition>
                                 </div>
                                 <div class="form_group" v-else>
-                                    <label for="discount_field">Flat Rate Discount <span>*</span></label>
-                                    <input type="text" name="discount_field" autocomplete="off" class="default_text" v-validate="'required|numeric'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('discount_field')">{{ errors.first('discount_field') }}</span></transition>
+                                    <label for="discount">Flat Rate Discount <span>*</span></label>
+                                    <input type="text" name="discount" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('discount')">{{ errors.first('discount') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_group">
                                 <label for="promo_code">Promo Code <span>*</span></label>
-                                <input type="text" name="promo_code" autocomplete="off" class="default_text">
+                                <input type="text" name="promo_code" autocomplete="off" class="default_text" v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('promo_code')">{{ errors.first('promo_code') }}</span></transition>
                             </div>
                             <div class="form_flex">
@@ -118,33 +118,50 @@
                     </div>
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
-                            <h2 class="form_title">Products</h2>
+                            <h2 class="form_title">{{ (filterType == 'class_packages') ? 'Class Packages' : 'Products' }}</h2>
                             <div class="form_flex_radio">
                                 <label class="radio_label">Apply this promo code to:</label>
                                 <div class="form_radio">
-                                    <input type="radio" id="class_packages" value="class_packages" name="apply_promo" class="action_radio" @change="getData('class_packages')">
+                                    <input type="radio" id="class_packages" value="class_packages" name="apply_promo" class="action_radio" v-validate="'required'" @change="getFilter('class_packages')">
                                     <label for="class_packages">Class Packages</label>
                                 </div>
                                 <div class="form_radio">
-                                    <input type="radio" id="products" value="products" name="apply_promo" class="action_radio" @change="getData('products')">
+                                    <input type="radio" id="products" value="products" name="apply_promo" class="action_radio" v-validate="'required'" @change="getFilter('products')">
                                     <label for="products">Products</label>
                                 </div>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('apply_promo')">{{ errors.first('apply_promo') }}</span></transition>
                             </div>
                         </div>
                         <transition name="fade">
-                            <div class="form_main_group" v-if="filters.length > 0">
-                                <div class="form_flex">
-                                    <div class="form_group">
-                                        <label for="q">Search products</label>
-                                        <input type="text" name="q" autocomplete="off" placeholder="Search for a product" class="default_text search_alternate">
+                            <div class="form_main_group" v-if="isFilter">
+                                <div class="form_flex alternate">
+                                    <div :class="`form_group ${(filterType == 'class_packages') ? 'full' : ''}`">
+                                        <label for="q">Search a {{ (filterType == 'class_packages') ? 'Class Packages' : 'Product' }}</label>
+                                        <input type="text" name="q" autocomplete="off" v-model="form.query" :placeholder="`Search for a ${(filterType == 'class_packages') ? 'class packages' : 'products' }`" class="default_text search_alternate">
                                     </div>
-                                    <div class="form_group">
-                                        <label for="products">Select Products</label>
-                                        <select class="default_select alternate" name="products">
-                                            <option value="" selected>All {{ (filterType == 'class_packages') ? 'Class Packages' : 'Products' }}</option>
+                                    <div class="form_group margin" v-if="filterType == 'products'">
+                                        <label for="products">Select {{ (filterType == 'class_packages') ? 'Class Packages' : 'Categories' }}</label>
+                                        <select class="default_select alternate" name="category_id" v-model="form.categoryID">
+                                            <option value="" selected>All {{ (filterType == 'class_packages') ? 'Class Packages' : 'Categories' }}</option>
                                             <option :value="data.id" v-for="(data, key) in filters">{{ data.name }}</option>
                                         </select>
                                     </div>
+                                    <div class="button_group">
+                                        <button type="button" name="button" class="action_btn alternate" @click="submitFilter(filterType)">Filter</button>
+                                    </div>
+                                </div>
+                                <div class="form_flex scrollable" v-if="filterData.length > 0">
+                                    <label class="flex_label">Select {{ (filterType == 'class_packages') ? 'Class Packages' : 'Products' }}</label>
+                                    <div class="form_check select_all">
+                                        <div :class="`custom_action_check ${(checkData) ? 'checked' : ''}`" @click.prevent="toggleSelectAll($event)">Select All</div>
+                                    </div>
+                                    <div class="form_check" v-for="(data, key) in filterData" :key="key">
+                                        <input type="checkbox" :id="`data_${key}`" name="filter_data" class="action_check" v-model="data.checked">
+                                        <label :for="`data_${key}`">{{ data.name }}</label>
+                                    </div>
+                                </div>
+                                <div class="no_results" v-else>
+                                    No Result(s) Found. Search another {{ (filterType == 'class_packages') ? 'Class Packages' : 'Products' }}
                                 </div>
                             </div>
                         </transition>
@@ -176,33 +193,74 @@
         },
         data () {
             return {
+                isFilter: false,
                 isDiscount: true,
                 lastRoute: '',
                 prevRoute: '',
                 filters: [],
                 filterType: '',
+                filterValues: [],
+                filterData: [],
                 form: {
                     start: {
-                        hour: 0,
-                        mins: 0,
+                        hour: '00',
+                        mins: '00',
                         convention: 'AM'
                     },
                     end: {
-                        hour: 0,
-                        mins: 0,
+                        hour: '00',
+                        mins: '00',
                         convention: 'PM'
-                    }
+                    },
+                    query: '',
+                    categoryID: ''
                 }
             }
         },
+        computed: {
+            checkData () {
+                const me = this
+                let count = 0
+                let result = false
+                me.filterData.forEach((data, index) => {
+                    if (data.checked) {
+                        count++
+                    }
+                })
+                if (count == me.filterData.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
+            }
+        },
         methods: {
-            getData (type) {
+            toggleSelectAll (event) {
+                const me = this
+                if (me.checkData) {
+                    me.filterData.forEach((data, index) => {
+                        data.checked = false
+                    })
+                } else {
+                    me.filterData.forEach((data, index) => {
+                        data.checked = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
+            getFilter (type) {
                 const me = this
                 let apiRoute = ''
+                let formData = new FormData()
                 me.filterType = type
                 switch (type) {
                     case 'class_packages':
-                        apiRoute = 'api/packages/class-packages?enabled=1'
+                        apiRoute = 'api/packages/class-packages?promotion=1'
                         break
                     case 'products':
                         apiRoute = 'api/inventory/product-categories'
@@ -211,10 +269,17 @@
                 me.$axios.get(apiRoute).then(res => {
                     if (res.data) {
                         if (type == 'class_packages') {
-                            me.filters = res.data.classPackages.data
+                            me.filterData = res.data.classPackages.data
                         } else {
                             me.filters = res.data.productCategories
+                            formData.append('promotion', 1)
+                            me.$axios.post('api/inventory/products/search', formData).then(res => {
+                                if (res.data) {
+                                    me.filterData = res.data.products
+                                }
+                            })
                         }
+                        me.isFilter = true
                     }
                 })
             },
@@ -229,13 +294,39 @@
                         break
                 }
             },
+            submitFilter (type) {
+                const me = this
+                let formData = new FormData()
+                formData.append('promotion', 1)
+                formData.append('q', me.form.query)
+                switch (type) {
+                    case 'class_packages':
+                        me.$axios.post('api/packages/class-packages/search', formData).then(res => {
+                            if (res.data) {
+                                me.filterData = res.data.classPackages
+                            }
+                        })
+                        break
+                    case 'products':
+                        formData.append('category_id', me.form.categoryID)
+                        me.$axios.post('api/inventory/products/search', formData).then(res => {
+                            if (res.data) {
+                                me.filterData = res.data.products
+                            }
+                        })
+                        break
+                }
+            },
             submissionSuccess () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('affecteds', JSON.stringify(me.filterData))
+                        formData.append('start_time', `${me.form.start.hour}:${me.form.start.mins} ${me.form.start.convention}`)
+                        formData.append('end_time', `${me.form.end.hour}:${me.form.end.mins} ${me.form.end.convention}`)
                         me.loader(true)
-                        me.$axios.post('api/studios', formData).then(res => {
+                        me.$axios.post('api/inventory/promos', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Added')
@@ -250,7 +341,7 @@
                         }).then(() => {
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
-                                    me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                    me.$router.push(`/${me.prevRoute}/${me.lastRoute}`)
                                 }
                                 me.loader(false)
                             }, 500)

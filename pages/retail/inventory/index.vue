@@ -21,7 +21,7 @@
                     <nuxt-link :to="`${$route.path}/promotions/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Promotion</nuxt-link>
                 </div>
                 <div class="filter_wrapper">
-                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess('products')" v-if="package_status == 1">
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)" v-if="package_status == 1">
                         <div class="form_group">
                             <label for="category_id">Category</label>
                             <select class="default_select alternate" name="category_id">
@@ -49,7 +49,7 @@
                         </div>
                         <button type="submit" name="button" class="action_btn alternate margin">Search</button>
                     </form>
-                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess('promotions')" v-if="package_status == 2">
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)" v-if="package_status == 2">
                         <div class="form_group">
                             <label for="q">Find a Promo</label>
                             <input type="text" name="q" autocomplete="off" placeholder="Search for a promo" class="default_text search_alternate">
@@ -104,7 +104,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <table class="cms_table" v-if="package_status == 2">
+                <table class="cms_table" v-if="res.promos && package_status == 2">
                     <thead>
                         <tr>
                             <th>Promo Name</th>
@@ -115,25 +115,25 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Sample</td>
-                            <td>50% Off</td>
-                            <td>SampleCode123</td>
-                            <td>{{ formatDate(new Date()) }}</td>
-                            <td>{{ formatDate(new Date()) }}</td>
+                    <tbody v-if="res.promos.data.length > 0">
+                        <tr v-for="(data, key) in res.promos.data" :key="key">
+                            <td>{{ data.name }}</td>
+                            <td>{{ (data.discount_type == 'percent') ? `${data.discount}  %` : `PHP ${data.discount}` }}</td>
+                            <td>{{ data.promo_code }}</td>
+                            <td>{{ formatDate(data.start_date) }}</td>
+                            <td>{{ formatDate(data.end_date) }}</td>
                             <td class="table_actions">
-                                <nuxt-link class="table_action_edit" :to="`${$route.path}/promotions/1/edit`">Edit</nuxt-link>
-                                <a class="table_action_cancel" @click.self="toggleStatus(1, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
-                                <a class="table_action_success" @click.self="toggleStatus(1, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
+                                <nuxt-link class="table_action_edit" :to="`${$route.path}/promotions/${data.id}/edit`">Edit</nuxt-link>
+                                <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
+                                <a class="table_action_success" @click.self="toggleStatus(data.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
                             </td>
                         </tr>
                     </tbody>
-                    <!-- <tbody class="no_results" v-else>
+                    <tbody class="no_results" v-else>
                         <tr>
                             <td :colspan="rowCount">No Result(s) Found.</td>
                         </tr>
-                    </tbody> -->
+                    </tbody>
                 </table>
                 <!-- <pagination :apiRoute="(res.productVariants) ? (res.classPackages ? res.classPackages.path : res.productVariants.path ) : res.storeCredits.path" :current="(res.productVariants) ? (res.classPackages ? res.classPackages.current_page : res.productVariants.current_page ) : res.storeCredits.current_page" :last="(res.productVariants) ? (res.classPackages ? res.classPackages.last_page : res.productVariants.last_page ) : res.storeCredits.last_page" /> -->
             </section>
@@ -165,10 +165,7 @@
                 res: [],
                 categories: [],
                 suppliers: [],
-                studios: [],
-                form_search: {
-                    user: ''
-                }
+                studios: []
             }
         },
         methods: {
@@ -177,14 +174,17 @@
                     return this.$moment(value).format('MMM DD, YYYY')
                 }
             },
-            submissionSuccess (type) {
+            submissionSuccess (packageStatus) {
                 const me = this
                 let apiRoute = ''
                 let formData = new FormData(document.getElementById('filter'))
                 formData.append('enabled', me.status)
-                switch (type) {
-                    case 'products':
+                switch (packageStatus) {
+                    case 1:
                         apiRoute = 'api/inventory/product-variants/search'
+                        break
+                    case 2:
+                        apiRoute = 'api/inventory/promos/search'
                         break
                 }
                 me.loader(true)
@@ -214,7 +214,7 @@
                     me.$refs.enabled.confirm.id = id
                     me.$refs.enabled.confirm.enabled = enabled
                     me.$refs.enabled.confirm.status = status
-                    me.$refs.enabled.confirm.type = (me.res.classPackages) ? 'class package' : 'store credits'
+                    me.$refs.enabled.confirm.type = (res.productVariants) ? (res.promos ? 'promo' : 'product variant' ) : 'gift card'
                 }, 100)
                 document.body.classList.add('no_scroll')
             },
@@ -236,7 +236,7 @@
                         apiRoute = `api/inventory/product-variants?enabled=${status}`
                         break
                     case 2:
-                        apiRoute = `api/packages/class-packages?enabled=${status}&promo=${packageStatus}`
+                        apiRoute = `api/inventory/promos?enabled=${status}`
                         break
                     case 3:
                         apiRoute = `api/packages/store-credits?enabled=${status}`

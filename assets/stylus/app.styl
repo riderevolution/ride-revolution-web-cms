@@ -715,6 +715,15 @@ input::placeholder
                         transition: .3s ease-in-out
         .form_main_group
             padding: 30px
+            .button_group
+                .action_btn
+                    padding: 14px
+            .no_results
+                background-color: $white
+                sf_pro_regular(1.6vh)
+                color: $black
+                padding: 20px 35px
+                text-align: center
             &.alternate
                 padding: 30px 30px 10px
                 border-bottom: 1px solid $border
@@ -758,6 +767,14 @@ input::placeholder
     flex-flow: row wrap
     align-items: center
     justify-content: space-between
+    &.alternate
+        .form_group
+            flex: 1 0 32.33%
+    &.scrollable
+        height: 100%
+        max-height: 500px
+        overflow-y: auto
+        overflow-x: hidden
     &.select_all
         margin-bottom: 20px
     .flex_label
@@ -777,6 +794,8 @@ input::placeholder
         flex: 0 0 48.33%
         margin-bottom: 30px
     .form_group
+        &.full
+            flex: 1 0 48.33%
         flex: 0 0 48.33%
         &.check
             margin-bottom: 0
@@ -932,6 +951,21 @@ input::placeholder
             border-bottom: 7px solid $red
             left: 17px
             z-index: 1
+
+.custom_action_check
+    sf_pro_regular(1.5vh)
+    color: $black
+    -webkit-appearance: none
+    outline: none
+    padding: 5px 0 5px 30px
+    background-image: url('/icons/uncheck-icon.svg')
+    background-position: center left
+    background-size: 25%
+    background-repeat: no-repeat
+    transition: .3s ease-in-out
+    &.checked
+        background-image: url('/icons/check-icon.svg')
+        transition: .3s ease-in-out
 
 .form_flex_radio
     position: relative
