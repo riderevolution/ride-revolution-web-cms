@@ -5,7 +5,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Inventory</h1>
                     <div class="actions">
-                        <!-- <div class="total">Total: {{ totalItems((res.productVariants) ? (res.classPackages ? 1 : res.productVariants.total ) : 1) }}</div> -->
+                        <div class="total">Total: {{ totalItems((res.productVariants) ? res.productVariants.total : (res.promos ? res.promos.total : 100 )) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
@@ -19,6 +19,9 @@
                 </div>
                 <div class="action_buttons" v-if="package_status == 2">
                     <nuxt-link :to="`${$route.path}/promotions/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Promotion</nuxt-link>
+                </div>
+                <div class="action_buttons" v-if="package_status == 3">
+                    <nuxt-link :to="`${$route.path}/promotions/create`" class="action_btn alternate">Import Gift Cards</nuxt-link>
                 </div>
                 <div class="filter_wrapper">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)" v-if="package_status == 1">
@@ -53,6 +56,19 @@
                         <div class="form_group">
                             <label for="q">Find a Promo</label>
                             <input type="text" name="q" autocomplete="off" placeholder="Search for a promo" class="default_text search_alternate">
+                        </div>
+                        <button type="submit" name="button" class="action_btn alternate margin">Search</button>
+                    </form>
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)" v-if="package_status == 3">
+                        <div class="form_group">
+                            <label for="package_id">Value</label>
+                            <select class="default_select alternate" name="package_id">
+                                <option value="" selected>All Values</option>
+                            </select>
+                        </div>
+                        <div class="form_group margin">
+                            <label for="q">Find a gift card</label>
+                            <input type="text" name="q" autocomplete="off" placeholder="Search for a gift card" class="default_text search_alternate">
                         </div>
                         <button type="submit" name="button" class="action_btn alternate margin">Search</button>
                     </form>
@@ -135,7 +151,34 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <pagination :apiRoute="(res.productVariants) ? (res.classPackages ? res.classPackages.path : res.productVariants.path ) : res.storeCredits.path" :current="(res.productVariants) ? (res.classPackages ? res.classPackages.current_page : res.productVariants.current_page ) : res.storeCredits.current_page" :last="(res.productVariants) ? (res.classPackages ? res.classPackages.last_page : res.productVariants.last_page ) : res.storeCredits.last_page" /> -->
+                </table>
+                <table class="cms_table" v-if="package_status == 3">
+                    <thead>
+                        <tr>
+                            <th>Card Code</th>
+                            <th>Starting Value</th>
+                            <th>Date Created</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ASBASD123</td>
+                            <td>PHP 1,000 - Single Class Package</td>
+                            <td>{{ formatDate(new Date()) }}</td>
+                            <td class="table_actions">
+                                <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
+                                <a class="table_action_success" @click.self="toggleStatus(data.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <!-- <tbody class="no_results">
+                        <tr>
+                            <td :colspan="rowCount">No Result(s) Found.</td>
+                        </tr>
+                    </tbody> -->
+                </table>
+                <pagination :apiRoute="(res.productVariants) ? res.productVariants.path : (res.promos ? res.promos.path : 'api')" :current="(res.productVariants) ? res.productVariants.current_page : (res.promos ? res.promos.current_page : 'api')" :last="(res.productVariants) ? res.productVariants.last_page : (res.promos ? res.promos.last_page : 'api')" />
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
