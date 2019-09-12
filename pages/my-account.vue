@@ -32,7 +32,7 @@
                             </div>
                             <div class="form_flex">
                                 <div class="form_group">
-                                    <label for="password">Password</label>
+                                    <label for="password">Current Password</label>
                                     <input type="password" name="password" autocomplete="off" class="default_text" ref="password" v-validate="'min:8'">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('password')">{{ errors.first('password') }}</span></transition>
                                 </div>

@@ -560,6 +560,7 @@ img
                     flex: 0 0 75%
                     padding: 30px
                     .modal_tab_content_header
+                        margin-bottom: 30px
                         .form_flex
                             .form_group
                                 flex: 0 0 33.33%
@@ -572,6 +573,31 @@ img
                             span
                                 sf_pro_regular(1.6vh)
                                 color: $border_alt2
+                    .modal_tab_content
+                        .modal_tab_content_wrapper
+                            display: flex
+                            flex-flow: row wrap
+                            align-items: center
+                            padding-bottom: 15px
+                            border-bottom: 2px dashed $border
+                            .form_check
+                                flex: 1 0 40%
+                            .total_price
+                                flex: 0 0 10%
+                                sf_pro_regular(1.5vh)
+                                color: $black
+                            .form_group
+                                flex: 0 0 15%
+                                display: flex
+                                flex-flow: row wrap
+                                align-items: center
+                                margin-bottom: 0
+                                label
+                                    sf_pro_semibold(1.5vh)
+                                    margin-bottom: 0
+                                    margin-right: 10px
+                                .form_flex_input
+                                    flex: 1 0 33.33%
     .confirmation_wrapper
         position: fixed
         width: 600px

@@ -11,7 +11,7 @@
                             <div class="total_price">Total: PHP {{ totalCount(1000) }}</div>
                         </div>
                         <div class="modal_tab">
-                            <div class="modal_tab_title" v-for="(productCategory, key) in productCategories" :key="key">{{ productCategory.name }}</div>
+                            <div class="modal_tab_title" v-for="(productCategory, key) in productCategories" :key="key" @click="fetchProducts(productCategory.id)">{{ productCategory.name }}</div>
                             <div class="modal_tab_title">Ride Rewards</div>
                             <div class="modal_tab_title">Physical Gift Card</div>
                             <div class="modal_tab_title">Custom Gift Card</div>
@@ -36,8 +36,8 @@
                                     <input type="checkbox" id="enabled" name="enabled" class="action_check">
                                     <label for="enabled">Lorem ipsum</label>
                                 </div>
-                                <div class="modal_tab_content_price">PHP {{ totalCount(1000) }}</div>
-                                <div class="form_group flex">
+                                <div class="total_price">PHP {{ totalCount(1000) }}</div>
+                                <div class="form_group">
                                     <label>Qty.</label>
                                     <div class="form_flex_input">
                                         <input type="text" name="quantity" class="default_text number" autocomplete="off" v-validate="'numeric|max_value:24|min_value:0'">
@@ -67,6 +67,9 @@
                 const me = this
                 me.$store.state.quickSaleStatus = false
                 document.body.classList.remove('no_scroll')
+            },
+            fetchProducts (id) {
+                const me = this
             },
             fetchTabContents () {
                 const me = this
