@@ -30,16 +30,21 @@
                                 <input type="email" name="email" autocomplete="off" class="default_text" v-validate="'required|email'" v-model="res.email">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('email')">{{ errors.first('email') }}</span></transition>
                             </div>
+                            <div class="form_group">
+                                <label for="current_password">Current Password</label>
+                                <input type="password" name="current_password" autocomplete="off" class="default_text" v-validate="'required|min:8'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('current_password')">{{ errors.first('current_password') }}</span></transition>
+                            </div>
                             <div class="form_flex">
                                 <div class="form_group">
-                                    <label for="password">Current Password</label>
-                                    <input type="password" name="password" autocomplete="off" class="default_text" ref="password" v-validate="'min:8'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('password')">{{ errors.first('password') }}</span></transition>
+                                    <label for="new_password">New Password</label>
+                                    <input type="password" name="new_password" autocomplete="off" class="default_text" ref="new_password" v-validate="'min:8'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('new_password')">{{ errors.first('new_password') }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="password_confirmation">Password Confirmation</label>
-                                    <input type="password" name="password_confirmation" autocomplete="off" class="default_text" v-validate="'confirmed:password'">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('password_confirmation')">{{ errors.first('password_confirmation') }}</span></transition>
+                                    <label for="new_password_confirmation">New Password Confirmation</label>
+                                    <input type="password" name="new_password_confirmation" autocomplete="off" class="default_text" v-validate="'confirmed:new_password'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('new_password_confirmation')">{{ errors.first('new_password_confirmation') }}</span></transition>
                                 </div>
                             </div>
                             <div class="form_group_disclaimer">
@@ -76,8 +81,8 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        if (formData.get('password').length <= 0) {
-                            formData.delete('password')
+                        if (formData.get('current_password').length <= 0) {
+                            formData.delete('current_password')
                         }
                         formData = me.toJSON(formData)
                         me.loader(true)
