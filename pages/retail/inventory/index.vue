@@ -21,7 +21,7 @@
                     <nuxt-link :to="`${$route.path}/promotions/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Promotion</nuxt-link>
                 </div>
                 <div class="action_buttons" v-if="package_status == 3">
-                    <nuxt-link :to="`${$route.path}/promotions/create`" class="action_btn alternate">Import Gift Cards</nuxt-link>
+                    <a href="javascript:void(0)" class="action_btn alternate" @click="$store.state.importStatus = true">Import Gift Cards</a>
                 </div>
                 <div class="filter_wrapper">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)" v-if="package_status == 1">
@@ -178,12 +178,15 @@
                         </tr>
                     </tbody> -->
                 </table>
-                <pagination :apiRoute="(res.productVariants) ? res.productVariants.path : (res.promos ? res.promos.path : 'api')" :current="(res.productVariants) ? res.productVariants.current_page : (res.promos ? res.promos.current_page : 'api')" :last="(res.productVariants) ? res.productVariants.last_page : (res.promos ? res.promos.last_page : 'api')" />
+                <pagination :apiRoute="(res.productVariants) ? res.productVariants.path : (res.promos ? res.promos.path : 'api')" :current="(res.productVariants) ? res.productVariants.current_page : (res.promos ? res.promos.current_page : 3)" :last="(res.productVariants) ? res.productVariants.last_page : (res.promos ? res.promos.last_page : 3)" />
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
         <transition name="fade">
             <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" :packageStatus="package_status" />
+        </transition>
+        <transition name="fade">
+            <import v-if="$store.state.importStatus" />
         </transition>
     </div>
 </template>
@@ -192,11 +195,13 @@
     import Foot from '../../../components/Foot'
     import Pagination from '../../../components/Pagination'
     import ConfirmStatus from '../../../components/modals/ConfirmStatus'
+    import Import from '../../../components/modals/Import'
     export default {
         components: {
             Foot,
             Pagination,
             ConfirmStatus,
+            Import
         },
         data () {
             return {

@@ -507,6 +507,71 @@ img
                 .form_footer_wrapper
                     margin-top: 40px
                     margin-bottom: 0
+            .modal_tab_wrapper
+                display: flex
+                flex-flow: row wrap
+                .left_side
+                    position: relative
+                    flex: 0 0 25%
+                    background-color: #F8F8FB
+                    .overlay
+                        position: absolute
+                        top: 0
+                        left: 0
+                        right: 0
+                        margin: 15px
+                        padding: 20px
+                        background-color: $white
+                        box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.09)
+                        border-radius: 5px
+                        .total_title
+                            position: relative
+                            sf_pro_bold(2.2vh)
+                            color: $black
+                        .total_price
+                            sf_pro_regular(2vh)
+                            color: $red
+                            margin-top: 10px
+                    .modal_tab
+                        padding: 150px 0
+                        .modal_tab_title
+                            position: relative
+                            padding: 30px 60px
+                            sf_pro_semibold(1.8vh)
+                            color: $black
+                            background-color: transparent
+                            transition: .3s ease-in-out
+                            &::before
+                                content: url('/icons/custom-select-icon.svg')
+                                position: absolute
+                                top: 50%
+                                right: calc(0% + 65px)
+                                z-index: 1
+                                transform: translateY(-50%) rotate(-90deg)
+                                transition: .3s ease-in-out
+                            &:hover
+                                background-color: $white
+                                color: $green
+                                transition: .3s ease-in-out
+                                &::before
+                                    right: calc(0% + 50px)
+                                    transition: .3s ease-in-out
+                .right_side
+                    flex: 0 0 75%
+                    padding: 30px
+                    .modal_tab_content_header
+                        .form_flex
+                            .form_group
+                                flex: 0 0 33.33%
+                            .button_group
+                                button
+                                    padding: 14px
+                        .total_items
+                            sf_pro_semibold(1.6vh)
+                            color: $black
+                            span
+                                sf_pro_regular(1.6vh)
+                                color: $border_alt2
     .confirmation_wrapper
         position: fixed
         width: 600px
@@ -645,11 +710,14 @@ input::placeholder
                             justify-content: flex-start
     &.overlay
         position: fixed
-        width: 800px
+        width: 100%
+        max-width: 50%
         top: 50%
         z-index: 4
         left: 50%
         transform: translate(-50%, -50%)
+        &.alternate
+            max-width: 75%
     .form_wrapper
         background-color: $white
         box-shadow: 5px 5px 40px rgba(0, 0, 0, 0.05)
@@ -811,50 +879,50 @@ input::placeholder
                 flex: 0 0 100%
             .form_check
                 margin-bottom: 0
-            .form_flex_input
-                position: relative
-                flex: 0 0 48.33%
-                &.active
-                    pointer-events: all
-                &.not_active
-                    pointer-events: none
-                    opacity: 0.5
-                &.full
-                    flex: 0 0 100%
-                    .placeholder
-                        right: calc(0px + 15px)
-                .placeholder
-                    position: absolute
-                    top: 50%
-                    right: calc(0px + 40px)
-                    z-index: 1
-                    sf_pro_regular(1.5vh)
-                    color: $gray
-                    transform: translateY(-50%)
-                .up
-                    position: absolute
-                    top: 35%
-                    right: calc(0px + 15px)
-                    z-index: 1
-                    width: 0
-                    height: 0
-                    border-left: 6px solid transparent
-                    border-right: 6px solid transparent
-                    border-bottom: 8px solid $green
-                    transform: translateY(-50%)
-                    cursor: pointer
-                .down
-                    position: absolute
-                    top: 65%
-                    right: calc(0px + 15px)
-                    z-index: 1
-                    width: 0
-                    height: 0
-                    border-left: 6px solid transparent
-                    border-right: 6px solid transparent
-                    border-top: 8px solid $green
-                    transform: translateY(-50%)
-                    cursor: pointer
+.form_flex_input
+    position: relative
+    flex: 0 0 48.33%
+    &.active
+        pointer-events: all
+    &.not_active
+        pointer-events: none
+        opacity: 0.5
+    &.full
+        flex: 0 0 100%
+        .placeholder
+            right: calc(0px + 15px)
+    .placeholder
+        position: absolute
+        top: 50%
+        right: calc(0px + 40px)
+        z-index: 1
+        sf_pro_regular(1.5vh)
+        color: $gray
+        transform: translateY(-50%)
+    .up
+        position: absolute
+        top: 35%
+        right: calc(0px + 15px)
+        z-index: 1
+        width: 0
+        height: 0
+        border-left: 6px solid transparent
+        border-right: 6px solid transparent
+        border-bottom: 8px solid $green
+        transform: translateY(-50%)
+        cursor: pointer
+    .down
+        position: absolute
+        top: 65%
+        right: calc(0px + 15px)
+        z-index: 1
+        width: 0
+        height: 0
+        border-left: 6px solid transparent
+        border-right: 6px solid transparent
+        border-top: 8px solid $green
+        transform: translateY(-50%)
+        cursor: pointer
 
 .form_check
     position: relative
@@ -2145,29 +2213,30 @@ input::placeholder
             &:hover
                 box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
                 transition: .3s ease-in-out
-        &.alternate
-            .filter
-                flex: 1 0 auto
+    &.alternate
+        .filter
+            flex: 1 0 100%
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: space-between
+            margin-bottom: 30px
+            padding: 15px
+            .filter_selector
                 display: flex
                 flex-flow: row wrap
                 align-items: center
-                justify-content: space-between
-                margin-bottom: 30px
-                .filter_selector
-                    display: flex
-                    flex-flow: row wrap
-                    align-items: center
-                    .default_select
-                        flex: 1 0 40%
-                    .divider
-                        margin: 0 15px
-            .total_wrapper
-                display: flex
-                flex-flow: row wrap
-                justify-content: space-between
-                flex: 0 0 100%
-                .wrapper
-                    flex: 0 0 23%
+                .default_select
+                    flex: 1 0 40%
+                .divider
+                    margin: 0 15px
+        .total_wrapper
+            display: flex
+            flex-flow: row wrap
+            justify-content: space-between
+            flex: 0 0 100%
+            .wrapper
+                flex: 0 0 23%
 
 .cms_taxonomy
     display: flex

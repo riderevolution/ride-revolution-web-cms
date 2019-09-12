@@ -1,7 +1,7 @@
 <template>
     <div class="default_modal">
         <div class="background" @click="toggleClose()"></div>
-        <div class="confirmation_wrapper" v-if="$store.state.deleteStatus">
+        <div class="confirmation_wrapper">
             <div class="confirmation_text">
                 This action cannot be undone.
             </div>

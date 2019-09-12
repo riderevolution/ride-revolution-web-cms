@@ -28,8 +28,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="total_wrapper">
-                            <div class="wrapper" v-for="(data, key) in res.today">
+                        <div class="cms_col" v-for="(data, key) in res.today">
+                            <div class="wrapper">
                                 <div class="total_image">
                                     <img class="front" :src="data.imgSrc" />
                                     <img class="back" :src="data.imgSrc" />

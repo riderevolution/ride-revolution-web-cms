@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 const createStore = () => {
     return new Vuex.Store({
         state: () => ({
+            quickSaleStatus: false,
+            importStatus: false,
             resetSuccessfulStatus: false,
             resetStatus: false,
             deleteStatus: false,
