@@ -11,7 +11,7 @@
                             <div class="total_price">Total: PHP {{ totalCount(1000) }}</div>
                         </div>
                         <div class="modal_tab">
-                            <div class="modal_tab_title" v-for="(productCategory, key) in productCategories" :key="key" @click="fetchProducts(productCategory.id)">{{ productCategory.name }}</div>
+                            <div :class="`modal_tab_title ${(key == 0) ? 'active' : '' }`" v-for="(productCategory, key) in productCategories" :key="key" @click="fetchProducts(productCategory.id, type = key)">{{ productCategory.name }}</div>
                             <div class="modal_tab_title">Ride Rewards</div>
                             <div class="modal_tab_title">Physical Gift Card</div>
                             <div class="modal_tab_title">Custom Gift Card</div>
@@ -28,25 +28,10 @@
                                     <button type="button" name="button" class="action_btn alternate">Take Payment</button>
                                 </div>
                             </div>
-                            <div class="total_items">{{ totalItems(1000) }} <span>items</span></div>
+                            <div class="total_items">{{ totalItems(productTotal) }} <span>items</span></div>
                         </div>
                         <div class="modal_tab_content">
-                            <div class="modal_tab_content_wrapper">
-                                <div class="form_check">
-                                    <input type="checkbox" id="enabled" name="enabled" class="action_check">
-                                    <label for="enabled">Lorem ipsum</label>
-                                </div>
-                                <div class="total_price">PHP {{ totalCount(1000) }}</div>
-                                <div class="form_group">
-                                    <label>Qty.</label>
-                                    <div class="form_flex_input">
-                                        <input type="text" name="quantity" class="default_text number" autocomplete="off" v-validate="'numeric|max_value:24|min_value:0'">
-                                        <div class="up"></div>
-                                        <div class="down"></div>
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity')">{{ errors.first('quantity') }}</span></transition>
-                                    </div>
-                                </div>
-                            </div>
+                            <quick-sale-tab-content :value="product" v-for="(product, key) in products" :key="key" v-if="isProduct" />
                         </div>
                     </div>
                 </div>
@@ -56,9 +41,17 @@
 </template>
 
 <script>
+    import QuickSaleTabContent from './QuickSaleTabContent'
     export default {
+        components: {
+            QuickSaleTabContent
+        },
         data () {
             return {
+                type: 0,
+                isProduct: true,
+                productTotal: 0,
+                products: [],
                 productCategories: []
             }
         },
@@ -68,14 +61,32 @@
                 me.$store.state.quickSaleStatus = false
                 document.body.classList.remove('no_scroll')
             },
-            fetchProducts (id) {
+            fetchProducts (id, unique) {
                 const me = this
+                const elements = document.querySelectorAll('.modal_tab .modal_tab_title')
+                let formData = new FormData()
+                elements.forEach((element, index) => {
+                    if (unique == index) {
+                        element.classList.add('active')
+                    } else {
+                        element.classList.remove('active')
+                    }
+                })
+                formData.append('category_id', id)
+                formData.append('enabled', 1)
+                me.$axios.post('api/inventory/product-variants/search', formData).then(res => {
+                    if (res.data) {
+                        me.products = res.data.productVariants.data
+                        me.productTotal = me.products.length
+                    }
+                })
             },
             fetchTabContents () {
                 const me = this
                 me.$axios.get('api/inventory/product-categories').then(res => {
                     if (res.data) {
                         me.productCategories = res.data.productCategories
+                        me.fetchProducts(me.productCategories[0].id, 0)
                     }
                 })
             }
