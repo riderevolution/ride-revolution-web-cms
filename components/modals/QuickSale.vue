@@ -11,7 +11,7 @@
                             <div class="total_price">Total: PHP {{ totalCount(1000) }}</div>
                         </div>
                         <div class="modal_tab">
-                            <div :class="`modal_tab_title ${(key == 0) ? 'active' : '' }`" v-for="(productCategory, key) in productCategories" :key="key" @click="fetchProducts(productCategory.id, type = key)">{{ productCategory.name }}</div>
+                            <div :class="`modal_tab_title ${(key == 0) ? 'active' : '' }`" v-for="(productCategory, key) in productCategories" :key="key" @click="toggleStatus(status = key, 'category', productCategory.id)">{{ productCategory.name }}</div>
                             <div class="modal_tab_title">Ride Rewards</div>
                             <div class="modal_tab_title">Physical Gift Card</div>
                             <div class="modal_tab_title">Custom Gift Card</div>
@@ -28,10 +28,10 @@
                                     <button type="button" name="button" class="action_btn alternate">Take Payment</button>
                                 </div>
                             </div>
-                            <div class="total_items">{{ totalItems(productTotal) }} <span>items</span></div>
+                            <div class="total_items">{{ totalItems(total) }} <span>items</span></div>
                         </div>
                         <div class="modal_tab_content">
-                            <quick-sale-tab-content :value="product" v-for="(product, key) in products" :key="key" v-if="isProduct" />
+                            <quick-sale-tab-content :value="product" :unique="product.id" v-for="(product, key) in products" :key="product.id" v-show="isProduct && toCompare == product.product.product_category_id" />
                         </div>
                     </div>
                 </div>
@@ -48,11 +48,12 @@
         },
         data () {
             return {
-                type: 0,
-                isProduct: true,
-                productTotal: 0,
+                status: 0,
+                total: 0,
                 products: [],
-                productCategories: []
+                productCategories: [],
+                isProduct: true,
+                toCompare: 0
             }
         },
         methods: {
@@ -61,7 +62,22 @@
                 me.$store.state.quickSaleStatus = false
                 document.body.classList.remove('no_scroll')
             },
-            fetchProducts (id, unique) {
+            countTotalItems (type) {
+                const me = this
+                let count = 0
+                switch (type) {
+                    case 'category':
+                        me.products.forEach((product, index) => {
+                            if (me.toCompare == product.product.product_category_id) {
+                                count++
+                            }
+                        })
+                        break
+                }
+
+                me.total = count
+            },
+            toggleStatus (unique, type, id) {
                 const me = this
                 const elements = document.querySelectorAll('.modal_tab .modal_tab_title')
                 let formData = new FormData()
@@ -72,30 +88,32 @@
                         element.classList.remove('active')
                     }
                 })
-                formData.append('category_id', id)
-                formData.append('enabled', 1)
-                me.$axios.post('api/inventory/product-variants/search', formData).then(res => {
-                    if (res.data) {
-                        me.products = res.data.productVariants.data
-                        me.productTotal = me.products.length
-                    }
-                })
+                switch (type) {
+                    case 'category':
+                        me.toCompare = id
+                        me.countTotalItems('category')
+                        break
+                }
             },
             fetchTabContents () {
                 const me = this
                 me.$axios.get('api/inventory/product-categories').then(res => {
                     if (res.data) {
                         me.productCategories = res.data.productCategories
-                        setTimeout( () => {
-                            me.fetchProducts(me.productCategories[0].id, 0)
-                        }, 100)
+                        me.toCompare = me.productCategories[0].id
+                        me.countTotalItems('category')
                     }
                 })
             }
         },
         mounted () {
             const me = this
-            me.fetchTabContents()
+            me.$axios.get('api/inventory/product-variants?enabled=1').then(res => {
+                if (res.data) {
+                    me.fetchTabContents()
+                    me.products = res.data.productVariants.data
+                }
+            })
         }
     }
 </script>

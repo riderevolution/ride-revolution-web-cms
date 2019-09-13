@@ -5,7 +5,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Inventory</h1>
                     <div class="actions">
-                        <div class="total">Total: {{ totalItems((res.productVariants) ? res.productVariants.total : (res.promos ? res.promos.total : 100 )) }}</div>
+                        <div class="total">Total: {{ totalItems((res.productVariants) ? res.productVariants.total : (res.promos ? res.promos.total : res.giftCards.total )) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
@@ -61,9 +61,10 @@
                     </form>
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)" v-if="package_status == 3">
                         <div class="form_group">
-                            <label for="package_id">Value</label>
-                            <select class="default_select alternate" name="package_id">
+                            <label for="class_package_sku_id">Value</label>
+                            <select class="default_select alternate" name="class_package_sku_id">
                                 <option value="" selected>All Values</option>
+                                <option :value="classPackage.sku_id" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
                             </select>
                         </div>
                         <div class="form_group margin">
@@ -152,7 +153,7 @@
                     </tbody>
                 </table>
                 </table>
-                <table class="cms_table" v-if="package_status == 3">
+                <table class="cms_table" v-if="res.giftCards && package_status == 3">
                     <thead>
                         <tr>
                             <th>Card Code</th>
@@ -161,24 +162,24 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>ASBASD123</td>
-                            <td>PHP 1,000 - Single Class Package</td>
-                            <td>{{ formatDate(new Date()) }}</td>
+                    <tbody v-if="res.giftCards.data.length > 0">
+                        <tr v-for="(data, key) in res.giftCards.data" :key="key">
+                            <td>{{ data.card_code }}</td>
+                            <td>PHP {{ totalCount(data.class_package.package_price) }} - {{ data.class_package.name }}</td>
+                            <td>{{ formatDate(data.created_at) }}</td>
                             <td class="table_actions">
                                 <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
                                 <a class="table_action_success" @click.self="toggleStatus(data.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
                             </td>
                         </tr>
                     </tbody>
-                    <!-- <tbody class="no_results">
+                    <tbody class="no_results" v-else>
                         <tr>
                             <td :colspan="rowCount">No Result(s) Found.</td>
                         </tr>
-                    </tbody> -->
+                    </tbody>
                 </table>
-                <pagination :apiRoute="(res.productVariants) ? res.productVariants.path : (res.promos ? res.promos.path : 'api')" :current="(res.productVariants) ? res.productVariants.current_page : (res.promos ? res.promos.current_page : 3)" :last="(res.productVariants) ? res.productVariants.last_page : (res.promos ? res.promos.last_page : 3)" />
+                <pagination :apiRoute="(res.productVariants) ? res.productVariants.path : (res.promos ? res.promos.path : res.giftCards.path)" :current="(res.productVariants) ? res.productVariants.current_page : (res.promos ? res.promos.current_page : res.giftCards.current_page)" :last="(res.productVariants) ? res.productVariants.last_page : (res.promos ? res.promos.last_page : res.giftCards.last_page)" />
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
@@ -186,7 +187,7 @@
             <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" :packageStatus="package_status" />
         </transition>
         <transition name="fade">
-            <import v-if="$store.state.importStatus" />
+            <import v-if="$store.state.importStatus" :status="status" />
         </transition>
     </div>
 </template>
@@ -213,7 +214,8 @@
                 res: [],
                 categories: [],
                 suppliers: [],
-                studios: []
+                studios: [],
+                classPackages: []
             }
         },
         methods: {
@@ -233,6 +235,9 @@
                         break
                     case 2:
                         apiRoute = 'api/inventory/promos/search'
+                        break
+                    case 3:
+                        apiRoute = 'api/inventory/gift-cards/search'
                         break
                 }
                 me.loader(true)
@@ -287,7 +292,7 @@
                         apiRoute = `api/inventory/promos?enabled=${status}`
                         break
                     case 3:
-                        apiRoute = `api/packages/store-credits?enabled=${status}`
+                        apiRoute = `api/inventory/gift-cards?enabled=${status}`
                         break
                 }
                 me.loader(true)
@@ -320,6 +325,11 @@
                         })
                         me.$axios.get('api/inventory/product-categories').then(res => {
                             me.categories = res.data.productCategories
+                        })
+                        break
+                    case 3:
+                        me.$axios.get('api/extras/class-packages-for-gift-cards').then(res => {
+                            me.classPackages = res.data.classPackages
                         })
                         break
                 }
