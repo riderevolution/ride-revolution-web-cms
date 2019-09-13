@@ -9,8 +9,8 @@
             <label>Qty.</label>
             <div class="form_flex_input">
                 <input type="text" name="quantity" class="default_text number" autocomplete="off" v-model="form.quantity" v-validate="'numeric|min_value:0'">
-                <div class="up"></div>
-                <div class="down"></div>
+                <div class="up" @click="addCount()"></div>
+                <div class="down" @click="subtractCount()"></div>
                 <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity')">{{ errors.first('quantity') }}</span></transition>
             </div>
         </div>
@@ -31,6 +31,21 @@
                 form: {
                     quantity: 0
                 }
+            }
+        },
+        methods: {
+            addCount () {
+                const me = this
+                let data
+                data = parseInt(me.form.quantity)
+                data != 0 && (me.form.quantity = 0)
+                me.form.quantity = (data += 1)
+            },
+            subtractCount () {
+                const me = this
+                let data
+                data = parseInt(me.form.quantity)
+                data > 0 && (me.form.quantity = (data -= 1))
             }
         }
     }
