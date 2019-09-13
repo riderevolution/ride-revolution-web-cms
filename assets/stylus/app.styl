@@ -1208,6 +1208,11 @@ input::placeholder
 .form_group
     position: relative
     margin-bottom: 30px
+    &.active
+        pointer-events: all
+    &.not_active
+        pointer-events: none
+        opacity: 0.5
     .limit
         sf_pro_regular(1.4vh)
         color: $gray

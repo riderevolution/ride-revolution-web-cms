@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="form_flex_input">
                                         <div class="form_check">
-                                            <input type="checkbox" id="class_count_unlimited" name="class_count_unlimited" class="action_check" :checked="res.class_count_unlimited == 1">
+                                            <input type="checkbox" id="class_count_unlimited" name="class_count_unlimited" class="action_check" :checked="res.class_count_unlimited == 1" @change="isUnlimited ^= true">
                                             <label for="class_count_unlimited">Unlimited</label>
                                         </div>
                                     </div>
@@ -69,8 +69,8 @@
                                     <div class="form_flex_input">
                                         <select class="default_select alternate" name="expiry_type">
                                             <option value="" disabled>Choose a Type</option>
-                                            <option value="day" :selected="res.expiry_type == 'day'">Days</option>
-                                            <option value="month" :selected="res.expiry_type == 'month'">Months</option>
+                                            <option value="day" :selected="res.expiry_type == 'day' || (!isUnlimited) ? true : false" :disabled="(isUnlimited || res.expiry_type == 'day') ? true : false">Days</option>
+                                            <option value="month" :selected="(res.expiry_type == 'month' || isUnlimited) ? true : false">Months</option>
                                         </select>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('expiry_type')">{{ errors.first('expiry_type') }}</span></transition>
                                     </div>
@@ -102,13 +102,13 @@
                             <div class="form_flex">
                                 <div class="form_group flex">
                                     <label>Days/months to expire if not activated:</label>
-                                    <div :class="`form_flex_input ${(isNotActivated) ? 'active' : 'not_active'}`">
+                                    <div :class="`form_flex_input ${(!isNotActivated) ? 'not_active' : 'active'}`">
                                         <input type="text" name="ao_expiry_if_not_activated" class="default_text number" autocomplete="off" v-model="form.notActivated = res.ao_expiry_if_not_activated" v-validate="'numeric|min_value:0|max_value:9999999999'">
                                         <div class="up" @click="addCount('notActivated')"></div>
                                         <div class="down" @click="subtractCount('notActivated')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('ao_expiry_if_not_activated')">{{ errors.first('ao_expiry_if_not_activated') }}</span></transition>
                                     </div>
-                                    <div :class="`form_flex_input ${(isNotActivated) ? 'active' : 'not_active'}`">
+                                    <div :class="`form_flex_input ${(!isNotActivated) ? 'not_active' : 'active'}`">
                                         <select class="default_select alternate" name="ao_expiry_if_not_activated_type">
                                             <option value="" disabled>Choose a Type</option>
                                             <option value="day" :selected="res.ao_expiry_if_not_activated_type == 'day'">Days</option>
@@ -116,7 +116,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form_group flex">
+                                <div :class="`form_group flex ${(isNotActivated) ? 'not_active' : 'active'}`">
                                     <label for="ao_fixed_activation_date">Fixed Activation Date</label>
                                     <input type="date" name="ao_fixed_activation_date" autocomplete="off" class="default_text date" v-model="form.ao_fixed_activation_date = res.ao_fixed_activation_date">
                                 </div>
@@ -231,6 +231,7 @@
         },
         data () {
             return {
+                isUnlimited: false,
                 isComplimentary: true,
                 isNotActivated: false,
                 isPromo: false,
@@ -358,6 +359,7 @@
                 me.isPromo = (me.res.is_promo == 1) ? true : false
                 me.isNotActivated = (me.res.ao_activate_on_first_class_booked == 1) ? true : false
                 me.isComplimentary = (me.res.por_complimentary_package_mode == 1) ? true : false
+                me.isUnlimited = (me.res.class_count_unlimited == 1) ? true : false
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]

@@ -102,13 +102,13 @@
                             <div class="form_flex">
                                 <div class="form_group flex">
                                     <label>Days/months to expire if not activated:</label>
-                                    <div class="form_flex_input">
-                                        <input type="text" name="ao_expiry_if_not_activated" :class="`default_text number ${(!isNotActivated) ? 'disabled' : ''}`" autocomplete="off" v-model="form.notActivated" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
+                                    <div :class="`form_flex_input ${(!isNotActivated) ? 'not_active' : 'active'}`">
+                                        <input type="text" name="ao_expiry_if_not_activated" class="default_text number" autocomplete="off" v-model="form.notActivated" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
                                         <div class="up" @click="addCount('notActivated')"></div>
                                         <div class="down" @click="subtractCount('notActivated')"></div>
                                     </div>
-                                    <div class="form_flex_input">
-                                        <select :class="`default_select alternate ${(!isNotActivated) ? 'disabled' : ''}`" name="ao_expiry_if_not_activated_type">
+                                    <div :class="`form_flex_input ${(!isNotActivated) ? 'not_active' : 'active'}`">
+                                        <select class="default_select alternate" name="ao_expiry_if_not_activated_type">
                                             <option value="" selected disabled>Choose a Type</option>
                                             <option value="day" selected>Days</option>
                                             <option value="month">Months</option>
@@ -116,9 +116,9 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('ao_expiry_if_not_activated_type')">{{ errors.first('ao_expiry_if_not_activated_type') }}</span></transition>
                                     </div>
                                 </div>
-                                <div class="form_group flex">
+                                <div :class="`form_group flex ${(isNotActivated) ? 'not_active' : 'active'}`">
                                     <label for="ao_fixed_activation_date">Fixed Activation Date</label>
-                                    <input type="date" name="ao_fixed_activation_date" autocomplete="off" :class="`default_text date ${(isNotActivated) ? 'disabled' : ''}`" v-model="form.ao_fixed_activation_date">
+                                    <input type="date" name="ao_fixed_activation_date" autocomplete="off" class="default_text date" v-model="form.ao_fixed_activation_date">
                                 </div>
                             </div>
                         </div>
