@@ -86,7 +86,9 @@
                 me.$axios.get('api/inventory/product-categories').then(res => {
                     if (res.data) {
                         me.productCategories = res.data.productCategories
-                        me.fetchProducts(me.productCategories[0].id, 0)
+                        setTimeout( () => {
+                            me.fetchProducts(me.productCategories[0].id, 0)
+                        }, 100)
                     }
                 })
             }
