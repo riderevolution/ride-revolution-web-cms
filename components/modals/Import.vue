@@ -7,11 +7,9 @@
                 <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group">
                     <div class="form_photo alternate">
-                        <input type="file" id="file" name="file" class="action_photo" @change="getFile($event, unique)" v-validate="'required'">
+                        <input type="file" id="file" name="file" class="action_photo" @change="getFile($event)" v-validate="'required'">
                         <label for="file">
-                            <span>
-                                Upload Excel File
-                             </span>
+                            <span>{{ fileTitle }}</span>
                         </label>
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('file')">{{ errors.first('file') }}</span></transition>
                     </div>
@@ -35,7 +33,19 @@
                 default: 1
             }
         },
+        data () {
+            return {
+                fileTitle: 'Upload Excel File'
+            }
+        },
         methods: {
+            getFile (event) {
+                const me = this
+                let element = event.target
+                if (element.files[0]) {
+                    me.fileTitle = element.files[0].name
+                }
+            },
             toggleClose () {
                 const me = this
                 me.$store.state.importStatus = false
