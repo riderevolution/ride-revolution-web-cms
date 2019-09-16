@@ -48,11 +48,6 @@
                             link: '/admin/configuration/occupations'
                         },
                         {
-                            label: 'Shoe Sizes',
-                            imgSrc: '/icons/types-icon.svg',
-                            link: '/admin/configuration/shoe-sizes'
-                        },
-                        {
                             label: 'System Emails',
                             imgSrc: '/icons/system-emails-icon.svg',
                             link: '/admin/configuration/system-emails'

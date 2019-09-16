@@ -11,10 +11,7 @@
                             <div class="total_price">Total: PHP {{ totalCount(1000) }}</div>
                         </div>
                         <div class="modal_tab">
-                            <div :class="`modal_tab_title ${(key == 0) ? 'active' : '' }`" v-for="(productCategory, key) in productCategories" :key="key" @click="toggleStatus(status = key, 'category', productCategory.id)">{{ productCategory.name }}</div>
-                            <div class="modal_tab_title">Ride Rewards</div>
-                            <div class="modal_tab_title">Physical Gift Card</div>
-                            <div class="modal_tab_title">Custom Gift Card</div>
+                            <div :class="`modal_tab_title ${(key == 0) ? 'active' : '' }`" v-for="(menu, key) in menus" :key="key" @click="toggleStatus(status = key, menu.type, menu.id)">{{ menu.name }}</div>
                         </div>
                     </div>
                     <div class="right_side">
@@ -31,7 +28,7 @@
                             <div class="total_items">{{ totalItems(total) }} <span>items</span></div>
                         </div>
                         <div class="modal_tab_content">
-                            <quick-sale-tab-content :value="product" :unique="product.id" v-for="(product, key) in products" :key="product.id" />
+                            <quick-sale-tab-content :values="showProducts" :unique="unique" />
                         </div>
                     </div>
                 </div>
@@ -51,10 +48,57 @@
                 status: 0,
                 total: 0,
                 products: [],
-                giftCards: [],
-                productCategories: [],
+                menus: [
+                    {
+                        id: 0,
+                        name: 'Ride Rewards',
+                        type: 'ride-rewards'
+                    },
+                    {
+                        id: 0,
+                        name: 'Physical Gift Card',
+                        type: 'physical-card'
+                    },
+                    {
+                        id: 0,
+                        name: 'Custom Gift Card',
+                        type: 'custom-card'
+                    }
+                ],
                 isProduct: true,
-                toCompare: 0
+                toCompare: {
+                    product: 0,
+                    giftCard: 0
+                },
+                unique: 0
+            }
+        },
+        computed: {
+            showProducts () {
+                const me = this
+                let products = []
+                switch (me.toCompare.giftCard) {
+                    case 0:
+                        me.products.forEach((product, index) => {
+                            if (product.product) {
+                                product.isProductShow = true
+                            } else {
+                                product.isGiftShow = false
+                            }
+                        })
+                        break
+                    case 1:
+                        me.products.forEach((product, index) => {
+                            if (product.product) {
+                                product.isProductShow = false
+                            } else {
+                                product.isGiftShow = true
+                            }
+                        })
+                        break
+                }
+                products = me.products
+                return products
             }
         },
         methods: {
@@ -69,17 +113,26 @@
                 switch (type) {
                     case 'category':
                         me.products.forEach((product, index) => {
-                            if (me.toCompare == product.product.product_category_id) {
+                            if (product.product) {
+                                if (me.toCompare.product == product.product.product_category_id) {
+                                    count++
+                                }
+                            }
+                        })
+                        break
+                    case 'physical-card':
+                        me.products.forEach((product, index) => {
+                            if (!product.product) {
                                 count++
                             }
                         })
                         break
                 }
-
                 me.total = count
             },
             toggleStatus (unique, type, id) {
                 const me = this
+                me.unique = unique
                 const elements = document.querySelectorAll('.modal_tab .modal_tab_title')
                 let formData = new FormData()
                 elements.forEach((element, index) => {
@@ -91,8 +144,13 @@
                 })
                 switch (type) {
                     case 'category':
-                        me.toCompare = id
+                        me.toCompare.product = id
+                        me.toCompare.giftCard = 0
                         me.countTotalItems('category')
+                        break
+                    case 'physical-card':
+                        me.toCompare.giftCard = 1
+                        me.countTotalItems('physical-card')
                         break
                 }
             },
@@ -100,8 +158,16 @@
                 const me = this
                 me.$axios.get('api/inventory/product-categories').then(res => {
                     if (res.data) {
-                        me.productCategories = res.data.productCategories
-                        me.toCompare = me.productCategories[0].id
+                        res.data.productCategories.forEach((productCategory, index) => {
+                            me.menus.unshift(
+                                {
+                                    id: res.data.productCategories[res.data.productCategories.length - (index + 1)].id,
+                                    name: res.data.productCategories[res.data.productCategories.length - (index + 1)].name,
+                                    type: 'category'
+                                }
+                            )
+                        })
+                        me.toCompare.product = me.menus[0].id
                         me.countTotalItems('category')
                     }
                 })
@@ -111,14 +177,14 @@
                 me.$axios.get('api/inventory/product-variants?enabled=1').then(res => {
                     if (res.data) {
                         me.products = res.data.productVariants.data
-                        setTimeout( () => {
-                            me.fetchTabContents()
-                        }, 100)
-                    }
-                })
-                me.$axios.get('api/inventory/gift-cards').then(res => {
-                    if (res.data) {
-                        me.giftCards = res.data.giftCards.data
+                        me.fetchTabContents()
+                        me.$axios.get('api/inventory/gift-cards').then(res => {
+                            if (res.data) {
+                                res.data.giftCards.data.forEach((data, index) => {
+                                    me.products.push(data)
+                                })
+                            }
+                        })
                     }
                 })
             }

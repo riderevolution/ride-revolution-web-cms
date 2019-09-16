@@ -19,7 +19,7 @@
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
                             <label for="q">Find a Customer</label>
-                            <input type="text" name="q" autocomplete="off" class="default_text search_alternate">
+                            <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" class="default_text search_alternate">
                         </div>
                         <div class="form_group margin">
                             <label for="type">Customer Type</label>
