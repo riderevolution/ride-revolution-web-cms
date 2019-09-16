@@ -1,5 +1,6 @@
 <template>
-    <div class="modal_tab_content_wrapper">
+    <div v-show="$parent.toCompare == value.product.product_category_id">
+        <div class="modal_tab_content_wrapper">
         <div class="form_check">
             <input type="checkbox" :id="`product_${unique}`" name="product[]" class="action_check">
             <label :for="`product_${unique}`">{{ value.variant }}</label>
@@ -14,6 +15,7 @@
                 <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity')">{{ errors.first('quantity') }}</span></transition>
             </div>
         </div>
+    </div>
     </div>
 </template>
 

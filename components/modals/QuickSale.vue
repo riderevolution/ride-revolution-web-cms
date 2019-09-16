@@ -31,7 +31,7 @@
                             <div class="total_items">{{ totalItems(total) }} <span>items</span></div>
                         </div>
                         <div class="modal_tab_content">
-                            <quick-sale-tab-content :value="product" :unique="product.id" v-for="(product, key) in products" :key="product.id" v-show="isProduct && toCompare == product.product.product_category_id" />
+                            <quick-sale-tab-content :value="product" :unique="product.id" v-for="(product, key) in products" :key="product.id" v-show="isProduct" />
                         </div>
                     </div>
                 </div>
@@ -51,6 +51,7 @@
                 status: 0,
                 total: 0,
                 products: [],
+                giftCards: [],
                 productCategories: [],
                 isProduct: true,
                 toCompare: 0
@@ -104,16 +105,27 @@
                         me.countTotalItems('category')
                     }
                 })
+            },
+            fetchData () {
+                const me = this
+                me.$axios.get('api/inventory/product-variants?enabled=1').then(res => {
+                    if (res.data) {
+                        me.products = res.data.productVariants.data
+                        setTimeout( () => {
+                            me.fetchTabContents()
+                        }, 100)
+                    }
+                })
+                me.$axios.get('api/inventory/gift-cards').then(res => {
+                    if (res.data) {
+                        me.giftCards = res.data.giftCards.data
+                    }
+                })
             }
         },
         mounted () {
             const me = this
-            me.$axios.get('api/inventory/product-variants?enabled=1').then(res => {
-                if (res.data) {
-                    me.fetchTabContents()
-                    me.products = res.data.productVariants.data
-                }
-            })
+            me.fetchData()
         }
     }
 </script>
