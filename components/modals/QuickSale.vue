@@ -28,7 +28,7 @@
                             <div class="total_items">{{ totalItems(total) }} <span>items</span></div>
                         </div>
                         <div class="modal_tab_content">
-                            <quick-sale-tab-content :values="showProducts" :unique="unique" />
+                            <quick-sale-tab-content :value="value" :unique="index" v-for="(value, index) in showProducts" :key="`${unique}_${value.id}`" />
                         </div>
                     </div>
                 </div>
@@ -177,10 +177,14 @@
                 me.$axios.get('api/inventory/product-variants?enabled=1').then(res => {
                     if (res.data) {
                         me.products = res.data.productVariants.data
+                        me.products.forEach((product, index) => {
+                            product.isChecked = false
+                        })
                         me.fetchTabContents()
                         me.$axios.get('api/inventory/gift-cards').then(res => {
                             if (res.data) {
                                 res.data.giftCards.data.forEach((data, index) => {
+                                    data.isChecked = false
                                     me.products.push(data)
                                 })
                             }
