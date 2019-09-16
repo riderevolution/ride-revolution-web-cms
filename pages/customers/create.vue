@@ -63,11 +63,11 @@
                                 <div class="form_flex_radio">
                                     <label class="radio_label">Sex <span>*</span></label>
                                     <div class="form_radio">
-                                        <input type="radio" id="female" value="F" name="co_sex" class="action_radio" @change="searchShoeSize(true, 'F')">
+                                        <input type="radio" id="female" value="F" name="co_sex" class="action_radio">
                                         <label for="female">Female</label>
                                     </div>
                                     <div class="form_radio">
-                                        <input type="radio" id="male" value="M" name="co_sex" class="action_radio" @change="searchShoeSize(true, 'M')">
+                                        <input type="radio" id="male" value="M" name="co_sex" class="action_radio">
                                         <label for="male">Male</label>
                                     </div>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('co_sex')">{{ errors.first('co_sex') }}</span></transition>
@@ -83,11 +83,11 @@
                             </div>
                             <div class="form_flex">
                                 <transition name="fade">
-                                    <div class="form_group" v-if="genderStatus">
+                                    <div class="form_group">
                                         <label for="co_shoe_size">Shoe Size <span>*</span></label>
                                         <select class="default_select alternate" name="co_shoe_size" v-validate="'required'">
                                             <option value="" selected disabled>Choose Shoe Size</option>
-                                            <option :value="size.size" v-for="(size, index) in sizes">{{ size.size }}</option>
+                                            <option :value="size" v-for="(size, index) in sizes">{{ size }}</option>
                                         </select>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('co_shoe_size')">{{ errors.first('co_shoe_size') }}</span></transition>
                                     </div>
@@ -308,8 +308,19 @@
                     }
                 ],
                 types: [],
-                occupations: [],
-                sizes: []
+                occupations: []
+            }
+        },
+        computed: {
+            sizes () {
+                const me = this
+                let ctr = 5
+                let sizes = []
+                for (let i = 0; i < 35; i++) {
+                    ctr += 0.5
+                    sizes.push(ctr)
+                }
+                return sizes
             }
         },
         methods: {
@@ -386,17 +397,6 @@
 						})
                     }
                 })
-            },
-            searchShoeSize (status, gender) {
-                const me = this
-                let formData = new FormData()
-                formData.append('gender', gender)
-                me.genderStatus = status
-                me.$axios.post('api/extras/shoe-sizes/search', formData).then(res => {
-                    if (res.data) {
-                        me.sizes = res.data.shoeSizes
-                    }
-                })
             }
         },
         async mounted () {
@@ -407,7 +407,6 @@
             me.$axios.get('api/extras/occupations').then(res => {
                 me.occupations = res.data.occupations
             })
-            me.searchShoeSize(false, '')
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
         }

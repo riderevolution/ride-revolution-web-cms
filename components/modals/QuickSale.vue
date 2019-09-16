@@ -31,7 +31,7 @@
                             <div class="total_items">{{ totalItems(total) }} <span>items</span></div>
                         </div>
                         <div class="modal_tab_content">
-                            <quick-sale-tab-content :value="product" :unique="product.id" v-for="(product, key) in products" :key="product.id" v-show="isProduct" />
+                            <quick-sale-tab-content :value="product" :unique="product.id" v-for="(product, key) in products" :key="product.id" />
                         </div>
                     </div>
                 </div>

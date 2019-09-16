@@ -1,6 +1,5 @@
 <template>
-    <div v-show="$parent.toCompare == value.product.product_category_id">
-        {{ value.product.product_category_id }}
+    <div v-show="$parent.toCompare == value.product.product_category_id && $parent.isProduct">
         <div class="modal_tab_content_wrapper">
             <div class="form_check">
                 <input type="checkbox" :id="`product_${unique}`" name="product[]" class="action_check">
