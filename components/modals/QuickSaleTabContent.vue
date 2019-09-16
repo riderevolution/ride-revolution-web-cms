@@ -1,21 +1,22 @@
 <template>
     <div v-show="$parent.toCompare == value.product.product_category_id">
+        {{ value.product.product_category_id }}
         <div class="modal_tab_content_wrapper">
-        <div class="form_check">
-            <input type="checkbox" :id="`product_${unique}`" name="product[]" class="action_check">
-            <label :for="`product_${unique}`">{{ value.variant }}</label>
-        </div>
-        <div class="total_price">PHP {{ totalCount(value.sale_price) }}</div>
-        <div class="form_group">
-            <label>Qty.</label>
-            <div class="form_flex_input">
-                <input type="text" :name="`quantity_${unique}`" class="default_text number" autocomplete="off" v-model="quantity" v-validate="'numeric|min_value:0'">
-                <div class="up" @click="addCount()"></div>
-                <div class="down" @click="subtractCount()"></div>
-                <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity')">{{ errors.first('quantity') }}</span></transition>
+            <div class="form_check">
+                <input type="checkbox" :id="`product_${unique}`" name="product[]" class="action_check">
+                <label :for="`product_${unique}`">{{ value.variant }}</label>
+            </div>
+            <div class="total_price">PHP {{ totalCount(value.sale_price) }}</div>
+            <div class="form_group">
+                <label>Qty.</label>
+                <div class="form_flex_input">
+                    <input type="text" :name="`quantity_${unique}`" class="default_text number" autocomplete="off" v-model="quantity" v-validate="'numeric|min_value:0'">
+                    <div class="up" @click="addCount()"></div>
+                    <div class="down" @click="subtractCount()"></div>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity')">{{ errors.first('quantity') }}</span></transition>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 

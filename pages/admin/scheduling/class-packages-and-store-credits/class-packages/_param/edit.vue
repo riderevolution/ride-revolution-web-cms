@@ -172,8 +172,8 @@
                                 </div>
                                 <div class="form_group flex check">
                                     <div class="form_check">
-                                        <input type="checkbox" id="por_complimentary_package_mode" name="por_complimentary_package_mode" class="action_check" :checked="res.por_complimentary_package_mode == 1" @change="isComplimentary ^= true">
-                                        <label for="por_complimentary_package_mode">Complimentary Package Mode</label>
+                                        <input type="checkbox" id="por_has_complimentary_package" name="por_has_complimentary_package" class="action_check" :checked="res.por_has_complimentary_package == 1" @change="isComplimentary ^= true">
+                                        <label for="por_has_complimentary_package">Complimentary Package Mode</label>
                                     </div>
                                 </div>
                             </div>
