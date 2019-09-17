@@ -48,6 +48,11 @@
                             link: '/admin/configuration/occupations'
                         },
                         {
+                            label: 'Gift Card Titles',
+                            imgSrc: '/icons/types-icon.svg',
+                            link: '/admin/configuration/gift-card-titles'
+                        },
+                        {
                             label: 'System Emails',
                             imgSrc: '/icons/system-emails-icon.svg',
                             link: '/admin/configuration/system-emails'
