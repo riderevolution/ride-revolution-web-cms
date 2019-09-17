@@ -12,7 +12,85 @@
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
                             <h2 class="form_title">Class Package Overview</h2>
+                            <div class="form_check toggler" @click="isPromo ^= true">
+                                <input type="hidden" id="is_promo" name="is_promo" class="action_check" :value="(isPromo) ? 1 : 0">
+                                <div :class="`toggle ${(isPromo) ? 'active' : ''}`"></div>
+                                <label for="is_promo">Promo</label>
+                            </div>
                         </div>
+                        <transition name="fade">
+                            <div class="form_main_group alternate" v-if="isPromo">
+                                <div class="form_flex_radio_alternate">
+                                    <label>Restrict to New Customers</label>
+                                    <div class="radio_wrapper">
+                                        <div class="form_radio">
+                                            <input type="radio" id="por_restrict_yes" value="Yes" name="por_restrict_to_new_customers" class="action_radio">
+                                            <label for="por_restrict_yes">Yes</label>
+                                        </div>
+                                        <div class="form_radio">
+                                            <input type="radio" id="por_restrict_no" value="No" name="por_restrict_to_new_customers" class="action_radio">
+                                            <label for="por_restrict_no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form_flex_radio_alternate">
+                                    <label>Allow sharing of package?</label>
+                                    <div class="radio_wrapper">
+                                        <div class="form_radio">
+                                            <input type="radio" id="por_allow_yes" value="Yes" name="por_allow_sharing_of_package" class="action_radio">
+                                            <label for="por_allow_yes">Yes</label>
+                                        </div>
+                                        <div class="form_radio">
+                                            <input type="radio" id="por_allow_no" value="No" name="por_allow_sharing_of_package" class="action_radio">
+                                            <label for="por_allow_no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form_flex">
+                                    <div class="form_group flex">
+                                        <label>Purchase Limit <span>*</span></label>
+                                        <div class="form_flex_input full">
+                                            <input type="text" name="por_purchase_limit" class="default_text number" autocomplete="off" v-model="form.purchaseLimit" v-validate="'required|numeric|min_value:0'">
+                                            <div class="up" @click="addCount('purchaseLimit')"></div>
+                                            <div class="down" @click="subtractCount('purchaseLimit')"></div>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('por_purchase_limit')">{{ errors.first('por_purchase_limit') }}</span></transition>
+                                        </div>
+                                    </div>
+                                    <div class="form_group flex check">
+                                        <div class="form_check">
+                                            <input type="checkbox" id="por_has_complimentary_package" name="por_has_complimentary_package" class="action_check" checked @change="isComplimentary ^= true">
+                                            <label for="por_has_complimentary_package">Complimentary Package Mode</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <transition name="fade">
+                                    <div class="form_group_disclaimer" v-if="isComplimentary">
+                                        <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Tie a free package to this package to do things like ‘Take 10 classes and get 1 free’. In Purchase Mode, the complimentary package is given immediately on purchase of this package. In Usage Mode, the complimentary package is given when this package is used up, and the activation date is set to the same date as the purchased package. It will not be given if the package expires before all classes have been used up.</span></div>
+                                    </div>
+                                </transition>
+                                <transition name="fade">
+                                    <div class="form_flex" v-if="isComplimentary">
+                                        <div class="form_group">
+                                            <label for="por_complimentary_package_mode">Mode</label>
+                                            <select class="default_select alternate" name="por_complimentary_package_mode">
+                                                <option value="" selected disabled>Choose a Mode</option>
+                                                <option value="1" selected>Purchase Mode</option>
+                                                <option value="2">Usage Mode</option>
+                                            </select>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_mode')">{{ errors.first('por_complimentary_package_mode') }}</span></transition>
+                                        </div>
+                                        <div class="form_group">
+                                            <label for="por_complimentary_package_id">Complimentary Package</label>
+                                            <select class="default_select alternate" name="por_complimentary_package_id">
+                                                <option value="" selected disabled>Choose a Package</option>
+                                                <option :value="classPackage.id" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
+                                            </select>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_id')">{{ errors.first('por_complimentary_package_id') }}</span></transition>
+                                        </div>
+                                    </div>
+                                </transition>
+                            </div>
+                        </transition>
                         <div class="form_main_group">
                             <div class="form_group">
                                 <label for="name">Package Type <span>*</span></label>
@@ -122,89 +200,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form_wrapper">
-                        <div class="form_header_wrapper">
-                            <h2 class="form_title">Purchase Options / Restrictions</h2>
-                            <div class="form_check toggler" @click="isPromo ^= true">
-                                <input type="hidden" id="is_promo" name="is_promo" class="action_check" :value="(isPromo) ? 1 : 0">
-                                <div :class="`toggle ${(isPromo) ? 'active' : ''}`"></div>
-                                <label for="is_promo">Promo</label>
-                            </div>
-                        </div>
-                        <transition name="fade">
-                            <div class="form_main_group" v-if="isPromo">
-                            <div class="form_flex_radio_alternate">
-                                <label>Restrict to New Customers</label>
-                                <div class="radio_wrapper">
-                                    <div class="form_radio">
-                                        <input type="radio" id="por_restrict_yes" value="Yes" name="por_restrict_to_new_customers" class="action_radio">
-                                        <label for="por_restrict_yes">Yes</label>
-                                    </div>
-                                    <div class="form_radio">
-                                        <input type="radio" id="por_restrict_no" value="No" name="por_restrict_to_new_customers" class="action_radio">
-                                        <label for="por_restrict_no">No</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form_flex_radio_alternate">
-                                <label>Allow sharing of package?</label>
-                                <div class="radio_wrapper">
-                                    <div class="form_radio">
-                                        <input type="radio" id="por_allow_yes" value="Yes" name="por_allow_sharing_of_package" class="action_radio">
-                                        <label for="por_allow_yes">Yes</label>
-                                    </div>
-                                    <div class="form_radio">
-                                        <input type="radio" id="por_allow_no" value="No" name="por_allow_sharing_of_package" class="action_radio">
-                                        <label for="por_allow_no">No</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form_flex">
-                                <div class="form_group flex">
-                                    <label>Purchase Limit <span>*</span></label>
-                                    <div class="form_flex_input full">
-                                        <input type="text" name="por_purchase_limit" class="default_text number" autocomplete="off" v-model="form.purchaseLimit" v-validate="'required|numeric|min_value:0'">
-                                        <div class="up" @click="addCount('purchaseLimit')"></div>
-                                        <div class="down" @click="subtractCount('purchaseLimit')"></div>
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('por_purchase_limit')">{{ errors.first('por_purchase_limit') }}</span></transition>
-                                    </div>
-                                </div>
-                                <div class="form_group flex check">
-                                    <div class="form_check">
-                                        <input type="checkbox" id="por_has_complimentary_package" name="por_has_complimentary_package" class="action_check" checked @change="isComplimentary ^= true">
-                                        <label for="por_has_complimentary_package">Complimentary Package Mode</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <transition name="fade">
-                                <div class="form_group_disclaimer" v-if="isComplimentary">
-                                    <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Tie a free package to this package to do things like ‘Take 10 classes and get 1 free’. In Purchase Mode, the complimentary package is given immediately on purchase of this package. In Usage Mode, the complimentary package is given when this package is used up, and the activation date is set to the same date as the purchased package. It will not be given if the package expires before all classes have been used up.</span></div>
-                                </div>
-                            </transition>
-                            <transition name="fade">
-                                <div class="form_flex" v-if="isComplimentary">
-                                    <div class="form_group">
-                                        <label for="por_complimentary_package_mode">Mode</label>
-                                        <select class="default_select alternate" name="por_complimentary_package_mode">
-                                            <option value="" selected disabled>Choose a Mode</option>
-                                            <option value="1" selected>Purchase Mode</option>
-                                            <option value="2">Usage Mode</option>
-                                        </select>
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_mode')">{{ errors.first('por_complimentary_package_mode') }}</span></transition>
-                                    </div>
-                                    <div class="form_group">
-                                        <label for="por_complimentary_package_id">Complimentary Package</label>
-                                        <select class="default_select alternate" name="por_complimentary_package_id">
-                                            <option value="" selected disabled>Choose a Package</option>
-                                            <option :value="classPackage.id" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
-                                        </select>
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_id')">{{ errors.first('por_complimentary_package_id') }}</span></transition>
-                                    </div>
-                                </div>
-                            </transition>
-                        </div>
-                        </transition>
                     </div>
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
