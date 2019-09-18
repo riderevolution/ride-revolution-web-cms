@@ -4,7 +4,7 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Update {{ res.name }}</h1>
+                    <h1 class="header_title">Add New Class Package</h1>
                 </div>
             </section>
             <section id="content">
@@ -24,11 +24,11 @@
                                     <label>Restrict to New Customers</label>
                                     <div class="radio_wrapper">
                                         <div class="form_radio">
-                                            <input type="radio" id="por_restrict_yes" :checked="res.por_restrict_to_new_customers == 1" value="Yes" name="por_restrict_to_new_customers" class="action_radio">
+                                            <input type="radio" id="por_restrict_yes" value="Yes" name="por_restrict_to_new_customers" class="action_radio">
                                             <label for="por_restrict_yes">Yes</label>
                                         </div>
                                         <div class="form_radio">
-                                            <input type="radio" id="por_restrict_no" value="No" :checked="res.por_restrict_to_new_customers == 0" name="por_restrict_to_new_customers" class="action_radio">
+                                            <input type="radio" id="por_restrict_no" value="No" name="por_restrict_to_new_customers" class="action_radio">
                                             <label for="por_restrict_no">No</label>
                                         </div>
                                     </div>
@@ -37,12 +37,62 @@
                                     <label>Allow sharing of package?</label>
                                     <div class="radio_wrapper">
                                         <div class="form_radio">
-                                            <input type="radio" id="por_allow_yes" value="Yes" :checked="res.por_allow_sharing_of_package == 1" name="por_allow_sharing_of_package" class="action_radio">
+                                            <input type="radio" id="por_allow_yes" value="Yes" name="por_allow_sharing_of_package" class="action_radio">
                                             <label for="por_allow_yes">Yes</label>
                                         </div>
                                         <div class="form_radio">
-                                            <input type="radio" id="por_allow_no" value="No" :checked="res.por_allow_sharing_of_package == 0" name="por_allow_sharing_of_package" class="action_radio">
+                                            <input type="radio" id="por_allow_no" value="No" name="por_allow_sharing_of_package" class="action_radio">
                                             <label for="por_allow_no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form_flex">
+                                    <div class="form_group">
+                                        <label for="start_date">Start Date <span>*</span></label>
+                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
+                                    </div>
+                                    <div class="form_group flex alternate">
+                                        <label>Start Time<span>*</span></label>
+                                        <div class="form_flex_input">
+                                            <input type="text" name="start_time_hour" class="default_text" autocomplete="off" v-model="form.start.hour" maxlength="2" v-validate="'required|numeric|max_value:12|min_value:0'">
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('start_time_hour')">{{ errors.first('start_time_hour') }}</span></transition>
+                                        </div>
+                                        <div class="form_flex_separator">:</div>
+                                        <div class="form_flex_input">
+                                            <input type="text" name="start_time_minutes" class="default_text" autocomplete="off" v-model="form.start.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('start_time_minutes')">{{ errors.first('start_time_minutes') }}</span></transition>
+                                        </div>
+                                        <div class="form_flex_input">
+                                            <input type="text" name="start_convention" class="default_text number no_click" autocomplete="off" v-model="form.start.convention" v-validate="'required'">
+                                            <div class="up" @click="changeConvention('start', 'AM')"></div>
+                                            <div class="down" @click="changeConvention('start', 'PM')"></div>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('start_convention')">{{ errors.first('start_convention') }}</span></transition>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form_flex">
+                                    <div class="form_group">
+                                        <label for="end_date">End Date <span>*</span></label>
+                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
+                                    </div>
+                                    <div class="form_group flex alternate">
+                                        <label>End Time<span>*</span></label>
+                                        <div class="form_flex_input">
+                                            <input type="text" name="end_time_hour" class="default_text" autocomplete="off" v-model="form.end.hour" maxlength="2" v-validate="'required|numeric|max_value:12|min_value:0'">
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('end_time_hour')">{{ errors.first('end_time_hour') }}</span></transition>
+                                        </div>
+                                        <div class="form_flex_separator">:</div>
+                                        <div class="form_flex_input">
+                                            <input type="text" name="end_time_minutes" class="default_text" autocomplete="off" v-model="form.end.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('end_time_minutes')">{{ errors.first('end_time_minutes') }}</span></transition>
+                                        </div>
+                                        <div class="form_flex_input">
+                                            <input type="text" name="end_convention" class="default_text number no_click" autocomplete="off" v-model="form.end.convention" v-validate="'required'">
+                                            <div class="up" @click="changeConvention('end', 'AM')"></div>
+                                            <div class="down" @click="changeConvention('ebd', 'PM')"></div>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('end_convention')">{{ errors.first('end_convention') }}</span></transition>
                                         </div>
                                     </div>
                                 </div>
@@ -50,7 +100,7 @@
                                     <div class="form_group flex">
                                         <label>Purchase Limit <span>*</span></label>
                                         <div class="form_flex_input full">
-                                            <input type="text" name="por_purchase_limit" class="default_text number" autocomplete="off" v-model="form.purchaseLimit = res.por_purchase_limit" v-validate="'numeric|min_value:0|max_value:9999999999'">
+                                            <input type="text" name="por_purchase_limit" class="default_text number" autocomplete="off" v-model="form.purchaseLimit" v-validate="'required|numeric|min_value:0'">
                                             <div class="up" @click="addCount('purchaseLimit')"></div>
                                             <div class="down" @click="subtractCount('purchaseLimit')"></div>
                                             <transition name="slide"><span class="validation_errors" v-if="errors.has('por_purchase_limit')">{{ errors.first('por_purchase_limit') }}</span></transition>
@@ -58,7 +108,7 @@
                                     </div>
                                     <div class="form_group flex check">
                                         <div class="form_check">
-                                            <input type="checkbox" id="por_has_complimentary_package" name="por_has_complimentary_package" class="action_check" :checked="res.por_has_complimentary_package == 1" @change="isComplimentary ^= true">
+                                            <input type="checkbox" id="por_has_complimentary_package" name="por_has_complimentary_package" class="action_check" checked @change="isComplimentary ^= true">
                                             <label for="por_has_complimentary_package">Complimentary Package Mode</label>
                                         </div>
                                     </div>
@@ -73,17 +123,19 @@
                                         <div class="form_group">
                                             <label for="por_complimentary_package_mode">Mode</label>
                                             <select class="default_select alternate" name="por_complimentary_package_mode">
-                                                <option value="" disabled>Choose a Mode</option>
-                                                <option value="1" :selected="res.por_complimentary_package_mode == 1">Purchase Mode</option>
-                                                <option value="2" :selected="res.por_complimentary_package_mode == 2">Usage Mode</option>
+                                                <option value="" selected disabled>Choose a Mode</option>
+                                                <option value="1" selected>Purchase Mode</option>
+                                                <option value="2">Usage Mode</option>
                                             </select>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_mode')">{{ errors.first('por_complimentary_package_mode') }}</span></transition>
                                         </div>
                                         <div class="form_group">
                                             <label for="por_complimentary_package_id">Complimentary Package</label>
                                             <select class="default_select alternate" name="por_complimentary_package_id">
                                                 <option value="" selected disabled>Choose a Package</option>
-                                                <option :value="classPackage.id" v-for="(classPackage, key) in classPackages" :key="key" :selected="res.por_complimentary_package_id == classPackage.id">{{ classPackage.name }}</option>
+                                                <option :value="classPackage.id" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
                                             </select>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_id')">{{ errors.first('por_complimentary_package_id') }}</span></transition>
                                         </div>
                                     </div>
                                 </transition>
@@ -94,32 +146,32 @@
                                 <label for="name">Package Type <span>*</span></label>
                                 <select class="default_select alternate" name="package_type_id" v-validate="'required'">
                                     <option value="" selected disabled>Choose a Type</option>
-                                    <option :value="type.id" v-for="(type, index) in types" :selected="res.package_type_id == type.id">{{ type.name }}</option>
+                                    <option :value="type.id" v-for="(type, index) in types">{{ type.name }}</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('package_type_id')">{{ errors.first('package_type_id') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="name">Package Name <span>*</span></label>
-                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="res.name">
+                                <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="description">Description <span>*</span></label>
-                                <textarea name="description" rows="8" class="default_text" v-validate="'required'" v-model="res.description"></textarea>
+                                <textarea name="description" rows="8" class="default_text" v-validate="'required'"></textarea>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') }}</span></transition>
                             </div>
                             <div class="form_flex">
                                 <div class="form_group flex">
-                                    <label>Class Count <span>*</span></label>
+                                    <label for="class_count">Class Count <span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="text" name="class_count" class="default_text number" autocomplete="off" v-model="form.classCount = res.class_count" v-validate="'required|numeric|min_value:0|max_value:9999999999'">
+                                        <input type="text" name="class_count" class="default_text number" autocomplete="off" v-model="form.classCount" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
                                         <div class="up" @click="addCount('classCount')"></div>
                                         <div class="down" @click="subtractCount('classCount')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('class_count')">{{ errors.first('class_count') }}</span></transition>
                                     </div>
                                     <div class="form_flex_input">
                                         <div class="form_check">
-                                            <input type="checkbox" id="class_count_unlimited" name="class_count_unlimited" class="action_check" :checked="res.class_count_unlimited == 1" @change="isUnlimited ^= true">
+                                            <input type="checkbox" id="class_count_unlimited" name="class_count_unlimited" class="action_check" @change="isUnlimited ^= true">
                                             <label for="class_count_unlimited">Unlimited</label>
                                         </div>
                                     </div>
@@ -127,7 +179,7 @@
                                 <div class="form_group flex">
                                     <label for="package_price">Package Price <span>*</span></label>
                                     <div class="form_flex_input full">
-                                        <input type="text" name="package_price" class="default_text number" v-model="res.package_price" autocomplete="off" v-validate="'required|numeric|min_value:0|max_value:9999999999'">
+                                        <input type="text" name="package_price" class="default_text number" autocomplete="off"v-validate="'required|decimal:2'">
                                         <div class="placeholder">PHP</div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('package_price')">{{ errors.first('package_price') }}</span></transition>
                                     </div>
@@ -137,7 +189,7 @@
                                 <div class="form_group flex">
                                     <label>Expire In <span>*</span></label>
                                     <div class="form_flex_input">
-                                        <input type="text" name="expires_in" class="default_text number" autocomplete="off" v-model="form.expiryIn = res.expires_in" v-validate="'required|numeric|min_value:0|max_value:9999999999'">
+                                        <input type="text" name="expires_in" class="default_text number" autocomplete="off" v-model="form.expiryIn" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
                                         <div class="up" @click="addCount('expiryIn')"></div>
                                         <div class="down" @click="subtractCount('expiryIn')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('expires_in')">{{ errors.first('expires_in') }}</span></transition>
@@ -145,8 +197,8 @@
                                     <div class="form_flex_input">
                                         <select class="default_select alternate" name="expiry_type">
                                             <option value="" disabled>Choose a Type</option>
-                                            <option value="day" :selected="res.expiry_type == 'day' || (!isUnlimited) ? true : false" :disabled="(isUnlimited || res.expiry_type == 'day') ? true : false">Days</option>
-                                            <option value="month" :selected="(res.expiry_type == 'month' || isUnlimited) ? true : false">Months</option>
+                                            <option value="day" :selected="(!isUnlimited) ? true : false" :disabled="(isUnlimited) ? true : false">Days</option>
+                                            <option value="month" :selected="(isUnlimited) ? true : false">Months</option>
                                         </select>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('expiry_type')">{{ errors.first('expiry_type') }}</span></transition>
                                     </div>
@@ -163,11 +215,11 @@
                                 <label>Activation on First Class Booked</label>
                                 <div class="radio_wrapper">
                                     <div class="form_radio">
-                                        <input type="radio" id="ao_yes" value="Yes" name="ao_activate_on_first_class_booked" :checked="res.ao_activate_on_first_class_booked == 1" class="action_radio" @change="toggleFirstClass(true)">
+                                        <input type="radio" id="ao_yes" value="Yes" name="ao_activate_on_first_class_booked" class="action_radio" @change="toggleFirstClass(true)">
                                         <label for="ao_yes">Yes</label>
                                     </div>
                                     <div class="form_radio">
-                                        <input type="radio" id="ao_no" value="No" name="ao_activate_on_first_class_booked" :checked="res.ao_activate_on_first_class_booked == 0" class="action_radio" @change="toggleFirstClass(false)">
+                                        <input type="radio" id="ao_no" value="No" name="ao_activate_on_first_class_booked" checked class="action_radio" @change="toggleFirstClass(false)">
                                         <label for="ao_no">No</label>
                                     </div>
                                 </div>
@@ -179,22 +231,22 @@
                                 <div class="form_group flex">
                                     <label>Days/months to expire if not activated:</label>
                                     <div :class="`form_flex_input ${(!isNotActivated) ? 'not_active' : 'active'}`">
-                                        <input type="text" name="ao_expiry_if_not_activated" class="default_text number" autocomplete="off" v-model="form.notActivated = res.ao_expiry_if_not_activated" v-validate="'numeric|min_value:0|max_value:9999999999'">
+                                        <input type="text" name="ao_expiry_if_not_activated" class="default_text number" autocomplete="off" v-model="form.notActivated" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
                                         <div class="up" @click="addCount('notActivated')"></div>
                                         <div class="down" @click="subtractCount('notActivated')"></div>
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('ao_expiry_if_not_activated')">{{ errors.first('ao_expiry_if_not_activated') }}</span></transition>
                                     </div>
                                     <div :class="`form_flex_input ${(!isNotActivated) ? 'not_active' : 'active'}`">
                                         <select class="default_select alternate" name="ao_expiry_if_not_activated_type">
-                                            <option value="" disabled>Choose a Type</option>
-                                            <option value="day" :selected="res.ao_expiry_if_not_activated_type == 'day'">Days</option>
-                                            <option value="month" :selected="res.ao_expiry_if_not_activated_type == 'month'">Months</option>
+                                            <option value="" selected disabled>Choose a Type</option>
+                                            <option value="day" selected>Days</option>
+                                            <option value="month">Months</option>
                                         </select>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('ao_expiry_if_not_activated_type')">{{ errors.first('ao_expiry_if_not_activated_type') }}</span></transition>
                                     </div>
                                 </div>
                                 <div :class="`form_group flex ${(isNotActivated) ? 'not_active' : 'active'}`">
                                     <label for="ao_fixed_activation_date">Fixed Activation Date</label>
-                                    <input type="date" name="ao_fixed_activation_date" autocomplete="off" class="default_text date" v-model="form.ao_fixed_activation_date = res.ao_fixed_activation_date">
+                                    <input type="date" name="ao_fixed_activation_date" autocomplete="off" class="default_text date" v-model="form.ao_fixed_activation_date">
                                 </div>
                             </div>
                         </div>
@@ -202,7 +254,7 @@
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
                             <div class="form_check">
-                                <input type="checkbox" id="enabled" name="enabled" class="action_check" :checked="res.enabled == 1">
+                                <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
@@ -219,7 +271,7 @@
 </template>
 
 <script>
-    import Foot from '../../../../../../components/Foot'
+    import Foot from '../../../../../components/Foot'
     export default {
         components: {
             Foot
@@ -234,17 +286,37 @@
                 prevRoute: '',
                 types: [],
                 classPackages: [],
-                res: [],
                 form: {
+                    start: {
+                        hour: '00',
+                        mins: '00',
+                        convention: 'AM'
+                    },
+                    end: {
+                        hour: '00',
+                        mins: '00',
+                        convention: 'PM'
+                    },
                     classCount: 0,
                     expiryIn: 0,
                     notActivated: 0,
                     purchaseLimit: 0,
-                    ao_fixed_activation_date: null
+                    ao_fixed_activation_date: '1999-01-01'
                 }
             }
         },
         methods: {
+            changeConvention (type, status) {
+                const me = this
+                switch (type) {
+                    case 'start':
+                        me.form.start.convention = status
+                        break
+                    case 'end':
+                        me.form.end.convention = status
+                        break
+                }
+            },
             toggleFirstClass (status) {
                 const me = this
                 if (status) {
@@ -307,9 +379,8 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('ao_fixed_activation_date', me.form.ao_fixed_activation_date)
-                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.post(`api/packages/class-packages/${me.$route.params.param}`, formData).then(res => {
+                        me.$axios.post('api/packages/class-packages', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Added')
@@ -341,7 +412,7 @@
                 me.$axios.get('api/packages/package-types').then(res => {
                     me.types = res.data.packageTypes.data
                 })
-                me.$axios.get(`api/extras/class-packages-except-me?id=${me.$route.params.param}`).then(res => {
+                me.$axios.get('api/extras/class-packages-except-me').then(res => {
                     me.classPackages = res.data.classPackages
                 })
             }
@@ -349,15 +420,8 @@
         async mounted () {
             const me = this
             me.fetchTypes()
-            me.$axios.get(`api/packages/class-packages/${me.$route.params.param}`).then(res => {
-                me.res = res.data.classPackage
-                me.isPromo = (me.res.is_promo == 1) ? true : false
-                me.isNotActivated = (me.res.ao_activate_on_first_class_booked == 1) ? true : false
-                me.isComplimentary = (me.res.por_complimentary_package_mode == 1) ? true : false
-                me.isUnlimited = (me.res.class_count_unlimited == 1) ? true : false
-            })
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
-            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }
     }
 </script>

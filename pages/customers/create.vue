@@ -248,10 +248,6 @@
                             <input type="checkbox" id="newsletter_subscription" name="newsletter_subscription" class="action_check">
                             <label for="newsletter_subscription">Subscribe to newsletter</label>
                         </div>
-                        <div class="form_check">
-                            <input type="checkbox" id="before_saving" name="before_saving" class="action_check">
-                            <label for="before_saving">Buy credits after saving.</label>
-                        </div>
                         <div class="form_flex">
                             <div class="form_check">
                                 <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>

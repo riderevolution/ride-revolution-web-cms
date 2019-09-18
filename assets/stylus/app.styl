@@ -567,12 +567,19 @@ img
                     padding: 30px
                     .modal_tab_content_header
                         margin-bottom: 10px
-                        .form_flex
-                            .form_group
-                                flex: 0 0 33.33%
-                            .button_group
-                                button
-                                    padding: 14px
+                        .tab_content_flex
+                            display: flex
+                            flex-flow: row wrap
+                            justify-content: space-between
+                            &.alternate
+                                padding: 20px 0 40px
+                            .form_flex
+                                flex: 1 0 auto
+                                justify-content: flex-start
+                                .action_btn
+                                    width: auto
+                            .action_btn
+                                padding: 14px
                         .total_items
                             sf_pro_semibold(1.6vh)
                             color: $black
@@ -580,6 +587,20 @@ img
                                 sf_pro_regular(1.6vh)
                                 color: $border_alt2
                     .modal_tab_content
+                        #default_form
+                            .modal_wrapper
+                                .modal_main_group
+                                    .form_main_group
+                                        padding: 20px 60px
+                                        margin: 0 30px
+                                        border-bottom: 2px dashed $border
+                                        .form_group_disclaimer
+                                            .form_disclaimer
+                                                margin-bottom: 0
+                                        &.no_border
+                                            border-bottom: none
+                                    .form_footer_wrapper
+                                        margin: 40px 30px 0
                         .modal_tab_content_wrapper
                             display: flex
                             flex-flow: row wrap
@@ -742,6 +763,13 @@ input::placeholder
                         margin-top: 10px
                         .form_radio
                             justify-content: flex-start
+    &.alternate_2
+        max-width: 100%
+        .modal_wrapper
+            box-shadow: none
+            background-color: transparent
+            .modal_main_group
+                padding: 0
     &.overlay
         position: fixed
         width: 100%
@@ -818,7 +846,7 @@ input::placeholder
         .form_main_group
             padding: 30px
             &.alternate
-                border-bottom: 1px solid #dedede
+                border-bottom: 1px solid $border
             .button_group
                 .action_btn
                     padding: 14px
@@ -871,6 +899,9 @@ input::placeholder
     flex-flow: row wrap
     align-items: center
     justify-content: space-between
+    &.alternate_2
+        padding: 30px 0
+        justify-content: flex-end
     &.alternate
         .form_group
             flex: 1 0 32.33%
@@ -1011,6 +1042,7 @@ input::placeholder
         sf_pro_regular(1.5vh)
         font-weight: normal
         color: $black
+        cursor: pointer
         a
             sf_pro_regular(1.8vh)
             color: $blue
@@ -1086,6 +1118,7 @@ input::placeholder
         sf_pro_regular(1.5vh)
         font-weight: normal
         color: $black
+        cursor: pointer
     .radio_label
         flex: 0 0 100%
         margin-left: 0px
@@ -1228,6 +1261,8 @@ input::placeholder
         text-align: right
     &.margin
         margin-left: 20px
+    &.no_margin
+        margin-bottom: 0
     .action_forgot_text
         display: inline-block
         sf_pro_regular(1.3vh)
@@ -2782,6 +2817,7 @@ input::placeholder
         z-index: 3
         flex: 0 0 70px
         width: 70px
+        height: 100vh
         transition: .3s ease-in-out
         &.toggled
             &:hover
@@ -2850,7 +2886,8 @@ input::placeholder
                 position: relative
                 list-style: none
                 padding: 0
-                height: 840px
+                height: 100%
+                max-height: 750px
                 overflow-x: hidden
                 overflow-y: auto
                 .item_wrapper

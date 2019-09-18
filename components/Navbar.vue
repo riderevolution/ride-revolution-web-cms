@@ -109,8 +109,8 @@
                                 link: '/admin/users-and-roles'
                             },
                             {
-                                title: 'Scheduling',
-                                link: '/admin/scheduling'
+                                title: 'Classes and Packages',
+                                link: '/admin/classes-and-packages'
                             },
                             {
                                 title: 'Configuration',

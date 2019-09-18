@@ -33,19 +33,19 @@
                 res: {
                     today: [
                         {
+                            label: 'Package Types',
+                            imgSrc: '/icons/package-icon.svg',
+                            link: '/admin/classes-and-packages/package-types'
+                        },
+                        {
+                            label: 'Class Packages and Store Credits',
+                            imgSrc: '/icons/package-icon.svg',
+                            link: '/admin/classes-and-packages/class-packages-and-store-credits'
+                        },
+                        {
                             label: 'Class Types',
                             imgSrc: '/icons/class-types-icon.svg',
-                            link: '/admin/scheduling/class-types'
-                        },
-                        {
-                            label: 'Class Packages',
-                            imgSrc: '/icons/package-icon.svg',
-                            link: '/admin/scheduling/class-packages-and-store-credits'
-                        },
-                        {
-                            label: 'Package Type',
-                            imgSrc: '/icons/package-icon.svg',
-                            link: '/admin/scheduling/package-types'
+                            link: '/admin/classes-and-packages/class-types'
                         }
                     ]
                 }

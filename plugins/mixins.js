@@ -2,6 +2,9 @@ import Vue from 'vue'
 
 Vue.mixin({
     methods: {
+        randomCode () {
+            return Math.random().toString(36).substring(5).toUpperCase()
+        },
         randomString () {
             return Math.random().toString(36).substring(2)
         },
