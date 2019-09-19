@@ -4,7 +4,7 @@
         <div id="default_form" class="overlay alternate">
             <div class="modal_wrapper">
                 <div class="form_close" @click="toggleClose()"></div>
-                <div class="modal_tab_wrapper">
+                <div class="modal_tab_wrapper" v-show="nextStep == 1">
                     <div class="left_side">
                         <div class="overlay">
                             <h2 class="total_title">Buy Products</h2>
@@ -106,6 +106,61 @@
                         </div>
                     </div>
                 </div>
+                <div class="modal_tab_wrapper alternate" id="step2" v-show="nextStep == 2">
+                    <div class="header_side">
+                        <h2 class="header_title">Checkout</h2>
+                        <div class="header_subtitle">
+                            <span>Order No: 123</span>
+                            <span>ID: 123612378</span>
+                        </div>
+                    </div>
+                    <div class="left_side">
+                        <h2 class="left_title">Payment Method</h2>
+                        <div class="form_flex_radio">
+                            <div class="form_radio">
+                                <input type="radio" id="debit_card" value="debit-card" name="payment_method" class="action_radio" checked>
+                                <label for="debit_card">Debit Card</label>
+                            </div>
+                            <div class="form_radio">
+                                <input type="radio" id="check" value="check" name="payment_method" class="action_radio">
+                                <label for="check">Check</label>
+                            </div>
+                            <div class="form_radio">
+                                <input type="radio" id="credit_card" value="credit-card" name="payment_method" class="action_radio">
+                                <label for="credit_card">Credit Card</label>
+                            </div>
+                            <div class="form_radio">
+                                <input type="radio" id="comp" value="comp" name="payment_method" class="action_radio">
+                                <label for="comp">Comp</label>
+                            </div>
+                            <div class="form_radio">
+                                <input type="radio" id="cash" value="cash" name="payment_method" class="action_radio">
+                                <label for="cash">Cash</label>
+                            </div>
+                            <div class="form_radio">
+                                <input type="radio" id="store-credits" value="store-credits" name="payment_method" class="action_radio">
+                                <label for="store-credits">Store Credits</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right_side">
+                        <div class="breakdown">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Items</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ totalPrice }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -119,6 +174,7 @@
         },
         data () {
             return {
+                nextStep: 1,
                 status: 0,
                 total: 0,
                 products: [],
@@ -202,6 +258,11 @@
             }
         },
         methods: {
+            takePayment () {
+                const me = this
+                me.nextStep = 2
+                document.getElementById('step2').classList.add('slide_in')
+            },
             getPackagePrice (event) {
                 const me = this
                 let sku = event.target.value

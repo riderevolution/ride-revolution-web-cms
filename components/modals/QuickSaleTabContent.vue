@@ -2,7 +2,7 @@
     <div>
         <div :class="`modal_tab_content_wrapper ${(value.isGiftShow) ? 'no_qty' : '' }`" v-show="(isSearched) ? (value.isProductShow == true) ? $parent.toCompare.product == value.product.product_category_id : (value.isGiftShow == true ? true : false) : false">
             <div class="form_check">
-                <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)" :checked="value.isChecked">
+                <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value, value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)" :checked="value.isChecked">
                 <label :for="`product_${value.id}_${unique}`">{{ (!value.isGiftShow) ? value.variant : value.card_code }}</label>
             </div>
             <div class="total_price">PHP {{ totalCount((!value.isGiftShow) ? value.sale_price : value.class_package.package_price) }}</div>
@@ -83,7 +83,7 @@
                     })
                 }
             },
-            toggleChecked (id, key, price) {
+            toggleChecked (data, id, key, price) {
                 const me = this
                 let element = document.getElementById(`product_${id}_${key}`)
                 let quantity = (!me.value.isGiftShow) ? document.getElementById(`quantity_${key}`).value : 1
@@ -92,6 +92,7 @@
                         {
                             id: key,
                             quantity: quantity,
+                            product: data,
                             price: parseInt(quantity) * price
                         }
                     )

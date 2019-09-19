@@ -514,6 +514,32 @@ img
             .modal_tab_wrapper
                 display: flex
                 flex-flow: row wrap
+                &.alternate
+                    padding: 30px
+                    justify-content: space-between
+                    .header_side
+                        flex: 1 0 100%
+                        margin-bottom: 40px
+                        .header_title
+                            position: relative
+                            sf_pro_bold(2.4vh)
+                            color: $black
+                        .header_subtitle
+                            margin-top: 5px
+                            sf_pro_regular(1.6vh)
+                            color: $border_alt2
+                    .left_side
+                        flex: 0 0 48%
+                        background-color: $white
+                        .left_title
+                            sf_pro_bold(2vh)
+                            color: $black
+                            margin-bottom: 15px
+                        .form_flex_radio
+                            .form_radio
+                                margin-bottom: 15px
+                    .right_side
+                        flex: 0 0 48%
                 .left_side
                     position: relative
                     flex: 0 0 25%
@@ -531,7 +557,7 @@ img
                         border-radius: 5px
                         .total_title
                             position: relative
-                            sf_pro_bold(2.2vh)
+                            sf_pro_bold(2.4vh)
                             color: $black
                         .total_price
                             sf_pro_regular(2vh)
@@ -3286,6 +3312,9 @@ input::placeholder
 
 .fade_out
     animation: fade_out .3s
+
+.slide_in
+    animation: slide_in .3s
 
 /**
  * Fade */
