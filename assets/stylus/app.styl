@@ -63,7 +63,7 @@ img
     vertical-align: middle
 
 /**
- * Default Loader */
+ * Default Loader **/
 .loader_wrapper
     position: fixed
     z-index: 999
@@ -125,7 +125,7 @@ img
     }
 
 /**
- * Default Notification */
+ * Default Notification **/
 .notification
     position: relative
     .notification_icon
@@ -233,7 +233,7 @@ img
             transition: .3s ease-in-out
 
 /**
- * Default Buttons */
+ * Default Buttons **/
 .action_success_btn
     display: inline-block
     width: 225px
@@ -383,6 +383,8 @@ img
     padding: 10px 15px
     span
         sf_pro_regular(1.2vh)
+/**
+ * Close Icon **/
 .close_wrapper
     position: absolute
     top: 0
@@ -446,7 +448,7 @@ img
             transform: rotate(-45deg)
 
 /**
- * Default Modal */
+ * Default Modal **/
 .default_modal
     position: fixed
     top: 0
@@ -507,6 +509,8 @@ img
                 .form_footer_wrapper
                     margin-top: 40px
                     margin-bottom: 0
+            /**
+             * Modal Tab **/
             .modal_tab_wrapper
                 display: flex
                 flex-flow: row wrap
@@ -587,6 +591,11 @@ img
                                 sf_pro_regular(1.6vh)
                                 color: $border_alt2
                     .modal_tab_content
+                        .no_results
+                            sf_pro_regular(1.6vh)
+                            color: $black
+                            padding: 20px 35px
+                            text-align: center
                         #default_form
                             .modal_wrapper
                                 .modal_main_group
@@ -627,6 +636,8 @@ img
                                     margin-right: 10px
                                 .form_flex_input
                                     flex: 1 0 33.33%
+    /**
+     * Modal Confirmation **/
     .confirmation_wrapper
         position: fixed
         width: 600px

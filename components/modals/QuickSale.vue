@@ -20,10 +20,10 @@
                                 <div class="form_flex">
                                     <div class="form_group" v-if="toCompare.giftCard != 2">
                                         <label for="q">Search a Product</label>
-                                        <input type="text" name="q" autocomplete="off" placeholder="Search for a products" class="default_text search_alternate">
+                                        <input type="text" name="q" autocomplete="off" placeholder="Search for a products" v-model="form.search" class="default_text search_alternate">
                                     </div>
                                     <div class="button_group">
-                                        <button type="button" class="action_btn alternate margin" v-if="toCompare.giftCard != 2">Search</button>
+                                        <button type="button" class="action_btn alternate margin" v-if="toCompare.giftCard != 2" @click="submitFilter()">Search</button>
                                     </div>
                                 </div>
                                 <div class="button_group">
@@ -34,8 +34,11 @@
                         </div>
                         <div class="modal_tab_content">
                             <form id="product_form" v-show="isProduct">
-                                <quick-sale-tab-content :value="value" :unique="index" v-for="(value, index) in showProducts" :key="`${unique}_${value.id}`" />
+                                <quick-sale-tab-content ref="quickSale" :value="value" :unique="index" v-for="(value, index) in showProducts" :key="`${unique}_${value.id}`" />
                             </form>
+                            <div class="no_results" v-if="total == 0">
+                                No Result(s) Found.
+                            </div>
                             <form id="default_form" class="alternate_2" @submit.prevent="submitCustom()" v-show="!isProduct">
                                 <div class="modal_wrapper">
                                     <div class="modal_main_group alternate">
@@ -138,6 +141,9 @@
                         type: 'custom-gift-card'
                     }
                 ],
+                form: {
+                    search: ''
+                },
                 customGiftCard: {
                     classPackages: '',
                     classPackagePrice: 0,
@@ -205,6 +211,55 @@
                     }
                 })
             },
+            submitFilter () {
+                const me = this
+                let ctr  = 0
+                switch (me.toCompare.giftCard) {
+                    case 0:
+                        me.$refs.quickSale.forEach((product, qindex) => {
+                            if (product.value.product) {
+                                if (product.value.product.product_category_id == me.toCompare.product) {
+                                    let variant = product.value.variant.toLowerCase()
+                                    if (me.form.search != '') {
+                                        if (variant.includes(me.form.search.toLowerCase())) {
+                                            ctr++
+                                            product.isSearched = true
+                                        } else {
+                                            product.isSearched = false
+                                        }
+                                    } else {
+                                        ctr++
+                                        product.isSearched = true
+                                    }
+                                } else {
+                                    product.isSearched = false
+                                }
+                            }
+                        })
+                        break
+                    case 1:
+                    me.$refs.quickSale.forEach((product, qindex) => {
+                        if (!product.value.product) {
+                            let card_code = product.value.card_code.toLowerCase()
+                            if (me.form.search != '') {
+                                if (card_code.includes(me.form.search.toLowerCase())) {
+                                    ctr++
+                                    product.isSearched = true
+                                } else {
+                                    product.isSearched = false
+                                }
+                            } else {
+                                ctr++
+                                product.isSearched = true
+                            }
+                        } else {
+                            product.isSearched = false
+                        }
+                    })
+                        break
+                }
+                me.total = ctr
+            },
             submitCustom () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
@@ -212,7 +267,7 @@
                         if (me.customGiftCard.classPackages != '') {
                             me.totalPrice.push(
                                 {
-                                    id: 999,
+                                    id: 9999999,
                                     quantity: 1,
                                     price: parseFloat(me.customGiftCard.classPackagePrice)
                                 }
@@ -282,6 +337,7 @@
                     }
                 })
                 setTimeout( () => {
+                    me.form.search = ''
                     me.resetCustomGiftCard()
                 }, 10)
                 switch (type) {

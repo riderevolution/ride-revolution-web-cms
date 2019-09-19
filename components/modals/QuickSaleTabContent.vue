@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :class="`modal_tab_content_wrapper ${(value.isGiftShow) ? 'no_qty' : '' }`" v-show="(value.isProductShow == true) ? $parent.toCompare.product == value.product.product_category_id : (value.isGiftShow == true ? true : false)">
+        <div :class="`modal_tab_content_wrapper ${(value.isGiftShow) ? 'no_qty' : '' }`" v-show="(isSearched) ? (value.isProductShow == true) ? $parent.toCompare.product == value.product.product_category_id : (value.isGiftShow == true ? true : false) : false">
             <div class="form_check">
                 <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)" :checked="value.isChecked">
                 <label :for="`product_${value.id}_${unique}`">{{ (!value.isGiftShow) ? value.variant : value.card_code }}</label>
@@ -34,7 +34,8 @@
         },
         data () {
             return {
-                quantity: 1
+                quantity: 1,
+                isSearched: true
             }
         },
         methods: {
