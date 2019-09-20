@@ -111,35 +111,88 @@
                         <h2 class="header_title">Checkout</h2>
                         <div class="header_subtitle">
                             <span>Order No: 123</span>
-                            <span>ID: 123612378</span>
+                            <span class="margin">ID: 123612378</span>
                         </div>
                     </div>
                     <div class="left_side">
                         <h2 class="left_title">Payment Method</h2>
                         <div class="form_flex_radio">
                             <div class="form_radio">
-                                <input type="radio" id="debit_card" value="debit-card" name="payment_method" class="action_radio" checked>
+                                <input type="radio" id="debit_card" value="debit-card" name="payment_method" class="action_radio" checked @change="checkPayment('debit')">
                                 <label for="debit_card">Debit Card</label>
                             </div>
                             <div class="form_radio">
-                                <input type="radio" id="check" value="check" name="payment_method" class="action_radio">
+                                <input type="radio" id="check" value="check" name="payment_method" class="action_radio" @change="checkPayment('check')">
                                 <label for="check">Check</label>
                             </div>
                             <div class="form_radio">
-                                <input type="radio" id="credit_card" value="credit-card" name="payment_method" class="action_radio">
+                                <input type="radio" id="credit_card" value="credit-card" name="payment_method" class="action_radio" @change="checkPayment('credit')">
                                 <label for="credit_card">Credit Card</label>
                             </div>
                             <div class="form_radio">
-                                <input type="radio" id="comp" value="comp" name="payment_method" class="action_radio">
+                                <input type="radio" id="comp" value="comp" name="payment_method" class="action_radio" @change="checkPayment('comp')">
                                 <label for="comp">Comp</label>
                             </div>
                             <div class="form_radio">
-                                <input type="radio" id="cash" value="cash" name="payment_method" class="action_radio">
+                                <input type="radio" id="cash" value="cash" name="payment_method" class="action_radio" @change="checkPayment('cash')">
                                 <label for="cash">Cash</label>
                             </div>
-                            <div class="form_radio">
-                                <input type="radio" id="store-credits" value="store-credits" name="payment_method" class="action_radio">
-                                <label for="store-credits">Store Credits</label>
+                        </div>
+                        <div class="form_main_group" v-if="form.paymentType == 0 || form.paymentType == 2">
+                            <div class="form_group">
+                                <label for="bank">Bank<span>*</span></label>
+                                <select class="default_select alternate" name="bank" v-validate="'required'">
+                                    <option value="" selected disabled>Select a Bank</option>
+                                    <option value="bdo">BDO</option>
+                                </select>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('bank')">{{ errors.first('bank') }}</span></transition>
+                            </div>
+                            <div class="form_group">
+                                <label for="type_of_card">Type of Card<span>*</span></label>
+                                <select class="default_select alternate" name="type_of_card" v-validate="'required'">
+                                    <option value="" selected disabled>Select Type of Card</option>
+                                    <option value="mastercard">Mastercard</option>
+                                </select>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('type_of_card')">{{ errors.first('type_of_card') }}</span></transition>
+                            </div>
+                        </div>
+                        <div class="form_main_group" v-if="form.paymentType == 1">
+                            <div class="form_group">
+                                <label for="bank">Bank<span>*</span></label>
+                                <input type="text" name="bank" class="default_text" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('bank')">{{ errors.first('bank') }}</span></transition>
+                            </div>
+                            <div class="form_group">
+                                <label for="check_number">Check Number<span>*</span></label>
+                                <input type="text" name="check_number" class="default_text" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('check_number')">{{ errors.first('check_number') }}</span></transition>
+                            </div>
+                        </div>
+                        <div class="form_main_group" v-if="form.paymentType == 3">
+                            <div class="form_group">
+                                <label for="comp_reason">Comp Reason<span>*</span></label>
+                                <select class="default_select alternate" name="comp_reason" v-validate="'required'">
+                                    <option value="" selected disabled>Select a Reason</option>
+                                    <option value="other">Other</option>
+                                </select>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('comp_reason')">{{ errors.first('comp_reason') }}</span></transition>
+                            </div>
+                            <div class="form_group">
+                                <label for="note">Note<span>*</span></label>
+                                <input type="text" name="note" class="default_text" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('note')">{{ errors.first('note') }}</span></transition>
+                            </div>
+                        </div>
+                        <div class="form_main_group" v-if="form.paymentType == 4">
+                            <div class="form_group">
+                                <label for="cash_tendered">Cash Tendered (PHP)<span>*</span></label>
+                                <input type="text" name="cash_tendered" class="default_text" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('cash_tendered')">{{ errors.first('cash_tendered') }}</span></transition>
+                            </div>
+                            <div class="form_group">
+                                <label for="change">Change (PHP)<span>*</span></label>
+                                <input type="text" name="change" class="default_text disabled" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('change')">{{ errors.first('change') }}</span></transition>
                             </div>
                         </div>
                     </div>
@@ -154,11 +207,15 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, key) in totalPrice" :key="key">
-                                        <td class="item_name">({{ data.quantity }}) {{ data.product.name }}</td>
-                                        <td class="item_price">{{ data.product.origPrice }}</td>
+                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ data.product.name }}</td>
+                                        <td class="item_price" width="50%">PHP {{ totalCount(data.product.origPrice) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="breakdown_total">
+                            <div class="total_title">Total</div>
+                            <div class="total_price">PHP {{ computeTotal }}</div>
                         </div>
                     </div>
                     <div class="footer_side">
@@ -167,7 +224,7 @@
                         </div>
                         <div class="button_group">
                             <button type="button" class="action_cancel_btn" @click="takePayment(1)">Cancel</button>
-                            <button type="button" class="action_btn alternate margin">Save</button>
+                            <button type="button" class="action_success_btn alternate margin">Place Order</button>
                         </div>
                     </div>
                 </div>
@@ -208,7 +265,8 @@
                     }
                 ],
                 form: {
-                    search: ''
+                    search: '',
+                    paymentType: 0
                 },
                 customGiftCard: {
                     classPackages: '',
@@ -291,6 +349,26 @@
                         me.customGiftCard.classPackagePrice = me.totalCount(classPackage.package_price)
                     }
                 })
+            },
+            checkPayment (type) {
+                const me = this
+                switch (type) {
+                    case 'debit':
+                        me.form.paymentType = 0
+                        break
+                    case 'check':
+                        me.form.paymentType = 1
+                        break
+                    case 'credit':
+                        me.form.paymentType = 2
+                        break
+                    case 'comp':
+                        me.form.paymentType = 3
+                        break
+                    case 'cash':
+                        me.form.paymentType = 4
+                        break
+                }
             },
             submitFilter () {
                 const me = this

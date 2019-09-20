@@ -57,15 +57,17 @@
                 let element = document.getElementById(`product_${id}_${key}`)
                 let data
                 data = parseInt(me.quantity)
-                data != 0 && (me.quantity = 0)
-                me.quantity = (data += 1)
-                if (element.checked) {
-                    me.$parent.totalPrice.forEach((data, index) => {
-                        if (data.id == key) {
-                            data.quantity = me.quantity
-                            data.price =  parseInt(me.quantity) * price
-                        }
-                    })
+                if (data != 99) {
+                    data != 0 && (me.quantity = 0)
+                    me.quantity = (data += 1)
+                    if (element.checked) {
+                        me.$parent.totalPrice.forEach((data, index) => {
+                            if (data.id == key) {
+                                data.quantity = me.quantity
+                                data.price =  parseInt(me.quantity) * price
+                            }
+                        })
+                    }
                 }
             },
             subtractCount (id, key, price) {
