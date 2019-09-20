@@ -4,7 +4,7 @@
         <div id="default_form" class="overlay alternate">
             <div class="modal_wrapper">
                 <div class="form_close" @click="toggleClose()"></div>
-                <div class="modal_tab_wrapper" v-show="nextStep == 1">
+                <div class="modal_tab_wrapper" id="step1" v-show="nextStep == 1">
                     <div class="left_side">
                         <div class="overlay">
                             <h2 class="total_title">Buy Products</h2>
@@ -27,7 +27,7 @@
                                     </div>
                                 </div>
                                 <div class="button_group">
-                                    <button type="button" class="action_btn alternate" @click="takePayment()">Take Payment</button>
+                                    <button type="button" class="action_btn alternate" @click="takePayment(2)">Take Payment</button>
                                 </div>
                             </div>
                             <div class="total_items" v-if="toCompare.giftCard != 2">{{ totalItems(total) }} <span>items</span></div>
@@ -144,8 +144,8 @@
                         </div>
                     </div>
                     <div class="right_side">
-                        <div class="breakdown">
-                            <table>
+                        <div class="breakdown_wrapper">
+                            <table class="breakdown_table">
                                 <thead>
                                     <tr>
                                         <th>Items</th>
@@ -153,11 +153,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>{{ totalPrice }}</td>
+                                    <tr v-for="(data, key) in totalPrice" :key="key">
+                                        <td class="item_name">({{ data.quantity }}) {{ data.product.name }}</td>
+                                        <td class="item_price">{{ data.product.origPrice }}</td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    <div class="footer_side">
+                        <div class="form_group_disclaimer">
+                            <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Note: Promo code won’t be applicable to promo products/pacakges.</span></div>
+                        </div>
+                        <div class="button_group">
+                            <button type="button" class="action_cancel_btn" @click="takePayment(1)">Cancel</button>
+                            <button type="button" class="action_btn alternate margin">Save</button>
                         </div>
                     </div>
                 </div>
@@ -258,10 +268,20 @@
             }
         },
         methods: {
-            takePayment () {
+            takePayment (step) {
                 const me = this
-                me.nextStep = 2
-                document.getElementById('step2').classList.add('slide_in')
+                switch (step) {
+                    case 1:
+                        me.nextStep = 1
+                        document.getElementById('step1').classList.add('slide_in')
+                        document.getElementById('step2').classList.remove('slide_in')
+                        break
+                    case 2:
+                        me.nextStep = 2
+                        document.getElementById('step2').classList.add('slide_in')
+                        document.getElementById('step1').classList.remove('slide_in')
+                        break
+                }
             },
             getPackagePrice (event) {
                 const me = this

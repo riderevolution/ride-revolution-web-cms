@@ -9,7 +9,7 @@
             <div class="form_group" v-if="!value.isGiftShow">
                 <label>Qty.</label>
                 <div class="form_flex_input">
-                    <input type="text" name="quantity[]" :id="`quantity_${unique}`" class="default_text number" autocomplete="off" v-model="quantity" v-validate="'numeric|min_value:1'" @change="recomputeTotal(value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)">
+                    <input type="text" name="quantity[]" :id="`quantity_${unique}`" class="default_text number" autocomplete="off" v-model="quantity" v-validate="'numeric|min_value:1'" @input="recomputeTotal(value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)">
                     <div class="up" @click="addCount(value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)"></div>
                     <div class="down" @click="subtractCount(value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)"></div>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity[]')">{{ errors.first('quantity[]') }}</span></transition>
@@ -92,7 +92,12 @@
                         {
                             id: key,
                             quantity: quantity,
-                            product: data,
+                            product: {
+                                id: data.id,
+                                sku: (me.value.isGiftShow) ? data.class_package_sku_id : data.sku_id,
+                                name: (me.value.isGiftShow) ? data.card_code : data.variant,
+                                origPrice: (me.value.isGiftShow) ? data.class_package.package_price : data.sale_price
+                            },
                             price: parseInt(quantity) * price
                         }
                     )
