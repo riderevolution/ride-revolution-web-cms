@@ -39,9 +39,10 @@
                             <div class="no_results" v-if="total == 0">
                                 No Result(s) Found.
                             </div>
-                            <form id="custom_gift_form" class="alternate_2" @submit.prevent="submitCustom()" v-show="!isProduct">
+                            <form id="custom_gift_form" class="alternate_2" data-vv-scope="custom_gift_form" @submit.prevent="submitCustom()" v-show="!isProduct">
                                 <div class="modal_wrapper">
                                     <div class="modal_main_group alternate">
+                                        <div class="nonsense"></div>
                                         <div class="form_main_group">
                                             <div class="form_group">
                                                 <label for="class_package_sku_id">Card Value <span>*</span></label>
@@ -49,7 +50,7 @@
                                                     <option value="" disabled selected>Select a Value</option>
                                                     <option :value="classPackage.sku_id" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
                                                 </select>
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('class_package_sku_id')">{{ errors.first('class_package_sku_id') }}</span></transition>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.class_package_sku_id') && showErrors">{{ errors.first('custom_gift_form.class_package_sku_id') }}</span></transition>
                                             </div>
                                             <div class="form_group no_margin">
                                                 <label for="custom_card_code">Card Code <span>*</span></label>
@@ -60,12 +61,12 @@
                                             <div class="form_group">
                                                 <label for="custom_card_from">From <span>*</span></label>
                                                 <input type="email" name="custom_card_from" class="default_text" autocomplete="off" v-model="customGiftCard.customCardFrom" v-validate="'required|email'">
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_card_from')">{{ errors.first('custom_card_from') }}</span></transition>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_from') && showErrors">{{ errors.first('custom_gift_form.custom_card_from') }}</span></transition>
                                             </div>
                                             <div class="form_group">
                                                 <label for="custom_card_to">To <span>*</span></label>
                                                 <input type="email" name="custom_card_to" class="default_text" autocomplete="off" v-model="customGiftCard.customCardTo" v-validate="'required|email'">
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_card_to')">{{ errors.first('custom_card_to') }}</span></transition>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_to') && showErrors">{{ errors.first('custom_gift_form.custom_card_to') }}</span></transition>
                                             </div>
                                             <div class="form_group">
                                                 <label for="custom_card_predefined_title">Title</label>
@@ -73,7 +74,6 @@
                                                     <option value="" disabled selected>Select a Title</option>
                                                     <option :value="predefinedTitle.title" v-for="(predefinedTitle, key) in predefinedTitles" :key="key">{{ predefinedTitle.title }}</option>
                                                 </select>
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_card_predefined_title')">{{ errors.first('custom_card_predefined_title') }}</span></transition>
                                             </div>
                                             <div class="form_group">
                                                 <label for="custom_card_custom_title">Custom Title</label>
@@ -82,14 +82,14 @@
                                             <div class="form_group no_margin">
                                                 <label for="custom_card_personal_message">Personal Message <span>*</span></label>
                                                 <textarea name="custom_card_personal_message" autocomplete="off" rows="8" class="default_text" v-model="customGiftCard.customCardPersonalMessage" v-validate="'required'"></textarea>
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_card_personal_message')">{{ errors.first('custom_card_personal_message') }}</span></transition>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_personal_message') && showErrors">{{ errors.first('custom_gift_form.custom_card_personal_message') }}</span></transition>
                                             </div>
                                         </div>
                                         <div class="form_main_group no_border">
                                             <div class="form_group">
                                                 <label for="custom_card_recipient_email">Recipient's Email <span>*</span></label>
                                                 <input type="email" name="custom_card_recipient_email" autocomplete="off" class="default_text" v-model="customGiftCard.customCardRecipientEmail" v-validate="'required|email'">
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_card_recipient_email')">{{ errors.first('custom_card_recipient_email') }}</span></transition>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_recipient_email') && showErrors">{{ errors.first('custom_gift_form.custom_card_recipient_email') }}</span></transition>
                                             </div>
                                             <div class="form_group_disclaimer">
                                                 <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>The custom gift card will be sent after payment has been processed.</span></div>
@@ -205,9 +205,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {{ totalPrice }}
                                     <tr v-for="(data, key) in totalPrice" :key="key">
                                         <td class="item_name" width="50%">({{ data.quantity }}) {{ data.product.name }}</td>
-                                        <td class="item_price" width="50%">PHP {{ totalCount(data.product.origPrice) }}</td>
+                                        <td class="item_price" width="50%">PHP {{ totalCount(data.price) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -269,6 +270,7 @@
                     id: '',
                     change: 0
                 },
+                showErrors: false,
                 customGiftCard: {
                     classPackages: '',
                     classPackagePrice: 0,
@@ -354,6 +356,7 @@
                         me.nextStep = 2
                         document.getElementById('step2').classList.add('slide_in')
                         document.getElementById('step1').classList.remove('slide_in')
+                        me.resetCustomGiftCard()
                         break
                 }
             },
@@ -362,7 +365,7 @@
                 let sku = event.target.value
                 me.classPackages.forEach((classPackage, index) => {
                     if (classPackage.sku_id == sku) {
-                        me.customGiftCard.classPackagePrice = me.totalCount(classPackage.package_price)
+                        me.customGiftCard.classPackagePrice = classPackage.package_price
                     }
                 })
             },
@@ -438,39 +441,46 @@
             },
             submitCustom () {
                 const me = this
-                me.$validator.validateAll().then(valid => {
+                me.$validator.validateAll('custom_gift_form').then(valid => {
                     if (valid) {
                         if (me.customGiftCard.classPackages != '') {
                             me.totalPrice.push(
                                 {
                                     id: 9999999,
                                     quantity: 1,
-                                    price: parseFloat(me.customGiftCard.classPackagePrice)
+                                    product: {
+                                        name: 'Custom Gift Card'
+                                    },
+                                    price: parseFloat(me.customGiftCard.classPackagePrice),
+                                    type: 'custom-gift-card'
                                 }
                             )
                             setTimeout( () => {
                                 me.resetCustomGiftCard()
+                                document.querySelector('.nonsense').scrollIntoView({block: 'center', behavior: 'smooth'})
                             }, 10)
                         }
                     } else {
-                        document.querySelector('.validation_errors').scrollIntoView({block: 'center', behavior: 'smooth'})
+                        me.showErrors = true
+                        setTimeout( () => {
+                            document.querySelector('.validation_errors').scrollIntoView({block: 'center', behavior: 'smooth'})
+                        }, 10)
                     }
                 })
             },
             resetCustomGiftCard () {
                 const me = this
-                setTimeout( () => {
-                    me.customGiftCard.classPackages = ''
-                    me.customGiftCard.classPackagePrice = 0
-                    me.customGiftCard.customCardCode = ''
-                    me.customGiftCard.customCardFrom = ''
-                    me.customGiftCard.customCardTo = ''
-                    me.customGiftCard.customCardPredefinedTitle = ''
-                    me.customGiftCard.customCardCustomTitle = ''
-                    me.customGiftCard.customCardPersonalMessage = ''
-                    me.customGiftCard.customCardRecipientEmail = ''
-                    me.$validator.reset()
-                }, 10)
+                me.showErrors = false
+                me.customGiftCard.classPackages = ''
+                me.customGiftCard.classPackagePrice = 0
+                me.customGiftCard.customCardCode = ''
+                me.customGiftCard.customCardFrom = ''
+                me.customGiftCard.customCardTo = ''
+                me.customGiftCard.customCardPredefinedTitle = ''
+                me.customGiftCard.customCardCustomTitle = ''
+                me.customGiftCard.customCardPersonalMessage = ''
+                me.customGiftCard.customCardRecipientEmail = ''
+                me.customGiftCard.customCardCode = `GC-${me.randomCode()}`
             },
             toggleClose () {
                 const me = this
