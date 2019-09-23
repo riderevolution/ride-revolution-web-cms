@@ -469,7 +469,8 @@ table
         width: 100%
         height: 100%
         background-color: rgba(0, 0, 0, 0.5)
-    #default_form
+    #default_form,
+    #custom_gift_form
         margin: 0 auto
         .modal_wrapper
             position: relative
@@ -533,6 +534,7 @@ table
                             margin-top: 5px
                             sf_pro_regular(1.6vh)
                             color: $border_alt2
+                            text-transform: uppercase
                             .margin
                                 margin-left: 15px
                     .left_side
@@ -679,7 +681,8 @@ table
                             color: $black
                             padding: 20px 35px
                             text-align: center
-                        #default_form
+                        #default_form,
+                        #custom_gift_form
                             .modal_wrapper
                                 .modal_main_group
                                     .form_main_group
@@ -835,7 +838,8 @@ input::placeholder
         border: 1px solid $black
         transition: .3s ease-in-out
 
-#default_form
+#default_form,
+#custom_gift_form
     width: 100%
     max-width: 50%
     margin: 20px auto 0
@@ -3152,6 +3156,7 @@ input::placeholder
         position: fixed
         left: 0
         bottom: 0
+        z-index: 1
         width: 100%
         display: flex
         flex-flow: row wrap

@@ -39,7 +39,7 @@
                             <div class="no_results" v-if="total == 0">
                                 No Result(s) Found.
                             </div>
-                            <form id="default_form" class="alternate_2" @submit.prevent="submitCustom()" v-show="!isProduct">
+                            <form id="custom_gift_form" class="alternate_2" @submit.prevent="submitCustom()" v-show="!isProduct">
                                 <div class="modal_wrapper">
                                     <div class="modal_main_group alternate">
                                         <div class="form_main_group">
@@ -110,8 +110,7 @@
                     <div class="header_side">
                         <h2 class="header_title">Checkout</h2>
                         <div class="header_subtitle">
-                            <span>Order No: 123</span>
-                            <span class="margin">ID: 123612378</span>
+                            <span>ID: {{ form.id }}</span>
                         </div>
                     </div>
                     <div class="left_side">
@@ -186,12 +185,12 @@
                         <div class="form_main_group" v-if="form.paymentType == 4">
                             <div class="form_group">
                                 <label for="cash_tendered">Cash Tendered (PHP)<span>*</span></label>
-                                <input type="text" name="cash_tendered" class="default_text" v-validate="'required'">
+                                <input type="text" name="cash_tendered" class="default_text" v-validate="'required|decimal:2'" v-model="form.change">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('cash_tendered')">{{ errors.first('cash_tendered') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="change">Change (PHP)<span>*</span></label>
-                                <input type="text" name="change" class="default_text disabled" v-validate="'required'">
+                                <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('change')">{{ errors.first('change') }}</span></transition>
                             </div>
                         </div>
@@ -266,7 +265,9 @@
                 ],
                 form: {
                     search: '',
-                    paymentType: 0
+                    paymentType: 0,
+                    id: '',
+                    change: 0
                 },
                 customGiftCard: {
                     classPackages: '',
@@ -290,6 +291,21 @@
             }
         },
         computed: {
+            computeChange () {
+                const me = this
+                let value = (me.form.change == '') ? 0 : parseFloat(me.form.change)
+                let total = 0
+                let change = 0
+                if (value != 0) {
+                    me.totalPrice.forEach((data, index) => {
+                        total += data.price
+                    })
+                } else {
+                    change = 0
+                }
+                change = value - parseFloat(total)
+                return change
+            },
             computeTotal () {
                 const me = this
                 let total = 0
@@ -561,6 +577,7 @@
                     }
                 })
                 me.customGiftCard.customCardCode = `GC-${me.randomCode()}`
+                me.form.id = me.randomString()
             }
         },
         mounted () {
