@@ -385,6 +385,7 @@
                         me.form.paymentType = 4
                         break
                 }
+                me.form.change = 0
             },
             submitFilter () {
                 const me = this
