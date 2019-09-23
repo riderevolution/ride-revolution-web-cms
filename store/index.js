@@ -4,6 +4,7 @@ const createStore = () => {
     return new Vuex.Store({
         state: () => ({
             quickSaleStatus: false,
+            promptStatus: false,
             importStatus: false,
             resetSuccessfulStatus: false,
             resetStatus: false,

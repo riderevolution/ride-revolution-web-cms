@@ -205,7 +205,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{ totalPrice }}
                                     <tr v-for="(data, key) in totalPrice" :key="key">
                                         <td class="item_name" width="50%">({{ data.quantity }}) {{ data.product.name }}</td>
                                         <td class="item_price" width="50%">PHP {{ totalCount(data.price) }}</td>
@@ -223,21 +222,26 @@
                             <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Note: Promo code won’t be applicable to promo products/pacakges.</span></div>
                         </div>
                         <div class="button_group">
-                            <button type="button" class="action_cancel_btn" @click="takePayment(1)">Cancel</button>
+                            <button type="button" class="action_btn" @click="takePayment(1)">Go Back</button>
                             <button type="button" class="action_success_btn alternate margin">Place Order</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <transition name="fade">
+            <prompt v-if="$store.state.promptStatus" message="You have successfully added your custom gift card." />
+        </transition>
     </div>
 </template>
 
 <script>
     import QuickSaleTabContent from './QuickSaleTabContent'
+    import Prompt from './Prompt'
     export default {
         components: {
-            QuickSaleTabContent
+            QuickSaleTabContent,
+            Prompt
         },
         data () {
             return {
@@ -456,6 +460,7 @@
                                 }
                             )
                             setTimeout( () => {
+                                me.$store.state.promptStatus = true
                                 me.resetCustomGiftCard()
                                 document.querySelector('.nonsense').scrollIntoView({block: 'center', behavior: 'smooth'})
                             }, 10)
