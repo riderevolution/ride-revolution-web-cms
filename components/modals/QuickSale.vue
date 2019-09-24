@@ -202,7 +202,7 @@
                         <div class="form_main_group" v-if="form.paymentType == 4">
                             <div class="form_group">
                                 <label for="cash_tendered">Cash Tendered (PHP)<span>*</span></label>
-                                <input type="text" name="cash_tendered" class="default_text" v-validate="'required|min_value:1|decimal:2'" v-model="form.change">
+                                <input type="text" name="cash_tendered" class="default_text" v-validate="`required|min_value:${form.total}|decimal:2`" v-model="form.change">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered') && form.change == 0">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
                             </div>
                             <div class="form_group">
@@ -289,7 +289,8 @@
                     paymentType: 0,
                     id: '',
                     change: 0,
-                    comp: ''
+                    comp: '',
+                    total: 0
                 },
                 showErrors: false,
                 message: '',
@@ -336,6 +337,7 @@
                 me.totalPrice.forEach((data, index) => {
                     total += data.price
                 })
+                me.form.total = total
                 return me.totalCount(total)
             },
             showProducts () {
@@ -524,7 +526,7 @@
                                 {
                                     id: 9999999,
                                     quantity: 1,
-                                    product: {
+                                    item: {
                                         name: 'Custom Gift Card'
                                     },
                                     price: parseFloat(me.customGiftCard.classPackagePrice),
