@@ -391,6 +391,7 @@
                     if (valid) {
                         me.loader(true)
                         me.$axios.post('api/payments', formData).then(res => {
+                            console.log(res.data);
                             setTimeout( () => {
                                 if (res.data) {
                                     me.$store.state.successfulStatus = true
@@ -471,6 +472,7 @@
             submitFilter () {
                 const me = this
                 let ctr  = 0
+                me.loader(true)
                 switch (me.toCompare.giftCard) {
                     case 0:
                         me.$refs.quickSale.forEach((product, qindex) => {
@@ -495,26 +497,29 @@
                         })
                         break
                     case 1:
-                    me.$refs.quickSale.forEach((product, qindex) => {
-                        if (!product.value.product) {
-                            let card_code = product.value.card_code.toLowerCase()
-                            if (me.form.search != '') {
-                                if (card_code.includes(me.form.search.toLowerCase())) {
+                        me.$refs.quickSale.forEach((product, qindex) => {
+                            if (!product.value.product) {
+                                let card_code = product.value.card_code.toLowerCase()
+                                if (me.form.search != '') {
+                                    if (card_code.includes(me.form.search.toLowerCase())) {
+                                        ctr++
+                                        product.isSearched = true
+                                    } else {
+                                        product.isSearched = false
+                                    }
+                                } else {
                                     ctr++
                                     product.isSearched = true
-                                } else {
-                                    product.isSearched = false
                                 }
                             } else {
-                                ctr++
-                                product.isSearched = true
+                                product.isSearched = false
                             }
-                        } else {
-                            product.isSearched = false
-                        }
-                    })
+                        })
                         break
                 }
+                setTimeout( () => {
+                    me.loader(false)
+                }, 300)
                 me.total = ctr
             },
             submitCustom () {
