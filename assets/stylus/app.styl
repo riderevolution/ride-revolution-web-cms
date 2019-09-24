@@ -47,8 +47,20 @@ body
 *,
 *:before,
 *:after
+    user-select: none
     box-sizing: border-box
     margin: 0
+
+input,
+input:before,
+input:after,
+textarea,
+textarea:before,
+textarea:after,
+select,
+select:before,
+select:after
+    user-select: initial
 
 h1,
 h2,
@@ -775,7 +787,6 @@ table
     background-repeat: no-repeat
     transition: .3s ease-in-out
     &.disabled
-        user-select: none
         pointer-events: none
         background-color: $border_alt
         transition: .3s ease-in-out

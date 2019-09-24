@@ -109,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-                <form class="modal_tab_wrapper alternate" id="step2" v-show="nextStep == 2">
+                <form class="modal_tab_wrapper alternate" id="step2" data-vv-scope="checkout_form" v-show="nextStep == 2">
                     <div class="header_side">
                         <h2 class="header_title">Checkout</h2>
                         <div class="header_subtitle">
@@ -150,7 +150,7 @@
                                     <option value="psbank">PSBank</option>
                                     <option value="metrobank">MetroBank</option>
                                 </select>
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('bank')">{{ errors.first('bank') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.bank')">{{ errors.first('checkout_form.bank') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="type_of_card">Type of Card<span>*</span></label>
@@ -162,19 +162,19 @@
                                     <option value="jcb">JCB</option>
                                     <option value="amex">American Express</option>
                                 </select>
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('type_of_card')">{{ errors.first('type_of_card') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.type_of_card')">{{ errors.first('checkout_form.type_of_card') }}</span></transition>
                             </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 1">
                             <div class="form_group">
                                 <label for="bank">Bank<span>*</span></label>
                                 <input type="text" name="bank" class="default_text" v-validate="'required'">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('bank')">{{ errors.first('bank') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.bank')">{{ errors.first('checkout_form.bank') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="check_number">Check Number<span>*</span></label>
                                 <input type="text" name="check_number" class="default_text" v-validate="'required'">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('check_number')">{{ errors.first('check_number') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.check_number')">{{ errors.first('checkout_form.check_number') }}</span></transition>
                             </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 3">
@@ -185,7 +185,7 @@
                                     <option value="so-sick">So Sick of love song</option>
                                     <option value="other">Other</option>
                                 </select>
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('comp_reason')">{{ errors.first('comp_reason') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.comp_reason')">{{ errors.first('checkout_form.comp_reason') }}</span></transition>
                             </div>
                             <transition name="fade">
                                 <div class="form_group" v-if="form.comp == 'other'">
@@ -196,19 +196,19 @@
                             <div class="form_group">
                                 <label for="note">Note<span>*</span></label>
                                 <input type="text" name="note" class="default_text" v-validate="'required'">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('note')">{{ errors.first('note') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.note')">{{ errors.first('checkout_form.note') }}</span></transition>
                             </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 4">
                             <div class="form_group">
                                 <label for="cash_tendered">Cash Tendered (PHP)<span>*</span></label>
                                 <input type="text" name="cash_tendered" class="default_text" v-validate="'required|decimal:2'" v-model="form.change">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('cash_tendered')">{{ errors.first('cash_tendered') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered')">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="change">Change (PHP)<span>*</span></label>
                                 <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('change')">{{ errors.first('change') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.change')">{{ errors.first('checkout_form.change') }}</span></transition>
                             </div>
                         </div>
                     </div>
@@ -236,7 +236,7 @@
                     </div>
                     <div class="footer_side">
                         <div class="form_group_disclaimer">
-                            <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Note: Promo code won’t be applicable to promo products/pacakges.</span></div>
+                            <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Note: Promo code won’t be applicable to promo products/packages.</span></div>
                         </div>
                         <div class="button_group">
                             <button type="button" class="action_btn" @click="takePayment(1)">Go Back</button>
@@ -370,19 +370,36 @@
             submitQuickSale () {
                 const me = this
                 let formData = new FormData()
+                let total = 0
                 let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
                 let productForm = new FormData(document.getElementById('product_form'))
                 let checkout = new FormData(document.getElementById('step2'))
+
+                me.totalPrice.forEach((data, index) => {
+                    total += data.price
+                })
+
+                productForm.append('total', total)
                 productForm.append('items', JSON.stringify(me.totalPrice))
                 productForm.append('transaction_id', me.form.id)
+
                 formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
                 formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
-                me.$axios.post('api/payments', formData).then(res => {
-                    console.log(res.data);
-                }).catch(err => {
-                    me.$store.state.errorList = err.response.data.errors
-                    me.$store.state.errorStatus = true
+
+                me.$validator.validateAll('checkout_form').then(valid => {
+                    if (valid) {
+                        me.$axios.post('api/payments', formData).then(res => {
+                            console.log(res.data);
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        })
+                    } else {
+                        setTimeout( () => {
+                            document.querySelector('.validation_errors').scrollIntoView({block: 'center', behavior: 'smooth'})
+                        }, 10)
+                    }
                 })
             },
             takePayment (step) {
@@ -399,7 +416,7 @@
                             document.getElementById('step2').classList.add('slide_in')
                             document.getElementById('step1').classList.remove('slide_in')
                         } else {
-                            me.message = 'Please select a product before going to payment.'
+                            me.message = 'Please select a product before taking payment.'
                             me.$store.state.promptStatus = true
                         }
                         break
