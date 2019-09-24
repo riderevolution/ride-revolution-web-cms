@@ -60,12 +60,12 @@
                                         <div class="form_main_group">
                                             <div class="form_group">
                                                 <label for="custom_card_from">From <span>*</span></label>
-                                                <input type="email" name="custom_card_from" class="default_text" autocomplete="off" v-model="customGiftCard.customCardFrom" v-validate="'required|email'">
+                                                <input type="text" name="custom_card_from" class="default_text" autocomplete="off" v-model="customGiftCard.customCardFrom" v-validate="'required'">
                                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_from') && showErrors">{{ errors.first('custom_gift_form.custom_card_from') }}</span></transition>
                                             </div>
                                             <div class="form_group">
                                                 <label for="custom_card_to">To <span>*</span></label>
-                                                <input type="email" name="custom_card_to" class="default_text" autocomplete="off" v-model="customGiftCard.customCardTo" v-validate="'required|email'">
+                                                <input type="text" name="custom_card_to" class="default_text" autocomplete="off" v-model="customGiftCard.customCardTo" v-validate="'required'">
                                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_to') && showErrors">{{ errors.first('custom_gift_form.custom_card_to') }}</span></transition>
                                             </div>
                                             <div class="form_group">
