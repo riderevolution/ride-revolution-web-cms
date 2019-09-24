@@ -73,12 +73,15 @@
                                                 <select class="default_select alternate" name="custom_card_predefined_title" v-model="customGiftCard.customCardPredefinedTitle">
                                                     <option value="" disabled selected>Select a Title</option>
                                                     <option :value="predefinedTitle.title" v-for="(predefinedTitle, key) in predefinedTitles" :key="key">{{ predefinedTitle.title }}</option>
+                                                    <option value="other">Other</option>
                                                 </select>
                                             </div>
-                                            <div class="form_group">
-                                                <label for="custom_card_custom_title">Custom Title</label>
-                                                <input type="text" name="custom_card_custom_title" autocomplete="off" class="default_text" v-model="customGiftCard.customCardCustomTitle">
-                                            </div>
+                                            <transition name="fade">
+                                                <div class="form_group" v-if="customGiftCard.customCardPredefinedTitle == 'other'">
+                                                    <label for="custom_card_custom_title">Custom Title</label>
+                                                    <input type="text" name="custom_card_custom_title" autocomplete="off" class="default_text" v-model="customGiftCard.customCardCustomTitle">
+                                                </div>
+                                            </transition>
                                             <div class="form_group no_margin">
                                                 <label for="custom_card_personal_message">Personal Message <span>*</span></label>
                                                 <textarea name="custom_card_personal_message" autocomplete="off" rows="8" class="default_text" v-model="customGiftCard.customCardPersonalMessage" v-validate="'required'"></textarea>
@@ -106,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal_tab_wrapper alternate" id="step2" v-show="nextStep == 2">
+                <form class="modal_tab_wrapper alternate" id="step2" v-show="nextStep == 2">
                     <div class="header_side">
                         <h2 class="header_title">Checkout</h2>
                         <div class="header_subtitle">
@@ -142,7 +145,10 @@
                                 <label for="bank">Bank<span>*</span></label>
                                 <select class="default_select alternate" name="bank" v-validate="'required'">
                                     <option value="" selected disabled>Select a Bank</option>
-                                    <option value="bdo">BDO</option>
+                                    <option value="bpi">Bank of the Philippines Islands</option>
+                                    <option value="bdo">Banco de Oro</option>
+                                    <option value="psbank">PSBank</option>
+                                    <option value="metrobank">MetroBank</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('bank')">{{ errors.first('bank') }}</span></transition>
                             </div>
@@ -151,6 +157,10 @@
                                 <select class="default_select alternate" name="type_of_card" v-validate="'required'">
                                     <option value="" selected disabled>Select Type of Card</option>
                                     <option value="mastercard">Mastercard</option>
+                                    <option value="visa">Visa</option>
+                                    <option value="cirrus">Cirrus</option>
+                                    <option value="jcb">JCB</option>
+                                    <option value="amex">American Express</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('type_of_card')">{{ errors.first('type_of_card') }}</span></transition>
                             </div>
@@ -170,12 +180,19 @@
                         <div class="form_main_group" v-if="form.paymentType == 3">
                             <div class="form_group">
                                 <label for="comp_reason">Comp Reason<span>*</span></label>
-                                <select class="default_select alternate" name="comp_reason" v-validate="'required'">
+                                <select class="default_select alternate" name="comp_reason" v-validate="'required'" v-model="form.comp">
                                     <option value="" selected disabled>Select a Reason</option>
+                                    <option value="so-sick">So Sick of love song</option>
                                     <option value="other">Other</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('comp_reason')">{{ errors.first('comp_reason') }}</span></transition>
                             </div>
+                            <transition name="fade">
+                                <div class="form_group" v-if="form.comp == 'other'">
+                                    <label for="other">Indicate Reason</label>
+                                    <input type="text" name="indicate_reason" class="default_text">
+                                </div>
+                            </transition>
                             <div class="form_group">
                                 <label for="note">Note<span>*</span></label>
                                 <input type="text" name="note" class="default_text" v-validate="'required'">
@@ -206,7 +223,7 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, key) in totalPrice" :key="key">
-                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ data.product.name }}</td>
+                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ data.item.name }}</td>
                                         <td class="item_price" width="50%">PHP {{ totalCount(data.price) }}</td>
                                     </tr>
                                 </tbody>
@@ -223,10 +240,10 @@
                         </div>
                         <div class="button_group">
                             <button type="button" class="action_btn" @click="takePayment(1)">Go Back</button>
-                            <button type="button" class="action_success_btn alternate margin">Place Order</button>
+                            <button type="button" class="action_success_btn alternate margin" @click.prevent="submitQuickSale()">Place Order</button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
         <transition name="fade">
@@ -272,7 +289,8 @@
                     search: '',
                     paymentType: 0,
                     id: '',
-                    change: 0
+                    change: 0,
+                    comp: ''
                 },
                 showErrors: false,
                 message: '',
@@ -349,6 +367,23 @@
             }
         },
         methods: {
+            submitQuickSale () {
+                const me = this
+                let formData = new FormData()
+                let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
+                let productForm = new FormData(document.getElementById('product_form'))
+                let checkout = new FormData(document.getElementById('step2'))
+                productForm.append('items', JSON.stringify(me.totalPrice))
+                formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
+                formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
+                formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
+                me.$axios.post('api/payments', formData).then(res => {
+                    console.log(res.data);
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                })
+            },
             takePayment (step) {
                 const me = this
                 switch (step) {

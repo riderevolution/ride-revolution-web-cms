@@ -94,7 +94,7 @@
                         {
                             id: key,
                             quantity: quantity,
-                            product: {
+                            item: {
                                 id: data.id,
                                 sku: (me.value.isGiftShow) ? data.class_package_sku_id : data.sku_id,
                                 name: (me.value.isGiftShow) ? data.card_code : data.variant,
