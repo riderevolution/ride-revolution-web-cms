@@ -379,7 +379,7 @@
                     total += data.price
                 })
 
-                productForm.append('total', total)
+                checkout.append('total', total)
                 productForm.append('items', JSON.stringify(me.totalPrice))
                 productForm.append('transaction_id', me.form.id)
 
