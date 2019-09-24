@@ -202,13 +202,12 @@
                         <div class="form_main_group" v-if="form.paymentType == 4">
                             <div class="form_group">
                                 <label for="cash_tendered">Cash Tendered (PHP)<span>*</span></label>
-                                <input type="text" name="cash_tendered" class="default_text" v-validate="'required|decimal:2'" v-model="form.change">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered')">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
+                                <input type="text" name="cash_tendered" class="default_text" v-validate="'required|min_value:1|decimal:2'" v-model="form.change">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered') && form.change == 0">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
                             </div>
                             <div class="form_group">
-                                <label for="change">Change (PHP)<span>*</span></label>
+                                <label for="change">Change (PHP)</label>
                                 <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.change')">{{ errors.first('checkout_form.change') }}</span></transition>
                             </div>
                         </div>
                     </div>
@@ -380,20 +379,35 @@
                 })
 
                 checkout.append('total', total)
+                checkout.append('transaction_id', me.form.id)
                 productForm.append('items', JSON.stringify(me.totalPrice))
-                productForm.append('transaction_id', me.form.id)
 
                 formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
                 formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
-
                 me.$validator.validateAll('checkout_form').then(valid => {
                     if (valid) {
+                        me.loader(true)
                         me.$axios.post('api/payments', formData).then(res => {
-                            console.log(res.data);
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.$store.state.successfulStatus = true
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 200)
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                if (!me.$store.state.errorStatus) {
+                                    me.$store.state.successfulStatus = false
+                                }
+                            }, 200)
+                            document.body.classList.remove('no_scroll')
                         })
                     } else {
                         setTimeout( () => {
