@@ -7,7 +7,7 @@
                 Great! Kindly check your email to see your new password. You can change your password anytime once you have logged in.
             </div>
             <div class="button_group">
-                <div class="action_success_btn confirm margin" @click="toggleClose()">Done</div>
+                <div class="action_success_btn confirm" @click="toggleClose()">Done</div>
             </div>
         </div>
     </div>

@@ -407,10 +407,9 @@
                             setTimeout( () => {
                                 me.loader(false)
                                 if (!me.$store.state.errorStatus) {
-                                    me.$store.state.successfulStatus = false
+                                    me.$store.state.quickSaleStatus = false
                                 }
                             }, 200)
-                            document.body.classList.remove('no_scroll')
                         })
                     } else {
                         setTimeout( () => {

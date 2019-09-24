@@ -25,6 +25,9 @@
         <transition name="fade">
             <quick-sale v-if="$store.state.quickSaleStatus" />
         </transition>
+        <transition name="fade">
+            <successful v-if="$store.state.successfulStatus" />
+        </transition>
     </div>
 </template>
 
@@ -36,6 +39,7 @@
     import PasswordSent from '../components/modals/PasswordSent'
     import ResetSuccessful from '../components/modals/ResetSuccessful'
     import QuickSale from '../components/modals/QuickSale'
+    import Successful from '../components/modals/Successful'
     export default {
         components: {
             Navbar,
@@ -44,7 +48,8 @@
             ErrorStatus,
             PasswordSent,
             ResetSuccessful,
-            QuickSale
+            QuickSale,
+            Successful
         },
         data () {
             return {
