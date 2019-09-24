@@ -374,6 +374,7 @@
                 let productForm = new FormData(document.getElementById('product_form'))
                 let checkout = new FormData(document.getElementById('step2'))
                 productForm.append('items', JSON.stringify(me.totalPrice))
+                productForm.append('transaction_id', me.form.id)
                 formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
                 formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
