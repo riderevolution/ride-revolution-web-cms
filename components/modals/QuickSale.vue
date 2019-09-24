@@ -203,7 +203,7 @@
                             <div class="form_group">
                                 <label for="cash_tendered">Cash Tendered (PHP)<span>*</span></label>
                                 <input type="text" name="cash_tendered" class="default_text" v-validate="`required|min_value:${form.total}|decimal:2`" v-model="form.change">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered') && form.change == 0">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered')">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
                             </div>
                             <div class="form_group">
                                 <label for="change">Change (PHP)</label>
