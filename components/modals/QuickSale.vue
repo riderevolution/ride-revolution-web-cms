@@ -531,7 +531,8 @@
                                     id: 9999999,
                                     quantity: 1,
                                     item: {
-                                        name: 'Custom Gift Card'
+                                        name: 'Custom Gift Card',
+                                        origPrice: parseFloat(me.customGiftCard.classPackagePrice)
                                     },
                                     price: parseFloat(me.customGiftCard.classPackagePrice),
                                     type: 'custom-gift-card'
