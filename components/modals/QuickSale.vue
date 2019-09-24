@@ -390,8 +390,7 @@
                 me.$validator.validateAll('checkout_form').then(valid => {
                     if (valid) {
                         me.loader(true)
-                        me.$axios.post('api/payments', formData).then(res => {
-                            console.log(res.data);
+                        me.$axios.post('api/quick-sale', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.$store.state.successfulStatus = true
@@ -523,25 +522,36 @@
             },
             submitCustom () {
                 const me = this
+                let customIndex = null
                 me.$validator.validateAll('custom_gift_form').then(valid => {
                     if (valid) {
                         if (me.customGiftCard.classPackages != '') {
-                            me.totalPrice.push(
-                                {
-                                    id: 9999999,
-                                    quantity: 1,
-                                    item: {
-                                        name: 'Custom Gift Card',
-                                        origPrice: parseFloat(me.customGiftCard.classPackagePrice)
-                                    },
-                                    price: parseFloat(me.customGiftCard.classPackagePrice),
-                                    type: 'custom-gift-card'
+                            me.totalPrice.forEach((data, index) => {
+                                if (data.id == 9999999) {
+                                    customIndex = index
                                 }
-                            )
+                            })
+                            if (customIndex != null) {
+                                me.totalPrice[customIndex].price = parseFloat(me.customGiftCard.classPackagePrice)
+                                me.totalPrice[customIndex].item.origPrice = parseFloat(me.customGiftCard.classPackagePrice)
+                            } else {
+                                me.totalPrice.push(
+                                    {
+                                        id: 9999999,
+                                        quantity: 1,
+                                        item: {
+                                            name: 'Custom Gift Card',
+                                            origPrice: parseFloat(me.customGiftCard.classPackagePrice)
+                                        },
+                                        price: parseFloat(me.customGiftCard.classPackagePrice),
+                                        type: 'custom-gift-card'
+                                    }
+                                )
+                            }
                             me.message = 'You have successfully added your custom gift card.'
                             setTimeout( () => {
+                                me.showErrors = false
                                 me.$store.state.promptStatus = true
-                                me.resetCustomGiftCard()
                                 document.querySelector('.nonsense').scrollIntoView({block: 'center', behavior: 'smooth'})
                             }, 10)
                         }
@@ -552,20 +562,6 @@
                         }, 10)
                     }
                 })
-            },
-            resetCustomGiftCard () {
-                const me = this
-                me.showErrors = false
-                me.customGiftCard.classPackages = ''
-                me.customGiftCard.classPackagePrice = 0
-                me.customGiftCard.customCardCode = ''
-                me.customGiftCard.customCardFrom = ''
-                me.customGiftCard.customCardTo = ''
-                me.customGiftCard.customCardPredefinedTitle = ''
-                me.customGiftCard.customCardCustomTitle = ''
-                me.customGiftCard.customCardPersonalMessage = ''
-                me.customGiftCard.customCardRecipientEmail = ''
-                me.customGiftCard.customCardCode = `GC-${me.randomCode()}`
             },
             toggleClose () {
                 const me = this
@@ -609,7 +605,6 @@
                 })
                 setTimeout( () => {
                     me.form.search = ''
-                    me.resetCustomGiftCard()
                 }, 10)
                 switch (type) {
                     case 'category':
