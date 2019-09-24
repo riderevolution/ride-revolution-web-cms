@@ -230,7 +230,7 @@
             </div>
         </div>
         <transition name="fade">
-            <prompt v-if="$store.state.promptStatus" message="You have successfully added your custom gift card." />
+            <prompt v-if="$store.state.promptStatus" :message="message" />
         </transition>
     </div>
 </template>
@@ -275,6 +275,7 @@
                     change: 0
                 },
                 showErrors: false,
+                message: '',
                 customGiftCard: {
                     classPackages: '',
                     classPackagePrice: 0,
@@ -357,10 +358,14 @@
                         document.getElementById('step2').classList.remove('slide_in')
                         break
                     case 2:
-                        me.nextStep = 2
-                        document.getElementById('step2').classList.add('slide_in')
-                        document.getElementById('step1').classList.remove('slide_in')
-                        me.resetCustomGiftCard()
+                        if (me.totalPrice.length > 0) {
+                            me.nextStep = 2
+                            document.getElementById('step2').classList.add('slide_in')
+                            document.getElementById('step1').classList.remove('slide_in')
+                        } else {
+                            me.message = 'Please select a product before going to payment.'
+                            me.$store.state.promptStatus = true
+                        }
                         break
                 }
             },
@@ -459,6 +464,7 @@
                                     type: 'custom-gift-card'
                                 }
                             )
+                            me.message = 'You have successfully added your custom gift card.'
                             setTimeout( () => {
                                 me.$store.state.promptStatus = true
                                 me.resetCustomGiftCard()

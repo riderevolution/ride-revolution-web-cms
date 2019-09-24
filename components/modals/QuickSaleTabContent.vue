@@ -99,7 +99,7 @@
                                 sku: (me.value.isGiftShow) ? data.class_package_sku_id : data.sku_id,
                                 name: (me.value.isGiftShow) ? data.card_code : data.variant,
                                 origPrice: (me.value.isGiftShow) ? data.class_package.package_price : data.sale_price,
-                                // product: data
+                                product: data
                             },
                             type: (me.value.isGiftShow) ? 'gift-card' : 'product',
                             price: parseInt(quantity) * price

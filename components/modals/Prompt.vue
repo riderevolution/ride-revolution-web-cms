@@ -24,7 +24,6 @@
             toggleClose () {
                 const me = this
                 me.$store.state.promptStatus = false
-                document.body.classList.remove('no_scroll')
             }
         }
     }
