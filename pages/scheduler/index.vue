@@ -1,4 +1,4 @@
-te<template>
+<template>
     <div class="content">
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table" v-if="loaded">
@@ -124,11 +124,11 @@ te<template>
                                         <div class='header_wrapper'>
                                             <div class='header_day'>${startDate}</div>
                                             <div class='header_menu'>
-                                                <div class='menu_circles' id=menu_${startDate}><span>&#x25CF;</span><span class='margin'>&#x25CF;</span><span class='margin'>&#x25CF;</span></div>
+                                                <div class='menu_circles' id=menu_${startDate}>&#x25CF; &#x25CF; &#x25CF;</div>
                                                 <div class='menu_overlay'>
                                                     <ul class='menu_list_wrapper'>
-                                                        <li class='menu_list'><a class='menu_item' href='javascript:void(0)'>Add a Class</a></li>
-                                                        <li class='menu_list'><a class='menu_item' href='javascript:void(0)'>Clear a Day</a></li>
+                                                        <li class='menu_list'><a class='menu_item margin' href='javascript:void(0)'>Add a Class</a></li>
+                                                        <li class='menu_list'><a class='menu_item margin' href='javascript:void(0)'>Clear a Day</a></li>
                                                         <li class='menu_list'><a class='menu_item' href='javascript:void(0)'>Duplicate Day</a></li>
                                                     </ul>
                                                 </div>
@@ -175,12 +175,32 @@ te<template>
                 }
                 me.clickDates(1, endDate)
             },
+            toggleOverlays (e) {
+                const me = this
+                let target = e.target
+                let startDate = 1
+                let endDate = me.$moment(`${me.currentYear}-${me.currentMonth}`).daysInMonth()
+                do {
+                    let element = document.getElementById(`menu_${startDate}`)
+                    if (element !== target && !element.contains(target)) {
+                        if (element.nextElementSibling.classList.contains('active')) {
+                            element.nextElementSibling.classList.remove('active')
+                        }
+                    }
+                    startDate++
+                } while (startDate <= endDate)
+            },
             clickDates (startNum, endNum) {
                 const me = this
                 do {
                     let element = document.getElementById(`menu_${startNum}`)
-                    element.addEventListener('click', function() {
-                        alert('I got clicked')
+                    element.addEventListener('click', function(e) {
+                        let nextElement = e.target.nextElementSibling
+                        if (nextElement.classList.contains('active')) {
+                            nextElement.classList.remove('active')
+                        } else {
+                            nextElement.classList.add('active')
+                        }
                     })
                     startNum++
                 } while (startNum <= endNum)
@@ -200,6 +220,12 @@ te<template>
         mounted () {
             const me = this
             me.fetchData()
+        },
+        beforeMount () {
+            document.addEventListener('click', this.toggleOverlays)
+        },
+        beforeDestroy () {
+            document.removeEventListener('click', this.toggleOverlays)
         }
     }
 </script>
