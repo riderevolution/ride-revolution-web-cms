@@ -34,8 +34,8 @@ te<template>
                 </div>
             </section>
             <section id="content">
-                {{ month }}
                 <div class="calendar_wrapper">
+                    {{ monthName }}
                     <table class="cms_table_calendar">
                         <thead>
                             <tr>
@@ -61,7 +61,7 @@ te<template>
         data () {
             return {
                 loaded: false,
-                month: '',
+                monthName: '',
                 studios: [],
                 instructors: [],
                 dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -81,9 +81,10 @@ te<template>
             },
             generateCalendar (year, month) {
                 const me = this
-                me.month = me.$moment(`${year}-${month}`).format('MMMM')
+                me.monthName = me.$moment(`${year}-${month}`).format('MMMM')
                 let startDate = 1
                 let nextDate = 1
+                let prevDate = 1
                 let endDate = me.$moment(`${year}-${month}`).daysInMonth()
                 let calendarTable = document.querySelector('.cms_table_calendar tbody')
                 /**
@@ -113,9 +114,17 @@ te<template>
                                     </td>`
                                 startDate++
                             } else {
-                                tableRow.innerHTML += '<td></td>'
+                                tableRow.innerHTML += `
+                                    <td class='day_wrapper disabled_day'>
+                                        <div class='header_wrapper'>
+                                            <div class='header_day'>${prevDate}</div>
+                                        </div>
+                                    </td>`
+                                prevDate++
                             }
                         } else {
+                            /**
+                             * Generate Next Dates **/
                             if (me.$moment(`${year}-${month}-${1}`).format('d') == 0) {
                                 if (i == 4) {
                                     tableRow.innerHTML += `
