@@ -3366,6 +3366,32 @@ input::placeholder
                             transition: .3s ease-in-out
             .filter_wrapper
                 flex: 0 0 100%
+                &.alternate
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: flex-end
+                    .legends_wrapper
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        padding-bottom: 15px
+                        margin-left: 20px
+                        .legend_title
+                            sf_pro_regular(1.6vh)
+                            color: $black
+                            span
+                                sf_pro_regular(1.6vh)
+                            &.margin
+                                margin-left: 20px
+                            &.black
+                                span
+                                    color: $black
+                            &.gray
+                                span
+                                    color: $border
+                            &.blue
+                                span
+                                    color: $blue
                 .filter_flex
                     display: flex
                     flex-flow: row wrap
@@ -3386,6 +3412,7 @@ input::placeholder
                         display: inline-block
                         width: auto
                         padding: 14px 20px
+
     #content
         padding: 60px 40px
         position: relative

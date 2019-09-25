@@ -1,8 +1,32 @@
 te<template>
     <div class="content">
         <div id="admin" class="cms_dashboard">
-            <section id="top_content">
-                <h1 class="header_title">Scheduler</h1>
+            <section id="top_content" class="table" v-if="loaded">
+                <div class="action_wrapper">
+                    <h1 class="header_title">Scheduler</h1>
+                </div>
+                <div class="filter_wrapper alternate">
+                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)">
+                        <div class="form_group">
+                            <label for="studio_id">Studio</label>
+                            <select class="default_select alternate" name="studio_id">
+                                <option value="" selected>All Studios</option>
+                            </select>
+                        </div>
+                        <div class="form_group margin">
+                            <label for="instructor_id">Instructor</label>
+                            <select class="default_select alternate" name="instructor_id">
+                                <option value="" selected>All Instructors</option>
+                            </select>
+                        </div>
+                        <button type="submit" name="button" class="action_btn alternate margin">Search</button>
+                    </form>
+                    <div class="legends_wrapper">
+                        <div class="legend_title gray"><span>&#x25CF;</span> Class Completed</div>
+                        <div class="legend_title margin blue"><span>&#x25CF;</span> Published</div>
+                        <div class="legend_title margin black"><span>&#x25CF;</span> Draft</div>
+                    </div>
+                </div>
             </section>
             <section id="content">
                 {{ month }}
@@ -31,6 +55,7 @@ te<template>
         },
         data () {
             return {
+                loaded: false,
                 month: '',
                 dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             }
@@ -112,6 +137,7 @@ te<template>
         mounted () {
             const me = this
             me.generateCalendar(me.$moment().year(), me.$moment().month() + 1)
+            me.loaded = true
         }
     }
 </script>
