@@ -976,7 +976,7 @@ input::placeholder
                 .form_group
                     &.alternate
                         .validation_errors
-                            top: calc(100% + 5px);
+                            top: calc(100% + 5px)
                     .validation_errors
                         top: calc(0% + 25px)
             &.alternate_2
@@ -2078,46 +2078,88 @@ input::placeholder
 .calendar_wrapper
     padding: 20px
     background-color: $white
-.cms_table_calendar
-    thead
-        tr
-            th
-                sf_pro_regular(1.6vh)
-                color: $border_alt2
-                font-weight: normal
-                padding: 10px 0
-    tbody
-        tr
-            .day_wrapper
-                border: 1px solid $border
-                padding: 10px
-                background-color: $white
-                &.disabled_day
-                    background-color: $border_alt
+    .calendar_header
+        position: relative
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: center
+        margin-bottom: 60px
+        .calendar_title
+            sf_pro_bold(3vh)
+            color: $black
+            margin: 0 20px
+        .calendar_prev
+            position: absolute
+            top: 50%
+            left: calc(50% - 200px)
+            transform: translate(-50%, -50%) rotate(180deg)
+        .calendar_next
+            position: absolute
+            top: 50%
+            right: calc(50% - 200px)
+            transform: translate(-50%, -50%)
+        .calendar_next,
+        .calendar_prev
+            width: 28px
+            height: 28px
+            svg
+                .arrow_1
+                    fill: $white
+                    stroke: $border
+                    transition: .3s ease-in-out
+                .arrow_2,
+                .arrow_4
+                    fill: none
+                .arrow_2
+                    stroke: $green
+                    stroke-width: 1.5px
+                .arrow_3
+                    stroke: none
+                &:hover
+                    .arrow_1
+                        fill: $border
+                        transition: .3s ease-in-out
+    .cms_table_calendar
+        thead
+            tr
+                th
+                    sf_pro_regular(1.6vh)
+                    color: $border_alt2
+                    font-weight: normal
+                    padding: 10px 0
+        tbody
+            tr
+                .day_wrapper
+                    border: 1px solid $border
+                    padding: 10px
+                    background-color: $white
+                    &.disabled_day
+                        background-color: $border_alt
+                        .header_wrapper
+                            .header_day
+                                color: $border_alt2
                     .header_wrapper
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        justify-content: space-between
+                        padding-bottom: 10px
                         .header_day
-                            color: $border_alt2
-                .header_wrapper
-                    display: flex
-                    flex-flow: row wrap
-                    align-items: center
-                    justify-content: space-between
-                    padding-bottom: 10px
-                    .header_day
-                        sf_pro_semibold(1.6vh)
-                        color: $black
-                    .header_menu
-                        .menu_circles
-                            span
-                                sf_pro_regular(0.8vh)
-                                color: $green
-                                &.margin
-                                    margin-left: 3px
-                        .menu_overlay
-                            position: absolute
-                            opacity: 0
-                            visibility: hidden
-                            z-index: -1
+                            sf_pro_semibold(1.6vh)
+                            color: $black
+                        .header_menu
+                            .menu_circles
+                                span
+                                    sf_pro_regular(0.8vh)
+                                    color: $green
+                                    &.margin
+                                        margin-left: 3px
+                            .menu_overlay
+                                position: absolute
+                                opacity: 0
+                                visibility: hidden
+                                z-index: -1
 .cms_table_taxonomy
     border-collapse: collapse
     width: 100%

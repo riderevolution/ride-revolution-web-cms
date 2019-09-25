@@ -35,7 +35,15 @@ te<template>
             </section>
             <section id="content">
                 <div class="calendar_wrapper">
-                    {{ monthName }}
+                    <div class="calendar_header">
+                        <div class="calendar_prev" @click="generatePrevCalendar()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"> <g transform="translate(-248 -187)"> <g class="arrow_1" transform="translate(248 187)"> <circle class="arrow_3" cx="14" cy="14" r="14" /> <circle class="arrow_4" cx="14" cy="14" r="13.5" /> </g> <path class="arrow_2" d="M184.939,200.506l-3.981,3.981,3.981,3.981" transform="translate(445.438 405.969) rotate(180)" /> </g> </svg>
+                        </div>
+                        <h2 class="calendar_title">{{ monthName }} {{ yearName }}</h2>
+                        <div class="calendar_next" @click="generateNextCalendar()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"> <g transform="translate(-248 -187)"> <g class="arrow_1" transform="translate(248 187)"> <circle class="arrow_3" cx="14" cy="14" r="14" /> <circle class="arrow_4" cx="14" cy="14" r="13.5" /> </g> <path class="arrow_2" d="M184.939,200.506l-3.981,3.981,3.981,3.981" transform="translate(445.438 405.969) rotate(180)" /> </g> </svg>
+                        </div>
+                    </div>
                     <table class="cms_table_calendar">
                         <thead>
                             <tr>
@@ -61,27 +69,42 @@ te<template>
         data () {
             return {
                 loaded: false,
+                currentMonth: 0,
+                currentYear: 0,
                 monthName: '',
+                yearName: '',
                 studios: [],
                 instructors: [],
                 dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             }
         },
         methods: {
-            fetchData () {
+            generatePrevCalendar () {
                 const me = this
-                me.$axios.get('api/studios?enabled=1').then(res => {
-                    me.studios = res.data.studios
-                })
-                me.$axios.get('api/instructors?enabled=1').then(res => {
-                    me.instructors = res.data.instructors.data
-                })
-                me.generateCalendar(me.$moment().year(), me.$moment().month() + 1)
-                me.loaded = true
+                me.currentMonth = me.currentMonth - 1
+                if (me.currentMonth == 0) {
+                    me.currentMonth = 12
+                    me.currentYear = me.currentYear - 1
+                }
+                me.generateCalendar(me.currentYear, me.currentMonth)
+            },
+            generateNextCalendar () {
+                const me = this
+                me.currentMonth = me.currentMonth + 1
+                if (me.currentMonth == 13) {
+                    me.currentMonth = 1
+                    me.currentYear = me.currentYear + 1
+                }
+                me.generateCalendar(me.currentYear, me.currentMonth)
+            },
+            clearTableRows () {
+                document.querySelectorAll('.cms_table_calendar tbody tr').forEach(function(e){e.remove()})
             },
             generateCalendar (year, month) {
                 const me = this
+                me.clearTableRows()
                 me.monthName = me.$moment(`${year}-${month}`).format('MMMM')
+                me.yearName = me.$moment(`${year}-${month}`).format('YYYY')
                 let startDate = 1
                 let nextDate = 1
                 let prevDate = 1
@@ -114,6 +137,8 @@ te<template>
                                     </td>`
                                 startDate++
                             } else {
+                                /**
+                                 * Generate Previous Dates **/
                                 tableRow.innerHTML += `
                                     <td class='day_wrapper disabled_day'>
                                         <div class='header_wrapper'>
@@ -159,6 +184,17 @@ te<template>
                     })
                     startNum++
                 } while (startNum <= endNum)
+            },
+            fetchData () {
+                const me = this
+                me.$axios.get('api/studios?enabled=1').then(res => {
+                    me.studios = res.data.studios
+                })
+                me.$axios.get('api/instructors?enabled=1').then(res => {
+                    me.instructors = res.data.instructors.data
+                })
+                me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1)
+                me.loaded = true
             }
         },
         mounted () {
