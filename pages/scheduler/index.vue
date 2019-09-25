@@ -4,6 +4,9 @@ te<template>
             <section id="top_content" class="table" v-if="loaded">
                 <div class="action_wrapper">
                     <h1 class="header_title">Scheduler</h1>
+                    <div class="actions">
+                        <a href="javascript:void(0)" class="action_btn">Print Schedule</a>
+                    </div>
                 </div>
                 <div class="filter_wrapper alternate">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)">
@@ -11,12 +14,14 @@ te<template>
                             <label for="studio_id">Studio</label>
                             <select class="default_select alternate" name="studio_id">
                                 <option value="" selected>All Studios</option>
+                                <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
                         </div>
                         <div class="form_group margin">
                             <label for="instructor_id">Instructor</label>
                             <select class="default_select alternate" name="instructor_id">
                                 <option value="" selected>All Instructors</option>
+                                <option :value="instructor.id" v-for="(instructor, key) in instructors" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
                             </select>
                         </div>
                         <button type="submit" name="button" class="action_btn alternate margin">Search</button>
@@ -57,10 +62,23 @@ te<template>
             return {
                 loaded: false,
                 month: '',
+                studios: [],
+                instructors: [],
                 dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             }
         },
         methods: {
+            fetchData () {
+                const me = this
+                me.$axios.get('api/studios?enabled=1').then(res => {
+                    me.studios = res.data.studios
+                })
+                me.$axios.get('api/instructors?enabled=1').then(res => {
+                    me.instructors = res.data.instructors.data
+                })
+                me.generateCalendar(me.$moment().year(), me.$moment().month() + 1)
+                me.loaded = true
+            },
             generateCalendar (year, month) {
                 const me = this
                 me.month = me.$moment(`${year}-${month}`).format('MMMM')
@@ -136,8 +154,7 @@ te<template>
         },
         mounted () {
             const me = this
-            me.generateCalendar(me.$moment().year(), me.$moment().month() + 1)
-            me.loaded = true
+            me.fetchData()
         }
     }
 </script>

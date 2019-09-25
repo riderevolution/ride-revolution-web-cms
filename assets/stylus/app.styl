@@ -3333,6 +3333,43 @@ input::placeholder
                     display: flex
                     flex-flow: row wrap
                     align-items: center
+                    .action_btn
+                        display: flex
+                        flex-flow: row wrap
+                        justify-content: center
+                        align-items: center
+                        svg
+                            margin-right: 10px
+                            .add,
+                            .cart
+                                fill: $blue
+                                transition: .3s ease-in-out
+                            .add_sign
+                                fill: transparent
+                                stroke: $white
+                                transition: .3s ease-in-out
+                            .cart_sign
+                                fill: transparent
+                                stroke: $blue
+                                stroke-linecap: round
+                                stroke-miterlimit: 10
+                                transition: .3s ease-in-out
+                        &:hover,
+                        &:focus
+                            .add,
+                            .cart
+                                fill: $white
+                                transition: .3s ease-in-out
+                            .add_sign
+                                fill: transparent
+                                stroke: $blue
+                                transition: .3s ease-in-out
+                            .cart_sign
+                                fill: transparent
+                                stroke: $white
+                                stroke-linecap: round
+                                stroke-miterlimit: 10
+                                transition: .3s ease-in-out
                 .action_buttons
                     flex: 0 0 auto
                     margin-top: 0
