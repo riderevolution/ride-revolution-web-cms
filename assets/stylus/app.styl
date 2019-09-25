@@ -2073,6 +2073,51 @@ input::placeholder
     .no_results
         text-align: center
 
+/**
+ * Table Calendar **/
+.calendar_wrapper
+    padding: 20px
+    background-color: $white
+.cms_table_calendar
+    thead
+        tr
+            th
+                sf_pro_regular(1.6vh)
+                color: $border_alt2
+                font-weight: normal
+                padding: 10px 0
+    tbody
+        tr
+            .day_wrapper
+                border: 1px solid $border
+                padding: 10px
+                background-color: $white
+                &.disabled_day
+                    background-color: $border_alt
+                    .header_wrapper
+                        .header_day
+                            color: $border_alt2
+                .header_wrapper
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    justify-content: space-between
+                    padding-bottom: 10px
+                    .header_day
+                        sf_pro_semibold(1.6vh)
+                        color: $black
+                    .header_menu
+                        .menu_circles
+                            span
+                                sf_pro_regular(0.8vh)
+                                color: $green
+                                &.margin
+                                    margin-left: 3px
+                        .menu_overlay
+                            position: absolute
+                            opacity: 0
+                            visibility: hidden
+                            z-index: -1
 .cms_table_taxonomy
     border-collapse: collapse
     width: 100%
