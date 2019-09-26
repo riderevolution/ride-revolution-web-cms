@@ -72,6 +72,7 @@
         },
         data () {
             return {
+                lastRoute: '',
                 loaded: false,
                 currentDate: 0,
                 currentMonth: 0,
@@ -116,6 +117,7 @@
                 let prevDate = 1
                 let endDate = me.$moment(`${year}-${month}`, 'YYYY-MM').daysInMonth()
                 let calendarTable = document.querySelector('.cms_table_calendar tbody')
+                let unixTimestamp = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').valueOf()
                 /**
                  * Generate Rows **/
                 for (let i = 0; i < 6; i++) {
@@ -136,7 +138,7 @@
                                                 <div class='menu_circles' id=menu_${startDate}>&#x25CF; &#x25CF; &#x25CF;</div>
                                                 <div class='menu_overlay'>
                                                     <ul class='menu_list_wrapper'>
-                                                        <li class='menu_list'><a class='menu_item margin' href='javascript:void(0)'>Add a Class</a></li>
+                                                        <li class='menu_list'><a class='add menu_item margin' href='/${me.lastRoute}/${unixTimestamp}/create'>Add a Class</a></li>
                                                         <li class='menu_list'><a class='menu_item margin' href='javascript:void(0)'>Clear a Day</a></li>
                                                         <li class='menu_list'><a class='menu_item' href='javascript:void(0)'>Duplicate Day</a></li>
                                                     </ul>
@@ -191,7 +193,7 @@
                 let endDate = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()
                 do {
                     let element = document.getElementById(`menu_${startDate}`)
-                    if (element !== target) {
+                    if (element !== target && element !== target.parentNode.parentNode.parentNode.previousElementSibling) {
                         if (element.nextElementSibling.classList.contains('active')) {
                             element.nextElementSibling.classList.remove('active')
                         }
@@ -203,6 +205,11 @@
                 const me = this
                 do {
                     let element = document.getElementById(`menu_${startNum}`)
+                    let elementAdd = element.nextElementSibling.querySelector('.menu_list_wrapper .add')
+                    elementAdd.addEventListener('click', function(e) {
+                        e.preventDefault()
+                        me.$router.push(e.target.getAttribute('href'))
+                    })
                     element.addEventListener('click', function(e) {
                         let nextElement = e.target.nextElementSibling
                         if (nextElement.classList.contains('active')) {
@@ -228,6 +235,7 @@
         },
         mounted () {
             const me = this
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 1]
             me.fetchData()
         },
         beforeMount () {

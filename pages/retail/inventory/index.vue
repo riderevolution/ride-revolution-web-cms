@@ -292,7 +292,7 @@
                         apiRoute = `api/inventory/promos?enabled=${status}`
                         break
                     case 3:
-                        apiRoute = `api/inventory/gift-cards?enabled=${status}`
+                        apiRoute = `api/inventory/gift-cards?enabled=${status}&status=0`
                         break
                 }
                 me.loader(true)

@@ -1048,6 +1048,15 @@ input::placeholder
         sf_pro_semibold(1.8vh)
         color: $black
         margin-bottom: 20px
+        &.alternate
+            user-select: none
+            display: block
+            sf_pro_regular(1.6vh)
+            font-weight: normal
+            color: $black
+            margin-bottom: 10px
+            span
+                color: $green
     .form_check
         flex: 1 0 35%
         margin-bottom: 20px
@@ -1127,7 +1136,7 @@ input::placeholder
     display: flex
     align-items: center
     &.toggler
-        flex: 0 0 120px
+        flex: 0 0 auto
         justify-content: flex-end
         label
             sf_pro_regular(1.8vh)
@@ -1140,7 +1149,7 @@ input::placeholder
             width: 55px
             height: 30px
             top: 50%
-            left: 0
+            left: calc(0% - 75px)
             z-index: 1
             background-color: $border_alt
             border-radius: 16px
