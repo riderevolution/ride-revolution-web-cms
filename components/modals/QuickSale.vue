@@ -651,7 +651,7 @@
                             product.isChecked = false
                         })
                         me.fetchTabContents()
-                        me.$axios.get('api/inventory/gift-cards').then(res => {
+                        me.$axios.get('api/inventory/gift-cards?enabled=1&status=0').then(res => {
                             if (res.data) {
                                 res.data.giftCards.data.forEach((data, index) => {
                                     data.isChecked = false

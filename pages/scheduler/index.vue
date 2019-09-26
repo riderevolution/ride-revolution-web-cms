@@ -129,7 +129,7 @@
                                     tableRow.classList.add('highlighted')
                                 }
                                 tableRow.innerHTML += `
-                                    <td class='day_wrapper'>
+                                    <td class='day_wrapper fade_in'>
                                         <div class='header_wrapper'>
                                             <div class='header_day ${(me.currentDate == startDate) ? 'active' : '' }'>${startDate}</div>
                                             <div class='header_menu'>
