@@ -36,8 +36,8 @@
             <section id="content">
                 <div class="calendar_wrapper">
                     <div class="calendar_actions">
-                        <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar($moment().year(), $moment().month() + 1)">This Month</a>
-                        <a href="javascript:void(0)" class="action_calendar_btn margin" @click="highlightWeek()">This Week</a>
+                        <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar($moment().year(), $moment().month() + 1, 0)">This Month</a>
+                        <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar($moment().year(), $moment().month() + 1, 1)">This Week</a>
                     </div>
                     <div class="calendar_header">
                         <div class="calendar_prev" @click="generatePrevCalendar()">
@@ -84,9 +84,6 @@
             }
         },
         methods: {
-            highlightWeek () {
-                const me = this
-            },
             generatePrevCalendar () {
                 const me = this
                 me.currentMonth = me.currentMonth - 1
@@ -94,7 +91,7 @@
                     me.currentMonth = 12
                     me.currentYear = me.currentYear - 1
                 }
-                me.generateCalendar(me.currentYear, me.currentMonth)
+                me.generateCalendar(me.currentYear, me.currentMonth, 0)
             },
             generateNextCalendar () {
                 const me = this
@@ -103,12 +100,12 @@
                     me.currentMonth = 1
                     me.currentYear = me.currentYear + 1
                 }
-                me.generateCalendar(me.currentYear, me.currentMonth)
+                me.generateCalendar(me.currentYear, me.currentMonth, 0)
             },
             clearTableRows () {
                 document.querySelectorAll('.cms_table_calendar tbody tr').forEach(function(e){e.remove()})
             },
-            generateCalendar (year, month) {
+            generateCalendar (year, month, highlight) {
                 const me = this
                 me.clearTableRows()
                 me.currentDate = me.$moment().date()
@@ -128,6 +125,9 @@
                     for (let j = 0; j < 7; j++) {
                         if (startDate <= endDate) {
                             if (me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').format('d') == j) {
+                                if (highlight && me.currentDate == startDate) {
+                                    tableRow.classList.add('highlighted')
+                                }
                                 tableRow.innerHTML += `
                                     <td class='day_wrapper'>
                                         <div class='header_wrapper'>
@@ -222,7 +222,7 @@
                 me.$axios.get('api/instructors?enabled=1').then(res => {
                     me.instructors = res.data.instructors.data
                 })
-                me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1)
+                me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1, 0)
                 me.loaded = true
             }
         },
