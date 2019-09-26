@@ -35,6 +35,10 @@
             </section>
             <section id="content">
                 <div class="calendar_wrapper">
+                    <div class="calendar_actions">
+                        <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar($moment().year(), $moment().month() + 1)">This Month</a>
+                        <a href="javascript:void(0)" class="action_calendar_btn margin" @click="highlightWeek()">This Week</a>
+                    </div>
                     <div class="calendar_header">
                         <div class="calendar_prev" @click="generatePrevCalendar()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"> <g transform="translate(-248 -187)"> <g class="arrow_1" transform="translate(248 187)"> <circle class="arrow_3" cx="14" cy="14" r="14" /> <circle class="arrow_4" cx="14" cy="14" r="13.5" /> </g> <path class="arrow_2" d="M184.939,200.506l-3.981,3.981,3.981,3.981" transform="translate(445.438 405.969) rotate(180)" /> </g> </svg>
@@ -69,6 +73,7 @@
         data () {
             return {
                 loaded: false,
+                currentDate: 0,
                 currentMonth: 0,
                 currentYear: 0,
                 monthName: '',
@@ -79,6 +84,9 @@
             }
         },
         methods: {
+            highlightWeek () {
+                const me = this
+            },
             generatePrevCalendar () {
                 const me = this
                 me.currentMonth = me.currentMonth - 1
@@ -103,12 +111,13 @@
             generateCalendar (year, month) {
                 const me = this
                 me.clearTableRows()
-                me.monthName = me.$moment(`${year}-${month}`).format('MMMM')
-                me.yearName = me.$moment(`${year}-${month}`).format('YYYY')
+                me.currentDate = me.$moment().date()
+                me.monthName = me.$moment(`${year}-${month}`, 'YYYY-MM').format('MMMM')
+                me.yearName = me.$moment(`${year}-${month}`, 'YYYY-MM').format('YYYY')
                 let startDate = 1
                 let nextDate = 1
                 let prevDate = 1
-                let endDate = me.$moment(`${year}-${month}`).daysInMonth()
+                let endDate = me.$moment(`${year}-${month}`, 'YYYY-MM').daysInMonth()
                 let calendarTable = document.querySelector('.cms_table_calendar tbody')
                 /**
                  * Generate Rows **/
@@ -118,11 +127,11 @@
                     * Generate Columns **/
                     for (let j = 0; j < 7; j++) {
                         if (startDate <= endDate) {
-                            if (me.$moment(`${year}-${month}-${startDate}`).format('d') == j) {
+                            if (me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').format('d') == j) {
                                 tableRow.innerHTML += `
                                     <td class='day_wrapper'>
                                         <div class='header_wrapper'>
-                                            <div class='header_day'>${startDate}</div>
+                                            <div class='header_day ${(me.currentDate == startDate) ? 'active' : '' }'>${startDate}</div>
                                             <div class='header_menu'>
                                                 <div class='menu_circles' id=menu_${startDate}>&#x25CF; &#x25CF; &#x25CF;</div>
                                                 <div class='menu_overlay'>
@@ -150,7 +159,7 @@
                         } else {
                             /**
                              * Generate Next Dates **/
-                            if (me.$moment(`${year}-${month}-${1}`).format('d') == 0) {
+                            if (me.$moment(`${year}-${month}-${1}`, 'YYYY-MM-D').format('d') == 0) {
                                 if (i == 4) {
                                     tableRow.innerHTML += `
                                         <td class='day_wrapper disabled_day'>
@@ -179,10 +188,10 @@
                 const me = this
                 let target = e.target
                 let startDate = 1
-                let endDate = me.$moment(`${me.currentYear}-${me.currentMonth}`).daysInMonth()
+                let endDate = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()
                 do {
                     let element = document.getElementById(`menu_${startDate}`)
-                    if (element !== target && !element.contains(target)) {
+                    if (element !== target) {
                         if (element.nextElementSibling.classList.contains('active')) {
                             element.nextElementSibling.classList.remove('active')
                         }

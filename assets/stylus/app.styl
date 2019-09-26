@@ -399,6 +399,23 @@ table
     padding: 10px 15px
     span
         sf_pro_regular(1.2vh)
+.action_calendar_btn
+    display: inline-block
+    sf_pro_regular(1.4vh)
+    color: $black
+    background-color: #F2F2F2
+    border: 1px solid rgba(171, 173, 185, 0.25)
+    padding: 10px 15px
+    text-decoration: none
+    outline: none
+    border-radius: 3px
+    transition: .3s ease-in-out
+    &.margin
+        margin-left: 5px
+    &:hover
+        background-color: rgba(171, 173, 185, 0.5)
+        transition: .3s ease-in-out
+
 /**
  * Close Icon **/
 .close_wrapper
@@ -2146,8 +2163,18 @@ input::placeholder
                         justify-content: space-between
                         padding-bottom: 10px
                         .header_day
+                            position: relative
                             sf_pro_semibold(1.6vh)
                             color: $black
+                            &.active
+                                color: $blue
+                                &::before
+                                    content: ''
+                                    position: absolute
+                                    top: calc(100% - 2px)
+                                    height: 2px
+                                    width: 100%
+                                    background-color: $blue
                         .header_menu
                             position: relative
                             .menu_circles
