@@ -162,7 +162,6 @@
                 classTypes: [],
                 customerTypes: [],
                 instructors: [],
-                classPackages: [],
                 form: {
                     start: {
                         hour: '00',
@@ -173,12 +172,7 @@
                         hour: '00',
                         mins: '00',
                         convention: 'PM'
-                    },
-                    classCount: 0,
-                    expiryIn: 0,
-                    notActivated: 0,
-                    purchaseLimit: 0,
-                    ao_fixed_activation_date: '1999-01-01'
+                    }
                 }
             }
         },
@@ -227,14 +221,6 @@
                     case 'end':
                         me.form.end.convention = status
                         break
-                }
-            },
-            toggleFirstClass (status) {
-                const me = this
-                if (status) {
-                    me.isNotActivated = true
-                } else {
-                    me.isNotActivated = false
                 }
             },
             addCount (type) {
@@ -329,9 +315,6 @@
                 })
                 me.$axios.get('api/instructors?enabled=1').then(res => {
                     me.instructors = res.data.instructors.data
-                })
-                me.$axios.get('api/extras/class-packages-except-me').then(res => {
-                    me.classPackages = res.data.classPackages
                 })
             }
         },
