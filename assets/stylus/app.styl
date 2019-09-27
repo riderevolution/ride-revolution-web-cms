@@ -2102,8 +2102,32 @@ input::placeholder
 /**
  * Table Calendar **/
 .calendar_wrapper
-    padding: 20px 80px 20px 20px
+    margin-bottom: 30px
     background-color: $white
+    .calendar_actions
+        padding: 20px
+        display: flex
+        flex-flow: row wrap
+        align-items: center
+        justify-content: space-between
+        .action_flex
+            .calendar_gear
+                svg
+                    fill: $light_green
+                    transition: .3s ease-in-out
+                    .gear_2
+                        fill: transparent
+                        stroke: $green
+                        stroke-miterlimit: 10
+                        stroke-width: 2
+                        transition: .3s ease
+                    &:hover
+                        fill: $green
+                        transition: .3s ease-in-out
+                        .gear_2
+                            fill: $green
+                            stroke: $white
+                            transition: .3s ease-in-out
     .calendar_header
         position: relative
         display: flex
@@ -2146,93 +2170,117 @@ input::placeholder
                     .arrow_1
                         fill: $border
                         transition: .3s ease-in-out
-    .cms_table_calendar
-        thead
-            tr
-                th
-                    sf_pro_regular(1.6vh)
-                    color: $border_alt2
-                    font-weight: normal
-                    padding: 10px 0
-        tbody
-            tr
-                &.highlighted
+    .cms_table_calendar_wrapper
+        padding: 20px 70px 20px 20px
+        .cms_table_calendar
+            thead
+                tr
+                    th
+                        sf_pro_regular(1.6vh)
+                        color: $border_alt2
+                        font-weight: normal
+                        padding: 10px 0
+            tbody
+                tr
+                    &.highlighted
+                        .day_wrapper
+                            background-color: $light_green
+                            transition: .3s ease-in-out
                     .day_wrapper
-                        background-color: $light_green
+                        position: relative
+                        border: 1px solid $border
+                        padding: 10px
+                        background-color: $white
                         transition: .3s ease-in-out
-                .day_wrapper
-                    border: 1px solid $border
-                    padding: 10px
-                    background-color: $white
-                    transition: .3s ease-in-out
-                    &.disabled_day
-                        background-color: $border_alt
+                        &.disabled_day
+                            background-color: $border_alt
+                            .header_wrapper
+                                .header_day
+                                    color: $border_alt2
                         .header_wrapper
+                            display: flex
+                            flex-flow: row wrap
+                            align-items: center
+                            justify-content: space-between
+                            padding-bottom: 10px
                             .header_day
-                                color: $border_alt2
-                    .header_wrapper
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        justify-content: space-between
-                        padding-bottom: 10px
-                        .header_day
-                            position: relative
-                            sf_pro_semibold(1.6vh)
-                            color: $black
-                            &.active
-                                color: $green
-                                &::before
-                                    content: ''
-                                    position: absolute
-                                    top: calc(100% - 2px)
-                                    height: 2px
-                                    width: 100%
-                                    background-color: $green
-                        .header_menu
-                            position: relative
-                            .menu_circles
-                                sf_pro_regular(0.8vh)
-                                color: $green
-                            .menu_overlay
-                                position: absolute
-                                background-color: $white
-                                border-radius: 5px
-                                width: 160px
-                                padding: 10px 0
-                                top: calc(100% + 20px)
-                                left: 0
-                                right: unset
-                                opacity: 0
-                                z-index: 0
-                                visibility: hidden
-                                box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
-                                transition: .3s ease-in-out
-                                &.alternate
-                                    left: unset
-                                    right: 0
-                                .menu_list_wrapper
-                                    list-style: none
-                                    padding: 0
-                                    .menu_list
-                                        .menu_item
-                                            display: block
-                                            sf_pro_regular(1.5vh)
-                                            color: $black
-                                            text-decoration: none
-                                            padding: 10px 20px
-                                            background-color: transparent
-                                            transition: .3s ease-in-out
-                                            &:hover
-                                                color: $green
-                                                background-color: $light_green
-                                                transition: .3s ease-in-out
+                                position: relative
+                                sf_pro_semibold(1.6vh)
+                                color: $black
                                 &.active
-                                    top: calc(100% + 10px)
-                                    opacity: 1
-                                    visibility: visible
-                                    z-index: 1
+                                    color: $green
+                                    &::before
+                                        content: ''
+                                        position: absolute
+                                        top: calc(100% - 2px)
+                                        height: 2px
+                                        width: 100%
+                                        background-color: $green
+                            .header_menu
+                                position: relative
+                                .menu_circles
+                                    sf_pro_regular(0.8vh)
+                                    color: $green
+                                .menu_overlay
+                                    position: absolute
+                                    background-color: $white
+                                    border-radius: 5px
+                                    width: 160px
+                                    padding: 10px 0
+                                    top: calc(100% + 20px)
+                                    left: 0
+                                    right: unset
+                                    opacity: 0
+                                    z-index: 0
+                                    visibility: hidden
+                                    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
                                     transition: .3s ease-in-out
+                                    &.alternate
+                                        left: unset
+                                        right: 0
+                                    .menu_list_wrapper
+                                        list-style: none
+                                        padding: 0
+                                        .menu_list
+                                            .menu_item
+                                                display: block
+                                                sf_pro_regular(1.5vh)
+                                                color: $black
+                                                text-decoration: none
+                                                padding: 10px 20px
+                                                background-color: transparent
+                                                transition: .3s ease-in-out
+                                                &:hover
+                                                    color: $green
+                                                    background-color: $light_green
+                                                    transition: .3s ease-in-out
+                                    &.active
+                                        top: calc(100% + 10px)
+                                        opacity: 1
+                                        visibility: visible
+                                        z-index: 1
+                                        transition: .3s ease-in-out
+                        .calendar_gear
+                            position: absolute
+                            top: calc(0% - 1px)
+                            left: calc(100% + 10px)
+                            z-index: 2
+                            svg
+                                fill: $light_green
+                                transition: .3s ease-in-out
+                                .gear_2
+                                    fill: transparent
+                                    stroke: $green
+                                    stroke-miterlimit: 10
+                                    stroke-width: 2
+                                    transition: .3s ease
+                                &:hover
+                                    fill: $green
+                                    transition: .3s ease-in-out
+                                    .gear_2
+                                        fill: $green
+                                        stroke: $white
+                                        transition: .3s ease-in-out
 .cms_table_taxonomy
     border-collapse: collapse
     width: 100%

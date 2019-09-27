@@ -36,8 +36,15 @@
             <section id="content">
                 <div class="calendar_wrapper">
                     <div class="calendar_actions">
-                        <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar($moment().year(), $moment().month() + 1, 0)">This Month</a>
-                        <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar($moment().year(), $moment().month() + 1, 1)">This Week</a>
+                        <div class="action_flex">
+                            <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar($moment().year(), $moment().month() + 1, 0)">This Month</a>
+                            <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar($moment().year(), $moment().month() + 1, 1)">This Week</a>
+                        </div>
+                        <div class="action_flex">
+                            <div class="calendar_gear">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg>
+                            </div>
+                        </div>
                     </div>
                     <div class="calendar_header">
                         <div class="calendar_prev" @click="generatePrevCalendar()">
@@ -48,15 +55,17 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"> <g transform="translate(-248 -187)"> <g class="arrow_1" transform="translate(248 187)"> <circle class="arrow_3" cx="14" cy="14" r="14" /> <circle class="arrow_4" cx="14" cy="14" r="13.5" /> </g> <path class="arrow_2" d="M184.939,200.506l-3.981,3.981,3.981,3.981" transform="translate(445.438 405.969) rotate(180)" /> </g> </svg>
                         </div>
                     </div>
-                    <table class="cms_table_calendar">
-                        <thead>
-                            <tr>
-                                <th v-for="(dayLabel, key) in dayLabels" :key="key">{{ dayLabel }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="cms_table_calendar_wrapper">
+                        <table class="cms_table_calendar">
+                            <thead>
+                                <tr>
+                                    <th v-for="(dayLabel, key) in dayLabels" :key="key">{{ dayLabel }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
         </div>
@@ -154,7 +163,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        ${(j == 6) ? '<div class="calendar_gear">sample</div>' : '' }
+                                        ${(j == 6) ? '<div class="calendar_gear"><svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg></div>' : '' }
                                     </td>`
                                 startDate++
                             } else {
@@ -178,6 +187,7 @@
                                             <div class='header_wrapper'>
                                                 <div class='header_day'>${nextDate}</div>
                                             </div>
+                                            ${(j == 6 && i == 4) ? '<div class="calendar_gear"><svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg></div>' : '' }
                                         </td>`
                                     nextDate++
                                 }
@@ -187,6 +197,7 @@
                                         <div class='header_wrapper'>
                                             <div class='header_day'>${nextDate}</div>
                                         </div>
+                                        ${(j == 6 && i == 4) ? '<div class="calendar_gear"><svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg></div>' : '' }
                                     </td>`
                                 nextDate++
                             }
