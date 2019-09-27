@@ -135,6 +135,7 @@
                 let prevDate = 1
                 let endDate = me.$moment(`${year}-${month}`, 'YYYY-MM').daysInMonth()
                 let calendarTable = document.querySelector('.cms_table_calendar tbody')
+                me.loader(true)
                 /**
                  * Generate Rows **/
                 for (let i = 0; i < 6; i++) {
@@ -206,6 +207,9 @@
                     calendarTable.appendChild(tableRow)
                 }
                 me.clickDates(1, endDate)
+                setTimeout( () => {
+                    me.loader(false)
+                }, 300)
             },
             toggleOverlays (e) {
                 const me = this
