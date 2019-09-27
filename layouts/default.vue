@@ -5,9 +5,13 @@
                 Content has been {{ $store.state.notificationMessage }}!
             </div>
         </transition>
-        <navbar v-if="$store.state.isAuth" />
+        <transition name="fade">
+            <navbar v-if="$store.state.isAuth" />
+        </transition>
         <div class="admin_flex">
-            <headerNav v-if="$store.state.isAuth" />
+            <transition name="fade">
+                <headerNav v-if="$store.state.isAuth" />
+            </transition>
             <nuxt />
         </div>
         <transition name="fade">

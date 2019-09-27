@@ -60,15 +60,22 @@
                 </div>
             </section>
         </div>
-        <foot v-if="$store.state.isAuth" />
+        <transition name="fade">
+            <foot v-if="$store.state.isAuth" />
+        </transition>
+        <transition name="fade">
+            <calendar-clear v-if="$store.state.calendarClearStatus" :unix="currentUnix" :type="calendarType" />
+        </transition>
     </div>
 </template>
 
 <script>
     import Foot from '../../components/Foot'
+    import CalendarClear from '../../components/modals/CalendarClear'
     export default {
         components: {
-            Foot
+            Foot,
+            CalendarClear
         },
         data () {
             return {
@@ -77,6 +84,8 @@
                 currentDate: 0,
                 currentMonth: 0,
                 currentYear: 0,
+                currentUnix: 0,
+                calendarType: 'day',
                 monthName: '',
                 yearName: '',
                 studios: [],
@@ -117,7 +126,6 @@
                 let prevDate = 1
                 let endDate = me.$moment(`${year}-${month}`, 'YYYY-MM').daysInMonth()
                 let calendarTable = document.querySelector('.cms_table_calendar tbody')
-                let unixTimestamp = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').valueOf()
                 /**
                  * Generate Rows **/
                 for (let i = 0; i < 6; i++) {
@@ -127,6 +135,7 @@
                     for (let j = 0; j < 7; j++) {
                         if (startDate <= endDate) {
                             if (me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').format('d') == j) {
+                                let unixTimestamp = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').valueOf()
                                 if (highlight && me.currentDate == startDate) {
                                     tableRow.classList.add('highlighted')
                                 }
@@ -136,15 +145,16 @@
                                             <div class='header_day ${(me.currentDate == startDate) ? 'active' : '' }'>${startDate}</div>
                                             <div class='header_menu'>
                                                 <div class='menu_circles' id=menu_${startDate}>&#x25CF; &#x25CF; &#x25CF;</div>
-                                                <div class='menu_overlay'>
+                                                <div class='menu_overlay ${(j == 6) ? 'alternate' : ''}'>
                                                     <ul class='menu_list_wrapper'>
-                                                        <li class='menu_list'><a class='add menu_item margin' href='/${me.lastRoute}/${unixTimestamp}/create'>Add a Class</a></li>
-                                                        <li class='menu_list'><a class='menu_item margin' href='javascript:void(0)'>Clear a Day</a></li>
+                                                        <li class='menu_list'><a class='add menu_item' href='/${me.lastRoute}/${unixTimestamp}/create'>Add a Class</a></li>
+                                                        <li class='menu_list'><a class='clear menu_item' href='${unixTimestamp}'>Clear a Day</a></li>
                                                         <li class='menu_list'><a class='menu_item' href='javascript:void(0)'>Duplicate Day</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
+                                        ${(j == 6) ? '<div class="calendar_gear">sample</div>' : '' }
                                     </td>`
                                 startDate++
                             } else {
@@ -206,10 +216,23 @@
                 do {
                     let element = document.getElementById(`menu_${startNum}`)
                     let elementAdd = element.nextElementSibling.querySelector('.menu_list_wrapper .add')
+                    let elementClear = element.nextElementSibling.querySelector('.menu_list_wrapper .clear')
+                    /**
+                     * Add Class **/
                     elementAdd.addEventListener('click', function(e) {
                         e.preventDefault()
                         me.$router.push(e.target.getAttribute('href'))
                     })
+                    /**
+                     * Clear Class **/
+                    elementClear.addEventListener('click', function(e) {
+                        e.preventDefault()
+                        me.currentUnix = e.target.getAttribute('href')
+                        me.calendarType = 'day'
+                        me.$store.state.calendarClearStatus = true
+                    })
+                    /**
+                     * Toggle Overlay **/
                     element.addEventListener('click', function(e) {
                         let nextElement = e.target.nextElementSibling
                         if (nextElement.classList.contains('active')) {

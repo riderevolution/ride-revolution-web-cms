@@ -1,0 +1,52 @@
+<template>
+    <div class="default_modal">
+        <div class="background" @click="toggleClose()"></div>
+        <div class="confirmation_wrapper">
+            <div class="confirmation_text">
+                Are you sure you want to clear this {{ (type == 'day') ? 'day' : (type == 'week' ? 'week' : 'month') }}?
+            </div>
+            <div class="button_group">
+                <div class="action_cancel_btn confirm" @click="toggleClose()">Cancel</div>
+                <div class="action_success_btn confirm margin" @click="proceedStatus()">Clear Schedule</div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            unix: {
+                type: Number,
+                default: 0
+            },
+            type: {
+                type: String,
+                default: 'day'
+            }
+        },
+        methods: {
+            toggleClose () {
+                const me = this
+                me.$store.state.calendarClearStatus = false
+                document.body.classList.remove('no_scroll')
+            },
+            proceedStatus () {
+                const me = this
+                switch (type) {
+                    case 'day':
+
+                        break
+                    case 'week':
+
+                        break
+                    case 'month':
+
+                        break
+                }
+                me.$store.state.calendarClearStatus = false
+                document.body.classList.remove('no_scroll')
+            }
+        }
+    }
+</script>

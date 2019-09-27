@@ -163,7 +163,7 @@
 </template>
 
 <script>
-    import Foot from '../../../components/Foot'
+    import Foot from '../../../../components/Foot'
     export default {
         components: {
             Foot
@@ -287,7 +287,7 @@
         mounted () {
             const me = this
             me.fetchTypes()
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }
     }
 </script>
