@@ -43,6 +43,12 @@
                         <div class="action_flex">
                             <div class="calendar_gear">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg>
+                                <div class="gear_overlay">
+                                    <ul class='gear_list_wrapper'>
+                                        <li class='gear_list'><a class='add gear_item' href='javascript:void(0)'>Clear Month</a></li>
+                                        <li class='gear_list'><a class='clear gear_item' href='javascript:void(0)'>Duplicate Month</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -164,7 +170,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        ${(j == 6) ? '<div class="calendar_gear"><svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg></div>' : '' }
+                                        ${(j == 6) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Month</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Month</a></li> </ul> </div>` : '' }
                                     </td>`
                                 startDate++
                             } else {
@@ -206,9 +212,9 @@
                     }
                     calendarTable.appendChild(tableRow)
                 }
-                me.clickDates(1, endDate)
                 setTimeout( () => {
                     me.loader(false)
+                    me.clickDates(1, endDate)
                 }, 300)
             },
             toggleOverlays (e) {
@@ -217,10 +223,18 @@
                 let startDate = 1
                 let endDate = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()
                 do {
-                    let element = document.getElementById(`menu_${startDate}`)
-                    if (element !== target && element !== target.parentNode.parentNode.parentNode.previousElementSibling) {
-                        if (element.nextElementSibling.classList.contains('active')) {
-                            element.nextElementSibling.classList.remove('active')
+                    let elementDay = document.getElementById(`menu_${startDate}`)
+                    let elementWeek = document.getElementById(`gear_${startDate}`)
+                    if (elementDay !== target && elementDay !== target.parentNode.parentNode.parentNode.previousElementSibling) {
+                        if (elementDay.nextElementSibling.classList.contains('active')) {
+                            elementDay.nextElementSibling.classList.remove('active')
+                        }
+                    }
+                    if (elementWeek != null) {
+                        if (elementWeek !== target.ownerSVGElement && target.ownerSVGElement === undefined) {
+                            if (elementWeek.nextElementSibling.classList.contains('active')) {
+                                elementWeek.nextElementSibling.classList.remove('active')
+                            }
                         }
                     }
                     startDate++
@@ -229,9 +243,10 @@
             clickDates (startNum, endNum) {
                 const me = this
                 do {
-                    let element = document.getElementById(`menu_${startNum}`)
-                    let elementAdd = element.nextElementSibling.querySelector('.menu_list_wrapper .add')
-                    let elementClear = element.nextElementSibling.querySelector('.menu_list_wrapper .clear')
+                    let elementDay = document.getElementById(`menu_${startNum}`)
+                    let elementWeek = (me.$moment(`${me.currentYear}-${me.currentMonth}-${startNum}`, 'YYYY-MM-D').startOf('week').format('D') == startNum) ? document.getElementById(`gear_${startNum - 1}`) : ''
+                    let elementAdd = elementDay.nextElementSibling.querySelector('.menu_list_wrapper .add')
+                    let elementClear = elementDay.nextElementSibling.querySelector('.menu_list_wrapper .clear')
                     /**
                      * Add Class **/
                     elementAdd.addEventListener('click', function(e) {
@@ -246,14 +261,28 @@
                         me.calendarType = 'day'
                         me.$store.state.calendarClearStatus = true
                     })
+                    if (elementWeek != null && elementWeek != 0) {
+                        /**
+                         * Toggle Week Overlay **/
+                        elementWeek.addEventListener('click', function(e) {
+                            let me = this
+                            let overlay = me.nextElementSibling
+                            if (overlay.classList.contains('active')) {
+                                overlay.classList.remove('active')
+                            } else {
+                                overlay.classList.add('active')
+                            }
+                        })
+                    }
                     /**
-                     * Toggle Overlay **/
-                    element.addEventListener('click', function(e) {
-                        let nextElement = e.target.nextElementSibling
-                        if (nextElement.classList.contains('active')) {
-                            nextElement.classList.remove('active')
+                     * Toggle Day Overlay **/
+                    elementDay.addEventListener('click', function(e) {
+                        let me = this
+                        let overlay = me.nextElementSibling
+                        if (overlay.classList.contains('active')) {
+                            overlay.classList.remove('active')
                         } else {
-                            nextElement.classList.add('active')
+                            overlay.classList.add('active')
                         }
                     })
                     startNum++

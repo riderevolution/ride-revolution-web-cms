@@ -2112,6 +2112,7 @@ input::placeholder
         justify-content: space-between
         .action_flex
             .calendar_gear
+                position: relative
                 svg
                     fill: $light_green
                     transition: .3s ease-in-out
@@ -2120,7 +2121,6 @@ input::placeholder
                         stroke: $green
                         stroke-miterlimit: 10
                         stroke-width: 2
-                        transition: .3s ease
                     &:hover
                         fill: $green
                         transition: .3s ease-in-out
@@ -2128,6 +2128,44 @@ input::placeholder
                             fill: $green
                             stroke: $white
                             transition: .3s ease-in-out
+                .gear_overlay
+                    position: absolute
+                    background-color: $white
+                    border-radius: 5px
+                    width: 160px
+                    padding: 10px 0
+                    top: calc(100% + 20px)
+                    right: 0
+                    opacity: 0
+                    z-index: 1
+                    visibility: hidden
+                    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
+                    transition: .3s ease-in-out
+                    &.alternate
+                        left: unset
+                        right: 0
+                    .gear_list_wrapper
+                        list-style: none
+                        padding: 0
+                        .gear_list
+                            .gear_item
+                                display: block
+                                sf_pro_regular(1.5vh)
+                                color: $black
+                                text-decoration: none
+                                padding: 10px 20px
+                                background-color: transparent
+                                transition: .3s ease-in-out
+                                &:hover
+                                    color: $green
+                                    background-color: $light_green
+                                    transition: .3s ease-in-out
+                    &.active
+                        top: calc(100% + 10px)
+                        opacity: 1
+                        visibility: visible
+                        z-index: 1
+                        transition: .3s ease-in-out
     .calendar_header
         position: relative
         display: flex
@@ -2265,22 +2303,57 @@ input::placeholder
                             top: calc(0% - 1px)
                             left: calc(100% + 10px)
                             z-index: 2
-                            svg
-                                fill: $light_green
+                            fill: $light_green
+                            transition: .3s ease-in-out
+                            .gear_2
+                                fill: transparent
+                                stroke: $green
+                                stroke-miterlimit: 10
+                                stroke-width: 2
+                            &:hover
+                                fill: $green
                                 transition: .3s ease-in-out
                                 .gear_2
-                                    fill: transparent
-                                    stroke: $green
-                                    stroke-miterlimit: 10
-                                    stroke-width: 2
-                                    transition: .3s ease
-                                &:hover
                                     fill: $green
+                                    stroke: $white
                                     transition: .3s ease-in-out
-                                    .gear_2
-                                        fill: $green
-                                        stroke: $white
+                        .gear_overlay
+                            position: absolute
+                            background-color: $white
+                            border-radius: 5px
+                            width: 160px
+                            padding: 10px 0
+                            top: calc(100% - 25px)
+                            right: calc(0% - 50px)
+                            opacity: 0
+                            z-index: 3
+                            visibility: hidden
+                            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
+                            transition: .3s ease-in-out
+                            &.alternate
+                                left: unset
+                                right: 0
+                            .gear_list_wrapper
+                                list-style: none
+                                padding: 0
+                                .gear_list
+                                    .gear_item
+                                        display: block
+                                        sf_pro_regular(1.5vh)
+                                        color: $black
+                                        text-decoration: none
+                                        padding: 10px 20px
+                                        background-color: transparent
                                         transition: .3s ease-in-out
+                                        &:hover
+                                            color: $green
+                                            background-color: $light_green
+                                            transition: .3s ease-in-out
+                            &.active
+                                top: calc(100% - 5px)
+                                opacity: 1
+                                visibility: visible
+                                transition: .3s ease-in-out
 .cms_table_taxonomy
     border-collapse: collapse
     width: 100%
