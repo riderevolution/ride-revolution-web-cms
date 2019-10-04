@@ -139,9 +139,11 @@
                 me.yearName = me.$moment(`${year}-${month}`, 'YYYY-MM').format('YYYY')
                 let startDate = 1
                 let nextDate = 1
-                let prevDate = 1
+                let prevDate = me.$moment(`${year}-${(month - 1 == 0) ? 12 : month - 1}`, 'YYYY-MM').daysInMonth()
                 let endDate = me.$moment(`${year}-${month}`, 'YYYY-MM').daysInMonth()
                 let calendarTable = document.querySelector('.cms_table_calendar tbody')
+                let current = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').format('d')
+                let excess = 0
                 me.loader(true)
                 /**
                  * Generate Rows **/
@@ -171,10 +173,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        ${(j == 6) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Month</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Month</a></li> </ul> </div>` : '' }
+                                        ${(j == 6) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Clear Week</a></li> <li class="gear_list"><a class="duplicate gear_item" href="javascript:void(0)">Duplicate Week</a></li> </ul> </div>` : '' }
                                     </td>`
                                 startDate++
                             } else {
+                                let prevDate = me.$moment(`${year}-${(month - 1 == 0) ? 12 : month - 1}`, 'YYYY-MM').daysInMonth()
+                                current--
+                                if (current <= 0) {
+                                    prevDate = me.$moment(`${year}-${(month - 1 == 0) ? 12 : month - 1}`, 'YYYY-MM').daysInMonth()
+                                } else {
+                                    prevDate = prevDate - current
+                                }
+                                excess++
                                 /**
                                  * Generate Previous Dates **/
                                 tableRow.innerHTML += `
@@ -183,7 +193,6 @@
                                             <div class='header_day'>${prevDate}</div>
                                         </div>
                                     </td>`
-                                prevDate++
                             }
                         } else {
                             /**
@@ -195,7 +204,7 @@
                                             <div class='header_wrapper'>
                                                 <div class='header_day'>${nextDate}</div>
                                             </div>
-                                            ${(j == 6 && i == 4) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate - 1}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Month</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Month</a></li> </ul> </div>` : '' }
+                                            ${(j == 6 && i == 4) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate - 1}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Week</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Week</a></li> </ul> </div>` : '' }
                                         </td>`
                                     nextDate++
                                 }
@@ -205,7 +214,7 @@
                                         <div class='header_wrapper'>
                                             <div class='header_day'>${nextDate}</div>
                                         </div>
-                                        ${(j == 6 && i == 4) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate - 1}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Month</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Month</a></li> </ul> </div>` : '' }
+                                        ${(j == 6 && i == 4) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate - 1}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Week</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Week</a></li> </ul> </div>` : '' }
                                     </td>`
                                 nextDate++
                             }
@@ -215,7 +224,7 @@
                 }
                 setTimeout( () => {
                     me.loader(false)
-                    me.clickDates(1, endDate)
+                    me.clickDates(1, endDate, excess)
                 }, 300)
             },
             toggleOverlays (e) {
@@ -250,26 +259,27 @@
                 let month = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').format('M-YYYY')
                 me.monthStatus ^= true
             },
-            clickDates (startNum, endNum) {
+            clickDates (startNum, endNum, firstDayExcess) {
                 const me = this
                 do {
                     let elementDay = (document.getElementById(`menu_${startNum}`) != null) ? document.getElementById(`menu_${startNum}`) : null
                     let elementWeek = (document.getElementById(`gear_${startNum - 1}`) != null) ? document.getElementById(`gear_${startNum - 1}`) : null
-                    let elementAdd = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .add') : null
-                    let elementClear = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .clear') : null
+                    let elementDayAdd = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .add') : null
+                    let elementDayClear = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .clear') : null
+                    let elementWeekClear = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .clear') : null
 
-                    if (elementAdd != null) {
-                        /**
-                        * Add Class **/
-                        elementAdd.addEventListener('click', function(e) {
+                    /**
+                    * Add Class **/
+                    if (elementDayAdd != null) {
+                        elementDayAdd.addEventListener('click', function(e) {
                             e.preventDefault()
                             me.$router.push(e.target.getAttribute('href'))
                         })
                     }
-                    if (elementClear != null) {
-                        /**
-                         * Clear Class **/
-                        elementClear.addEventListener('click', function(e) {
+                    /**
+                    * Clear Class **/
+                    if (elementDayClear != null) {
+                        elementDayClear.addEventListener('click', function(e) {
                             e.preventDefault()
                             me.currentUnix = e.target.getAttribute('href')
                             me.calendarType = 'day'
@@ -280,8 +290,10 @@
                         /**
                          * Toggle Week Overlay **/
                         elementWeek.addEventListener('click', function(e) {
-                            let me = this
-                            let overlay = me.nextElementSibling
+                            let element = this
+                            let overlay = element.nextElementSibling
+                            let id = element.id.split('_')[1]
+                            console.log(me.getLastDayofWeek(id));
                             if (overlay.classList.contains('active')) {
                                 overlay.classList.remove('active')
                             } else {
@@ -304,6 +316,24 @@
                     }
                     startNum++
                 } while (startNum < 50)
+            },
+            getFirstDayofWeek (startDate, excess) {
+                const me = this
+                let firstDayofWeek = parseInt(me.$moment(`${me.currentYear}-${me.currentMonth}-${startDate}`, 'YYYY-MM-D').startOf('week').format('D')) + parseInt(excess)
+                if (firstDayofWeek == 31 || firstDayofWeek == 32) {
+                    firstDayofWeek = 1
+                } else {
+                    firstDayofWeek = firstDayofWeek - excess
+                }
+                return firstDayofWeek
+            },
+            getLastDayofWeek (startDate) {
+                const me = this
+                let lastDayofWeek = me.$moment(`${me.currentYear}-${me.currentMonth}-${startDate}`, 'YYYY-MM-D').endOf('week').format('D')
+                if (startDate == 30 || startDate == 31) {
+                    lastDayofWeek = me.$moment(`${me.currentYear}-${me.currentMonth}-${startDate}`, 'YYYY-MM-D').daysInMonth()
+                }
+                return lastDayofWeek
             },
             fetchData () {
                 const me = this
