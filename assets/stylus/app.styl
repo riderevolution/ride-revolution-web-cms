@@ -2111,9 +2111,15 @@ input::placeholder
         align-items: center
         justify-content: space-between
         .action_flex
-            .calendar_gear
+            .gear_action
                 position: relative
-                svg
+                width: 38.568px
+                height: 32.924px
+                .calendar_gear
+                    position: absolute
+                    top: 0
+                    left: 0
+                    z-index: 2
                     fill: $light_green
                     transition: .3s ease-in-out
                     .gear_2
@@ -2134,10 +2140,9 @@ input::placeholder
                     border-radius: 5px
                     width: 160px
                     padding: 10px 0
-                    top: calc(100% + 20px)
+                    top: calc(100% - 25px)
                     right: 0
                     opacity: 0
-                    z-index: 1
                     visibility: hidden
                     box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
                     transition: .3s ease-in-out
@@ -2161,10 +2166,9 @@ input::placeholder
                                     background-color: $light_green
                                     transition: .3s ease-in-out
                     &.active
-                        top: calc(100% + 10px)
+                        top: calc(100% + 15px)
                         opacity: 1
                         visibility: visible
-                        z-index: 1
                         transition: .3s ease-in-out
     .calendar_header
         position: relative

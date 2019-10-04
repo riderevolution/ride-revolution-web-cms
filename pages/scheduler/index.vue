@@ -41,9 +41,9 @@
                             <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar($moment().year(), $moment().month() + 1, 1)">This Week</a>
                         </div>
                         <div class="action_flex">
-                            <div class="calendar_gear">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg>
-                                <div class="gear_overlay">
+                            <div class="gear_action">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="calendar_gear" id="gear_month" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" @click="monthGear()"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg>
+                                <div :class="`gear_overlay ${(monthStatus) ? 'active' : ''}`">
                                     <ul class='gear_list_wrapper'>
                                         <li class='gear_list'><a class='add gear_item' href='javascript:void(0)'>Clear Month</a></li>
                                         <li class='gear_list'><a class='clear gear_item' href='javascript:void(0)'>Duplicate Month</a></li>
@@ -96,6 +96,7 @@
             return {
                 lastRoute: '',
                 loaded: false,
+                monthStatus: false,
                 currentDate: 0,
                 currentMonth: 0,
                 currentYear: 0,
@@ -194,7 +195,7 @@
                                             <div class='header_wrapper'>
                                                 <div class='header_day'>${nextDate}</div>
                                             </div>
-                                            ${(j == 6 && i == 4) ? '<div class="calendar_gear"><svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg></div>' : '' }
+                                            ${(j == 6 && i == 4) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate - 1}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Month</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Month</a></li> </ul> </div>` : '' }
                                         </td>`
                                     nextDate++
                                 }
@@ -204,7 +205,7 @@
                                         <div class='header_wrapper'>
                                             <div class='header_day'>${nextDate}</div>
                                         </div>
-                                        ${(j == 6 && i == 4) ? '<div class="calendar_gear"><svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg></div>' : '' }
+                                        ${(j == 6 && i == 4) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate - 1}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="add gear_item" href="javascript:void(0)">Clear Month</a></li> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Duplicate Month</a></li> </ul> </div>` : '' }
                                     </td>`
                                 nextDate++
                             }
@@ -222,6 +223,10 @@
                 let target = e.target
                 let startDate = 1
                 let endDate = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()
+                let elementMonth = document.getElementById('gear_month')
+                if (elementMonth !== target.ownerSVGElement && elementMonth !== target.parentNode.parentNode.parentNode.previousElementSibling) {
+                    me.monthStatus = false
+                }
                 do {
                     let elementDay = document.getElementById(`menu_${startDate}`)
                     let elementWeek = document.getElementById(`gear_${startDate}`)
@@ -231,7 +236,7 @@
                         }
                     }
                     if (elementWeek != null) {
-                        if (elementWeek !== target.ownerSVGElement && target.ownerSVGElement === undefined) {
+                        if (elementWeek !== target.ownerSVGElement && elementWeek !== target.parentNode.parentNode.parentNode.previousElementSibling) {
                             if (elementWeek.nextElementSibling.classList.contains('active')) {
                                 elementWeek.nextElementSibling.classList.remove('active')
                             }
@@ -240,27 +245,37 @@
                     startDate++
                 } while (startDate <= endDate)
             },
+            monthGear () {
+                const me = this
+                let month = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').format('M-YYYY')
+                me.monthStatus ^= true
+            },
             clickDates (startNum, endNum) {
                 const me = this
                 do {
-                    let elementDay = document.getElementById(`menu_${startNum}`)
-                    let elementWeek = (me.$moment(`${me.currentYear}-${me.currentMonth}-${startNum}`, 'YYYY-MM-D').startOf('week').format('D') == startNum) ? document.getElementById(`gear_${startNum - 1}`) : ''
-                    let elementAdd = elementDay.nextElementSibling.querySelector('.menu_list_wrapper .add')
-                    let elementClear = elementDay.nextElementSibling.querySelector('.menu_list_wrapper .clear')
-                    /**
-                     * Add Class **/
-                    elementAdd.addEventListener('click', function(e) {
-                        e.preventDefault()
-                        me.$router.push(e.target.getAttribute('href'))
-                    })
-                    /**
-                     * Clear Class **/
-                    elementClear.addEventListener('click', function(e) {
-                        e.preventDefault()
-                        me.currentUnix = e.target.getAttribute('href')
-                        me.calendarType = 'day'
-                        me.$store.state.calendarClearStatus = true
-                    })
+                    let elementDay = (document.getElementById(`menu_${startNum}`) != null) ? document.getElementById(`menu_${startNum}`) : null
+                    let elementWeek = (document.getElementById(`gear_${startNum - 1}`) != null) ? document.getElementById(`gear_${startNum - 1}`) : null
+                    let elementAdd = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .add') : null
+                    let elementClear = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .clear') : null
+
+                    if (elementAdd != null) {
+                        /**
+                        * Add Class **/
+                        elementAdd.addEventListener('click', function(e) {
+                            e.preventDefault()
+                            me.$router.push(e.target.getAttribute('href'))
+                        })
+                    }
+                    if (elementClear != null) {
+                        /**
+                         * Clear Class **/
+                        elementClear.addEventListener('click', function(e) {
+                            e.preventDefault()
+                            me.currentUnix = e.target.getAttribute('href')
+                            me.calendarType = 'day'
+                            me.$store.state.calendarClearStatus = true
+                        })
+                    }
                     if (elementWeek != null && elementWeek != 0) {
                         /**
                          * Toggle Week Overlay **/
@@ -274,19 +289,21 @@
                             }
                         })
                     }
-                    /**
-                     * Toggle Day Overlay **/
-                    elementDay.addEventListener('click', function(e) {
-                        let me = this
-                        let overlay = me.nextElementSibling
-                        if (overlay.classList.contains('active')) {
-                            overlay.classList.remove('active')
-                        } else {
-                            overlay.classList.add('active')
-                        }
-                    })
+                    if (elementDay != null) {
+                        /**
+                        * Toggle Day Overlay **/
+                        elementDay.addEventListener('click', function(e) {
+                            let me = this
+                            let overlay = me.nextElementSibling
+                            if (overlay.classList.contains('active')) {
+                                overlay.classList.remove('active')
+                            } else {
+                                overlay.classList.add('active')
+                            }
+                        })
+                    }
                     startNum++
-                } while (startNum <= endNum)
+                } while (startNum < 50)
             },
             fetchData () {
                 const me = this
