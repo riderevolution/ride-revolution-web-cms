@@ -17,7 +17,7 @@
     export default {
         props: {
             unix: {
-                type: Number,
+                type: String,
                 default: 0
             },
             type: {
