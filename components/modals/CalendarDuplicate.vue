@@ -29,25 +29,12 @@
                 </transition>
                 <transition name="fade">
                     <div class="modal_main_group" v-if="type == 'week'">
-                        {{ populateWeeks }}
                         <div class="form_flex trio">
-                            <div class="form_group">
-                                <label class="flex_label">Select permissions under this role</label>
-                                <div class="form_check">
-                                    <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
-                                    <label for="enabled">Activate</label>
-                                </div>
-                            </div>
-                            <div class="form_group">
-                                <div class="form_check">
-                                    <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
-                                    <label for="enabled">Activate</label>
-                                </div>
-                            </div>
-                            <div class="form_group">
-                                <div class="form_check">
-                                    <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
-                                    <label for="enabled">Activate</label>
+                            <div class="form_group" v-for="(data, key) in populateWeeks" :key="key">
+                                <label class="flex_label">{{ data.name }} {{ data.year }}</label>
+                                <div class="form_check" v-for="(week, wkey) in data.weeks" :key="wkey">
+                                    <input type="checkbox" :id="`week_${data.month}_${week}`" name="weeks[]" class="action_check" checked>
+                                    <label :for="`week_${data.month}_${week}`">{{ convertNumbertoString(wkey) }} Week</label>
                                 </div>
                             </div>
                         </div>
@@ -81,8 +68,6 @@
         computed: {
             populateWeeks () {
                 const me = this
-                let startDate = 1
-                let endDate = me.$moment(`${me.yearPicked}-${me.monthPicked}`, 'YYYY-MM').daysInMonth()
                 let month = me.monthPicked
                 let year = me.yearPicked
                 let data = []
@@ -94,20 +79,47 @@
                     }
                     data.push(
                         {
-                            monthName: me.$moment(`${year}-${month}`, 'YYYY-MM').format('MMMM'),
-                            weeks: []
+                            name: me.$moment(`${year}-${month}`, 'YYYY-MM').format('MMMM'),
+                            month: parseInt(me.$moment(`${year}-${month}`, 'YYYY-MM').format('M')),
+                            year: parseInt(me.$moment(`${year}-${month}`, 'YYYY-MM').format('YYYY')),
+                            weeks: ''
                         }
                     )
                 }
-                // for (let i = 0; i < 6; i++) {
-                //     for (let j = 0; j < 7; j++) {
-                //
-                //     }
-                // }
+
+                data.forEach((element, index) => {
+                    let startDate = 1
+                    let nextDate = 0
+                    let excess = 0
+                    let endDate = me.$moment(`${element.year}-${element.month}`, 'YYYY-MM').daysInMonth()
+                    let checkFirstDate = me.$moment(`${element.year}-${element.month}-${1}`, 'YYYY-MM-D').format('d')
+                    let checkLastDate = me.$moment(`${element.year}-${element.month}-${endDate}`, 'YYYY-MM-D').format('d')
+                    for (let i = 0; i < 6; i++) {
+                        for (let j = 0; j < 7; j++) {
+                            if (startDate <= endDate) {
+                                if (me.$moment(`${element.year}-${element.month}-${startDate}`, 'YYYY-MM-D').format('d') == j) {
+                                    startDate++
+                                }
+                            } else {
+                                if (checkFirstDate == 5 && checkLastDate == 0 || checkFirstDate == 6 && checkLastDate == 1) {
+                                    excess = i + 1
+                                } else {
+                                    excess = i
+                                }
+                            }
+                        }
+                    }
+                    element.weeks = excess
+                })
                 return data
             }
         },
         methods: {
+            convertNumbertoString (value) {
+                const me = this
+                let strings = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth']
+                return strings[value]
+            },
             toggleClose () {
                 const me = this
                 me.$store.state.calendarDuplicateStatus = false
