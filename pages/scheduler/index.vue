@@ -179,22 +179,22 @@
                                             </div>
                                         </div>
                                         <div class="classes">
-                                            <div class="class_wrapper private">
+                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper private">
                                                 <div class="class_text margin"><img src="/icons/private-class.svg" /><span>10:00 AM</span></div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </div>
-                                            <div class="class_wrapper">
+                                            </a>
+                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper">
                                                 <div class="class_text margin">10:00 AM</div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </div>
-                                            <div class="class_wrapper draft">
+                                            </a>
+                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper draft">
                                                 <div class="class_text margin">10:00 AM</div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </div>
-                                            <div class="class_wrapper completed">
+                                            </a>
+                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper completed">
                                                 <div class="class_text margin">10:00 AM</div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </div>
+                                            </a>
                                         </div>
                                         ${(j == 6) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Clear Week</a></li> <li class="gear_list"><a class="duplicate gear_item" href="javascript:void(0)">Duplicate Week</a></li> </ul> </div>` : '' }
                                     </td>`
@@ -311,7 +311,7 @@
                     let elementDayDuplicate = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .duplicate') : null
                     let elementWeekClear = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .clear') : null
                     let elementWeekDuplicate = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .duplicate') : null
-
+                    let classNode = document.querySelector('.class_wrapper')
                     /**
                      * Day **/
                     if (elementDay != null) {
@@ -381,6 +381,11 @@
                             })
                         }
                     }
+
+                    classNode.addEventListener('click', function(e) {
+                        e.preventDefault()
+                        me.$router.push(e.target.getAttribute('href'))
+                    })
 
                     startNum++
                 } while (startNum < 50)
