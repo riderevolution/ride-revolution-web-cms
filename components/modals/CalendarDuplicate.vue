@@ -3,7 +3,7 @@
         <div class="background" @click="toggleClose()"></div>
         <form id="default_form" class="overlay" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
             <div class="modal_wrapper">
-                <h2 class="form_title">Duplicate {{ (type == 'day') ? 'Day' : (type == 'week' ? 'into Weeks' : 'Month') }}</h2>
+                <h2 class="form_title">Duplicate {{ (type == 'day') ? 'Day' : (type == 'week' ? 'into Weeks' : 'into Months') }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
                 <transition name="fade">
                     <div class="modal_main_group" v-if="type == 'day'">
@@ -33,8 +33,26 @@
                             <div class="form_group" v-for="(data, key) in populateWeeks" :key="key">
                                 <label class="flex_label">{{ data.name }} {{ data.year }}</label>
                                 <div class="form_check" v-for="(week, wkey) in data.weeks" :key="wkey">
-                                    <input type="checkbox" :id="`week_${data.month}_${week}`" name="weeks[]" class="action_check" checked>
+                                    <input type="checkbox" :id="`week_${data.month}_${week}`" name="weeks[]" :value="`${data.year}-${data.month}-${week}`" class="action_check" checked>
                                     <label :for="`week_${data.month}_${week}`">{{ convertNumbertoString(wkey) }} Week</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form_footer_wrapper">
+                            <div class="button_group">
+                                <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose()">Cancel</a>
+                                <button type="submit" name="submit" class="action_success_btn margin alternate">Duplicate</button>
+                            </div>
+                        </div>
+                    </div>
+                </transition>
+                <transition name="fade">
+                    <div class="modal_main_group" v-if="type == 'month'">
+                        <div class="form_flex trio">
+                            <div class="form_group" v-for="(data, key) in populateWeeks" :key="key">
+                                <div class="form_check">
+                                    <input type="checkbox" :id="`month_${data.month}`" name="months[]" :value="`${data.year}-${data.month}`" class="action_check" checked>
+                                    <label :for="`month_${data.month}`">{{ convertMonthtoAbbrev(data.month) }} {{ data.year }}</label>
                                 </div>
                             </div>
                         </div>
@@ -115,6 +133,11 @@
             }
         },
         methods: {
+            convertMonthtoAbbrev (value) {
+                const me = this
+                let name = me.$moment(value, 'M').format('MMM')
+                return name
+            },
             convertNumbertoString (value) {
                 const me = this
                 let strings = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth']
