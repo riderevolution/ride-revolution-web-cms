@@ -178,12 +178,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="classes">
+                                        <div class="classes" id="class_${startDate}">
                                             <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper private">
                                                 <div class="class_text margin"><img src="/icons/private-class.svg" /><span>10:00 AM</span></div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
                                             </a>
-                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper">
+                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper original">
                                                 <div class="class_text margin">10:00 AM</div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
                                             </a>
@@ -311,7 +311,7 @@
                     let elementDayDuplicate = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .duplicate') : null
                     let elementWeekClear = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .clear') : null
                     let elementWeekDuplicate = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .duplicate') : null
-                    let classNode = document.querySelector('.class_wrapper')
+                    let classNode = (document.getElementById(`class_${startNum}`) != null) ? document.getElementById(`class_${startNum}`) : null
                     /**
                      * Day **/
                     if (elementDay != null) {
@@ -382,11 +382,24 @@
                         }
                     }
 
-                    classNode.addEventListener('click', function(e) {
-                        e.preventDefault()
-                        me.$router.push(e.target.getAttribute('href'))
-                    })
-
+                    if (classNode != null) {
+                        classNode.querySelector('.private').addEventListener('click', function(e) {
+                            e.preventDefault()
+                            me.$router.push(this.getAttribute('href'))
+                        })
+                        classNode.querySelector('.original').addEventListener('click', function(e) {
+                            e.preventDefault()
+                            me.$router.push(this.getAttribute('href'))
+                        })
+                        classNode.querySelector('.draft').addEventListener('click', function(e) {
+                            e.preventDefault()
+                            me.$router.push(this.getAttribute('href'))
+                        })
+                        classNode.querySelector('.completed').addEventListener('click', function(e) {
+                            e.preventDefault()
+                            me.$router.push(this.getAttribute('href'))
+                        })
+                    }
                     startNum++
                 } while (startNum < 50)
             },

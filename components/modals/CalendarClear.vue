@@ -33,9 +33,13 @@
             },
             proceedStatus () {
                 const me = this
+                let formData = new FormData()
+                formData.append('type', me.type)
                 switch (type) {
                     case 'day':
-
+                        formData.append('day', unix)
+                        me.$axios.post('example/api', formData).then(res => {
+                        })
                         break
                     case 'week':
 
