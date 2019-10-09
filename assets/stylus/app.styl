@@ -2129,7 +2129,7 @@ input::placeholder
                     position: absolute
                     top: 0
                     left: 0
-                    z-index: 2
+                    z-index: 1
                     fill: $light_green
                     transition: .3s ease-in-out
                     .gear_2
@@ -2243,10 +2243,10 @@ input::placeholder
                         position: relative
                         border: 1px solid $border
                         background-color: $white
+                        vertical-align: top
                         transition: .3s ease-in-out
                         &.disabled_day
                             background-color: $border_alt
-                            vertical-align: top
                             .header_wrapper
                                 .header_day
                                     color: $border_alt2
@@ -2340,7 +2340,7 @@ input::placeholder
                             position: absolute
                             top: calc(0% - 1px)
                             left: calc(100% + 10px)
-                            z-index: 2
+                            z-index: 1
                             fill: $light_green
                             transition: .3s ease-in-out
                             .gear_2

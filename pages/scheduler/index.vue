@@ -191,7 +191,7 @@
                                                 <div class="class_text margin">10:00 AM</div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
                                             </a>
-                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper completed">
+                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper ${(me.currentDate > startDate) ? 'completed' : 'uncomplete'}">
                                                 <div class="class_text margin">10:00 AM</div>
                                                 <div class="class_text">Ride Rev (50 mins.)</div>
                                             </a>
@@ -383,22 +383,36 @@
                     }
 
                     if (classNode != null) {
-                        classNode.querySelector('.private').addEventListener('click', function(e) {
-                            e.preventDefault()
-                            me.$router.push(this.getAttribute('href'))
-                        })
-                        classNode.querySelector('.original').addEventListener('click', function(e) {
-                            e.preventDefault()
-                            me.$router.push(this.getAttribute('href'))
-                        })
-                        classNode.querySelector('.draft').addEventListener('click', function(e) {
-                            e.preventDefault()
-                            me.$router.push(this.getAttribute('href'))
-                        })
-                        classNode.querySelector('.completed').addEventListener('click', function(e) {
-                            e.preventDefault()
-                            me.$router.push(this.getAttribute('href'))
-                        })
+                        if (classNode.querySelector('.private')) {
+                            classNode.querySelector('.private').addEventListener('click', function(e) {
+                                e.preventDefault()
+                                me.$router.push(this.getAttribute('href'))
+                            })
+                        }
+                        if (classNode.querySelector('.original')) {
+                            classNode.querySelector('.original').addEventListener('click', function(e) {
+                                e.preventDefault()
+                                me.$router.push(this.getAttribute('href'))
+                            })
+                        }
+                        if (classNode.querySelector('.draft')) {
+                            classNode.querySelector('.draft').addEventListener('click', function(e) {
+                                e.preventDefault()
+                                me.$router.push(this.getAttribute('href'))
+                            })
+                        }
+                        if (classNode.querySelector('.completed')) {
+                            classNode.querySelector('.completed').addEventListener('click', function(e) {
+                                e.preventDefault()
+                                me.$router.push(this.getAttribute('href'))
+                            })
+                        }
+                        if (classNode.querySelector('.uncomplete')) {
+                            classNode.querySelector('.uncomplete').addEventListener('click', function(e) {
+                                e.preventDefault()
+                                me.$router.push(this.getAttribute('href'))
+                            })
+                        }
                     }
                     startNum++
                 } while (startNum < 50)
