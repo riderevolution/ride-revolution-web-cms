@@ -41,7 +41,7 @@
                             <td>{{ data.email }}</td>
                             <td>{{ data.contact_number }}</td>
                             <td class="table_actions">
-                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/inventory/products/create?s=${data.id}`">Add a Product</nuxt-link>
+                                <nuxt-link class="table_action_edit" :to="`/${prevRoute}/products/create?s=${data.id}`">Add a Product</nuxt-link>
                                 <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
                             </td>
                         </tr>

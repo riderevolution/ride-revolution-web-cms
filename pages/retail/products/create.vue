@@ -2,9 +2,9 @@
     <div class="content">
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table">
-                <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
+                <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Update {{ res.name }}</h1>
+                    <h1 class="header_title">Add New Product</h1>asdasdasd
                 </div>
             </section>
             <section id="content">
@@ -14,12 +14,12 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="name">Product Name <span>*</span></label>
-                                    <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="form.title = res.name">
+                                    <input type="text" name="name" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="form.title">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
-                                    <textarea name="description" rows="10" class="default_text" @input="getCount($event)" maxlength="1000" v-model="res.description" v-validate="'required|max:1000'"></textarea>
+                                    <textarea name="description" rows="10" class="default_text" @input="getCount($event)" maxlength="1000" v-validate="'required|max:1000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') }}</span></transition>
                                     <div class="limit">
                                         <span class="field_limit">1000</span> <span class="field_label">Characters</span>
@@ -32,8 +32,8 @@
                                 <div class="form_group" v-if="$route.query.s">
                                     <label for="product_category_id">Category <span>*</span></label>
                                     <select class="default_select alternate" name="product_category_id" v-validate="'required'">
-                                        <option value="" disabled>Choose a Category</option>
-                                        <option :value="category.id" :selected="res.category_id == category.id" v-for="(category, key) in categories">{{ category.name }}</option>
+                                        <option value="" selected disabled>Choose a Category</option>
+                                        <option :value="category.id" v-for="(category, key) in categories">{{ category.name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('product_category_id')">{{ errors.first('product_category_id') }}</span></transition>
                                 </div>
@@ -47,7 +47,7 @@
                                     <label for="supplier_id">Supplier <span>*</span></label>
                                     <select class="default_select alternate" name="supplier_id" v-validate="'required'">
                                         <option value="" selected>Choose a Supplier</option>
-                                        <option :value="supplier.id" :selected="res.supplier_id == supplier.id" v-for="(supplier, key) in suppliers">{{ supplier.name }}</option>
+                                        <option :value="supplier.id" v-for="(supplier, key) in suppliers">{{ supplier.name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('supplier_id')">{{ errors.first('supplier_id') }}</span></transition>
                                 </div>
@@ -63,7 +63,7 @@
                                         <span @click="toggleCheckboxes ^= true">Select Studios</span>
                                         <div :class="`form_check_custom ${(toggleCheckboxes) ? 'active' : ''}`">
                                             <div class="check_custom" v-for="(studio, key) in studios" :key="key">
-                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
+                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" checked>
                                                 <label :for="`studio_${key}`">{{ studio.name }}</label>
                                             </div>
                                         </div>
@@ -73,11 +73,11 @@
                                     <label>Is this sellable? <span>*</span></label>
                                     <div class="radio_wrapper">
                                         <div class="form_radio">
-                                            <input type="radio" id="sellable_yes" value="Yes" name="sellable" class="action_radio" :checked="res.sellable == 1">
+                                            <input type="radio" id="sellable_yes" value="Yes" name="sellable" class="action_radio" checked>
                                             <label for="sellable_yes">Yes</label>
                                         </div>
                                         <div class="form_radio">
-                                            <input type="radio" id="sellable_no" value="No" name="sellable" class="action_radio" :checked="res.sellable == 0">
+                                            <input type="radio" id="sellable_no" value="No" name="sellable" class="action_radio">
                                             <label for="sellable_no">No</label>
                                         </div>
                                     </div>
@@ -105,7 +105,7 @@
                                     <div class="input_header image_upload">Action</div>
                                 </div>
                                 <div class="content_wrapper" v-if="variants.length > 0">
-                                    <variant ref="productVariant" :value="variant" :type="1" :unique="key" v-for="(variant, key) in variants" :key="key" />
+                                    <variant ref="productVariant" :unique="key" :type="0" v-for="(variant, key) in variants" :key="key" />
                                 </div>
                                 <div class="no_results" v-if="variants.length == 0">
                                     No Variant(s) Found. Please add a variant.
@@ -116,12 +116,12 @@
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
                             <div class="form_check">
-                                <input type="checkbox" id="enabled" name="enabled" class="action_check" :checked="res.enabled">
+                                <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
                                 <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
-                                <button type="submit" name="submit" class="action_btn alternate margin">Update</button>
+                                <button type="submit" name="submit" class="action_btn alternate margin">Upload</button>
                             </div>
                         </div>
                     </div>
@@ -133,17 +133,22 @@
 </template>
 
 <script>
-    import Foot from '../../../../../components/Foot'
-    import Variant from '../../../../../components/Variant'
+    import Foot from '../../../components/Foot'
+    import Variant from '../../../components/Variant'
     export default {
         components: {
             Foot,
             Variant
         },
+        provide () {
+            return {
+                $validator: this.$validator
+            }
+        },
         data () {
             return {
-                showClose: false,
                 loaded: false,
+                showClose: false,
                 toggleCheckboxes: false,
                 id: 0,
                 error: false,
@@ -154,11 +159,10 @@
                     category: [],
                     supplier: []
                 },
-                res: [],
                 studios: [],
                 categories: [],
                 suppliers: [],
-                variants: []
+                variants: [0]
             }
         },
         methods: {
@@ -176,29 +180,31 @@
             },
             addVariant () {
                 const me = this
-                me.variants.push({
-                    variant: '',
-                    sku_id: '',
-                    quantity: '',
-                    unit_price: '',
-                    sale_price: '',
-                    images: [],
-                    temporary_id: me.randomString(),
-                    variant_id: null
-                })
+                me.variants.push(0)
                 me.determineIfShowCloser()
+            },
+            determineIfShowCloser () {
+                const me = this
+                let enabledCount = 0
+                setTimeout(() => {
+                    me.$refs.productVariant.forEach((item, index) => {
+                        if (item.show == true) {
+                            enabledCount++
+                        }
+                    })
+                    me.showClose = (enabledCount > 1) ? true : false
+                }, 10)
             },
             submissionSuccess () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.post(`api/inventory/products/${me.$route.params.param}`, formData).then(res => {
+                        me.$axios.post('api/inventory/products', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
-                                    me.notify('Updated')
+                                    me.notify('Added')
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
@@ -221,64 +227,31 @@
 						})
                     }
                 })
-            },
-            determineIfShowCloser () {
-                const me = this
-                let enabledCount = 0
-                setTimeout(() => {
-                    me.$refs.productVariant.forEach((item, index) => {
-                        if (item.show == true) {
-                            enabledCount++
-                        }
-                    })
-                    me.showClose = (enabledCount > 1) ? true : false
-                }, 10)
-            },
-            fetchData () {
-                const me = this
-                me.$axios.get(`api/inventory/products/${me.$route.params.param}`).then(res => {
-                    me.res = res.data.product
-                    if (me.res.product_variants.length > 0) {
-                        me.variants = me.res.product_variants
-                        me.determineIfShowCloser()
-                    } else {
-                        me.variants = [0]
-                    }
-                    me.$axios.get('api/studios').then(res => {
-                        me.studios = res.data.studios
-                        me.studios.forEach((studio, index) => {
-                            studio.status = false
-                            me.res.studio_access.forEach((access, index) => {
-                                if (studio.id == access.studio_id) {
-                                    studio.status = true
-                                }
-                            })
-                        })
-                    })
-                    me.loaded = true
-                })
-                me.$axios.get('api/inventory/product-categories').then(res => {
-                    me.categories = res.data.productCategories
-                })
-                me.$axios.get('api/suppliers').then(res => {
-                    me.suppliers = res.data.suppliers.data
-                })
-                if (me.$route.query.s) {
-                    me.$axios.get(`api/suppliers/${me.$route.query.s}`).then(res => {
-                        me.form.supplier = res.data.supplier
-                    })
-                } else {
-                    me.$axios.get(`api/inventory/product-categories/${me.$route.query.c}`).then(res => {
-                        me.form.category = res.data.productCategory
-                    })
-                }
             }
         },
         async mounted () {
             const me = this
-            me.fetchData()
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
-            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]
+            me.$axios.get('api/studios').then(res => {
+                me.studios = res.data.studios
+            })
+            if (me.$route.query.s) {
+                me.$axios.get('api/inventory/product-categories').then(res => {
+                    me.categories = res.data.productCategories
+                })
+                me.$axios.get(`api/suppliers/${me.$route.query.s}`).then(res => {
+                    me.form.supplier = res.data.supplier
+                })
+            } else {
+                me.$axios.get('api/suppliers').then(res => {
+                    me.suppliers = res.data.suppliers.data
+                })
+                me.$axios.get(`api/inventory/product-categories/${me.$route.query.c}`).then(res => {
+                    me.form.category = res.data.productCategory
+                })
+            }
+            me.loaded = true
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
         }
     }
 </script>

@@ -2,7 +2,7 @@
     <div class="content">
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table" v-if="loaded">
-                <nuxt-link :to="`/admin/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg" /><span>{{ lastRoute }}</span></nuxt-link>
+                <nuxt-link :to="`/admin/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg" /><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
                     <h1 class="header_title">Class Packages &amp; Store Credits</h1>
                     <div class="actions">
@@ -27,7 +27,7 @@
                             <label for="q">Find a credit</label>
                             <input type="text" name="q" placeholder="Search for a credits" autocomplete="off" class="default_text search_alternate">
                         </div>
-                        <button type="submit" name="button" class="action_btn alternate margin">Search</button>
+                        <button type="submit" name="button" class="action_btn alternate margin" v-if="package_status != 2">Search</button>
                     </form>
                 </div>
             </section>

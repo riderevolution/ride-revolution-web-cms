@@ -85,6 +85,10 @@
                                 link: '/retail/purchase-order'
                             },
                             {
+                                title: 'Products',
+                                link: '/retail/products'
+                            },
+                            {
                                 title: 'Product Categories',
                                 link: '/retail/product-categories'
                             }
