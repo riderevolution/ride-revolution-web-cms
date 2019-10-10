@@ -174,6 +174,60 @@ table
         font-size: 20px
         opacity: 0
         transition: .3s ease-in-out
+    .notification_box_alternate
+        margin-bottom: 60px
+        .wrapper
+            width: 100%
+            max-width: 50%
+            margin: 0 auto
+            .notification_wrapper
+                display: flex
+                flex-flow: row wrap
+                align-items: flex-start
+                text-decoration: none
+                padding: 30px 60px
+                border-radius: 0px
+                background-color: $white
+                border-bottom: 1px solid $border_alt
+                transition: .3s ease-in-out
+                span
+                    color: $gray_alternate
+                    transition: .3s ease-in-out
+                .notification_desc
+                    flex: 1 0 50%
+                    padding-left: 10px
+                    .notification_title
+                        sf_pro_medium(1.5vh)
+                        color: $black
+                        padding-bottom: 10px
+                    .notification_time
+                        sf_pro_regular(1.4vh)
+                        color: $gray_alternate
+                &:hover
+                    background-color: $light_green
+                    transition: .3s ease-in-out
+                    &:first-child
+                        border-radius: 10px 10px 0 0
+                    span
+                        color: $green
+                        transition: .3s ease-in-out
+                &:last-child
+                    border-bottom: none
+        .notification_action
+            display: block
+            width: 100%
+            text-align: center
+            sf_pro_medium(1.6vh)
+            color: $blue
+            text-decoration: none
+            padding: 10px 0
+            border-radius: 0 0 10px 10px
+            background-color: transparent
+            border-top: 1px solid $border_alt
+            transition: .3s ease-in-out
+            &:hover
+                background-color: $light_blue
+                transition: .3s ease-in-out
     .notification_box
         position: absolute
         right: 0

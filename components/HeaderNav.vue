@@ -17,7 +17,7 @@
                             </div>
                         </div>
                     </div>
-                    <nuxt-link class="notification_action" to="/">See All</nuxt-link>
+                    <nuxt-link class="notification_action" to="/notifications">See All</nuxt-link>
                 </div>
             </div>
         </div>
@@ -50,11 +50,6 @@
                 notifications: []
             }
         },
-        async mounted () {
-            const me = this
-            const notifs = await me.$axios.get('api/logs')
-            me.notifications = notifs.data.logs.data
-        },
         methods: {
             /**
              * Toggler custom select */
@@ -81,6 +76,14 @@
                 me.$store.state.quickSaleStatus = true
                 document.body.classList.add('no_scroll')
             }
+        },
+        mounted () {
+            const me = this
+            me.$axios.get('api/logs').then(res => {
+                if (res.data) {
+                    me.notifications = res.data.logs.data
+                }
+            })
         }
     }
 </script>
