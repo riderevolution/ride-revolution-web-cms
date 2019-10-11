@@ -122,23 +122,26 @@
                             },
                         ]
                     }
-                ]
+                ],
+                isHovered: true
             }
         },
         methods: {
             resetHoverToggle () {
                 const me = this
                 const elements = document.querySelectorAll('.nav_list .toggled .sub_wrapper')
-                document.querySelector('.navbar_container').classList.add('toggled')
-                document.querySelector('.admin_flex .content').classList.add('toggled')
-                elements.forEach((element, index) => {
-                    setTimeout( () => {
-                        const length = element.querySelectorAll('.sub_nav_list').length
-                        const height = 59
-                        const currentHeight = height * length
-                        element.style.height = `${currentHeight}px`
-                    }, 300)
-                })
+                if (me.isHovered) {
+                    document.querySelector('.navbar_container').classList.add('toggled')
+                    document.querySelector('.admin_flex .content').classList.add('toggled')
+                    elements.forEach((element, index) => {
+                        setTimeout( () => {
+                            const length = element.querySelectorAll('.sub_nav_list').length
+                            const height = 59
+                            const currentHeight = height * length
+                            element.style.height = `${currentHeight}px`
+                        }, 300)
+                    })
+                }
             },
             resetLeaveToggle () {
                 const me = this
@@ -161,12 +164,16 @@
             toggleChild(event) {
                 const me = this
                 const target = event.target
+                me.isHovered = false
                 if (!target.parentNode.classList.contains('toggled')) {
                     target.nextElementSibling.style.height = `${target.nextElementSibling.scrollHeight}px`
                     target.parentNode.classList.add('toggled')
                 } else {
                     target.nextElementSibling.style.height = 0
                     target.parentNode.classList.remove('toggled')
+                    setTimeout( () => {
+                        me.isHovered = true
+                    }, 100)
                 }
             }
         }

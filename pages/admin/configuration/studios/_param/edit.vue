@@ -169,13 +169,7 @@
                         hour: 0,
                         mins: 0
                     },
-                },
-                sample: [
-                    {
-                        name: '',
-                        phone: 'asdasdasd'
-                    }
-                ]
+                }
             }
         },
         methods: {

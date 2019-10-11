@@ -3064,6 +3064,57 @@ input::placeholder
         &.active
             pointer-events: none
 
+/**
+ * Booker **/
+.booker_wrapper
+    display: flex
+    flex-flow: row wrap
+    align-content: flex-start
+    justify-content: space-between
+    .booker_classes
+        flex: 0 0 20%
+        background-color: $white
+        .header_wrapper
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            justify-content: space-between
+            padding: 30px 15px
+            border-bottom: 1px solid $border
+            .booker_header
+                position: relative
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                .booker_title
+                    sf_pro_bold(3vh)
+                    color: $black
+                .booker_prev
+                    transform: rotate(180deg)
+                .booker_next,
+                .booker_prev
+                    width: 28px
+                    height: 28px
+                    svg
+                        .arrow_1
+                            fill: $white
+                            stroke: $border
+                            transition: .3s ease-in-out
+                        .arrow_2,
+                        .arrow_4
+                            fill: none
+                        .arrow_2
+                            stroke: $green
+                            stroke-width: 1.5px
+                        .arrow_3
+                            stroke: none
+                        &:hover
+                            .arrow_1
+                                fill: $border
+                                transition: .3s ease-in-out
+    .booker_content
+        flex: 0 0 75%
+
 .no_contents
     sf_pro_regular(3vh)
     color: $border_alt2
@@ -3580,6 +3631,34 @@ input::placeholder
                 margin-left: 10px
                 sf_pro_bold(1.8vh)
                 color: $border_alt2
+        &.booker
+            .action_wrapper
+                .actions
+                    flex: 0 0 65%
+                    .customer_filter_flex
+                        flex: 1 0 auto
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        .form_group
+                            flex: 0 0 25%
+                            &.customer
+                                flex: 0 0 15%
+                        .customer_selected
+                            flex: 1 0 auto
+                            margin-left: 20px
+                            padding: 40px 20px
+                            background-color: $white
+                            border: 2px dashed $border_alt2
+                            border-radius: 3px
+                            text-align: center
+                            .customer_label
+                                sf_pro_regular(1.8vh)
+                                color: $border_alt2
+                            .customer_text
+                                sf_pro_regular(1.5vh)
+                                color: $black
+                                margin-top: 10px
         &.table
             box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
             padding: 60px 40px 40px
