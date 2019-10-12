@@ -3072,7 +3072,7 @@ input::placeholder
     align-content: flex-start
     justify-content: space-between
     .booker_classes
-        flex: 0 0 20%
+        flex: 0 0 25%
         background-color: $white
         .header_wrapper
             display: flex
@@ -3087,8 +3087,9 @@ input::placeholder
                 flex-flow: row wrap
                 align-items: center
                 .booker_title
-                    sf_pro_bold(3vh)
+                    sf_pro_bold(2vh)
                     color: $black
+                    margin: 0 15px
                 .booker_prev
                     transform: rotate(180deg)
                 .booker_next,
@@ -3112,8 +3113,71 @@ input::placeholder
                             .arrow_1
                                 fill: $border
                                 transition: .3s ease-in-out
+        .content_wrapper
+            .class_accordion
+                .accordion_header
+                    position: relative
+                    margin: 20px
+                    sf_pro_semibold(2vh)
+                    color: $black
+                    cursor: pointer
+                    &::before
+                        content: url(/icons/custom-select-icon.svg)
+                        position: absolute
+                        top: 50%
+                        right: 0
+                        transform: translateY(-50%) rotate(0deg)
+                        transition: .3s ease-in-out
+                .accordion_content
+                    .class_content
+                        display: block
+                        padding: 20px
+                        text-decoration: none
+                        box-shadow: transparent
+                        border-left: 2px solid transparent
+                        border-bottom: 1px solid $border
+                        transition: .3s ease-in-out
+                        .class_title
+                            display: flex
+                            flex-flow: row wrap
+                            align-items: center
+                            justify-content: space-between
+                            span
+                                sf_pro_medium(1.6vh)
+                                color: $black
+                                transition: .3s ease-in-out
+                            .class_status
+                                sf_pro_regular(1.4vh)
+                                color: $black
+                                padding: 5px 15px
+                                border: 1px solid $black
+                                border-radius: 20px
+                                &.full
+                                    color: $red
+                                    border: 1px solid $red
+                        .class_text
+                            sf_pro_regular(1.5vh)
+                            color: $black
+                            margin-top: 5px
+                            &.alternate
+                                display: flex
+                                flex-flow: row wrap
+                                align-items: center
+                                justify-content: space-between
+                        &:last-child
+                            border-bottom: 1px solid transparent
+                        &:hover,
+                        &:focus
+                            border-left: 2px solid $green
+                            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1)
+                            transition: .3s ease-in-out
+                            .class_title
+                                span
+                                    color: $green
+                                    transition: .3s ease-in-out
+
     .booker_content
-        flex: 0 0 75%
+        flex: 0 0 70%
 
 .no_contents
     sf_pro_regular(3vh)
