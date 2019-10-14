@@ -156,6 +156,7 @@
                         element.style.height = `${currentHeight}px`
                     }, 300)
                 })
+                me.isHovered = true
             },
             resetToggle () {
                 document.querySelector('.navbar_container').classList.remove('toggled')

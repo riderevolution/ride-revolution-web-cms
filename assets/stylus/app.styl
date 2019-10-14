@@ -3115,9 +3115,19 @@ input::placeholder
                                 transition: .3s ease-in-out
         .content_wrapper
             .class_accordion
+                &.toggled
+                    .accordion_header
+                        &::before
+                            transform: translateY(-50%) rotate(-180deg)
+                            transition: .3s ease-in-out
+                    .accordion_content
+                        opacity: 1
+                        overflow: initial
+                        visibility: visible
+                        transition: .3s ease-in-out
                 .accordion_header
                     position: relative
-                    margin: 20px
+                    padding: 20px
                     sf_pro_semibold(2vh)
                     color: $black
                     cursor: pointer
@@ -3125,15 +3135,20 @@ input::placeholder
                         content: url(/icons/custom-select-icon.svg)
                         position: absolute
                         top: 50%
-                        right: 0
+                        right: calc(0% + 20px)
                         transform: translateY(-50%) rotate(0deg)
                         transition: .3s ease-in-out
                 .accordion_content
+                    height: 0
+                    opacity: 0
+                    overflow: hidden
+                    visibility: hidden
+                    transition: .3s ease-in-out
                     .class_content
                         display: block
                         padding: 20px
                         text-decoration: none
-                        box-shadow: transparent
+                        box-shadow: 0px 0px 15px transparent
                         border-left: 2px solid transparent
                         border-bottom: 1px solid $border
                         transition: .3s ease-in-out
@@ -3150,15 +3165,16 @@ input::placeholder
                                 sf_pro_regular(1.4vh)
                                 color: $black
                                 padding: 5px 15px
-                                border: 1px solid $black
+                                border: 1px solid $border
                                 border-radius: 20px
                                 &.full
                                     color: $red
                                     border: 1px solid $red
                         .class_text
                             sf_pro_regular(1.5vh)
-                            color: $black
+                            color: $border_alt2
                             margin-top: 5px
+                            transition: .3s ease-in-out
                             &.alternate
                                 display: flex
                                 flex-flow: row wrap
@@ -3169,12 +3185,15 @@ input::placeholder
                         &:hover,
                         &:focus
                             border-left: 2px solid $green
-                            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1)
+                            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1)
                             transition: .3s ease-in-out
                             .class_title
                                 span
                                     color: $green
                                     transition: .3s ease-in-out
+                            .class_text
+                                color: $black
+                                transition: .3s ease-in-out
 
     .booker_content
         flex: 0 0 70%
@@ -3517,7 +3536,7 @@ input::placeholder
                             height: 0px
                             overflow: hidden
                             opacity: 0
-                            transition: .15s ease-in-out
+                            transition: .3s ease-in-out
                         &.dashboard
                             background-image: url('/icons/navbar/dashboard-unselected.png')
                         &.booker
@@ -3581,7 +3600,7 @@ input::placeholder
                         .nav_item
                             & ~ .sub_wrapper
                                 opacity: 1
-                                transition: .15s ease-in-out
+                                transition: .3s ease-in-out
                             &.nav_parent
                                 position: relative
                                 &::before

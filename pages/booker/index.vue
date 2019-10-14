@@ -42,15 +42,45 @@
                         </div>
                         <div class="content_wrapper">
                             <div class="class_accordion">
-                                <div class="accordion_header">
-                                    Today | May 6, 2019
-                                </div>
+                                <div class="accordion_header" @click.self="toggleClass($event)">Today | May 6, 2019</div>
                                 <div class="accordion_content">
                                     <a href="javascript:void(0)" class="class_content">
                                         <div class="class_title">
                                             <span>12:15 PM, Ride Rev</span>
                                             <div class="class_status full">
                                                 Full (28)
+                                            </div>
+                                        </div>
+                                        <div class="class_text">
+                                            Billie (50 mins)
+                                        </div>
+                                        <div class="class_text alternate">
+                                            <span>Signed-in: 3</span>
+                                            <span>Available: 3</span>
+                                            <span>No show: 3</span>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)" class="class_content">
+                                        <div class="class_title">
+                                            <span>12:15 PM, Ride Rev</span>
+                                            <div class="class_status full">
+                                                Full (28)
+                                            </div>
+                                        </div>
+                                        <div class="class_text">
+                                            Billie (50 mins)
+                                        </div>
+                                        <div class="class_text alternate">
+                                            <span>Signed-in: 3</span>
+                                            <span>Available: 3</span>
+                                            <span>No show: 3</span>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0)" class="class_content">
+                                        <div class="class_title">
+                                            <span>12:15 PM, Ride Rev</span>
+                                            <div class="class_status">
+                                                Enrolled (20)
                                             </div>
                                         </div>
                                         <div class="class_text">
@@ -96,6 +126,19 @@
             }
         },
         methods: {
+            toggleClass (event) {
+                const me = this
+                const target = event.target
+                if (!target.parentNode.classList.contains('toggled')) {
+                    target.nextElementSibling.style.height = `${target.nextElementSibling.scrollHeight}px`
+                    setTimeout( () => {
+                        target.parentNode.classList.add('toggled')
+                    }, 100)
+                } else {
+                    target.nextElementSibling.style.height = 0
+                    target.parentNode.classList.remove('toggled')
+                }
+            },
             submissionSuccess () {
                 const me = this
                 let formData = new FormData(document.getElementById('filter'))
