@@ -30,19 +30,19 @@
                     <div class="booker_classes">
                         <div class="header_wrapper">
                             <div class="booker_header">
-                                <div class="booker_prev" @click="generatePrevCalendar()">
+                                <div class="booker_prev" @click="generatePrevClasses()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"> <g transform="translate(-248 -187)"> <g class="arrow_1" transform="translate(248 187)"> <circle class="arrow_3" cx="14" cy="14" r="14" /> <circle class="arrow_4" cx="14" cy="14" r="13.5" /> </g> <path class="arrow_2" d="M184.939,200.506l-3.981,3.981,3.981,3.981" transform="translate(445.438 405.969) rotate(180)" /> </g> </svg>
                                 </div>
                                 <h2 class="booker_title">Classes</h2>
-                                <div class="booker_next" @click="generateNextCalendar()">
+                                <div class="booker_next" @click="generateNextClasses()">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"> <g transform="translate(-248 -187)"> <g class="arrow_1" transform="translate(248 187)"> <circle class="arrow_3" cx="14" cy="14" r="14" /> <circle class="arrow_4" cx="14" cy="14" r="13.5" /> </g> <path class="arrow_2" d="M184.939,200.506l-3.981,3.981,3.981,3.981" transform="translate(445.438 405.969) rotate(180)" /> </g> </svg>
                                 </div>
                             </div>
-                            <a href="javascript:void(0)" class="action_calendar_btn">Today</a>
+                            <a href="javascript:void(0)" class="action_calendar_btn" @click="generateTodayClasses()">Today</a>
                         </div>
                         <div class="content_wrapper">
-                            <div class="class_accordion">
-                                <div class="accordion_header" @click.self="toggleClass($event)">Today | May 6, 2019</div>
+                            <div class="class_accordion" v-for="(data, key) in results" :key="key">
+                                <div class="accordion_header" @click.self="toggleClass($event)">{{ data.abbr }} | {{ data.date }}</div>
                                 <div class="accordion_content">
                                     <a href="javascript:void(0)" class="class_content">
                                         <div class="class_title">
@@ -122,10 +122,51 @@
                 rowCount: 0,
                 status: 1,
                 res: [],
-                studios: []
+                studios: [],
+                results: [],
+                current: 0,
+                currentMonth: 0,
+                currentYear: 0
             }
         },
         methods: {
+            generateNextClasses () {
+                const me = this
+                let ctr = 1
+                let lastDay = me.$moment(`${me.currentYear}-${me.currentMonth}-${me.current}`, 'YYYY-MM-D').daysInMonth()
+                me.results = []
+                for (let i = 0; i < 7; i++) {
+                    if (me.current == lastDay + 1) {
+                        me.current = 1
+                        me.currentMonth = me.currentMonth + 1
+                        if (me.currentMonth == 13) {
+                            me.currentMonth = 1
+                            me.currentYear = me.currentYear + 1
+                        }
+                    }
+                    console.log(me.currentMonth);
+                    me.results.push({
+                        abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${me.current}`, 'YYYY-MM-D').format('ddd'),
+                        date: me.$moment(`${me.currentYear}-${me.currentMonth}-${me.current}`, 'YYYY-MM-D').format('MMMM D, YYYY')
+                    })
+                    me.current++
+                }
+            },
+            populateClasses () {
+                const me = this
+                let currentDate = parseInt(me.$moment().format('D'))
+                me.current = currentDate
+                me.currentMonth = parseInt(me.$moment().format('MM'))
+                me.currentYear = parseInt(me.$moment().format('YYYY'))
+                for (let i = 0; i < 7; i++) {
+                    me.results.push({
+                        abbr: (i == 0 ) ? 'Today' : me.$moment(`${me.currentYear}-${me.currentMonth}-${currentDate}`, 'YYYY-MM-D').format('ddd'),
+                        date: me.$moment(`${me.currentYear}-${me.currentMonth}-${currentDate}`, 'YYYY-MM-D').format('MMMM D, YYYY')
+                    })
+                    currentDate++
+                    me.current = currentDate
+                }
+            },
             toggleClass (event) {
                 const me = this
                 const target = event.target
@@ -190,6 +231,7 @@
                 me.$axios.get('api/studios?enabled=1').then(res => {
                     me.studios = res.data.studios
                 })
+                me.populateClasses()
             }
         },
         async mounted () {
