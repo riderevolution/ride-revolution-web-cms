@@ -125,37 +125,68 @@
                 studios: [],
                 results: [],
                 current: 0,
+                last: 0,
                 currentMonth: 0,
-                currentYear: 0
+                currentYear: 0,
+                isPrev: false
             }
         },
         methods: {
             generateNextClasses () {
                 const me = this
-                let ctr = 1
-                let lastDay = me.$moment(`${me.currentYear}-${me.currentMonth}-${me.current}`, 'YYYY-MM-D').daysInMonth()
+                if (me.isPrev) {
+                    me.isPrev = false
+                    me.current = me.current + 8
+                }
                 me.results = []
                 for (let i = 0; i < 7; i++) {
-                    if (me.current == lastDay + 1) {
-                        me.current = 1
+                    if (me.current > me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()) {
+                        me.current = me.current - me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()
                         me.currentMonth = me.currentMonth + 1
                         if (me.currentMonth == 13) {
                             me.currentMonth = 1
                             me.currentYear = me.currentYear + 1
                         }
                     }
-                    console.log(me.currentMonth);
-                    me.results.push({
-                        abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${me.current}`, 'YYYY-MM-D').format('ddd'),
-                        date: me.$moment(`${me.currentYear}-${me.currentMonth}-${me.current}`, 'YYYY-MM-D').format('MMMM D, YYYY')
-                    })
+                    me.populateResults(me.current, 'next')
                     me.current++
+                    if (i == 6) {
+                        console.log(me.current);
+                        me.last = me.current
+                    }
+                }
+            },
+            generatePrevClasses () {
+                const me = this
+                if (!me.isPrev) {
+                    me.isPrev = true
+                    me.current = me.current - 8
+                }
+                me.results = []
+                for (let i = 0; i < 7; i++) {
+                    if (me.current <= 0) {
+                        me.currentMonth = me.currentMonth - 1
+                        if (me.currentMonth == 0) {
+                            me.currentMonth = 12
+                            me.currentYear = me.currentYear - 1
+                            me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${1}`, 'YYYY-MM-D').daysInMonth()
+                        } else {
+                            me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${1}`, 'YYYY-MM-D').daysInMonth()
+                        }
+                    }
+                    me.populateResults(me.current, 'prev')
+                    me.current--
+                    if (i == 6) {
+                        console.log(me.current);
+                        me.last = me.current
+                    }
                 }
             },
             populateClasses () {
                 const me = this
                 let currentDate = parseInt(me.$moment().format('D'))
                 me.current = currentDate
+                me.last = currentDate
                 me.currentMonth = parseInt(me.$moment().format('MM'))
                 me.currentYear = parseInt(me.$moment().format('YYYY'))
                 for (let i = 0; i < 7; i++) {
@@ -165,6 +196,23 @@
                     })
                     currentDate++
                     me.current = currentDate
+                }
+            },
+            populateResults (data, type) {
+                const me = this
+                switch (type) {
+                    case 'next':
+                        me.results.push({
+                            abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
+                            date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY')
+                        })
+                        break
+                    case 'prev':
+                        me.results.unshift({
+                            abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
+                            date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY')
+                        })
+                        break
                 }
             },
             toggleClass (event) {
