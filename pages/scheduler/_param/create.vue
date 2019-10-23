@@ -81,7 +81,7 @@
                                         <div :class="`custom_action_check ${(checkData) ? 'checked' : ''}`" @click.prevent="toggleSelectAll($event)">Select All</div>
                                     </div>
                                     <div class="form_check" v-for="(customerType, key) in customerTypes" :key="key">
-                                        <input type="checkbox" :id="`data_${key}`" name="filter_data" class="action_check" v-model="customerType.checked">
+                                        <input type="checkbox" :id="`data_${key}`" name="customer_type_restriction" class="action_check" v-model="customerType.checked">
                                         <label :for="`data_${key}`">{{ customerType.name }}</label>
                                     </div>
                                 </div>
@@ -135,9 +135,9 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('repetition')">{{ errors.first('repetition') }}</span></transition>
                                     </div>
                                     <div class="form_group">
-                                        <label for="start_date">Start Date <span>*</span></label>
-                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
+                                        <label for="end_date">End Date <span>*</span></label>
+                                        <input type="date" name="end_date" autocomplete="off" value="2019-10-31" class="default_text date" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
                                     </div>
                                 </div>
                             </transition>
@@ -243,8 +243,10 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('start_time', `${me.form.start.hour}:${me.form.start.mins} ${me.form.start.convention}`)
+                        formData.append('date', me.$moment(parseInt(me.$route.params.param)).format('Y-MM-DD'))
+                        formData.append('customer_type_restrictions', JSON.stringify(me.customerTypes))
                         me.loader(true)
-                        me.$axios.post('api/packages/class-packages', formData).then(res => {
+                        me.$axios.post('api/schedules', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Added')

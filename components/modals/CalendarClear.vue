@@ -33,23 +33,17 @@
             },
             proceedStatus () {
                 const me = this
+                let date = me.$moment(parseInt(me.unix)).format('Y-MM-DD')
                 let formData = new FormData()
                 formData.append('type', me.type)
-                switch (type) {
-                    case 'day':
-                        formData.append('day', unix)
-                        me.$axios.post('example/api', formData).then(res => {
-                        })
-                        break
-                    case 'week':
-
-                        break
-                    case 'month':
-
-                        break
-                }
-                me.$store.state.calendarClearStatus = false
-                document.body.classList.remove('no_scroll')
+                formData.append('date', date)
+                me.$axios.post('api/schedules/clear', formData).then(res => {
+                    console.log(res.data)
+                }).catch(err => {
+                    console.log(err)
+                })
+                // me.$store.state.calendarClearStatus = false
+                // document.body.classList.remove('no_scroll')
             }
         }
     }

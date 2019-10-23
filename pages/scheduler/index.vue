@@ -443,8 +443,17 @@
                 me.$axios.get('api/instructors?enabled=1').then(res => {
                     me.instructors = res.data.instructors.data
                 })
+                me.fetchSchedules(me.$moment().month(), me.$moment().year())
+                    
+
                 me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1, 0)
                 me.loaded = true
+            },
+            fetchSchedules (month, year) {
+                let me = this
+                me.$axios.get(`api/schedules?year=${me.$moment().year()}&month=${me.$moment().month()}`).then(res => {
+                    console.log(res.data)
+                })
             }
         },
         mounted () {
