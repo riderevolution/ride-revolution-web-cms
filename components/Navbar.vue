@@ -85,16 +85,20 @@
                                 link: '/retail/purchase-order'
                             },
                             {
-                                title: 'Promotions',
-                                link: '/retail/promotions'
-                            },
-                            {
                                 title: 'Products',
                                 link: '/retail/products'
                             },
                             {
                                 title: 'Product Categories',
                                 link: '/retail/product-categories'
+                            },
+                            {
+                                title: 'Promotions',
+                                link: '/retail/promotions'
+                            },
+                            {
+                                title: 'Gift Cards',
+                                link: '/retail/gift-cards'
                             }
                         ]
                     },

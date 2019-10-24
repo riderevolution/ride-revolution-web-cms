@@ -3,9 +3,9 @@
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table" v-if="loaded">
                 <div class="action_wrapper">
-                    <h1 class="header_title">Promotions</h1>
+                    <h1 class="header_title">Gift Cards</h1>
                     <div class="actions">
-                        <div class="total">Total: {{ totalItems(res.promos.total) }}</div>
+                        <div class="total">Total: {{ totalItems(res.giftCards.total) }}</div>
                         <div class="toggler">
                             <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
@@ -13,13 +13,20 @@
                     </div>
                 </div>
                 <div class="action_buttons">
-                    <nuxt-link :to="`${$route.path}/promotions/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Promotion</nuxt-link>
+                    <a href="javascript:void(0)" class="action_btn alternate" @click="$store.state.importStatus = true">Import Gift Cards</a>
                 </div>
                 <div class="filter_wrapper">
                     <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
-                            <label for="q">Find a Promo</label>
-                            <input type="text" name="q" autocomplete="off" placeholder="Search for a promo" class="default_text search_alternate">
+                            <label for="class_package_sku_id">Value</label>
+                            <select class="default_select alternate" name="class_package_sku_id">
+                                <option value="" selected>All Values</option>
+                                <option :value="classPackage.sku_id" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
+                            </select>
+                        </div>
+                        <div class="form_group margin">
+                            <label for="q">Find a gift card</label>
+                            <input type="text" name="q" autocomplete="off" placeholder="Search for a gift card" class="default_text search_alternate">
                         </div>
                         <button type="submit" name="button" class="action_btn alternate margin">Search</button>
                     </form>
@@ -29,23 +36,18 @@
                 <table class="cms_table">
                     <thead>
                         <tr>
-                            <th>Promo Name</th>
-                            <th>Discount</th>
-                            <th>Promo Code</th>
-                            <th>Start date</th>
-                            <th>End Date</th>
+                            <th>Card Code</th>
+                            <th>Starting Value</th>
+                            <th>Date Created</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody v-if="res.promos.data.length > 0">
-                        <tr v-for="(data, key) in res.promos.data" :key="key">
-                            <td>{{ data.name }}</td>
-                            <td>{{ (data.discount_type == 'percent') ? `${data.discount_percent}  %` : `PHP ${totalCount(data.discount_flat_rate)}` }}</td>
-                            <td>{{ data.promo_code }}</td>
-                            <td>{{ formatDate(data.start_date) }}</td>
-                            <td>{{ formatDate(data.end_date) }}</td>
+                    <tbody v-if="res.giftCards.data.length > 0">
+                        <tr v-for="(data, key) in res.giftCards.data" :key="key">
+                            <td>{{ data.card_code }}</td>
+                            <td>PHP {{ totalCount(data.class_package.package_price) }} - {{ data.class_package.name }}</td>
+                            <td>{{ formatDate(data.created_at) }}</td>
                             <td class="table_actions">
-                                <nuxt-link class="table_action_edit" :to="`${$route.path}/promotions/${data.id}/edit`">Edit</nuxt-link>
                                 <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
                                 <a class="table_action_success" @click.self="toggleStatus(data.id, 1, 'Activated')" href="javascript:void(0)" v-if="status == 0">Activate</a>
                             </td>
@@ -57,12 +59,15 @@
                         </tr>
                     </tbody>
                 </table>
-                <pagination :apiRoute="res.promos.path" :current="res.promos.current_page" :last="res.promos.last_page" />
+                <pagination :apiRoute="res.giftCards.path" :current="res.giftCards.current_page" :last="res.giftCards.last_page" />
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
         <transition name="fade">
             <confirm-status v-if="$store.state.confirmStatus" ref="enabled" :status="status" />
+        </transition>
+        <transition name="fade">
+            <import v-if="$store.state.importStatus" :status="status" />
         </transition>
     </div>
 </template>
@@ -71,11 +76,13 @@
     import Foot from '../../../components/Foot'
     import Pagination from '../../../components/Pagination'
     import ConfirmStatus from '../../../components/modals/ConfirmStatus'
+    import Import from '../../../components/modals/Import'
     export default {
         components: {
             Foot,
             Pagination,
-            ConfirmStatus
+            ConfirmStatus,
+            Import
         },
         data () {
             return {
@@ -83,7 +90,8 @@
                 prevRoute: '',
                 rowCount: 0,
                 status: 1,
-                res: []
+                res: [],
+                classPackages: []
             }
         },
         methods: {
@@ -97,7 +105,7 @@
                 let formData = new FormData(document.getElementById('filter'))
                 formData.append('enabled', me.status)
                 me.loader(true)
-                me.$axios.post('api/inventory/promos/search', formData).then(res => {
+                me.$axios.post('api/inventory/gift-cards/search', formData).then(res => {
                     if (res.data) {
                         me.res = res.data
                     }
@@ -130,10 +138,13 @@
             fetchData (value) {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/inventory/promos?enabled=${value}`).then(res => {
+                me.$axios.get(`api/inventory/gift-cards?enabled=${value}&status=0`).then(res => {
                     if (res.data) {
                         me.res = res.data
                         me.loaded = true
+                        me.$axios.get('api/extras/class-packages-for-gift-cards').then(res => {
+                            me.classPackages = res.data.classPackages
+                        })
                     }
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
