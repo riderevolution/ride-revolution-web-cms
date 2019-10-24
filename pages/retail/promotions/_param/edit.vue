@@ -186,7 +186,7 @@
 </template>
 
 <script>
-    import Foot from '../../../../../components/Foot'
+    import Foot from '../../../../components/Foot'
     export default {
         components: {
             Foot
