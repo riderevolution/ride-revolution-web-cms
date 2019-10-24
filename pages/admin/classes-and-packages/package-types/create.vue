@@ -28,9 +28,12 @@
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') }}</span></transition>
                             </div>
                             <div class="form_flex select_all">
-                                <label class="flex_label">Restrict access to studios:</label>
+                                <label class="flex_label alternate">Restrict class to: <span>*</span></label>
+                                <div class="form_check select_all">
+                                    <div :class="`custom_action_check ${(checkData) ? 'checked' : ''}`" @click.prevent="toggleSelectAll($event)">Select All</div>
+                                </div>
                                 <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" :value="studio.id" class="action_check">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -68,32 +71,69 @@
                 studios: []
             }
         },
+        computed: {
+            checkData () {
+                const me = this
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (data.checked) {
+                        count++
+                    }
+                })
+                if (count == me.studios.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
+            }
+        },
         methods: {
+            toggleSelectAll (event) {
+                const me = this
+                if (me.checkData) {
+                    me.studios.forEach((data, index) => {
+                        data.checked = false
+                    })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        data.checked = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             submissionSuccess () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.loader(true)
+                        formData.append('studio_access', JSON.stringify(me.studios))
+                        // me.loader(true)
                         me.$axios.post('api/packages/package-types', formData).then(res => {
-                            setTimeout( () => {
-                                if (res.data) {
-                                    me.notify('Added')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
-                                }
-                            }, 500)
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
-                                if (!me.$store.state.errorStatus) {
-                                    me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
-                                }
-                                me.loader(false)
-                            }, 500)
+                            console.log(res.data);
+                        //     setTimeout( () => {
+                        //         if (res.data) {
+                        //             me.notify('Added')
+                        //         } else {
+                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
+                        //             me.$store.state.errorStatus = true
+                        //         }
+                        //     }, 500)
+                        // }).catch(err => {
+                        //     me.$store.state.errorList = err.response.data.errors
+                        //     me.$store.state.errorStatus = true
+                        // }).then(() => {
+                        //     setTimeout( () => {
+                        //         if (!me.$store.state.errorStatus) {
+                        //             me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                        //         }
+                        //         me.loader(false)
+                        //     }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
@@ -106,9 +146,6 @@
                 const me = this
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios
-                    me.studios.forEach((studio, index) => {
-                        studio.status = studioStatus
-                    })
                 })
             }
         },

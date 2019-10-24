@@ -274,6 +274,7 @@
                         } else {
                             me.filters = res.data.productCategories
                             formData.append('promotion', 1)
+                            formData.append('enabled', 1)
                             me.$axios.post(`api/inventory/products/search?promo_id=${me.res.id}`, formData).then(res => {
                                 if (res.data) {
                                     me.filterData = res.data.products
@@ -370,8 +371,8 @@
                     me.filterType = me.res.affected_type
                 }
             })
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
-            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 5]
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }
     }
 </script>

@@ -173,7 +173,7 @@
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
-                                <nuxt-link :to="`/admin/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
+                                <nuxt-link :to="`/${prevRoute}/${lastRoute}`" class="action_cancel_btn">Cancel</nuxt-link>
                                 <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                             </div>
                         </div>
@@ -273,6 +273,7 @@
                         } else {
                             me.filters = res.data.productCategories
                             formData.append('promotion', 1)
+                            formData.append('enabled', 1)
                             me.$axios.post('api/inventory/products/search', formData).then(res => {
                                 if (res.data) {
                                     me.filterData = res.data.products
@@ -356,8 +357,8 @@
         },
         async mounted () {
             const me = this
-            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
-            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
+            me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
+            me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
         }
     }
 </script>
