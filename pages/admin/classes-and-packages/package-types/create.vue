@@ -113,27 +113,26 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('studio_access', JSON.stringify(me.studios))
-                        // me.loader(true)
+                        me.loader(true)
                         me.$axios.post('api/packages/package-types', formData).then(res => {
-                            console.log(res.data);
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.notify('Added')
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 500)
-                        // }).catch(err => {
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
-                        //         }
-                        //         me.loader(false)
-                        //     }, 500)
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Added')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                if (!me.$store.state.errorStatus) {
+                                    me.$router.push(`/admin/${me.prevRoute}/${me.lastRoute}`)
+                                }
+                                me.loader(false)
+                            }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {

@@ -28,9 +28,12 @@
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') }}</span></transition>
                             </div>
                             <div class="form_flex select_all">
-                                <label class="flex_label">Restrict access to studios:</label>
-                                <div class="form_check studios" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
+                                <label class="flex_label alternate">Restrict class to: <span>*</span></label>
+                                <div class="form_check select_all">
+                                    <div :class="`custom_action_check ${(checkData) ? 'checked' : ''}`" @click.prevent="toggleSelectAll($event)">Select All</div>
+                                </div>
+                                <div class="form_check" v-for="(studio, key) in studios" :key="key">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checkedForReal" class="action_check">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -71,37 +74,40 @@
                 res: []
             }
         },
-        methods: {
-            toggleAll () {
+        computed: {
+            checkData () {
                 const me = this
-                const elements = document.querySelectorAll('.select_all .form_check')
-                elements.forEach((element, index) => {
-                    if (document.getElementById(`select_all`).checked) {
-                        if (document.getElementById(`studio_${index}`)) {
-                            if (!document.getElementById(`studio_${index}`).checked) {
-                                document.getElementById(`studio_${index}`).checked = true
-                                me.form.studios.push(parseInt(document.getElementById(`studio_${index}`).value))
-                            }
-                        }
-                    } else {
-                        if (document.getElementById(`studio_${index}`)) {
-                            document.getElementById(`studio_${index}`).checked = false
-                            me.form.studios.splice((index - index), 1)
-                        }
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (data.checkedForReal) {
+                        count++
                     }
                 })
-            },
-            toggleStudio (id, key) {
-                const me = this
-                document.getElementById(`select_all`).checked = false
-                if (me.form.studios.indexOf(id) == -1) {
-                    me.form.studios.push(id)
+                if (count == me.studios.length) {
+                    result = true
                 } else {
-                    me.form.studios.forEach((studio, index) => {
-                        if (studio == id) {
-                            me.form.studios.splice(index, 1)
-                        }
+                    result = false
+                }
+                return result
+            }
+        },
+        methods: {
+            toggleSelectAll (event) {
+                const me = this
+                if (me.checkData) {
+                    me.studios.forEach((data, index) => {
+                        data.checkedForReal = false
                     })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        data.checkedForReal = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
                 }
             },
             submissionSuccess () {
@@ -110,6 +116,7 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'patch')
+                        formData.append('studio_access', JSON.stringify(me.studios))
                         me.loader(true)
                         me.$axios.post(`api/packages/package-types/${me.$route.params.param}`, formData).then(res => {
                             setTimeout( () => {
@@ -138,26 +145,12 @@
                     }
                 })
             },
-            fetchStudios () {
-                const me = this
-                me.$axios.get('api/studios').then(res => {
-                    me.studios = res.data.studios
-                    me.studios.forEach((studio, index) => {
-                        studio.status = false
-                        me.res.studio_access.forEach((access, index) => {
-                            if (studio.id == access.studio_id) {
-                                studio.status = true
-                            }
-                        })
-                    })
-                })
-            }
         },
         async mounted () {
             const me = this
             me.$axios.get(`api/packages/package-types/${me.$route.params.param}`).then(res => {
                 me.res = res.data.packageType
-                me.fetchStudios()
+                me.studios = res.data.packageType.studios
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
