@@ -47,6 +47,18 @@
                                     </div>
                                 </div>
                                 <div class="form_flex">
+                                    <div class="form_group">
+                                        <label for="start_date">Start Date <span>*</span></label>
+                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
+                                    </div>
+                                    <div class="form_group">
+                                        <label for="end_date">End Date <span>*</span></label>
+                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
+                                    </div>
+                                </div>
+                                <div class="form_flex">
                                     <div class="form_group flex">
                                         <label>Purchase Limit <span>*</span></label>
                                         <div class="form_flex_input full">
@@ -134,6 +146,13 @@
                                 </div>
                             </div>
                             <div class="form_flex">
+                                <div class="form_group flex">
+                                    <label for="purchase_limit_per_customer">Purchase Limit per Customer <span>*</span></label>
+                                    <div class="form_flex_input full">
+                                        <input type="text" name="purchase_limit_per_customer" class="default_text number" autocomplete="off"v-validate="'required|numeric'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('purchase_limit_per_customer')">{{ errors.first('purchase_limit_per_customer') }}</span></transition>
+                                    </div>
+                                </div>
                                 <div class="form_group flex">
                                     <label>Expire In <span>*</span></label>
                                     <div class="form_flex_input">

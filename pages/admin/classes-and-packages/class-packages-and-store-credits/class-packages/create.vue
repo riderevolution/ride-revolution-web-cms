@@ -52,48 +52,10 @@
                                         <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
                                     </div>
-                                    <div class="form_group flex alternate">
-                                        <label>Start Time<span>*</span></label>
-                                        <div class="form_flex_input">
-                                            <input type="text" name="start_time_hour" class="default_text" autocomplete="off" v-model="form.start.hour" maxlength="2" v-validate="'required|numeric|max_value:12|min_value:0'">
-                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('start_time_hour')">{{ errors.first('start_time_hour') }}</span></transition>
-                                        </div>
-                                        <div class="form_flex_separator">:</div>
-                                        <div class="form_flex_input">
-                                            <input type="text" name="start_time_minutes" class="default_text" autocomplete="off" v-model="form.start.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
-                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('start_time_minutes')">{{ errors.first('start_time_minutes') }}</span></transition>
-                                        </div>
-                                        <div class="form_flex_input">
-                                            <input type="text" name="start_convention" class="default_text number no_click" autocomplete="off" v-model="form.start.convention" v-validate="'required'">
-                                            <div class="up" @click="changeConvention('start', 'AM')"></div>
-                                            <div class="down" @click="changeConvention('start', 'PM')"></div>
-                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('start_convention')">{{ errors.first('start_convention') }}</span></transition>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form_flex">
                                     <div class="form_group">
                                         <label for="end_date">End Date <span>*</span></label>
                                         <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
-                                    </div>
-                                    <div class="form_group flex alternate">
-                                        <label>End Time<span>*</span></label>
-                                        <div class="form_flex_input">
-                                            <input type="text" name="end_time_hour" class="default_text" autocomplete="off" v-model="form.end.hour" maxlength="2" v-validate="'required|numeric|max_value:12|min_value:0'">
-                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('end_time_hour')">{{ errors.first('end_time_hour') }}</span></transition>
-                                        </div>
-                                        <div class="form_flex_separator">:</div>
-                                        <div class="form_flex_input">
-                                            <input type="text" name="end_time_minutes" class="default_text" autocomplete="off" v-model="form.end.mins" maxlength="2" v-validate="'required|numeric|max_value:60|min_value:0'">
-                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('end_time_minutes')">{{ errors.first('end_time_minutes') }}</span></transition>
-                                        </div>
-                                        <div class="form_flex_input">
-                                            <input type="text" name="end_convention" class="default_text number no_click" autocomplete="off" v-model="form.end.convention" v-validate="'required'">
-                                            <div class="up" @click="changeConvention('end', 'AM')"></div>
-                                            <div class="down" @click="changeConvention('ebd', 'PM')"></div>
-                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('end_convention')">{{ errors.first('end_convention') }}</span></transition>
-                                        </div>
                                     </div>
                                 </div>
                                 <div class="form_flex">
@@ -186,6 +148,13 @@
                                 </div>
                             </div>
                             <div class="form_flex">
+                                <div class="form_group flex">
+                                    <label for="purchase_limit_per_customer">Purchase Limit per Customer <span>*</span></label>
+                                    <div class="form_flex_input full">
+                                        <input type="text" name="purchase_limit_per_customer" class="default_text number" autocomplete="off"v-validate="'required|numeric'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('purchase_limit_per_customer')">{{ errors.first('purchase_limit_per_customer') }}</span></transition>
+                                    </div>
+                                </div>
                                 <div class="form_group flex">
                                     <label>Expire In <span>*</span></label>
                                     <div class="form_flex_input">
@@ -287,16 +256,6 @@
                 types: [],
                 classPackages: [],
                 form: {
-                    start: {
-                        hour: '00',
-                        mins: '00',
-                        convention: 'AM'
-                    },
-                    end: {
-                        hour: '00',
-                        mins: '00',
-                        convention: 'PM'
-                    },
                     classCount: 0,
                     expiryIn: 0,
                     notActivated: 0,
@@ -306,17 +265,6 @@
             }
         },
         methods: {
-            changeConvention (type, status) {
-                const me = this
-                switch (type) {
-                    case 'start':
-                        me.form.start.convention = status
-                        break
-                    case 'end':
-                        me.form.end.convention = status
-                        break
-                }
-            },
             toggleFirstClass (status) {
                 const me = this
                 if (status) {

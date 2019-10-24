@@ -27,14 +27,6 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('amount')">{{ errors.first('amount') }}</span></transition>
                                     </div>
                                 </div>
-                                <div class="form_group flex">
-                                    <label for="price">Price <span>*</span></label>
-                                    <div class="form_flex_input full">
-                                        <input type="text" name="price" class="default_text number" v-model="res.price" autocomplete="off" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
-                                        <div class="placeholder">PHP</div>
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('price')">{{ errors.first('price') }}</span></transition>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
