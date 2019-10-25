@@ -48,14 +48,14 @@
                                 </div>
                                 <div class="form_flex">
                                     <div class="form_group">
-                                        <label for="start_date">Start Date <span>*</span></label>
-                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
+                                        <label for="promo_start_date">Start Date <span>*</span></label>
+                                        <input type="date" name="promo_start_date" class="default_text date" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('promo_start_date')">{{ errors.first('promo_start_date') }}</span></transition>
                                     </div>
                                     <div class="form_group">
-                                        <label for="end_date">End Date <span>*</span></label>
-                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
+                                        <label for="promo_end_date">End Date <span>*</span></label>
+                                        <input type="date" name="promo_end_date" class="default_text date" v-validate="'required'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('promo_end_date')">{{ errors.first('promo_end_date') }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_flex">
@@ -92,12 +92,17 @@
                                             <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_mode')">{{ errors.first('por_complimentary_package_mode') }}</span></transition>
                                         </div>
                                         <div class="form_group">
-                                            <label for="por_complimentary_package_id">Complimentary Package</label>
-                                            <select class="default_select alternate" name="por_complimentary_package_id">
+                                            <label for="por_complimentary_id">Complimentary Package</label>
+                                            <select class="default_select alternate" name="por_complimentary_id">
                                                 <option value="" selected disabled>Choose a Package</option>
-                                                <option :value="classPackage.id" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
+                                                <optgroup label="Packages">
+                                                    <option :value="`${classPackage.id}|||package`" v-for="(classPackage, key) in classPackages" :key="key">{{ classPackage.name }}</option>
+                                                </optgroup>
+                                                <optgroup label="Store Credits">
+                                                    <option :value="`${storeCredit.id}|||store_credit`" v-for="(storeCredit, key) in storeCredits" :key="key">{{ storeCredit.name }}</option>
+                                                </optgroup>
                                             </select>
-                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_package_id')">{{ errors.first('por_complimentary_package_id') }}</span></transition>
+                                            <transition name="slide"><span class="validation_errors" v-if="errors.has('por_complimentary_id')">{{ errors.first('por_complimentary_id') }}</span></transition>
                                         </div>
                                     </div>
                                 </transition>
@@ -125,7 +130,7 @@
                             <div class="form_flex">
                                 <div class="form_group flex">
                                     <label for="class_count">Class Count <span>*</span></label>
-                                    <div class="form_flex_input">
+                                    <div :class="`form_flex_input ${(isUnlimited) ? 'not_active' : 'active'}`">
                                         <input type="text" name="class_count" class="default_text number" autocomplete="off" v-model="form.classCount" v-validate="'required|numeric|max_value:9999999999|min_value:0'">
                                         <div class="up" @click="addCount('classCount')"></div>
                                         <div class="down" @click="subtractCount('classCount')"></div>
@@ -255,6 +260,7 @@
                 prevRoute: '',
                 types: [],
                 classPackages: [],
+                storeCredits: [],
                 form: {
                     classCount: 0,
                     expiryIn: 0,
@@ -362,6 +368,9 @@
                 })
                 me.$axios.get('api/extras/class-packages-except-me').then(res => {
                     me.classPackages = res.data.classPackages
+                })
+                me.$axios.get('api/packages/store-credits?enabled=1').then(res => {
+                    me.storeCredits = res.data.storeCredits.data
                 })
             }
         },

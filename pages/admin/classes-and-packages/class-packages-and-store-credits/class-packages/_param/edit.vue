@@ -62,7 +62,7 @@
                                     <div class="form_group flex">
                                         <label>Purchase Limit <span>*</span></label>
                                         <div class="form_flex_input full">
-                                            <input type="text" name="por_purchase_limit" class="default_text number" autocomplete="off" v-model="form.purchaseLimit = res.por_purchase_limit" v-validate="'numeric|min_value:0|max_value:9999999999'">
+                                            <input type="text" name="por_purchase_limit" class="default_text number" autocomplete="off" v-model="form.purchaseLimit" v-validate="'numeric|min_value:0|max_value:9999999999'">
                                             <div class="up" @click="addCount('purchaseLimit')"></div>
                                             <div class="down" @click="subtractCount('purchaseLimit')"></div>
                                             <transition name="slide"><span class="validation_errors" v-if="errors.has('por_purchase_limit')">{{ errors.first('por_purchase_limit') }}</span></transition>
@@ -123,8 +123,8 @@
                             <div class="form_flex">
                                 <div class="form_group flex">
                                     <label>Class Count <span>*</span></label>
-                                    <div class="form_flex_input">
-                                        <input type="text" name="class_count" class="default_text number" autocomplete="off" v-model="form.classCount = res.class_count" v-validate="'required|numeric|min_value:0|max_value:9999999999'">
+                                    <div :class="`form_flex_input ${(isUnlimited) ? 'not_active' : 'active'}`">
+                                        <input type="text" name="class_count" class="default_text number" autocomplete="off" v-model="form.classCount" v-validate="'required|numeric|min_value:0|max_value:9999999999'">
                                         <div class="up" @click="addCount('classCount')"></div>
                                         <div class="down" @click="subtractCount('classCount')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('class_count')">{{ errors.first('class_count') }}</span></transition>
@@ -149,7 +149,7 @@
                                 <div class="form_group flex">
                                     <label for="purchase_limit_per_customer">Purchase Limit per Customer <span>*</span></label>
                                     <div class="form_flex_input full">
-                                        <input type="text" name="purchase_limit_per_customer" class="default_text number" autocomplete="off"v-validate="'required|numeric'">
+                                        <input type="text" name="purchase_limit_per_customer" class="default_text number" v-model="res.purchase_limit_per_customer" autocomplete="off" v-validate="'required|numeric'">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('purchase_limit_per_customer')">{{ errors.first('purchase_limit_per_customer') }}</span></transition>
                                     </div>
                                 </div>
@@ -198,7 +198,7 @@
                                 <div class="form_group flex">
                                     <label>Days/months to expire if not activated:</label>
                                     <div :class="`form_flex_input ${(!isNotActivated) ? 'not_active' : 'active'}`">
-                                        <input type="text" name="ao_expiry_if_not_activated" class="default_text number" autocomplete="off" v-model="form.notActivated = res.ao_expiry_if_not_activated" v-validate="'numeric|min_value:0|max_value:9999999999'">
+                                        <input type="text" name="ao_expiry_if_not_activated" class="default_text number" autocomplete="off" v-model="form.notActivated" v-validate="'numeric|min_value:0|max_value:9999999999'">
                                         <div class="up" @click="addCount('notActivated')"></div>
                                         <div class="down" @click="subtractCount('notActivated')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('ao_expiry_if_not_activated')">{{ errors.first('ao_expiry_if_not_activated') }}</span></transition>
@@ -370,6 +370,9 @@
             me.fetchTypes()
             me.$axios.get(`api/packages/class-packages/${me.$route.params.param}`).then(res => {
                 me.res = res.data.classPackage
+                me.form.purchaseLimit = me.res.por_purchase_limit
+                me.form.classCount = me.res.class_count
+                me.form.notActivated = me.res.ao_expiry_if_not_activated
                 me.isPromo = (me.res.is_promo == 1) ? true : false
                 me.isNotActivated = (me.res.ao_activate_on_first_class_booked == 1) ? true : false
                 me.isComplimentary = (me.res.por_complimentary_package_mode == 1) ? true : false

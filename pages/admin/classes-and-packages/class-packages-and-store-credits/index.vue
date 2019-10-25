@@ -51,7 +51,7 @@
                         <tr v-for="(data, key) in res.classPackages.data" :key="key">
                             <td>{{ data.name }}</td>
                             <td>{{ data.sku_id }}</td>
-                            <td>{{ data.class_count }}</td>
+                            <td>{{ (data.class_count_unlimited) ? 'Unlimited' : data.class_count }}</td>
                             <td>PHP {{ totalCount(data.package_price) }}</td>
                             <td class="table_actions">
                                 <nuxt-link class="table_action_edit" :to="`${$route.path}/class-packages/${data.id}/edit`">Edit</nuxt-link>
