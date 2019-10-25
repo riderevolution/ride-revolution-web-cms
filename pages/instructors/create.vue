@@ -179,7 +179,7 @@
                                 <div class="form_group_header">Medical History</div>
                                 <transition name="slide"><span class="validation_errors" v-if="error">Please choose yes or no</span></transition>
                                 <div class="form_flex_radio_alternate" v-for="(history, key) in histories" :key="key">
-                                    <label>{{ history.name }}</label>
+                                    <label>{{ history.title }}</label>
                                     <div class="radio_wrapper">
                                         <div class="form_radio">
                                             <input type="radio" :id="`history_${key}_yes`" value="Yes" :name="`history_${key}`" class="action_radio" @change="toggleMedical(key, 1)">
@@ -279,20 +279,7 @@
                     ba_city: '',
                     medical_history: []
                 },
-                histories: [
-                    {
-                        name: 'Do I have a history of serious injury or disease?',
-                        value: 0
-                    },
-                    {
-                        name: 'Do I have a history of serious injury or disease 2?',
-                        value: 0
-                    },
-                    {
-                        name: 'Do I have a history of serious injury or disease 3?',
-                        value: 0
-                    }
-                ],
+                histories: [],
                 occupations: []
             }
         },
@@ -388,6 +375,9 @@
             const me = this
             me.$axios.get('api/extras/occupations').then(res => {
                 me.occupations = res.data.occupations
+            })
+            me.$axios.get('api/extras/medical-history-questions').then(res => {
+                me.histories = res.data.medicalHistoryQuestions
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 2]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
