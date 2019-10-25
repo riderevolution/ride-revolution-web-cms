@@ -83,9 +83,9 @@
             fetchData (value) {
                 const me = this
                 me.loader(true)
-                me.$axios.get('api/extras/gift-card-titles').then(res => {
+                me.$axios.get('api/extras/medical-history-questions').then(res => {
                     if (res.data) {
-                        me.res = res.data.giftCardTitles
+                        me.res = res.data.medicalHistoryQuestions
                         me.count = me.res.length
                         me.loaded = true
                     }

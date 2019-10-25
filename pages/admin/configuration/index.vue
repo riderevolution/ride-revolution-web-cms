@@ -44,12 +44,12 @@
                         },
                         {
                             label: 'Occupations',
-                            imgSrc: '/icons/types-icon.svg',
+                            imgSrc: '/icons/occupation-icon.svg',
                             link: '/admin/configuration/occupations'
                         },
                         {
                             label: 'Gift Card Titles',
-                            imgSrc: '/icons/types-icon.svg',
+                            imgSrc: '/icons/gift-card-title-icon.svg',
                             link: '/admin/configuration/gift-card-titles'
                         },
                         {

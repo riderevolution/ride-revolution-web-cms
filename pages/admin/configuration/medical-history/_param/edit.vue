@@ -11,13 +11,20 @@
                 <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
-                            <h2 class="form_title">Type Details</h2>
+                            <h2 class="form_title">Question Details</h2>
                         </div>
                         <div class="form_main_group">
-                            <div class="form_group">
-                                <label for="title">Title <span>*</span></label>
-                                <input type="text" name="title" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="res.title">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') }}</span></transition>
+                            <div class="form_flex">
+                                <div class="form_group">
+                                    <label for="title">Title <span>*</span></label>
+                                    <input type="text" name="title" autocomplete="off" class="default_text" autofocus v-validate="'required'" v-model="res.title">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') }}</span></transition>
+                                </div>
+                                <div class="form_group">
+                                    <label for="sequence">Sequence <span>*</span></label>
+                                    <input type="text" name="sequence" autocomplete="off" class="default_text" v-validate="'required|numeric'" v-model="res.sequence">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('sequence')">{{ errors.first('sequence') }}</span></transition>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -55,7 +62,7 @@
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')
                         me.loader(true)
-                        me.$axios.post(`api/extras/gift-card-titles/${me.res.id}`, formData).then(res => {
+                        me.$axios.post(`api/extras/medical-history-questions/${me.res.id}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Updated')
@@ -89,8 +96,8 @@
             const me = this
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
-            me.$axios.get(`api/extras/gift-card-titles/${me.$route.params.param}`).then(res => {
-                me.res = res.data.giftCardTitle
+            me.$axios.get(`api/extras/medical-history-questions/${me.$route.params.param}`).then(res => {
+                me.res = res.data.medicalHistoryQuestion
             })
         }
     }

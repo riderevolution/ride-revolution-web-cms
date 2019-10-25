@@ -14,10 +14,17 @@
                             <h2 class="form_title">Question Details</h2>
                         </div>
                         <div class="form_main_group">
-                            <div class="form_group">
-                                <label for="title">Title <span>*</span></label>
-                                <input type="text" name="title" autocomplete="off" class="default_text" autofocus v-validate="'required'">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') }}</span></transition>
+                            <div class="form_flex">
+                                <div class="form_group">
+                                    <label for="title">Title <span>*</span></label>
+                                    <input type="text" name="title" autocomplete="off" class="default_text" autofocus v-validate="'required'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') }}</span></transition>
+                                </div>
+                                <div class="form_group">
+                                    <label for="sequence">Sequence <span>*</span></label>
+                                    <input type="text" name="sequence" autocomplete="off" class="default_text" v-validate="'required|numeric'">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('sequence')">{{ errors.first('sequence') }}</span></transition>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -53,7 +60,7 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         me.loader(true)
-                        me.$axios.post('api/extras/gift-card-titles', formData).then(res => {
+                        me.$axios.post('api/extras/medical-history-questions', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Added')

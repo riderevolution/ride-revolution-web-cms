@@ -48,14 +48,14 @@
                                 </div>
                                 <div class="form_flex">
                                     <div class="form_group">
-                                        <label for="start_date">Start Date <span>*</span></label>
-                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
+                                        <label for="promo_start_date">Start Date <span>*</span></label>
+                                        <input type="date" name="promo_start_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.promo_start_date">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('promo_start_date')">{{ errors.first('promo_start_date') }}</span></transition>
                                     </div>
                                     <div class="form_group">
-                                        <label for="end_date">End Date <span>*</span></label>
-                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
+                                        <label for="promo_end_date">End Date <span>*</span></label>
+                                        <input type="date" name="promo_end_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.promo_end_date">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('promo_end_date')">{{ errors.first('promo_end_date') }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_flex">
@@ -91,10 +91,15 @@
                                             </select>
                                         </div>
                                         <div class="form_group">
-                                            <label for="por_complimentary_package_id">Complimentary Package</label>
-                                            <select class="default_select alternate" name="por_complimentary_package_id">
+                                            <label for="por_complimentary_id">Complimentary Package</label>
+                                            <select class="default_select alternate" name="por_complimentary_id">
                                                 <option value="" selected disabled>Choose a Package</option>
-                                                <option :value="classPackage.id" v-for="(classPackage, key) in classPackages" :key="key" :selected="res.por_complimentary_package_id == classPackage.id">{{ classPackage.name }}</option>
+                                                <optgroup label="Packages">
+                                                    <option :value="`${classPackage.id}|||package`" v-for="(classPackage, key) in classPackages" :key="key" :selected="res.por_complimentary_package_id == classPackage.id">{{ classPackage.name }}</option>
+                                                </optgroup>
+                                                <optgroup label="Store Credits">
+                                                    <option :value="`${storeCredit.id}|||store_credit`" v-for="(storeCredit, key) in storeCredits" :key="key" :selected="res.por_complimentary_store_credit_id == storeCredit.id">{{ storeCredit.name }}</option>
+                                                </optgroup>
                                             </select>
                                         </div>
                                     </div>
@@ -253,6 +258,7 @@
                 prevRoute: '',
                 types: [],
                 classPackages: [],
+                storeCredits: [],
                 res: [],
                 form: {
                     classCount: 0,
@@ -362,6 +368,9 @@
                 })
                 me.$axios.get(`api/extras/class-packages-except-me?id=${me.$route.params.param}`).then(res => {
                     me.classPackages = res.data.classPackages
+                })
+                me.$axios.get('api/packages/store-credits?enabled=1').then(res => {
+                    me.storeCredits = res.data.storeCredits.data
                 })
             }
         },
