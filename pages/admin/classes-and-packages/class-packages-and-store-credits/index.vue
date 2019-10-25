@@ -72,7 +72,7 @@
                             <th>Package Name</th>
                             <th>Package ID</th>
                             <th>Credit Amount</th>
-                            <th>Price</th>
+                            <th>Created At</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -81,7 +81,7 @@
                             <td>{{ data.name }}</td>
                             <td>{{ data.sku_id }}</td>
                             <td>PHP {{ totalCount(data.amount) }}</td>
-                            <td>PHP {{ totalCount(data.price) }}</td>
+                            <td>{{ formatDate(data.created_at) }}</td>
                             <td class="table_actions">
                                 <nuxt-link class="table_action_edit" :to="`${$route.path}/store-credits/${data.id}/edit`">Edit</nuxt-link>
                                 <a class="table_action_cancel" @click.self="toggleStatus(data.id, 0, 'Deactivated')" href="javascript:void(0)" v-if="status == 1">Deactivate</a>
@@ -126,6 +126,11 @@
             }
         },
         methods: {
+            formatDate (value) {
+                if (value) {
+                    return this.$moment(value).format('MMM DD, YYYY')
+                }
+            },
             submissionSuccess (packageStatus) {
                 const me = this
                 let apiRoute = ''

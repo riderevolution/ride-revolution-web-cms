@@ -53,6 +53,11 @@
                             link: '/admin/configuration/gift-card-titles'
                         },
                         {
+                            label: 'Medical History',
+                            imgSrc: '/icons/types-icon.svg',
+                            link: '/admin/configuration/medical-history'
+                        },
+                        {
                             label: 'System Emails',
                             imgSrc: '/icons/system-emails-icon.svg',
                             link: '/admin/configuration/system-emails'
