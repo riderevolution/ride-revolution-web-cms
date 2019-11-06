@@ -10,7 +10,7 @@
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sku_id[]`)">{{ errors.first(`variant_form_${unique}.sku_id[]`) }}</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="quantity[]" autocomplete="off" class="default_text disabled" v-validate="'required|numeric'" value="1">
+                <input type="text" name="quantity[]" autocomplete="off" class="default_text disabled" v-validate="'required|numeric'" value="0">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.quantity[]`)">{{ errors.first(`variant_form_${unique}.quantity[]`) }}</span></transition>
             </div>
             <div class="input_content">
@@ -43,7 +43,7 @@
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.sku_id[]`)">{{ errors.first(`variant_form_${unique}.sku_id[]`) }}</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="quantity[]" autocomplete="off" class="default_text disabled" v-model="value.quantity" v-validate="'required|numeric'">
+                <input type="text" name="quantity[]" autocomplete="off" class="default_text disabled" value="0" v-validate="'required|numeric'">
                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`variant_form_${unique}.quantity[]`)">{{ errors.first(`variant_form_${unique}.quantity[]`) }}</span></transition>
             </div>
             <div class="input_content">

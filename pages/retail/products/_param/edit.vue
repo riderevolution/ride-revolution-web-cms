@@ -29,7 +29,7 @@
                         </div>
                         <div class="form_wrapper side">
                             <div class="form_main_group">
-                                <div class="form_group" v-if="$route.query.s">
+                                <div class="form_group" v-if="!$route.query.s">
                                     <label for="product_category_id">Category <span>*</span></label>
                                     <select class="default_select alternate" name="product_category_id" v-validate="'required'">
                                         <option value="" disabled>Choose a Category</option>
@@ -43,7 +43,7 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('product_category_name')">{{ errors.first('product_category_name') }}</span></transition>
                                     <input type="hidden" name="product_category_id" v-model="form.category.id">
                                 </div>
-                                <div class="form_group" v-if="$route.query.c">
+                                <div class="form_group" v-if="!$route.query.c">
                                     <label for="supplier_id">Supplier <span>*</span></label>
                                     <select class="default_select alternate" name="supplier_id" v-validate="'required'">
                                         <option value="" selected>Choose a Supplier</option>
@@ -257,19 +257,22 @@
                     })
                     me.loaded = true
                 })
-                me.$axios.get('api/inventory/product-categories').then(res => {
-                    me.categories = res.data.productCategories
-                })
-                me.$axios.get('api/suppliers').then(res => {
-                    me.suppliers = res.data.suppliers.data
-                })
                 if (me.$route.query.s) {
                     me.$axios.get(`api/suppliers/${me.$route.query.s}`).then(res => {
                         me.form.supplier = res.data.supplier
                     })
                 } else {
+                    me.$axios.get('api/inventory/product-categories').then(res => {
+                        me.categories = res.data.productCategories
+                    })
+                }
+                if (me.$route.query.c) {
                     me.$axios.get(`api/inventory/product-categories/${me.$route.query.c}`).then(res => {
                         me.form.category = res.data.productCategory
+                    })
+                } else {
+                    me.$axios.get('api/suppliers').then(res => {
+                        me.suppliers = res.data.suppliers.data
                     })
                 }
             }
