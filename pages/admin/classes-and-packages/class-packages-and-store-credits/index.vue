@@ -23,6 +23,13 @@
                             <label for="q">Find a package</label>
                             <input type="text" name="q" placeholder="Search for a class packages" autocomplete="off" class="default_text search_alternate">
                         </div>
+                        <div class="form_group margin" v-if="package_status == 1">
+                            <label for="package_type_id">Package Type</label>
+                            <select class="default_select alternate" name="package_type_id">
+                                <option value="" selected>All Package Types</option>
+                                <option :value="type.id" v-for="(type, key) in types" :key="key">{{ type.name }}</option>
+                            </select>
+                        </div>
                         <div class="form_group" v-if="package_status == 3">
                             <label for="q">Find a credit</label>
                             <input type="text" name="q" placeholder="Search for a credits" autocomplete="off" class="default_text search_alternate">
@@ -122,7 +129,8 @@
                 rowCount: 0,
                 status: 1,
                 package_status: 1,
-                res: []
+                res: [],
+                types: []
             }
         },
         methods: {
@@ -206,6 +214,12 @@
                     setTimeout( () => {
                         me.loader(false)
                     }, 300)
+                })
+                me.$axios.get(`api/packages/package-types?enabled=1`).then(res => {
+                    me.types = res.data.packageTypes.data
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
                 })
             }
         },

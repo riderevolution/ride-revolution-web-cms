@@ -3,7 +3,7 @@
         <div id="admin" class="cms_dashboard">
             <section id="top_content" class="table" v-if="loaded">
                 <div class="action_wrapper">
-                    <h1 class="header_title">Gift Cards</h1>
+                    <h1 class="header_title">Physical Gift Cards</h1>
                     <div class="actions">
                         <div class="total">Total: {{ totalItems(res.giftCards.total) }}</div>
                         <div class="toggler">

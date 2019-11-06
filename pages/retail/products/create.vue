@@ -29,7 +29,7 @@
                         </div>
                         <div class="form_wrapper side">
                             <div class="form_main_group">
-                                <div class="form_group" v-if="$route.query.s">
+                                <div class="form_group" v-if="!$route.query.s">
                                     <label for="product_category_id">Category <span>*</span></label>
                                     <select class="default_select alternate" name="product_category_id" v-validate="'required'">
                                         <option value="" selected disabled>Choose a Category</option>
@@ -43,7 +43,7 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('product_category_name')">{{ errors.first('product_category_name') }}</span></transition>
                                     <input type="hidden" name="product_category_id" v-model="form.category.id">
                                 </div>
-                                <div class="form_group" v-if="$route.query.c">
+                                <div class="form_group" v-if="!$route.query.c">
                                     <label for="supplier_id">Supplier <span>*</span></label>
                                     <select class="default_select alternate" name="supplier_id" v-validate="'required'">
                                         <option value="" selected>Choose a Supplier</option>
@@ -102,7 +102,7 @@
                                     <div class="input_header">Reorder Point</div>
                                     <div class="input_header">Unit Price (PHP)</div>
                                     <div class="input_header">Sale Price (PHP)</div>
-                                    <div class="input_header image_upload">Action</div>
+                                    <!-- <div class="input_header image_upload">Action</div> -->
                                 </div>
                                 <div class="content_wrapper" v-if="variants.length > 0">
                                     <variant ref="productVariant" :unique="key" :type="0" v-for="(variant, key) in variants" :key="key" />

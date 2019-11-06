@@ -270,17 +270,12 @@
                 menus: [
                     {
                         id: 0,
-                        name: 'Ride Rewards',
-                        type: 'ride-rewards'
-                    },
-                    {
-                        id: 0,
                         name: 'Physical Gift Card',
                         type: 'physical-gift-card'
                     },
                     {
                         id: 0,
-                        name: 'Custom Gift Card',
+                        name: 'Digital Gift Card',
                         type: 'custom-gift-card'
                     }
                 ],

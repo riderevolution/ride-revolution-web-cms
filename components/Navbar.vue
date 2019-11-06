@@ -97,8 +97,8 @@
                                 link: '/retail/promotions'
                             },
                             {
-                                title: 'Gift Cards',
-                                link: '/retail/gift-cards'
+                                title: 'Physical Gift Cards',
+                                link: '/retail/physical-gift-cards'
                             }
                         ]
                     },

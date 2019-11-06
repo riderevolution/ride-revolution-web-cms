@@ -54,7 +54,7 @@
                         },
                         {
                             label: 'Medical History',
-                            imgSrc: '/icons/types-icon.svg',
+                            imgSrc: '/icons/medical-history-icon.svg',
                             link: '/admin/configuration/medical-history'
                         },
                         {

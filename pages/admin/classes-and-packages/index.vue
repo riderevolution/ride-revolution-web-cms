@@ -39,7 +39,7 @@
                         },
                         {
                             label: 'Class Packages and Store Credits',
-                            imgSrc: '/icons/package-icon.svg',
+                            imgSrc: '/icons/stores-icon.svg',
                             link: '/admin/classes-and-packages/class-packages-and-store-credits'
                         },
                         {
