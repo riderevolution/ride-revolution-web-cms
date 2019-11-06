@@ -102,7 +102,7 @@
                                     <div class="input_header">Reorder Point</div>
                                     <div class="input_header">Unit Price (PHP)</div>
                                     <div class="input_header">Sale Price (PHP)</div>
-                                    <!-- <div class="input_header image_upload">Action</div> -->
+                                    <div class="input_header image_upload" v-if="showClose">Action</div>
                                 </div>
                                 <div class="content_wrapper" v-if="variants.length > 0">
                                     <variant ref="productVariant" :unique="key" :type="0" v-for="(variant, key) in variants" :key="key" />
@@ -235,18 +235,21 @@
                 me.studios = res.data.studios
             })
             if (me.$route.query.s) {
-                me.$axios.get('api/inventory/product-categories').then(res => {
-                    me.categories = res.data.productCategories
-                })
                 me.$axios.get(`api/suppliers/${me.$route.query.s}`).then(res => {
                     me.form.supplier = res.data.supplier
                 })
             } else {
-                me.$axios.get('api/suppliers').then(res => {
-                    me.suppliers = res.data.suppliers.data
+                me.$axios.get('api/inventory/product-categories').then(res => {
+                    me.categories = res.data.productCategories
                 })
+            }
+            if (me.$route.query.c) {
                 me.$axios.get(`api/inventory/product-categories/${me.$route.query.c}`).then(res => {
                     me.form.category = res.data.productCategory
+                })
+            } else {
+                me.$axios.get('api/suppliers').then(res => {
+                    me.suppliers = res.data.suppliers.data
                 })
             }
             me.loaded = true

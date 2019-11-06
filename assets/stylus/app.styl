@@ -1875,12 +1875,15 @@ input::placeholder
             &:last-child
                 padding: 20px 0
             &.image_upload
-                flex: 1 0 25%
+                flex: 1 0 10%
     .content_wrapper
         .input_content_wrapper
-            border-bottom: 2px dashed $border
             background-color: transparent
             transition: .3s ease-in-out
+            &.active
+                border-bottom: 2px dashed $border
+            &.not_active
+                border-bottom: none
             &.threshold
                 background-color: $light_red
                 .input_wrapper
@@ -1945,12 +1948,12 @@ input::placeholder
                     &:last-child
                         padding: 20px 0
                     &.image_upload
-                        flex: 1 0 25%
+                        flex: 1 0 10%
                         display: flex
                         align-items: center
                         justify-content: space-between
                         .action_cancel_btn
-                            flex: 0 0 50%
+                            flex: 1 0 50%
                             padding: 13px
                         .action_btn
                             flex: 0 0 50%
