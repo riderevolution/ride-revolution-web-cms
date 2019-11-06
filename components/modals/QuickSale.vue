@@ -639,7 +639,7 @@
             },
             fetchData () {
                 const me = this
-                me.$axios.get('api/inventory/product-variants?enabled=1').then(res => {
+                me.$axios.get(`api/inventory/product-variants?enabled=1&studio_id=${me.$store.state.user.current_studio_id}`).then(res => {
                     if (res.data) {
                         me.products = res.data.productVariants.data
                         me.products.forEach((product, index) => {

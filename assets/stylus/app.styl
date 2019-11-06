@@ -592,9 +592,6 @@ table
                     transform: rotate(-45deg)
             .modal_main_group
                 padding: 40px
-                &.alternate
-                    height: 600px
-                    overflow-y: auto
                 .form_footer_wrapper
                     margin-top: 40px
                     margin-bottom: 0
@@ -764,6 +761,11 @@ table
                                 sf_pro_regular(1.6vh)
                                 color: $border_alt2
                     .modal_tab_content
+                        padding: 0 20px 0 0
+                        height: 100%
+                        max-height: 400px
+                        overflow-x: hidden
+                        overflow-y: auto
                         .no_results
                             sf_pro_regular(1.6vh)
                             color: $black
