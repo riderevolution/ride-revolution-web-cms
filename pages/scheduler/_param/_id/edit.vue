@@ -118,7 +118,7 @@
                             </div>
                             <div class="form_group">
                                 <div class="form_check">
-                                    <input type="checkbox" id="repeat" name="repeat" class="action_check" @change="isRepeat ^= true">
+                                    <input type="checkbox" id="repeat" name="repeat" class="action_check" @change="isRepeat ^= true" :checked="isRepeat">
                                     <label for="repeat">Repeat</label>
                                 </div>
                             </div>
