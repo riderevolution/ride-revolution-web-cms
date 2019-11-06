@@ -102,7 +102,7 @@
                                     <div class="input_header">Reorder Point</div>
                                     <div class="input_header">Unit Price (PHP)</div>
                                     <div class="input_header">Sale Price (PHP)</div>
-                                    <div class="input_header image_upload">Action</div>
+                                    <div class="input_header image_upload" v-if="showClose">Action</div>
                                 </div>
                                 <div class="content_wrapper" v-if="variants.length > 0">
                                     <variant ref="productVariant" :value="variant" :type="1" :unique="key" v-for="(variant, key) in variants" :key="key" />
