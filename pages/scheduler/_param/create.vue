@@ -13,9 +13,9 @@
                         <div class="form_header_wrapper">
                             <h2 class="form_title">{{ $moment(parseInt($route.params.param)).format('MMMM D, YYYY (ddd)') }}</h2>
                             <div class="form_check toggler" @click="isPrivate ^= true">
-                                <input type="hidden" id="is_private" name="is_private" class="action_check" :value="(isPrivate) ? 1 : 0">
+                                <input type="hidden" id="private_class" name="private_class" class="action_check" :value="(isPrivate) ? 1 : 0">
                                 <div :class="`toggle ${(isPrivate) ? 'active' : ''}`"></div>
-                                <label for="is_private">Private Class</label>
+                                <label for="private_class">Private Class</label>
                             </div>
                         </div>
                         <div class="form_main_group">
