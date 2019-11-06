@@ -16,7 +16,7 @@
 <script>
     export default {
         props: {
-            unix: {
+            value: {
                 type: String,
                 default: 0
             },
@@ -33,17 +33,21 @@
             },
             proceedStatus () {
                 const me = this
-                let date = me.$moment(parseInt(me.unix)).format('Y-MM-DD')
+                let date = me.value
                 let formData = new FormData()
                 formData.append('type', me.type)
                 formData.append('date', date)
                 me.$axios.post('api/schedules/clear', formData).then(res => {
-                    console.log(res.data)
+                    if (res.data) {
+                        console.log(res.data)
+                        me.$parent.generateCalendar(me.$parent.currentYear, me.$parent.currentMonth, 0)
+                    }
                 }).catch(err => {
-                    console.log(err)
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
                 })
-                // me.$store.state.calendarClearStatus = false
-                // document.body.classList.remove('no_scroll')
+                me.$store.state.calendarClearStatus = false
+                document.body.classList.remove('no_scroll')
             }
         }
     }

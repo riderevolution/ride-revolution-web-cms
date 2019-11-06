@@ -639,9 +639,9 @@
             },
             fetchData () {
                 const me = this
-                me.$axios.get(`api/inventory/product-variants?enabled=1&studio_id=${me.$store.state.user.current_studio_id}`).then(res => {
+                me.$axios.get(`api/inventory/product-variants-for-quick-sale?studio_id=${me.$store.state.user.current_studio_id}`).then(res => {
                     if (res.data) {
-                        me.products = res.data.productVariants.data
+                        me.products = res.data.productVariants
                         me.products.forEach((product, index) => {
                             product.isChecked = false
                         })

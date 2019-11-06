@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <div id="admin" class="cms_dashboard">
+        <div id="admin" class="cms_dashboard" v-if="loaded">
             <section id="top_content" class="table">
                 <nuxt-link :to="`/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
@@ -42,8 +42,8 @@
                                     <label for="peak_type">Peak Type <span>*</span></label>
                                     <select class="default_select alternate" name="peak_type" v-validate="'required'">
                                         <option value="" selected disabled>Choose a Peak</option>
-                                        <option value="peak">Peak</option>
-                                        <option value="non-peak">Non-Peak</option>
+                                        <option value="peak" :selected="res.peak_type == 'peak'">Peak</option>
+                                        <option value="non-peak" :selected="res.peak_type == 'non-peak'">Non-Peak</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('peak_type')">{{ errors.first('peak_type') }}</span></transition>
                                 </div>
@@ -53,7 +53,7 @@
                                     <label for="class_type_id">Class Type <span>*</span></label>
                                     <select class="default_select alternate" name="class_type_id" v-validate="'required'">
                                         <option value="" selected disabled>Select a Class Type</option>
-                                        <option :value="classType.id" v-for="(classType, key) in classTypes" :key="key">{{ classType.name }}</option>
+                                        <option :value="classType.id" v-for="(classType, key) in classTypes" :key="key" :selected="res.class_type_id == classType.id">{{ classType.name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('class_type_id')">{{ errors.first('class_type_id') }}</span></transition>
                                 </div>
@@ -64,13 +64,13 @@
                             </div>
                             <div class="form_group">
                                 <label for="description">Description <span>*</span></label>
-                                <input type="text" name="description" autocomplete="off" class="default_text" v-validate="'required'">
+                                <input type="text" name="description" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.description">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') }}</span></transition>
                             </div>
                             <transition name="fade">
                                 <div class="form_group" v-if="isPrivate">
                                     <label for="occassion">Occassion <span>*</span></label>
-                                    <input type="text" name="occassion" autocomplete="off" class="default_text" v-validate="'required'">
+                                    <input type="text" name="occassion" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.occassion">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('occassion')">{{ errors.first('occassion') }}</span></transition>
                                 </div>
                             </transition>
@@ -81,7 +81,7 @@
                                         <div :class="`custom_action_check ${(checkData) ? 'checked' : ''}`" @click.prevent="toggleSelectAll($event)">Select All</div>
                                     </div>
                                     <div class="form_check" v-for="(customerType, key) in customerTypes" :key="key">
-                                        <input type="checkbox" :id="`data_${key}`" name="filter_data" class="action_check" v-model="customerType.checked">
+                                        <input type="checkbox" :id="`data_${key}`" name="filter_data" class="action_check" v-model="customerType.checkedForReal">
                                         <label :for="`data_${key}`">{{ customerType.name }}</label>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                                     <label for="instructor_id">Instructor <span>*</span></label>
                                     <select class="default_select alternate" name="instructor_id" v-validate="'required'">
                                         <option value="" selected disabled>Select an Instructor</option>
-                                        <option :value="instructor.id" v-for="(instructor, key) in instructors" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
+                                        <option :value="instructor.id" v-for="(instructor, key) in instructors" :selected="res.instructor_schedules[0].user_id == instructor.id" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('instructor_id')">{{ errors.first('instructor_id') }}</span></transition>
                                 </div>
@@ -99,7 +99,7 @@
                                     <label for="substitute_instructor_id">Substitute Instructor <span>*</span></label>
                                     <select class="default_select alternate" name="substitute_instructor_id" v-validate="'required'">
                                         <option value="" selected disabled>Select an Instructor</option>
-                                        <option :value="instructor.id" v-for="(instructor, key) in instructors" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
+                                        <option :value="instructor.id" v-for="(instructor, key) in instructors" :selected="res.instructor_schedules[1].user_id == instructor.id" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('substitute_instructor_id')">{{ errors.first('substitute_instructor_id') }}</span></transition>
                                 </div>
@@ -107,12 +107,12 @@
                             <div class="form_flex">
                                 <div class="form_group" v-if="isPrivate">
                                     <label for="no_of_riders">No. of Riders <span>*</span></label>
-                                    <input type="text" name="no_of_riders" autocomplete="off" class="default_text" v-validate="'required'">
+                                    <input type="text" name="no_of_riders" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.no_of_riders">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('no_of_riders')">{{ errors.first('no_of_riders') }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="class_credits">Class Credits <span>*</span></label>
-                                    <input type="text" name="class_credits" autocomplete="off" class="default_text" v-validate="'required'">
+                                    <input type="text" name="class_credits" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.class_credits">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('class_credits')">{{ errors.first('class_credits') }}</span></transition>
                                 </div>
                             </div>
@@ -128,15 +128,15 @@
                                         <label for="repetition">Repetition <span>*</span></label>
                                         <select class="default_select alternate" name="repetition" v-validate="'required'">
                                             <option value="" selected disabled>Choose a Repetition</option>
-                                            <option value="every-day">Every Day</option>
-                                            <option value="every-week">Every Week</option>
-                                            <option value="every-month">Every Month</option>
+                                            <option value="every-day" :selected="res.repetition == 'every-day'">Every Day</option>
+                                            <option value="every-week" :selected="res.repetition == 'every-week'">Every Week</option>
+                                            <option value="every-month" :selected="res.repetition == 'every-month'">Every Month</option>
                                         </select>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('repetition')">{{ errors.first('repetition') }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="start_date">Start Date <span>*</span></label>
-                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.end_date">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
                                     </div>
                                 </div>
@@ -172,6 +172,7 @@
             return {
                 isRepeat: false,
                 isPrivate: false,
+                loaded: false,
                 lastRoute: '',
                 classTypes: [],
                 customerTypes: [],
@@ -196,7 +197,7 @@
                 let count = 0
                 let result = false
                 me.customerTypes.forEach((data, index) => {
-                    if (data.checked) {
+                    if (data.checkedForReal) {
                         count++
                     }
                 })
@@ -213,11 +214,11 @@
                 const me = this
                 if (me.checkData) {
                     me.customerTypes.forEach((data, index) => {
-                        data.checked = false
+                        data.checkedForReal = false
                     })
                 } else {
                     me.customerTypes.forEach((data, index) => {
-                        data.checked = true
+                        data.checkedForReal = true
                     })
                 }
                 if (event.target.classList.contains('checked')) {
@@ -276,9 +277,6 @@
                 me.$axios.get('api/packages/class-types').then(res => {
                     me.classTypes = res.data.classTypes.data
                 })
-                me.$axios.get('api/extras/customer-types').then(res => {
-                    me.customerTypes = res.data.customerTypes
-                })
                 me.$axios.get('api/instructors?enabled=1').then(res => {
                     me.instructors = res.data.instructors.data
                 })
@@ -286,6 +284,18 @@
         },
         mounted () {
             const me = this
+            me.$axios.get(`api/schedules/${me.$route.params.id}`).then(res => {
+                if (res.data) {
+                    me.res = res.data.schedule
+                    me.form.start.hour = me.res.start_time.split(':')[0]
+                    me.form.start.mins = me.res.start_time.split(':')[1].split(' ')[0]
+                    me.form.start.convention = me.res.start_time.split(':')[1].split(' ')[1]
+                    me.customerTypes = res.data.schedule.customer_types
+                    me.isRepeat = (me.res.repeat == 1) ? true : false
+                    me.isPrivate = (me.res.private_class == 1) ? true : false
+                    me.loaded = true
+                }
+            })
             me.fetchTypes()
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]
         }

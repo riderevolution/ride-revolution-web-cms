@@ -93,7 +93,7 @@
                                     <div class="form_flex_input">
                                         <input type="text" name="end_convention" class="default_text number no_click" autocomplete="off" v-model="form.end.convention" v-validate="'required'">
                                         <div class="up" @click="changeConvention('end', 'AM')"></div>
-                                        <div class="down" @click="changeConvention('ebd', 'PM')"></div>
+                                        <div class="down" @click="changeConvention('end', 'PM')"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('end_convention')">{{ errors.first('end_convention') }}</span></transition>
                                     </div>
                                 </div>
@@ -364,8 +364,10 @@
                     me.res = res.data.promo
                     me.form.start.hour = me.res.start_time.split(':')[0]
                     me.form.start.mins = me.res.start_time.split(':')[1].split(' ')[0]
+                    me.form.start.convention = me.res.start_time.split(':')[1].split(' ')[1]
                     me.form.end.hour = me.res.end_time.split(':')[0]
                     me.form.end.mins = me.res.end_time.split(':')[1].split(' ')[0]
+                    me.form.end.convention = me.res.end_time.split(':')[1].split(' ')[1]
                     me.isDiscount = (me.res.discount_type == 'percent') ? true : false
                     me.getFilter(me.res.affected_type)
                     me.filterType = me.res.affected_type

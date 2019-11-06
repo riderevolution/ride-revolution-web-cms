@@ -79,7 +79,7 @@
             <foot v-if="$store.state.isAuth" />
         </transition>
         <transition name="fade">
-            <calendar-clear v-if="$store.state.calendarClearStatus" :unix="currentUnix" :type="calendarType" />
+            <calendar-clear v-if="$store.state.calendarClearStatus" :value="value" :type="calendarType" />
         </transition>
         <transition name="fade">
             <calendar-duplicate v-if="$store.state.calendarDuplicateStatus" :type="calendarType" :yearPicked="currentYear" :monthPicked="currentMonth" />
@@ -105,7 +105,7 @@
                 currentDate: 0,
                 currentMonth: 0,
                 currentYear: 0,
-                currentUnix: 0,
+                value: 0,
                 calendarType: 'day',
                 monthName: '',
                 yearName: '',
@@ -166,6 +166,7 @@
                         if (startDate <= endDate) {
                             if (me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').format('d') == j) {
                                 let unixTimestamp = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').valueOf()
+                                let dayDate = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-DD').format('YYYY-MM-DD')
                                 if (highlight && me.currentDate == startDate) {
                                     tableRow.classList.add('highlighted')
                                     setTimeout( () => {
@@ -181,7 +182,7 @@
                                                 <div class='menu_overlay ${(j == 6) ? 'alternate' : ''}'>
                                                     <ul class='menu_list_wrapper'>
                                                         <li class='menu_list'><a class='add menu_item' href='/${me.lastRoute}/${unixTimestamp}/create'>Add a Class</a></li>
-                                                        <li class='menu_list'><a class='clear menu_item' href='${unixTimestamp}'>Clear a Day</a></li>
+                                                        <li class='menu_list'><a class='clear menu_item' href='${dayDate}'>Clear a Day</a></li>
                                                         <li class='menu_list'><a class='duplicate menu_item' href='javascript:void(0)'>Duplicate Day</a></li>
                                                     </ul>
                                                 </div>
@@ -259,26 +260,26 @@
                 let result = ''
                 me.schedules.forEach((data, index) => {
                     let scheduleCurrent = me.$moment(data.date).format('D')
-                    let currentDate = me.$moment(`${me.currentYear}-${me.currentMonth}-${date}`)
+                    let currentDate = me.$moment(`${me.currentYear}-${me.currentMonth}-${date} ${data.schedule.start_time}`)
                     let scheduleDate = me.$moment()
                     let unixTimestamp = me.$moment(`${me.currentYear}-${me.currentMonth}-${scheduleCurrent}`, 'YYYY-MM-D').valueOf()
                     if (date == scheduleCurrent) {
                         if (data.schedule.private_class == 1) {
                             result += `
-                                <a href="/${me.lastRoute}/${unixTimestamp}/${data.id}/edit" class="class_wrapper private">
+                                <a href="/${me.lastRoute}/${unixTimestamp}/${data.schedule.id}/edit" class="class_wrapper private">
                                     <div class="class_text margin"><img src="/icons/private-class.svg" /><span>${data.schedule.start_time}</span></div>
                                     <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
                                 </a>`
                         } else {
                             if (data.schedule.enabled == 1) {
                                 result += `
-                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.id}/edit" class="class_wrapper ${(currentDate.diff(scheduleDate) < 0) ? 'completed' : 'original'}">
+                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.schedule.id}/edit" class="class_wrapper ${(currentDate.diff(scheduleDate) < 0) ? 'completed' : 'original'}">
                                         <div class="class_text margin">${data.schedule.start_time}</div>
                                         <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
                                     </a>`
                             } else {
                                 result += `
-                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.id}/edit" class="class_wrapper draft">
+                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.schedule.id}/edit" class="class_wrapper draft">
                                         <div class="class_text margin">${data.schedule.start_time}</div>
                                         <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
                                     </a>`
@@ -322,6 +323,7 @@
             },
             clearMonth () {
                 const me = this
+                me.value = me.$moment(`${me.currentYear}-${me.currentMonth}-${1}`, 'YYYY-MM-DD').format('YYYY-MM-DD')
                 me.calendarType = 'month'
                 me.$store.state.calendarClearStatus = true
             },
@@ -366,7 +368,7 @@
                         if (elementDayClear != null) {
                             elementDayClear.addEventListener('click', function(e) {
                                 e.preventDefault()
-                                me.currentUnix = e.target.getAttribute('href')
+                                me.value = e.target.getAttribute('href')
                                 me.calendarType = 'day'
                                 me.$store.state.calendarClearStatus = true
                             })
@@ -389,9 +391,8 @@
                             e.preventDefault()
                             let element = this
                             let overlay = element.nextElementSibling
-                            // let id = element.id.split('_')[1]
-                            // console.log(me.getFirstDayofWeek(id, firstDayExcess));
-                            // console.log(me.getLastDayofWeek(id));
+                            let id = element.id.split('_')[1]
+                            me.value = `${me.getFirstDayofWeek(id, firstDayExcess)}|||${me.getLastDayofWeek(id)}`
                             if (overlay.classList.contains('active')) {
                                 overlay.classList.remove('active')
                             } else {
@@ -401,6 +402,7 @@
                         if (elementWeekClear != null) {
                             elementWeekClear.addEventListener('click', function(e) {
                                 me.calendarType = 'week'
+                                console.log(me.value);
                                 me.$store.state.calendarClearStatus = true
                             })
                         }
@@ -456,7 +458,7 @@
                 } else {
                     firstDayofWeek = firstDayofWeek - excess
                 }
-                return parseInt(firstDayofWeek)
+                return me.$moment(`${me.currentYear}-${me.currentMonth}-${firstDayofWeek}`, 'YYYY-MM-DD').format('YYYY-MM-DD')
             },
             getLastDayofWeek (startDate) {
                 const me = this
@@ -464,7 +466,7 @@
                 if (startDate == 30 || startDate == 31) {
                     lastDayofWeek = me.$moment(`${me.currentYear}-${me.currentMonth}-${startDate}`, 'YYYY-MM-D').daysInMonth()
                 }
-                return parseInt(lastDayofWeek)
+                return me.$moment(`${me.currentYear}-${me.currentMonth}-${lastDayofWeek}`, 'YYYY-MM-DD').format('YYYY-MM-DD')
             },
             fetchData () {
                 const me = this
