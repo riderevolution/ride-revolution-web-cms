@@ -37,8 +37,8 @@
                 <div class="calendar_wrapper">
                     <div class="calendar_actions">
                         <div class="action_flex">
-                            <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar($moment().year(), $moment().month() + 1, 0)">This Month</a>
-                            <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar($moment().year(), $moment().month() + 1, 1)">This Week</a>
+                            <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 0)">This Month</a>
+                            <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 1)">This Week</a>
                         </div>
                         <div class="action_flex">
                             <div class="gear_action">
@@ -124,7 +124,6 @@
                     me.currentYear = me.currentYear - 1
                 }
                 me.generateCalendar(me.currentYear, me.currentMonth, 0)
-                me.fetchSchedules(me.currentYear, me.currentMonth)
             },
             generateNextCalendar () {
                 const me = this
@@ -134,12 +133,11 @@
                     me.currentYear = me.currentYear + 1
                 }
                 me.generateCalendar(me.currentYear, me.currentMonth, 0)
-                me.fetchSchedules(me.currentYear, me.currentMonth)
             },
             clearTableRows () {
                 document.querySelectorAll('.cms_table_calendar tbody tr').forEach(function(e){e.remove()})
             },
-            generateCalendar (year, month, highlight) {
+            async generateCalendar (year, month, highlight) {
                 const me = this
                 me.clearTableRows()
                 me.currentDate = me.$moment().date()
@@ -152,6 +150,11 @@
                 let calendarTable = document.querySelector('.cms_table_calendar tbody')
                 let current = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').format('d')
                 let excess = 0
+
+                await me.$axios.get(`api/schedules?year=${me.currentYear}&month=${me.currentMonth}`).then(res => {
+                    me.schedules = res.data.schedules
+                })
+
                 me.loader(true)
                 /**
                  * Generate Rows **/
@@ -165,6 +168,9 @@
                                 let unixTimestamp = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').valueOf()
                                 if (highlight && me.currentDate == startDate) {
                                     tableRow.classList.add('highlighted')
+                                    setTimeout( () => {
+                                        document.querySelector('.highlighted').scrollIntoView({block: 'center', behavior: 'smooth'})
+                                    }, 250)
                                 }
                                 tableRow.innerHTML += `
                                     <td id="col_${i}" class='day_wrapper fade_in'>
@@ -181,24 +187,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        ${me.populateScheduler(startDate)}
                                         <div class="classes" id="class_${startDate}">
-                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper private">
-                                                <div class="class_text margin"><img src="/icons/private-class.svg" /><span>10:00 AM</span></div>
-                                                <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </a>
-                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper original">
-                                                <div class="class_text margin">10:00 AM</div>
-                                                <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </a>
-                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper draft">
-                                                <div class="class_text margin">10:00 AM</div>
-                                                <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </a>
-                                            <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper ${(me.currentDate > startDate) ? 'completed' : 'uncomplete'}">
-                                                <div class="class_text margin">10:00 AM</div>
-                                                <div class="class_text">Ride Rev (50 mins.)</div>
-                                            </a>
+                                            ${me.populateScheduler(startDate)}
                                         </div>
                                         ${(j == 6) ? `<svg xmlns="http://www.w3.org/2000/svg" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" class="calendar_gear" id="gear_${startDate}"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg><div class="gear_overlay"><ul class="gear_list_wrapper"> <li class="gear_list"><a class="clear gear_item" href="javascript:void(0)">Clear Week</a></li> <li class="gear_list"><a class="duplicate gear_item" href="javascript:void(0)">Duplicate Week</a></li> </ul> </div>` : '' }
                                     </td>`
@@ -261,13 +251,39 @@
                     me.clickDates(1, endDate, excess)
                 }, 300)
             },
+            /**
+             * Populate the Scheduler
+             */
             populateScheduler (date) {
                 const me = this
                 let result = ''
-                me.schedules.forEach((schedule, index) => {
-                    let scheduleDate = me.$moment(schedule.date).format('D')
-                    if (date == scheduleDate) {
-                        result = schedule
+                me.schedules.forEach((data, index) => {
+                    let scheduleCurrent = me.$moment(data.date).format('D')
+                    let currentDate = me.$moment(`${me.currentYear}-${me.currentMonth}-${date}`)
+                    let scheduleDate = me.$moment()
+                    let unixTimestamp = me.$moment(`${me.currentYear}-${me.currentMonth}-${scheduleCurrent}`, 'YYYY-MM-D').valueOf()
+                    if (date == scheduleCurrent) {
+                        if (data.schedule.private_class == 1) {
+                            result += `
+                                <a href="/${me.lastRoute}/${unixTimestamp}/${data.id}/edit" class="class_wrapper private">
+                                    <div class="class_text margin"><img src="/icons/private-class.svg" /><span>${data.schedule.start_time}</span></div>
+                                    <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
+                                </a>`
+                        } else {
+                            if (data.schedule.enabled == 1) {
+                                result += `
+                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.id}/edit" class="class_wrapper ${(currentDate.diff(scheduleDate) < 0) ? 'completed' : 'original'}">
+                                        <div class="class_text margin">${data.schedule.start_time}</div>
+                                        <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
+                                    </a>`
+                            } else {
+                                result += `
+                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.id}/edit" class="class_wrapper draft">
+                                        <div class="class_text margin">${data.schedule.start_time}</div>
+                                        <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
+                                    </a>`
+                            }
+                        }
                     }
                 })
                 return result
@@ -459,21 +475,12 @@
                     me.instructors = res.data.instructors.data
                 })
                 me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1, 0)
-                me.fetchSchedules(me.currentYear, me.currentMonth)
                 me.loaded = true
             },
-            fetchSchedules (year, month) {
-                const me = this
-                me.$axios.get(`api/schedules?year=${year}&month=${month}`).then(res => {
-                    me.schedules = res.data.schedules
-                })
-            }
         },
         mounted () {
             const me = this
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 1]
-            let scheduleDate = me.$moment('2019-11-25').format('D')
-            console.log(scheduleDate);
             me.fetchData()
         },
         beforeMount () {
