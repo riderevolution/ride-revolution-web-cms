@@ -30,6 +30,7 @@ const createStore = () => {
             token: '',
             user: {
                 first_name: '',
+                current_studio_id: '',
                 staff_details: {
                     role: {
                         display_name: '',

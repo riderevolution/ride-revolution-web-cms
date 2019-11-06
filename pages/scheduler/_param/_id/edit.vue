@@ -4,7 +4,7 @@
             <section id="top_content" class="table">
                 <nuxt-link :to="`/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ replacer(lastRoute) }}</span></nuxt-link>
                 <div class="action_wrapper">
-                    <h1 class="header_title">Create a Schedule</h1>
+                    <h1 class="header_title">Update a Schedule</h1>
                 </div>
             </section>
             <section id="content">
