@@ -111,6 +111,7 @@
                 yearName: '',
                 studios: [],
                 instructors: [],
+                schedules: [],
                 dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             }
         },
@@ -123,6 +124,7 @@
                     me.currentYear = me.currentYear - 1
                 }
                 me.generateCalendar(me.currentYear, me.currentMonth, 0)
+                me.fetchSchedules(me.currentYear, me.currentMonth)
             },
             generateNextCalendar () {
                 const me = this
@@ -132,6 +134,7 @@
                     me.currentYear = me.currentYear + 1
                 }
                 me.generateCalendar(me.currentYear, me.currentMonth, 0)
+                me.fetchSchedules(me.currentYear, me.currentMonth)
             },
             clearTableRows () {
                 document.querySelectorAll('.cms_table_calendar tbody tr').forEach(function(e){e.remove()})
@@ -178,6 +181,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        ${me.populateScheduler(startDate)}
                                         <div class="classes" id="class_${startDate}">
                                             <a href="/${me.lastRoute}/${unixTimestamp}/1/edit" class="class_wrapper private">
                                                 <div class="class_text margin"><img src="/icons/private-class.svg" /><span>10:00 AM</span></div>
@@ -256,6 +260,17 @@
                     me.loader(false)
                     me.clickDates(1, endDate, excess)
                 }, 300)
+            },
+            populateScheduler (date) {
+                const me = this
+                let result = ''
+                me.schedules.forEach((schedule, index) => {
+                    let scheduleDate = me.$moment(schedule.date).format('D')
+                    if (date == scheduleDate) {
+                        result = schedule
+                    }
+                })
+                return result
             },
             toggleOverlays (e) {
                 const me = this
@@ -443,22 +458,22 @@
                 me.$axios.get('api/instructors?enabled=1').then(res => {
                     me.instructors = res.data.instructors.data
                 })
-                me.fetchSchedules(me.$moment().month(), me.$moment().year())
-                    
-
                 me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1, 0)
+                me.fetchSchedules(me.currentYear, me.currentMonth)
                 me.loaded = true
             },
-            fetchSchedules (month, year) {
-                let me = this
-                me.$axios.get(`api/schedules?year=${me.$moment().year()}&month=${me.$moment().month()}`).then(res => {
-                    console.log(res.data)
+            fetchSchedules (year, month) {
+                const me = this
+                me.$axios.get(`api/schedules?year=${year}&month=${month}`).then(res => {
+                    me.schedules = res.data.schedules
                 })
             }
         },
         mounted () {
             const me = this
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 1]
+            let scheduleDate = me.$moment('2019-11-25').format('D')
+            console.log(scheduleDate);
             me.fetchData()
         },
         beforeMount () {
