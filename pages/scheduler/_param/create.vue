@@ -33,8 +33,8 @@
                                     </div>
                                     <div class="form_flex_input">
                                         <input type="text" name="start_convention" class="default_text number no_click" autocomplete="off" v-model="form.start.convention" v-validate="'required'">
-                                        <div class="up" @click="changeConvention('start', 'AM')"></div>
-                                        <div class="down" @click="changeConvention('start', 'PM')"></div>
+                                        <div class="up" @click="changeConvention()"></div>
+                                        <div class="down" @click="changeConvention()"></div>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('start_convention')">{{ errors.first('start_convention') }}</span></transition>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@
                             <div class="form_flex">
                                 <div class="form_group">
                                     <label for="instructor_id">Instructor <span>*</span></label>
-                                    <select class="default_select alternate" name="instructor_id" v-validate="'required'">
+                                    <select class="default_select alternate" name="instructor_id" v-validate="'required'" v-model="form.instructor_id">
                                         <option value="" selected disabled>Select an Instructor</option>
                                         <option :value="instructor.id" v-for="(instructor, key) in instructors" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
                                     </select>
@@ -97,9 +97,9 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="substitute_instructor_id">Substitute Instructor <span>*</span></label>
-                                    <select class="default_select alternate" name="substitute_instructor_id" v-validate="'required'">
+                                    <select :class="`default_select alternate ${(form.instructor_id != '') ? '' : 'disabled'}`" name="substitute_instructor_id" v-validate="'required'">
                                         <option value="" selected disabled>Select an Instructor</option>
-                                        <option :value="instructor.id" v-for="(instructor, key) in instructors" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
+                                        <option :value="instructor.id" v-for="(instructor, key) in instructors" :key="key" v-if="form.instructor_id != instructor.id">{{ instructor.first_name }} {{ instructor.last_name }}</option>
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('substitute_instructor_id')">{{ errors.first('substitute_instructor_id') }}</span></transition>
                                 </div>
@@ -182,11 +182,7 @@
                         mins: '00',
                         convention: 'AM'
                     },
-                    end: {
-                        hour: '00',
-                        mins: '00',
-                        convention: 'PM'
-                    }
+                    instructor_id: ''
                 }
             }
         },
@@ -226,16 +222,9 @@
                     event.target.classList.add('checked')
                 }
             },
-            changeConvention (type, status) {
+            changeConvention () {
                 const me = this
-                switch (type) {
-                    case 'start':
-                        me.form.start.convention = status
-                        break
-                    case 'end':
-                        me.form.end.convention = status
-                        break
-                }
+                me.form.start.convention = (me.form.start.convention == 'AM') ? 'PM' : 'AM'
             },
             submissionSuccess () {
                 const me = this
