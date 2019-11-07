@@ -38,7 +38,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"> <g transform="translate(-248 -187)"> <g class="arrow_1" transform="translate(248 187)"> <circle class="arrow_3" cx="14" cy="14" r="14" /> <circle class="arrow_4" cx="14" cy="14" r="13.5" /> </g> <path class="arrow_2" d="M184.939,200.506l-3.981,3.981,3.981,3.981" transform="translate(445.438 405.969) rotate(180)" /> </g> </svg>
                                 </div>
                             </div>
-                            <a href="javascript:void(0)" class="action_calendar_btn" @click="generateTodayClasses()">Today</a>
+                            <a href="javascript:void(0)" class="action_calendar_btn" @click="populateClasses()">Today</a>
                         </div>
                         <div class="content_wrapper">
                             <div class="class_accordion" v-for="(data, key) in results" :key="key">
@@ -126,6 +126,7 @@
                 results: [],
                 current: 0,
                 last: 0,
+                test: 0,
                 currentMonth: 0,
                 currentYear: 0,
                 isPrev: false
@@ -149,11 +150,10 @@
                         }
                     }
                     me.populateResults(me.current, 'next')
-                    me.current++
-                    if (i == 6) {
-                        console.log(me.current);
-                        me.last = me.current
+                    if (i == 0) {
+                        me.last = me.current - 1
                     }
+                    me.current++
                 }
             },
             generatePrevClasses () {
@@ -169,21 +169,34 @@
                         if (me.currentMonth == 0) {
                             me.currentMonth = 12
                             me.currentYear = me.currentYear - 1
-                            me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${1}`, 'YYYY-MM-D').daysInMonth()
+                            if (me.current < 0) {
+                                me.current = me.last
+                            } else {
+                                me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${me.last}`, 'YYYY-MM-D').daysInMonth()
+                            }
                         } else {
-                            me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${1}`, 'YYYY-MM-D').daysInMonth()
+                            if (me.current == 0) {
+                                if (me.last == 0) {
+                                    me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${1}`, 'YYYY-MM-D').daysInMonth()
+                                } else {
+                                    me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${me.last}`, 'YYYY-MM-D').daysInMonth()
+                                }
+                            } else {
+                                me.current = me.last
+                            }
                         }
                     }
                     me.populateResults(me.current, 'prev')
                     me.current--
                     if (i == 6) {
-                        console.log(me.current);
                         me.last = me.current
                     }
                 }
             },
             populateClasses () {
                 const me = this
+                me.results = []
+                me.loader(true)
                 let currentDate = parseInt(me.$moment().format('D'))
                 me.current = currentDate
                 me.last = currentDate
@@ -196,10 +209,16 @@
                     })
                     currentDate++
                     me.current = currentDate
+                    me.isPrev = false
+                    me.isNext = false
                 }
+                setTimeout( () => {
+                    me.loader(false)
+                }, 500)
             },
             populateResults (data, type) {
                 const me = this
+                me.loader(true)
                 switch (type) {
                     case 'next':
                         me.results.push({
@@ -214,6 +233,9 @@
                         })
                         break
                 }
+                setTimeout( () => {
+                    me.loader(false)
+                }, 500)
             },
             toggleClass (event) {
                 const me = this
@@ -271,9 +293,6 @@
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
                 }).then(() => {
-                    setTimeout( () => {
-                        me.loader(false)
-                    }, 500)
                     me.rowCount = document.getElementsByTagName('th').length
                 })
                 me.$axios.get('api/studios?enabled=1').then(res => {
