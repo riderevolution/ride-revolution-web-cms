@@ -38,7 +38,7 @@
                             <div class="form_group margin" v-click-outside="closeMe">
                                 <label>Search a Product</label>
                                 <input type="text" autocomplete="off" placeholder="Add a product" :class="`default_text search_alternate ${(!isStudio) ? 'disabled' : '' }`" @click="autocomplete ^= true">
-                                <div class="cms_autocomplete ${(variants.length >= 6) ? 'scrollable' : ''}`" v-if="autocomplete">
+                                <div :class="`cms_autocomplete ${(variants.length >= 6) ? 'scrollable' : ''}`" v-if="autocomplete">
                                     <div class="autocomplete_title" v-for="(variant, key) in variants" :key="key" @click="addVariant(variant)" v-if="variants.length > 0">{{ variant.variant }}</div>
                                     <div class="autocomplete_title" v-if="variants.length == 0">No Product(s) Found.</div>
                                 </div>

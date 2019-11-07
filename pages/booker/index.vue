@@ -13,9 +13,22 @@
                                     <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                                 </select>
                             </div>
-                            <div class="form_group margin">
+                            <div class="form_group margin" v-click-outside="closeMe">
                                 <label for="q">Find a Customer</label>
-                                <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" class="default_text search_alternate">
+                                <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" class="default_text search_alternate" @click="toggleCustomers ^= true">
+                                <div :class="`customer_selection ${(customers.length > 6) ? 'scrollable' : ''}`" v-if="toggleCustomers">
+                                    <div class="customer_selection_list">
+                                        <div class="customer_wrapper" :id="`customer_${customer.id}`" v-for="(customer, key) in customers" :key="key">
+                                            <img :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
+                                            <div class="customer_image" v-else>
+                                                {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
+                                            </div>
+                                            <div class="customer_name">
+                                                {{ customer.first_name }} {{ customer.last_name }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="customer_selected">
                                 <div class="customer_label">No Customer Selected</div>
@@ -98,7 +111,37 @@
                     </div>
                     <div class="booker_content">
                         <div class="booker_footer">
-
+                            <div class="booker_notepad">
+                                <h2 class="footer_title">Notepad</h2>
+                                <div class="notepad_text">
+                                    <textarea name="notepad" rows="10"></textarea>
+                                </div>
+                            </div>
+                            <div class="booker_waitlist">
+                                <div class="footer_header">
+                                    <h2 class="footer_title">Waitlist (3)</h2>
+                                    <a href="javascript:void(0)" class="action_success_btn">Add to Wishlist</a>
+                                </div>
+                                <table class="cms_waitlist">
+                                    <thead>
+                                        <tr>
+                                            <th>Last Name</th>
+                                            <th>First Name</th>
+                                            <th class="action">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Villeta</td>
+                                            <td>Sheena</td>
+                                            <td class="action">
+                                                <a href="#">Assign Seat</a>
+                                                <a href="#" class="margin">Remove</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,15 +167,21 @@
                 res: [],
                 studios: [],
                 results: [],
+                customers: [],
                 current: 0,
                 last: 0,
                 test: 0,
                 currentMonth: 0,
                 currentYear: 0,
-                isPrev: false
+                isPrev: false,
+                toggleCustomers: false
             }
         },
         methods: {
+            closeMe () {
+                const me = this
+                me.toggleCustomers = false
+            },
             generateNextClasses () {
                 const me = this
                 if (me.isPrev) {
@@ -210,7 +259,6 @@
                     currentDate++
                     me.current = currentDate
                     me.isPrev = false
-                    me.isNext = false
                 }
                 setTimeout( () => {
                     me.loader(false)
@@ -287,7 +335,7 @@
                 const me = this
                 me.loader(true)
                 me.$axios.get(`api/customers?enabled=${value}`).then(res => {
-                    me.res = res.data
+                    me.customers = res.data.customers.data
                     me.loaded = true
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
