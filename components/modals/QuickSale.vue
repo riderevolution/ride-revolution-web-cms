@@ -382,6 +382,7 @@
                 formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
                 formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
+                formData.append('studio_id', me.$store.state.user.current_studio_id)
                 me.$validator.validateAll('checkout_form').then(valid => {
                     if (valid) {
                         me.loader(true)
