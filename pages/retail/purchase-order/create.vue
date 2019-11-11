@@ -18,7 +18,7 @@
                         <div class="filter_flex" id="filter">
                             <div class="form_group">
                                 <label for="supplier_id">Supplier</label>
-                                <select class="default_select alternate" name="supplier_id" @change="isSupplier = true" v-model="form.supplier">
+                                <select class="default_select alternate" name="supplier_id" @change="searchVariants()" v-model="form.supplier">
                                     <option value="" selected disabled>Select a Supplier</option>
                                     <option :value="supplier.id" v-for="(supplier, key) in suppliers" :key="key">{{ supplier.name }}</option>
                                 </select>
@@ -211,17 +211,21 @@
             },
             searchVariants () {
                 const me = this
-                me.$axios.get(`api/extras/purchase-orders-products-filter?supplier_id=${me.form.supplier}&studio_id=${me.form.studio}`).then(res => {
-                    me.variants = res.data.productVariants
-                    me.purchaseOrders = []
-                    me.variants.forEach((variant, vindex) => {
-                        if (variant.quantity < variant.reorder_point) {
-                            me.purchaseOrders.push(variant)
-                        }
+                if (me.isSupplier) {
+                    me.$axios.get(`api/extras/purchase-orders-products-filter?supplier_id=${me.form.supplier}&studio_id=${me.form.studio}`).then(res => {
+                        me.variants = res.data.productVariants
+                        me.purchaseOrders = []
+                        me.variants.forEach((variant, vindex) => {
+                            if (variant.quantity < variant.reorder_point) {
+                                me.purchaseOrders.push(variant)
+                            }
+                        })
+                        me.fetchItems()
+                        me.isStudio = true
                     })
-                    me.fetchItems()
-                    me.isStudio = true
-                })
+                } else {
+                    me.isSupplier = true
+                }
             },
             fetchData () {
                 const me = this
