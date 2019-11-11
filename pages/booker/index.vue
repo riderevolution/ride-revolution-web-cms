@@ -54,18 +54,18 @@
                             <a href="javascript:void(0)" class="action_calendar_btn" @click="populateClasses()">Today</a>
                         </div>
                         <div class="content_wrapper">
-                            <div class="class_accordion" v-for="(data, key) in results" :key="key">
-                                <div class="accordion_header" @click.self="toggleClass($event)">{{ data.abbr }} | {{ data.date }}</div>
+                            <div class="class_accordion" v-for="(result, key) in results" :key="key">
+                                <div class="accordion_header" @click.self="toggleClass($event, $moment(result.date).format('M'), $moment(result.date).format('D'), $moment(result.date).format('YYYY'))">{{ result.abbr }} | {{ result.date }}</div>
                                 <div class="accordion_content">
-                                    <a href="javascript:void(0)" class="class_content">
+                                    <a href="javascript:void(0)" class="class_content" v-for="(data, key) in schedules" :key="key">
                                         <div class="class_title">
-                                            <span>12:15 PM, Ride Rev</span>
+                                            <span>{{ data.schedule.start_time }}, {{ data.schedule.class_type.name }}</span>
                                             <div class="class_status full">
                                                 Full (28)
                                             </div>
                                         </div>
                                         <div class="class_text">
-                                            Billie (50 mins)
+                                            {{ data.schedule.instructor_schedules[0].user_id }} (50 mins)
                                         </div>
                                         <div class="class_text alternate">
                                             <span>Signed-in: 3</span>
@@ -73,37 +73,8 @@
                                             <span>No show: 3</span>
                                         </div>
                                     </a>
-                                    <a href="javascript:void(0)" class="class_content">
-                                        <div class="class_title">
-                                            <span>12:15 PM, Ride Rev</span>
-                                            <div class="class_status full">
-                                                Full (28)
-                                            </div>
-                                        </div>
-                                        <div class="class_text">
-                                            Billie (50 mins)
-                                        </div>
-                                        <div class="class_text alternate">
-                                            <span>Signed-in: 3</span>
-                                            <span>Available: 3</span>
-                                            <span>No show: 3</span>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0)" class="class_content">
-                                        <div class="class_title">
-                                            <span>12:15 PM, Ride Rev</span>
-                                            <div class="class_status">
-                                                Enrolled (20)
-                                            </div>
-                                        </div>
-                                        <div class="class_text">
-                                            Billie (50 mins)
-                                        </div>
-                                        <div class="class_text alternate">
-                                            <span>Signed-in: 3</span>
-                                            <span>Available: 3</span>
-                                            <span>No show: 3</span>
-                                        </div>
+                                    <a href="javascript:void(0)" class="no_class class_content" v-if="schedules.length <= 0">
+                                        No Schedule(s) for this day.
                                     </a>
                                 </div>
                             </div>
@@ -164,10 +135,10 @@
                 type: 0,
                 rowCount: 0,
                 status: 1,
-                res: [],
                 studios: [],
                 results: [],
                 customers: [],
+                schedules: [],
                 current: 0,
                 last: 0,
                 test: 0,
@@ -181,6 +152,11 @@
             closeMe () {
                 const me = this
                 me.toggleCustomers = false
+            },
+            parseSchedule (data) {
+                const me = this
+                let result = me.$moment(data).format('YYYY-MM-D')
+                return result
             },
             generateNextClasses () {
                 const me = this
@@ -249,12 +225,13 @@
                 let currentDate = parseInt(me.$moment().format('D'))
                 me.current = currentDate
                 me.last = currentDate
-                me.currentMonth = parseInt(me.$moment().format('MM'))
+                me.currentMonth = parseInt(me.$moment().format('M'))
                 me.currentYear = parseInt(me.$moment().format('YYYY'))
                 for (let i = 0; i < 7; i++) {
                     me.results.push({
                         abbr: (i == 0 ) ? 'Today' : me.$moment(`${me.currentYear}-${me.currentMonth}-${currentDate}`, 'YYYY-MM-D').format('ddd'),
-                        date: me.$moment(`${me.currentYear}-${me.currentMonth}-${currentDate}`, 'YYYY-MM-D').format('MMMM D, YYYY')
+                        date: me.$moment(`${me.currentYear}-${me.currentMonth}-${currentDate}`, 'YYYY-MM-D').format('MMMM D, YYYY'),
+                        value: currentDate
                     })
                     currentDate++
                     me.current = currentDate
@@ -266,18 +243,24 @@
             },
             populateResults (data, type) {
                 const me = this
+                document.querySelectorAll('.content_wrapper .class_accordion').forEach((value, index) => {
+                    value.classList.remove('toggled')
+                    value.querySelector('.accordion_content').style.height = 0
+                })
                 me.loader(true)
                 switch (type) {
                     case 'next':
                         me.results.push({
                             abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
-                            date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY')
+                            date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY'),
+                            value: data
                         })
                         break
                     case 'prev':
                         me.results.unshift({
                             abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
-                            date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY')
+                            date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY'),
+                            value: data
                         })
                         break
                 }
@@ -285,14 +268,20 @@
                     me.loader(false)
                 }, 500)
             },
-            toggleClass (event) {
+            async toggleClass (event, month, day, year) {
                 const me = this
                 const target = event.target
                 if (!target.parentNode.classList.contains('toggled')) {
+                    await me.$axios.get(`api/schedules?month=${month}&year=${year}&day=${day}`).then(res => {
+                        if (res.data) {
+                            me.schedules = res.data.schedules
+                        }
+                    })
                     target.nextElementSibling.style.height = `${target.nextElementSibling.scrollHeight}px`
                     setTimeout( () => {
                         target.parentNode.classList.add('toggled')
                     }, 100)
+
                 } else {
                     target.nextElementSibling.style.height = 0
                     target.parentNode.classList.remove('toggled')
