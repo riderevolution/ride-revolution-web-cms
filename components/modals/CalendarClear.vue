@@ -39,8 +39,7 @@
                 formData.append('date', date)
                 me.$axios.post('api/schedules/clear', formData).then(res => {
                     if (res.data) {
-                        console.log(res.data)
-                        me.$parent.generateCalendar(me.$parent.currentYear, me.$parent.currentMonth, 0)
+                        me.$parent.generateCalendar(me.$parent.currentYear, me.$parent.currentMonth, 0, 0)
                     }
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
