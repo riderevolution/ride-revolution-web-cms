@@ -1,7 +1,7 @@
 <template>
     <div class="default_modal">
         <div class="background" @click="toggleClose()"></div>
-        <form id="default_form" class="overlay" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
+        <form id="default_form" class="overlay" @submit.prevent="submissionSuccess()">
             <div class="modal_wrapper">
                 <h2 class="form_title">Duplicate {{ (type == 'day') ? 'Day' : (type == 'week' ? 'into Weeks' : 'into Months') }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
@@ -166,19 +166,27 @@
             },
             submissionSuccess () {
                 const me = this
-                let formData = new FormData()
-                formData.append('type', me.type)
-                formData.append('origin_date', me.datePicked)
-                me.$axios.post('api/schedules/duplicate', formData).then(res => {
-                    if (res.data) {
-                        me.$parent.generateCalendar(me.$parent.currentYear, me.$parent.currentMonth, 0, 0)
+                me.$validator.validateAll().then(valid => {
+                    if (valid) {
+                        let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('type', me.type)
+                        formData.append('origin_date', me.datePicked)
+                        me.$axios.post('api/schedules/duplicate', formData).then(res => {
+                            if (res.data) {
+                                me.$parent.generateCalendar(me.$parent.currentYear, me.$parent.currentMonth, 0, 0)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            me.$store.state.calendarDuplicateStatus = false
+                            document.body.classList.remove('no_scroll')
+                        })
+                    } else {
+                        document.querySelector('.validation_errors').scrollIntoView({block: 'center', behavior: 'smooth'})
                     }
-                }).catch(err => {
-                    me.$store.state.errorList = err.response.data.errors
-                    me.$store.state.errorStatus = true
                 })
-                me.$store.state.calendarDuplicateStatus = false
-                document.body.classList.remove('no_scroll')
+
             }
         }
     }
