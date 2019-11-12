@@ -82,8 +82,14 @@
                     </div>
                     <div class="booker_content">
                         <div class="booker_seats">
+                            <div class="seat_controls">
+                                <button id="zoom_in">Zoom in</button>
+                                <button id="zoom_out">Zoom out</button>
+                                <button id="reset">Reset</button>
+                            </div>
                             <panZoom @init="panZoomInit" :options="{
                                 bounds: true,
+                                boundsPadding: 0.2,
                                 minZoom: 0.1,
                                 maxZoom: 4,
                                 zoomDoubleClickSpeed: 1,
@@ -91,12 +97,13 @@
                                 onDoubleClick: panZoomDoubleClick,
                                 onTouch: panZoomTouch
                             }">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                <seat-plan />
                             </panZoom>
-                            <div class="seat_controls">
-                                <button id="zoom_in">Zoom in</button>
-                                <button id="zoom_out">Zoom out</button>
-                                <button id="reset">Reset</button>
+                            <div class="seat_legends">
+                                <div class="legend_title gray"><span></span> Booked</div>
+                                <div class="legend_title margin green"><span></span> Signed In</div>
+                                <div class="legend_title margin white"><span></span> Available</div>
+                                <div class="legend_title margin gradient"><span></span> Blocked/Comp</div>
                             </div>
                         </div>
                         <div class="booker_footer">
@@ -142,9 +149,11 @@
 
 <script>
     import Foot from '../../components/Foot'
+    import SeatPlan from '../../components/SeatPlan'
     export default {
         components: {
-            Foot
+            Foot,
+            SeatPlan
         },
         data () {
             return {

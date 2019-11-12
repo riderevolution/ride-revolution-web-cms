@@ -6,7 +6,8 @@
                 {{ message }}
             </div>
             <div class="button_group">
-                <div class="action_success_btn confirm margin" @click="toggleClose()">Confirm</div>
+                <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose(false)" v-if="hasCancel">Cancel</a>
+                <div class="action_success_btn confirm margin" @click="toggleClose(true)">Confirm</div>
             </div>
         </div>
     </div>
@@ -25,9 +26,16 @@
             }
         },
         methods: {
-            toggleClose () {
+            toggleClose (status) {
                 const me = this
+                document.body.classList.remove('no_scroll')
                 me.$store.state.promptStatus = false
+                if (status) {
+                    me.$parent.prompt = true
+                    me.$parent.submissionSuccess()
+                } else {
+                    me.$parent.prompt = false
+                }
             }
         }
     }
