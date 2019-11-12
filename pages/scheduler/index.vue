@@ -5,7 +5,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Scheduler</h1>
                     <div class="actions">
-                        <a href="javascript:void(0)" class="action_btn">Print Schedule</a>
+                        <a href="javascript:void(0)" class="action_btn">Export Schedule</a>
                     </div>
                 </div>
                 <div class="filter_wrapper alternate">
@@ -82,7 +82,7 @@
             <calendar-clear v-if="$store.state.calendarClearStatus" :value="value" :type="calendarType" />
         </transition>
         <transition name="fade">
-            <calendar-duplicate v-if="$store.state.calendarDuplicateStatus" :type="calendarType" :yearPicked="currentYear" :monthPicked="currentMonth" />
+            <calendar-duplicate v-if="$store.state.calendarDuplicateStatus" :type="calendarType" :datePicked="value" :yearPicked="currentYear" :monthPicked="currentMonth" />
         </transition>
     </div>
 </template>
@@ -197,7 +197,7 @@
                                                     <ul class='menu_list_wrapper'>
                                                         <li class='menu_list'><a class='add menu_item' href='/${me.lastRoute}/${unixTimestamp}/create'>Add a Class</a></li>
                                                         <li class='menu_list'><a class='clear menu_item' href='${dayDate}'>Clear a Day</a></li>
-                                                        <li class='menu_list'><a class='duplicate menu_item' href='javascript:void(0)'>Duplicate Day</a></li>
+                                                        <li class='menu_list'><a class='duplicate menu_item' href='${dayDate}'>Duplicate Day</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -332,7 +332,7 @@
             },
             monthGear () {
                 const me = this
-                let month = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').format('M-YYYY')
+                me.value = me.$moment(`${me.currentYear}-${me.currentMonth}-1`, 'YYYY-MM-D').format('YYYY-MM-DD')
                 me.monthStatus ^= true
             },
             clearMonth () {
@@ -390,6 +390,7 @@
                         if (elementDayDuplicate != null) {
                             elementDayDuplicate.addEventListener('click', function(e) {
                                 e.preventDefault()
+                                me.value = e.target.getAttribute('href')
                                 me.calendarType = 'day'
                                 me.$store.state.calendarDuplicateStatus = true
                             })
@@ -415,8 +416,8 @@
                         })
                         if (elementWeekClear != null) {
                             elementWeekClear.addEventListener('click', function(e) {
+                                e.preventDefault()
                                 me.calendarType = 'week'
-                                console.log(me.value);
                                 me.$store.state.calendarClearStatus = true
                             })
                         }

@@ -5,12 +5,13 @@
             <div class="modal_wrapper">
                 <h2 class="form_title">Duplicate {{ (type == 'day') ? 'Day' : (type == 'week' ? 'into Weeks' : 'into Months') }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
+                {{ datePicked }}
                 <transition name="fade">
                     <div class="modal_main_group" v-if="type == 'day'">
                         <div class="form_flex">
                             <div class="form_group check">
-                                <input type="date" name="day_date" autocomplete="off" class="default_text date" v-validate="'required'">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('day_date')">{{ errors.first('day_date') }}</span></transition>
+                                <input type="date" name="target_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('target_date')">{{ errors.first('target_date') }}</span></transition>
                             </div>
                             <div class="form_group flex check">
                                 <div class="form_check">
@@ -33,7 +34,7 @@
                             <div class="form_group" v-for="(data, key) in populateWeeks" :key="key">
                                 <label class="flex_label">{{ data.name }} {{ data.year }}</label>
                                 <div class="form_check" v-for="(week, wkey) in data.weeks" :key="wkey">
-                                    <input type="checkbox" :id="`week_${data.month}_${week}`" name="weeks[]" :value="`${data.year}-${data.month}-${week}`" class="action_check" checked>
+                                    <input type="checkbox" :id="`week_${data.month}_${week}`" name="target_weeks[]" :value="`${getWeekRange(data.year, data.month, data.day, wkey)}`" class="action_check" checked>
                                     <label :for="`week_${data.month}_${week}`">{{ convertNumbertoString(wkey) }} Week</label>
                                 </div>
                             </div>
@@ -51,7 +52,7 @@
                         <div class="form_flex trio">
                             <div class="form_group" v-for="(data, key) in populateWeeks" :key="key">
                                 <div class="form_check">
-                                    <input type="checkbox" :id="`month_${data.month}`" name="months[]" :value="`${data.year}-${data.month}`" class="action_check" checked>
+                                    <input type="checkbox" :id="`month_${data.month}`" name="target_months[]" :value="`${data.year}-${data.month}-1`" class="action_check" checked>
                                     <label :for="`month_${data.month}`">{{ convertMonthtoAbbrev(data.month) }} {{ data.year }}</label>
                                 </div>
                             </div>
@@ -78,6 +79,9 @@
             monthPicked: {
                 default: ''
             },
+            datePicked: {
+                default: ''
+            },
             type: {
                 type: String,
                 default: 'day'
@@ -100,7 +104,8 @@
                             name: me.$moment(`${year}-${month}`, 'YYYY-MM').format('MMMM'),
                             month: parseInt(me.$moment(`${year}-${month}`, 'YYYY-MM').format('M')),
                             year: parseInt(me.$moment(`${year}-${month}`, 'YYYY-MM').format('YYYY')),
-                            weeks: ''
+                            weeks: '',
+                            day: []
                         }
                     )
                 }
@@ -115,6 +120,11 @@
                     for (let i = 0; i < 6; i++) {
                         for (let j = 0; j < 7; j++) {
                             if (startDate <= endDate) {
+                                switch (j) {
+                                    case 6:
+                                    element.day.push(startDate)
+                                        break
+                                }
                                 if (me.$moment(`${element.year}-${element.month}-${startDate}`, 'YYYY-MM-D').format('d') == j) {
                                     startDate++
                                 }
@@ -128,6 +138,7 @@
                         }
                     }
                     element.weeks = excess
+                    element.day.push(endDate)
                 })
                 return data
             }
@@ -137,6 +148,12 @@
                 const me = this
                 let name = me.$moment(value, 'M').format('MMM')
                 return name
+            },
+            getWeekRange (year, month, day, unique) {
+                const me = this
+                let firstDayofWeek = me.$moment(`${year}-${month}-${day[unique]}`, 'YYYY-MM-D').startOf('week').format('YYYY-MM-DD')
+                let lastDayofWeek = me.$moment(`${year}-${month}-${day[unique]}`, 'YYYY-MM-D').format('YYYY-MM-DD')
+                return `${firstDayofWeek}|||${lastDayofWeek}`
             },
             convertNumbertoString (value) {
                 const me = this
