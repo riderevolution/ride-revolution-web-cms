@@ -83,8 +83,10 @@
                     <div class="booker_content">
                         <div class="booker_seats">
                             <panZoom @init="panZoomInit" :options="{
-                                minZoom: 0.5,
-                                maxZoom: 5,
+                                bounds: true,
+                                minZoom: 0.1,
+                                maxZoom: 4,
+                                zoomDoubleClickSpeed: 1,
                                 beforeWheel: panZoomBeforeWheel,
                                 onDoubleClick: panZoomDoubleClick,
                                 onTouch: panZoomTouch
@@ -161,27 +163,46 @@
                 currentMonth: 0,
                 currentYear: 0,
                 isPrev: false,
-                toggleCustomers: false
+                toggleCustomers: false,
+                minZoom: 1,
+                maxZoom: 3
             }
         },
         methods: {
             panZoomInit (instance, id) {
-                instance.on('panstart', function(e){
-                    console.log(e)
+                const me = this
+                document.getElementById('zoom_in').addEventListener('click', function(e) {
+                    me.customZoom(instance, 1.25, true)
+                })
+                document.getElementById('zoom_out').addEventListener('click', function(e) {
+                    me.customZoom(instance, 0.8, true)
+                })
+                document.getElementById('reset').addEventListener('click', function(e) {
+                    instance.moveTo(0, 0)
+                    instance.zoomAbs(0, 0, 1)
                 })
             },
             panZoomBeforeWheel (e) {
-                // allow wheel-zoom only if altKey is down. Otherwise - ignore
-                var shouldIgnore = !e.altKey;
-                return shouldIgnore;
+                let shouldIgnore = !e.altKey
+                return shouldIgnore
             },
             panZoomDoubleClick (e) {
-                // `e` - is current double click event.
-                return true; // tells the library to not preventDefault, and not stop propagation
+                return true
             },
             panZoomTouch (e) {
-                // `e` - is current touch event.
-                return false; // tells the library to not preventDefault.
+                return false
+            },
+            customZoom (instance, scale, status) {
+                if (scale) {
+                    let transform = instance.getTransform()
+                    let deltaX = transform.x
+                    let deltaY = transform.y
+                    let offsetX = scale + deltaX
+                    let offsetY = scale + deltaY
+                    if (status) {
+                        instance.smoothZoom(offsetX, offsetY, scale)
+                    }
+                }
             },
             closeMe () {
                 const me = this
