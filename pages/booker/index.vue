@@ -167,6 +167,7 @@
         methods: {
             panZoomInit (instance, id) {
                 instance.on('panstart', function(e){
+                    console.log(e)
                 })
             },
             panZoomBeforeWheel (e) {
@@ -176,8 +177,7 @@
             },
             panZoomDoubleClick (e) {
                 // `e` - is current double click event.
-                var shouldIgnore = !e.altKey;
-                return shouldIgnore;
+                return true; // tells the library to not preventDefault, and not stop propagation
             },
             panZoomTouch (e) {
                 // `e` - is current touch event.

@@ -86,7 +86,7 @@
                             </div>
                             <transition name="fade">
                                 <div class="form_flex select_all" v-if="!isPrivate">
-                                    <label class="flex_label alternate">Restrict class to: <span>*</span></label>
+                                    <label class="flex_label alternate">Restrict class to customer types: <span>*</span></label>
                                     <div class="form_check select_all">
                                         <div :class="`custom_action_check ${(checkData) ? 'checked' : ''}`" @click.prevent="toggleSelectAll($event)">Select All</div>
                                     </div>
@@ -145,9 +145,9 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('repetition')">{{ errors.first('repetition') }}</span></transition>
                                     </div>
                                     <div class="form_group">
-                                        <label for="start_date">Start Date <span>*</span></label>
-                                        <input type="date" name="start_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.end_date">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('start_date')">{{ errors.first('start_date') }}</span></transition>
+                                        <label for="end_date">End Date <span>*</span></label>
+                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.end_date">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
                                     </div>
                                 </div>
                             </transition>
@@ -276,30 +276,32 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
                         formData.append('start_time', `${me.form.start.hour}:${me.form.start.mins} ${me.form.start.convention}`)
                         formData.append('date', me.$moment(parseInt(me.$route.params.param)).format('YYYY-M-D'))
                         formData.append('customer_type_restrictions', JSON.stringify(me.customerTypes))
                         formData.append('studios', JSON.stringify(me.studios))
-                        me.loader(true)
-                        me.$axios.post('api/packages/class-packages', formData).then(res => {
-                            setTimeout( () => {
-                                if (res.data) {
-                                    me.notify('Updated')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
-                                }
-                            }, 500)
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
-                                if (!me.$store.state.errorStatus) {
-                                    me.$router.push(`/${me.lastRoute}`)
-                                }
-                                me.loader(false)
-                            }, 500)
+                        // me.loader(true)
+                        me.$axios.post(`api/schedules/${me.$route.params.id}`, formData).then(res => {
+                            console.log(res.data);
+                        //     setTimeout( () => {
+                        //         if (res.data) {
+                        //             me.notify('Updated')
+                        //         } else {
+                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
+                        //             me.$store.state.errorStatus = true
+                        //         }
+                        //     }, 500)
+                        // }).catch(err => {
+                        //     me.$store.state.errorList = err.response.data.errors
+                        //     me.$store.state.errorStatus = true
+                        // }).then(() => {
+                        //     setTimeout( () => {
+                        //         if (!me.$store.state.errorStatus) {
+                        //             me.$router.push(`/${me.lastRoute}`)
+                        //         }
+                        //         me.loader(false)
+                        //     }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
