@@ -40,7 +40,7 @@
                             <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 0, 0)">This Month</a>
                             <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 1, 0)">This Week</a>
                         </div>
-                        <div class="action_flex">
+                        <div :class="`action_flex ${(schedules.length <= 0) ? 'disabled_gear' : '' }`">
                             <div class="gear_action">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="calendar_gear" id="gear_month" width="38.568" height="32.924" viewBox="0 0 38.568 32.924" @click="monthGear()"> <rect width="38.569" height="32.924" rx="3" transform="translate(0 0)"/> <g transform="translate(10.043 7.221)"> <ellipse cx="6.719" cy="6.719" rx="6.719" ry="6.719" transform="translate(2.196 2.197)" class="gear_2"/> <line y2="2.197" transform="translate(8.916)" class="gear_2"/> <line y2="2.197" transform="translate(8.916 15.635)" class="gear_2"/> <line x2="2.197" transform="translate(0 8.916)" class="gear_2"/> <line x2="2.197" transform="translate(15.635 8.916)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(2.611 2.611)" class="gear_2"/> <line x2="1.553" y2="1.553" transform="translate(13.667 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(2.611 13.667)" class="gear_2"/> <line y1="1.553" x2="1.553" transform="translate(13.667 2.611)" class="gear_2"/> </g> </svg>
                                 <div :class="`gear_overlay ${(monthStatus) ? 'active' : ''}`">
@@ -220,7 +220,7 @@
                                 /**
                                  * Generate Previous Dates **/
                                 tableRow.innerHTML += `
-                                    <td class='day_wrapper disabled_day'>
+                                    <td class='day_wrapper fade_in disabled_day'>
                                         <div class='header_wrapper'>
                                             <div class='header_day'>${prevDate}</div>
                                         </div>
@@ -232,7 +232,7 @@
                             if (me.$moment(`${year}-${month}-${1}`, 'YYYY-MM-D').format('d') == 0) {
                                 if (i == 4) {
                                     tableRow.innerHTML += `
-                                        <td id="col_${i}" class='day_wrapper disabled_day'>
+                                        <td id="col_${i}" class='day_wrapper fade_in disabled_day'>
                                             <div class='header_wrapper'>
                                                 <div class='header_day'>${nextDate}</div>
                                             </div>
@@ -242,7 +242,7 @@
                                 }
                             } else {
                                 tableRow.innerHTML += `
-                                    <td id="col_${i}" class='day_wrapper disabled_day'>
+                                    <td id="col_${i}" class='day_wrapper fade_in disabled_day'>
                                         <div class='header_wrapper'>
                                             <div class='header_day'>${nextDate}</div>
                                         </div>
@@ -264,7 +264,24 @@
                 setTimeout( () => {
                     me.loader(false)
                     me.clickDates(1, endDate, excess)
+                    me.checkAllDayPerWeek()
                 }, 300)
+            },
+            checkAllDayPerWeek () {
+                const me = this
+                let schedules = document.querySelectorAll('.cms_table_calendar tbody tr')
+                schedules.forEach((schedule, sindex) => {
+                    let days = schedule.querySelectorAll('td')
+                    let ctr = 0
+                    days.forEach((day, dindex) => {
+                        if (day.classList.contains('disabled_menu')) {
+                            ctr++
+                        }
+                        if (ctr == 7) {
+                            day.classList.add('disabled_gear')
+                        }
+                    })
+                })
             },
             /**
              * Populate the Scheduler

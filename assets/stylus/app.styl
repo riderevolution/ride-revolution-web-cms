@@ -2184,6 +2184,15 @@ input::placeholder
         align-items: center
         justify-content: space-between
         .action_flex
+            &.disabled_gear
+                .gear_action
+                    .gear_overlay
+                        .gear_list_wrapper
+                            .gear_list
+                                .gear_item
+                                    pointer-events: none
+                                    background-color: $border_alt
+                                    color: $border_alt2
             .gear_action
                 position: relative
                 width: 38.568px
@@ -2326,6 +2335,14 @@ input::placeholder
                             .header_wrapper
                                 .header_day
                                     color: $border_alt2
+                        &.disabled_gear
+                            .gear_overlay
+                                .gear_list_wrapper
+                                    .gear_list
+                                        .gear_item
+                                            pointer-events: none
+                                            background-color: $border_alt
+                                            color: $border_alt2
                         .header_wrapper
                             display: flex
                             flex-flow: row wrap
