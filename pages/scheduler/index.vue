@@ -263,7 +263,7 @@
                 })
                 setTimeout( () => {
                     me.loader(false)
-                    me.clickDates(1, endDate, excess)
+                    me.clickDates(0, endDate, excess)
                     me.checkAllDayPerWeek()
                 }, 300)
             },
@@ -334,12 +334,14 @@
                     let elementWeek = document.getElementById(`gear_${startDate}`)
                     if (elementDay !== target && elementDay !== target.parentNode.parentNode.parentNode.previousElementSibling) {
                         if (elementDay.nextElementSibling.classList.contains('active')) {
+                            elementDay.classList.remove('active')
                             elementDay.nextElementSibling.classList.remove('active')
                         }
                     }
                     if (elementWeek != null) {
                         if (elementWeek !== target.ownerSVGElement && elementWeek !== target.parentNode.parentNode.parentNode.previousElementSibling) {
                             if (elementWeek.nextElementSibling.classList.contains('active')) {
+                                elementWeek.classList.remove('active')
                                 elementWeek.nextElementSibling.classList.remove('active')
                             }
                         }
@@ -428,8 +430,10 @@
                             me.value = `${me.getFirstDayofWeek(id, firstDayExcess)}|||${me.getLastDayofWeek(id)}`
                             if (overlay.classList.contains('active')) {
                                 overlay.classList.remove('active')
+                                overlay.previousElementSibling.classList.remove('active')
                             } else {
                                 overlay.classList.add('active')
+                                overlay.previousElementSibling.classList.add('active')
                             }
                         })
                         if (elementWeekClear != null) {
@@ -459,7 +463,7 @@
                             classNode.parentNode.classList.add('disabled_menu')
                         }
                     }
-                } while (startNum < endNum)
+                } while (startNum < endNum + firstDayExcess)
             },
             getFirstDayofWeek (startDate, excess) {
                 const me = this
