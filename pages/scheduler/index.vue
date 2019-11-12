@@ -368,15 +368,15 @@
                 let month = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').format('M')
                 let year = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').format('YYYY')
                 do {
+                    startNum++
                     let elementDay = (document.getElementById(`menu_${startNum}`) != null) ? document.getElementById(`menu_${startNum}`) : null
-                    let elementWeek = (document.getElementById(`gear_${startNum - 1}`) != null) ? document.getElementById(`gear_${startNum - 1}`) : null
+                    let elementWeek = (document.getElementById(`gear_${startNum}`) != null) ? document.getElementById(`gear_${startNum}`) : null
                     let elementDayAdd = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .add') : null
                     let elementDayClear = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .clear') : null
                     let elementDayDuplicate = (elementDay != null) ? elementDay.nextElementSibling.querySelector('.menu_list_wrapper .duplicate') : null
                     let elementWeekClear = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .clear') : null
                     let elementWeekDuplicate = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .duplicate') : null
                     let classNode = (document.getElementById(`class_${startNum}`) != null) ? document.getElementById(`class_${startNum}`) : null
-
                     /**
                      * Day **/
                     if (elementDay != null) {
@@ -459,8 +459,7 @@
                             classNode.parentNode.classList.add('disabled_menu')
                         }
                     }
-                    startNum++
-                } while (startNum < endNum + firstDayExcess)
+                } while (startNum < endNum)
             },
             getFirstDayofWeek (startDate, excess) {
                 const me = this

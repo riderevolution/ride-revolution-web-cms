@@ -18,6 +18,10 @@
             message: {
                 type: String,
                 default: ''
+            },
+            hasCancel: {
+                type: Boolean,
+                default: false
             }
         },
         methods: {
