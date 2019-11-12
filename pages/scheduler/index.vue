@@ -9,18 +9,18 @@
                     </div>
                 </div>
                 <div class="filter_wrapper alternate">
-                    <form class="filter_flex" id="filter" method="post" @submit.prevent="submissionSuccess(package_status)">
+                    <form class="filter_flex" id="filter" @submit.prevent="submissionSuccess()">
                         <div class="form_group">
                             <label for="studio_id">Studio</label>
-                            <select class="default_select alternate" name="studio_id">
-                                <option value="" selected>All Studios</option>
+                            <select class="default_select alternate" name="studio_id" v-model="form.studio_id">
+                                <option value="0" selected>All Studios</option>
                                 <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
                         </div>
                         <div class="form_group margin">
                             <label for="instructor_id">Instructor</label>
-                            <select class="default_select alternate" name="instructor_id">
-                                <option value="" selected>All Instructors</option>
+                            <select class="default_select alternate" name="instructor_id" v-model="form.instructor_id">
+                                <option value="0" selected>All Instructors</option>
                                 <option :value="instructor.id" v-for="(instructor, key) in instructors" :key="key">{{ instructor.first_name }} {{ instructor.last_name }}</option>
                             </select>
                         </div>
@@ -37,8 +37,8 @@
                 <div class="calendar_wrapper">
                     <div class="calendar_actions">
                         <div class="action_flex">
-                            <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 0)">This Month</a>
-                            <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 1)">This Week</a>
+                            <a href="javascript:void(0)" class="action_calendar_btn" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 0, 0)">This Month</a>
+                            <a href="javascript:void(0)" class="action_calendar_btn margin" @click="generateCalendar(currentYear = $moment().year(), currentMonth = $moment().month() + 1, 1, 0)">This Week</a>
                         </div>
                         <div class="action_flex">
                             <div class="gear_action">
@@ -112,10 +112,18 @@
                 studios: [],
                 instructors: [],
                 schedules: [],
-                dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+                dayLabels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                form: {
+                    studio_id: 0,
+                    instructor_id: 0
+                }
             }
         },
         methods: {
+            async submissionSuccess () {
+                const me = this
+                me.generateCalendar(me.currentYear, me.currentMonth, 0, 1)
+            },
             generatePrevCalendar () {
                 const me = this
                 me.currentMonth = me.currentMonth - 1
@@ -123,7 +131,7 @@
                     me.currentMonth = 12
                     me.currentYear = me.currentYear - 1
                 }
-                me.generateCalendar(me.currentYear, me.currentMonth, 0)
+                me.generateCalendar(me.currentYear, me.currentMonth, 0, 0)
             },
             generateNextCalendar () {
                 const me = this
@@ -132,12 +140,12 @@
                     me.currentMonth = 1
                     me.currentYear = me.currentYear + 1
                 }
-                me.generateCalendar(me.currentYear, me.currentMonth, 0)
+                me.generateCalendar(me.currentYear, me.currentMonth, 0, 0)
             },
             clearTableRows () {
                 document.querySelectorAll('.cms_table_calendar tbody tr').forEach(function(e){e.remove()})
             },
-            async generateCalendar (year, month, highlight) {
+            async generateCalendar (year, month, highlight, search) {
                 const me = this
                 me.clearTableRows()
                 me.currentDate = me.$moment().date()
@@ -151,9 +159,15 @@
                 let current = me.$moment(`${year}-${month}-${startDate}`, 'YYYY-MM-D').format('d')
                 let excess = 0
 
-                await me.$axios.get(`api/schedules?year=${me.currentYear}&month=${me.currentMonth}`).then(res => {
-                    me.schedules = res.data.schedules
-                })
+                if (search) {
+                    await me.$axios.get(`api/schedules?year=${me.currentYear}&month=${me.currentMonth}&studio_id=${me.form.studio_id}&instructor_id=${me.form.instructor_id}`).then(res => {
+                        me.schedules = res.data.schedules
+                    })
+                } else {
+                    await me.$axios.get(`api/schedules?year=${me.currentYear}&month=${me.currentMonth}`).then(res => {
+                        me.schedules = res.data.schedules
+                    })
+                }
 
                 me.loader(true)
                 /**
@@ -476,7 +490,7 @@
                 me.$axios.get('api/instructors?enabled=1').then(res => {
                     me.instructors = res.data.instructors.data
                 })
-                me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1, 0)
+                me.generateCalendar(me.currentYear = me.$moment().year(), me.currentMonth = me.$moment().month() + 1, 0, 0)
                 me.loaded = true
             },
         },

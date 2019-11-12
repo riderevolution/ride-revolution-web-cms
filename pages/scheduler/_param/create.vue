@@ -74,9 +74,19 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('occassion')">{{ errors.first('occassion') }}</span></transition>
                                 </div>
                             </transition>
+                            <div class="form_flex select_all">
+                                <label class="flex_label alternate">Restrict class to studios: <span>*</span></label>
+                                <div class="form_check select_all">
+                                    <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
+                                </div>
+                                <div class="form_check" v-for="(studio, key) in studios" :key="key">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check">
+                                    <label :for="`studio_${key}`">{{ studio.name }}</label>
+                                </div>
+                            </div>
                             <transition name="fade">
                                 <div class="form_flex select_all" v-if="!isPrivate">
-                                    <label class="flex_label alternate">Restrict class to: <span>*</span></label>
+                                    <label class="flex_label alternate">Restrict class to customer types: <span>*</span></label>
                                     <div class="form_check select_all">
                                         <div :class="`custom_action_check ${(checkData) ? 'checked' : ''}`" @click.prevent="toggleSelectAll($event)">Select All</div>
                                     </div>
@@ -136,7 +146,7 @@
                                     </div>
                                     <div class="form_group">
                                         <label for="end_date">End Date <span>*</span></label>
-                                        <input type="date" name="end_date" autocomplete="off" value="2019-10-31" class="default_text date" v-validate="'required'">
+                                        <input type="date" name="end_date" autocomplete="off" :value="$moment().format('YYYY-MM-DD')"class="default_text date" v-validate="'required'">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
                                     </div>
                                 </div>
@@ -176,6 +186,7 @@
                 classTypes: [],
                 customerTypes: [],
                 instructors: [],
+                studios: [],
                 form: {
                     start: {
                         hour: '00',
@@ -202,6 +213,22 @@
                     result = false
                 }
                 return result
+            },
+            checkStudio () {
+                const me = this
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (data.checked) {
+                        count++
+                    }
+                })
+                if (count == me.studios.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
             }
         },
         methods: {
@@ -222,6 +249,23 @@
                     event.target.classList.add('checked')
                 }
             },
+            toggleSelectAllStudio (event) {
+                const me = this
+                if (me.checkData) {
+                    me.studios.forEach((data, index) => {
+                        data.checked = false
+                    })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        data.checked = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             changeConvention () {
                 const me = this
                 me.form.start.convention = (me.form.start.convention == 'AM') ? 'PM' : 'AM'
@@ -232,8 +276,9 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('start_time', `${me.form.start.hour}:${me.form.start.mins} ${me.form.start.convention}`)
-                        formData.append('date', me.$moment(parseInt(me.$route.params.param)).format('Y-MM-DD'))
+                        formData.append('date', me.$moment(parseInt(me.$route.params.param)).format('YYYY-M-D'))
                         formData.append('customer_type_restrictions', JSON.stringify(me.customerTypes))
+                        formData.append('studios', JSON.stringify(me.studios))
                         me.loader(true)
                         me.$axios.post('api/schedules', formData).then(res => {
                             setTimeout( () => {
@@ -272,6 +317,9 @@
                 })
                 me.$axios.get('api/instructors?enabled=1').then(res => {
                     me.instructors = res.data.instructors.data
+                })
+                me.$axios.get('api/studios').then(res => {
+                    me.studios = res.data.studios
                 })
             }
         },

@@ -46,6 +46,7 @@ export default {
       { src: '~/plugins/vue-click-outside' },
       { src: '~/plugins/vue-cookie' },
       { src: '~/plugins/vee-validate' },
+      { src: '~/plugins/vue-panzoom' },
       { src: '~/plugins/mixins'}
   ],
 

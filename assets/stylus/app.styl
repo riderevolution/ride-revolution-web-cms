@@ -3212,6 +3212,22 @@ input::placeholder
 
     .booker_content
         flex: 0 0 calc(75% - 20px)
+        .booker_seats
+            display: block
+            position: relative
+            width: 100%
+            height: 500px
+            overflow: hidden
+            margin-bottom: 20px
+            .vue-pan-zoom-item,
+            .vue-pan-zoom-scene
+                height: 100%
+                outline: none
+            .seat_controls
+                position: absolute
+                top: 0
+                left: 0
+                z-index: 1
         .booker_footer
             display: flex
             flex-flow: row wrap

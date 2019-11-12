@@ -74,6 +74,16 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('occassion')">{{ errors.first('occassion') }}</span></transition>
                                 </div>
                             </transition>
+                            <div class="form_flex select_all">
+                                <label class="flex_label alternate">Restrict class to studios: <span>*</span></label>
+                                <div class="form_check select_all">
+                                    <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
+                                </div>
+                                <div class="form_check" v-for="(studio, key) in studios" :key="key">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checkedForReal" class="action_check">
+                                    <label :for="`studio_${key}`">{{ studio.name }}</label>
+                                </div>
+                            </div>
                             <transition name="fade">
                                 <div class="form_flex select_all" v-if="!isPrivate">
                                     <label class="flex_label alternate">Restrict class to: <span>*</span></label>
@@ -177,6 +187,7 @@
                 classTypes: [],
                 customerTypes: [],
                 instructors: [],
+                studios: [],
                 form: {
                     start: {
                         hour: '00',
@@ -203,6 +214,22 @@
                     result = false
                 }
                 return result
+            },
+            checkStudio () {
+                const me = this
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (data.checkedForReal) {
+                        count++
+                    }
+                })
+                if (count == me.studios.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
             }
         },
         methods: {
@@ -223,6 +250,23 @@
                     event.target.classList.add('checked')
                 }
             },
+            toggleSelectAllStudio (event) {
+                const me = this
+                if (me.checkData) {
+                    me.studios.forEach((data, index) => {
+                        data.checkedForReal = false
+                    })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        data.checkedForReal = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             changeConvention () {
                 const me = this
                 me.form.start.convention = (me.form.start.convention == 'AM') ? 'PM' : 'AM'
@@ -233,11 +277,14 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('start_time', `${me.form.start.hour}:${me.form.start.mins} ${me.form.start.convention}`)
+                        formData.append('date', me.$moment(parseInt(me.$route.params.param)).format('YYYY-M-D'))
+                        formData.append('customer_type_restrictions', JSON.stringify(me.customerTypes))
+                        formData.append('studios', JSON.stringify(me.studios))
                         me.loader(true)
                         me.$axios.post('api/packages/class-packages', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
-                                    me.notify('Added')
+                                    me.notify('Updated')
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
@@ -280,6 +327,7 @@
                     me.form.start.mins = me.res.start_time.split(':')[1].split(' ')[0]
                     me.form.start.convention = me.res.start_time.split(':')[1].split(' ')[1]
                     me.customerTypes = res.data.schedule.customer_types
+                    me.studios = res.data.schedule.studios
                     me.isRepeat = (me.res.repeat == 1) ? true : false
                     me.isPrivate = (me.res.private_class == 1) ? true : false
                     me.form.instructor_id = me.res.instructor_schedules[0].user_id

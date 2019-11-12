@@ -81,6 +81,22 @@
                         </div>
                     </div>
                     <div class="booker_content">
+                        <div class="booker_seats">
+                            <panZoom @init="panZoomInit" :options="{
+                                minZoom: 0.5,
+                                maxZoom: 5,
+                                beforeWheel: panZoomBeforeWheel,
+                                onDoubleClick: panZoomDoubleClick,
+                                onTouch: panZoomTouch
+                            }">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            </panZoom>
+                            <div class="seat_controls">
+                                <button id="zoom_in">Zoom in</button>
+                                <button id="zoom_out">Zoom out</button>
+                                <button id="reset">Reset</button>
+                            </div>
+                        </div>
                         <div class="booker_footer">
                             <div class="booker_notepad">
                                 <h2 class="footer_title">Notepad</h2>
@@ -149,6 +165,24 @@
             }
         },
         methods: {
+            panZoomInit (instance, id) {
+                instance.on('panstart', function(e){
+                })
+            },
+            panZoomBeforeWheel (e) {
+                // allow wheel-zoom only if altKey is down. Otherwise - ignore
+                var shouldIgnore = !e.altKey;
+                return shouldIgnore;
+            },
+            panZoomDoubleClick (e) {
+                // `e` - is current double click event.
+                var shouldIgnore = !e.altKey;
+                return shouldIgnore;
+            },
+            panZoomTouch (e) {
+                // `e` - is current touch event.
+                return false; // tells the library to not preventDefault.
+            },
             closeMe () {
                 const me = this
                 me.toggleCustomers = false
