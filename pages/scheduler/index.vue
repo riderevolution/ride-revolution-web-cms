@@ -359,6 +359,7 @@
                     let elementWeekClear = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .clear') : null
                     let elementWeekDuplicate = (elementWeek != null) ? elementWeek.nextElementSibling.querySelector('.gear_list_wrapper .duplicate') : null
                     let classNode = (document.getElementById(`class_${startNum}`) != null) ? document.getElementById(`class_${startNum}`) : null
+
                     /**
                      * Day **/
                     if (elementDay != null) {
@@ -431,39 +432,18 @@
                     }
 
                     if (classNode != null) {
-                        if (classNode.querySelector('.private')) {
-                            classNode.querySelector('.private').addEventListener('click', function(e) {
+                        if (classNode.querySelector('.class_wrapper')) {
+                            classNode.querySelector('.class_wrapper').addEventListener('click', function(e) {
                                 e.preventDefault()
                                 me.$router.push(this.getAttribute('href'))
                             })
                         }
-                        if (classNode.querySelector('.original')) {
-                            classNode.querySelector('.original').addEventListener('click', function(e) {
-                                e.preventDefault()
-                                me.$router.push(this.getAttribute('href'))
-                            })
-                        }
-                        if (classNode.querySelector('.draft')) {
-                            classNode.querySelector('.draft').addEventListener('click', function(e) {
-                                e.preventDefault()
-                                me.$router.push(this.getAttribute('href'))
-                            })
-                        }
-                        if (classNode.querySelector('.completed')) {
-                            classNode.querySelector('.completed').addEventListener('click', function(e) {
-                                e.preventDefault()
-                                me.$router.push(this.getAttribute('href'))
-                            })
-                        }
-                        if (classNode.querySelector('.uncomplete')) {
-                            classNode.querySelector('.uncomplete').addEventListener('click', function(e) {
-                                e.preventDefault()
-                                me.$router.push(this.getAttribute('href'))
-                            })
+                        if (classNode.querySelectorAll('.class_wrapper').length <= 0) {
+                            classNode.parentNode.classList.add('disabled_menu')
                         }
                     }
                     startNum++
-                } while (startNum < 50)
+                } while (startNum < endNum + firstDayExcess)
             },
             getFirstDayofWeek (startDate, excess) {
                 const me = this

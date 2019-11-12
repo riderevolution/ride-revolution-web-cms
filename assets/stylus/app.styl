@@ -2309,6 +2309,18 @@ input::placeholder
                         background-color: $white
                         vertical-align: top
                         transition: .3s ease-in-out
+                        &.disabled_menu
+                            .header_wrapper
+                                .header_menu
+                                    .menu_overlay
+                                        .menu_list_wrapper
+                                            .menu_list
+                                                .menu_item
+                                                    &.clear,
+                                                    &.duplicate
+                                                        pointer-events: none
+                                                        background-color: $border_alt
+                                                        color: $border_alt2
                         &.disabled_day
                             background-color: $border_alt
                             .header_wrapper
