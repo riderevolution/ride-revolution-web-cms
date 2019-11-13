@@ -3269,6 +3269,10 @@ input::placeholder
                             border-radius: 4px
                             text-align: center
                             cursor: pointer
+                            margin: 15px
+                            padding: 40px 20px
+                            background-color: $white
+                            border: 1.5px solid $black
                             .seat_number
                                 position: absolute
                                 top: 50%
@@ -3279,24 +3283,31 @@ input::placeholder
                                 sf_pro_bold(2.4vh)
                                 color: rgba(132, 143, 159, 0.3)
                         &.left
-                            top: 0
-                            left: 0
+                            align-items: flex-start
+                            top: calc(0% - 105px)
+                            left: calc(0% - 80px)
                             .seat_position
-                                flex: 0 0 calc(50% - 60px)
-                                margin: 30px
-                                padding: 30px 15px
+                                flex: 0 0 calc(50% - 52.5px)
+                                &:nth-child(2)
+                                    top: calc(0px + 60px)
+                                &:last-child
+                                    top: calc(0px + 100px)
                         &.right
-                            top: 0
-                            right: 0
+                            align-items: flex-start
+                            top: calc(0% - 105px)
+                            right: calc(0% - 230px)
+                            .seat_position
+                                flex: 0 0 calc(50% - 52.5px)
+                                &:first-child
+                                    top: calc(0px + 60px)
+                                &:nth-child(3)
+                                    top: calc(0px + 100px)
                         &.bottom
                             left: 0
                             right: 0
                             bottom: 0
                             .seat_position
-                                flex: 0 0 75px
-                                height: 75px
-                                background-color: $white
-                                border: 1.5px solid $black
+                                flex: 0 0 calc(10% - 30px)
             .seat_legends
                 display: flex
                 flex-flow: row wrap

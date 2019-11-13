@@ -90,11 +90,12 @@
                             <panZoom @init="panZoomInit" :options="{
                                 bounds: true,
                                 boundsPadding: 0.2,
-                                minZoom: 0.1,
-                                maxZoom: 4,
+                                minZoom: 0.2,
+                                maxZoom: 1,
                                 zoomDoubleClickSpeed: 1,
                                 beforeWheel: panZoomBeforeWheel,
                                 onDoubleClick: panZoomDoubleClick,
+                                smoothScroll: false,
                                 onTouch: panZoomTouch
                             }">
                                 <seat-plan />
@@ -172,24 +173,35 @@
                 currentMonth: 0,
                 currentYear: 0,
                 isPrev: false,
-                toggleCustomers: false
+                toggleCustomers: false,
+                zoomCtr: 0.6
             }
         },
         methods: {
             panZoomInit (instance, id) {
                 const me = this
-                let planWidth = document.querySelector('.plan_wrapper').offsetWidth
-                let planHeight = document.querySelector('.plan_wrapper').offsetHeight
-                instance.zoomAbs(planWidth / 2, planHeight / 2, 0.75)
+                let planWidth = document.querySelector('.plan_wrapper').getBoundingClientRect().width
+                let planHeight = document.querySelector('.plan_wrapper').getBoundingClientRect().height
+                instance.zoomAbs(planWidth / 2, planHeight / 2, 0.6)
+                planWidth = instance.getTransform().x
+                planHeight = instance.getTransform().y
                 document.getElementById('zoom_in').addEventListener('click', function(e) {
-                    me.customZoom(instance, 1.25, true)
+                    me.customZoom(instance, 'in')
                 })
                 document.getElementById('zoom_out').addEventListener('click', function(e) {
-                    me.customZoom(instance, 0.8, true)
+                    me.customZoom(instance, 'out')
                 })
                 document.getElementById('reset').addEventListener('click', function(e) {
-                    instance.moveTo(0, 0)
-                    instance.zoomAbs(0, 0, 1)
+                    if (me.zoomCtr >= 1) {
+                        me.zoomCtr = 0.6
+                    }
+                    if (me.zoomCtr <= 0.99999) {
+                        me.zoomCtr = 1.4
+                    }
+                    instance.getTransform().x = planWidth
+                    instance.getTransform().y = planHeight
+                    instance.getTransform().scale = 0.6
+                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.6, 0, 0, 0.6, ${planWidth}, ${planHeight})`
                 })
             },
             panZoomBeforeWheel (e) {
@@ -202,16 +214,25 @@
             panZoomTouch (e) {
                 return false
             },
-            customZoom (instance, scale, status) {
-                if (scale) {
-                    let transform = instance.getTransform()
-                    let deltaX = transform.x
-                    let deltaY = transform.y
-                    let offsetX = scale + deltaX
-                    let offsetY = scale + deltaY
-                    if (status) {
-                        instance.smoothZoom(offsetX, offsetY, scale)
-                    }
+            customZoom (instance, type) {
+                const me = this
+                let planWidth = document.querySelector('.plan_wrapper').offsetWidth
+                let planHeight = document.querySelector('.plan_wrapper').offsetHeight
+                switch (type) {
+                    case 'in':
+                        if (me.zoomCtr <= 0.99999) {
+                            me.zoomCtr = 1.4
+                        }
+                        instance.smoothZoom((planWidth / 2) + me.zoomCtr, (planHeight / 2) + me.zoomCtr, me.zoomCtr)
+                        me.zoomCtr += 0.2
+                        break
+                    case 'out':
+                        if (me.zoomCtr >= 1.0) {
+                            me.zoomCtr = 0.6
+                        }
+                        instance.smoothZoom((planWidth / 2) + me.zoomCtr, (planHeight / 2) + me.zoomCtr, me.zoomCtr)
+                        me.zoomCtr -= 0.2
+                        break
                 }
             },
             closeMe () {
