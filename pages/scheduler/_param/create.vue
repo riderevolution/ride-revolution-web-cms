@@ -251,7 +251,7 @@
             },
             toggleSelectAllStudio (event) {
                 const me = this
-                if (me.checkData) {
+                if (me.checkStudio) {
                     me.studios.forEach((data, index) => {
                         data.checked = false
                     })

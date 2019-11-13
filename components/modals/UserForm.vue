@@ -1,23 +1,33 @@
 <template>
     <div class="default_modal">
         <div class="background" @click="toggleClose()"></div>
-        <form id="default_form" class="overlay" @submit.prevent="submissionAddSuccess()" enctype="multipart/form-data" v-if="type == 0 && loaded">
+        <form id="default_form" class="overlay" @submit.prevent="submissionAddSuccess()" v-if="type == 0 && loaded">
             <div class="modal_wrapper">
                 <h2 class="form_title">Add a New User</h2>
                 <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group alternate">
                     <div class="form_group">
                         <label for="name">Choose a Role <span>*</span></label>
-                        <select class="default_select alternate" name="role_id" v-validate="'required'">
-                            <option value="" selected disabled>Choose a Role</option>
+                        <select class="default_select alternate" name="role_id" v-validate="'required'" v-model="form.role">
+                            <option value="0" selected disabled>Choose a Role</option>
                             <option :value="role.id" v-for="(role, index) in roles">{{ role.display_name }}</option>
                         </select>
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('role')">{{ errors.first('role') }}</span></transition>
                     </div>
-                    <div class="form_flex select_all">
-                        <label class="flex_label">Restrict access to studios:</label>
+                    <div class="form_flex select_all" v-if="form.role != 2">
+                        <label class="flex_label alternate">Restrict class to studios: <span>*</span></label>
+                        <div class="form_check select_all">
+                            <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
+                        </div>
                         <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                            <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" :value="studio.id" class="action_check">
+                            <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check">
+                            <label :for="`studio_${key}`">{{ studio.name }}</label>
+                        </div>
+                    </div>
+                    <div class="form_flex_radio select_all" v-if="form.role == 2">
+                        <label class="radio_label">Restrict class to studios: <span>*</span></label>
+                        <div class="form_radio" v-for="(studio, key) in studios" :key="key">
+                            <input type="radio" :id="`studio_${key}`" name="studios" :value="studio.id" class="action_radio">
                             <label :for="`studio_${key}`">{{ studio.name }}</label>
                         </div>
                     </div>
@@ -65,23 +75,33 @@
                 </div>
             </div>
         </form>
-        <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()" enctype="multipart/form-data" v-if="type == 1 && loaded">
+        <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()" v-if="type == 1 && loaded">
             <div class="modal_wrapper">
                 <h2 class="form_title">Update {{ res.first_name }} {{ res.last_name }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group">
                     <div class="form_group">
                         <label for="name">Choose a Role <span>*</span></label>
-                        <select class="default_select alternate" name="role_id" v-validate="'required'">
+                        <select class="default_select alternate" name="role_id" v-validate="'required'" v-model="form.role">
                             <option value="" disabled>Choose a Role</option>
-                            <option :value="role.id" v-for="(role, index) in roles" :selected="res.staff_details.role_id == role.id">{{ role.display_name }}</option>
+                            <option :value="role.id" v-for="(role, index) in roles" :selected="form.role == role.id">{{ role.display_name }}</option>
                         </select>
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('role')">{{ errors.first('role') }}</span></transition>
                     </div>
-                    <div class="form_flex select_all">
-                        <label class="flex_label">Restrict access to studios:</label>
-                        <div class="form_check studios" v-for="(studio, key) in studios" :key="key">
-                            <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
+                    <div class="form_flex select_all" v-if="form.role != 2">
+                        <label class="flex_label alternate">Restrict class to studios: <span>*</span></label>
+                        <div class="form_check select_all">
+                            <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
+                        </div>
+                        <div class="form_check" v-for="(studio, key) in studios" :key="key">
+                            <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checkedForReal" class="action_check">
+                            <label :for="`studio_${key}`">{{ studio.name }}</label>
+                        </div>
+                    </div>
+                    <div class="form_flex_radio select_all" v-if="form.role == 2">
+                        <label class="radio_label">Restrict class to studios: <span>*</span></label>
+                        <div class="form_radio" v-for="(studio, key) in studios" :key="key">
+                            <input type="radio" :id="`studio_${key}`" name="studios" :value="studio.id" class="action_radio" :checked="studio.checkedForReal">
                             <label :for="`studio_${key}`">{{ studio.name }}</label>
                         </div>
                     </div>
@@ -161,12 +181,64 @@
                         ]
                     }
                 },
+                form: {
+                    role: 0
+                },
                 roles: [],
                 studios: [],
                 studioLength: 0
             }
         },
+        computed: {
+            checkStudio () {
+                const me = this
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (me.type == 0) {
+                        if (data.checked) {
+                            count++
+                        }
+                    } else {
+                        if (data.checkedForReal) {
+                            count++
+                        }
+                    }
+                })
+                if (count == me.studios.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
+            }
+        },
         methods: {
+            toggleSelectAllStudio (event) {
+                const me = this
+                if (me.checkStudio) {
+                    me.studios.forEach((data, index) => {
+                        if (me.type == 0) {
+                            data.checked = false
+                        } else {
+                            data.checkedForReal = false
+                        }
+                    })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        if (me.type == 0) {
+                            data.checked = true
+                        } else {
+                            data.checkedForReal = true
+                        }
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             toggleClose () {
                 const me = this
                 me.$store.state.userForm = false
@@ -177,6 +249,9 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        if (me.form.role != 2) {
+                            formData.append('studios', JSON.stringify(me.studios))
+                        }
                         me.loader(true)
                         me.$axios.post('api/staff', formData).then(res => {
                             setTimeout( () => {
@@ -217,6 +292,9 @@
                             formData.delete('password')
                         }
                         formData.append('_method', 'PATCH')
+                        if (me.form.role != 2) {
+                            formData.append('studios', JSON.stringify(me.studios))
+                        }
                         me.loader(true)
                         me.$axios.post(`api/staff/${me.id}`, formData).then(res => {
                             setTimeout( () => {
@@ -252,20 +330,6 @@
                 const me = this
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios
-                    if (me.id != 0) {
-                        me.studios.forEach((studio, index) => {
-                            studio.status = false
-                            me.res.staff_details.studio_access.forEach((access, index) => {
-                                if (studio.id == access.studio_id) {
-                                    studio.status = true
-                                }
-                            })
-                        })
-                    } else {
-                        me.studios.forEach((studio, index) => {
-                            studio.status = studioStatus
-                        })
-                    }
                 })
             }
         },
@@ -277,10 +341,11 @@
             if (me.id != 0) {
                 me.$axios.get(`api/staff/${me.id}`).then(res => {
                     me.res = res.data.user
-                    me.fetchStudios(false)
+                    me.studios = res.data.user.studios
+                    me.form.role = res.data.user.staff_details.role_id
                 })
             } else {
-                me.fetchStudios(false)
+                me.fetchStudios()
             }
             me.loaded = true
         }

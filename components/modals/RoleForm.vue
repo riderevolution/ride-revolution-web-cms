@@ -11,8 +11,11 @@
                         <input type="text" name="display_name" autocomplete="off" autofocus class="default_text" v-validate="'required'">
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('display_name')">{{ errors.first('display_name') }}</span></transition>
                     </div>
-                    <div class="form_flex">
-                        <label class="flex_label">Select permissions under this role</label>
+                    <div class="form_flex select_all">
+                        <label class="flex_label alternate">Select permissions under this role <span>*</span></label>
+                        <div class="form_check select_all">
+                            <div :class="`custom_action_check ${(checkPermissions) ? 'checked' : ''}`" @click.prevent="toggleSelectAllPermissions($event)">Select All</div>
+                        </div>
                         <div class="form_check" v-for="(permission, key) in permissions" :key="key">
                             <input type="checkbox" :id="`permission_${key}`" name="permissions" :class="`action_check ${permission.class}`" v-model="permission.checked">
                             <label :for="`permission_${key}`">{{ permission.name }}</label>
@@ -43,8 +46,11 @@
                         <input type="text" name="display_name" autocomplete="off" class="default_text" v-validate="'required'" v-model="res.display_name">
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('display_name')">{{ errors.first('display_name') }}</span></transition>
                     </div>
-                    <div class="form_flex">
-                        <label class="flex_label">Select permissions under this role</label>
+                    <div class="form_flex select_all">
+                        <label class="flex_label alternate">Select permissions under this role <span>*</span></label>
+                        <div class="form_check select_all">
+                            <div :class="`custom_action_check ${(checkPermissions) ? 'checked' : ''}`" @click.prevent="toggleSelectAllPermissions($event)">Select All</div>
+                        </div>
                         <div class="form_check" v-for="(permission, key) in permissions" :key="key">
                             <input type="checkbox" :id="`permission_${key}`" name="permissions" :class="`action_check ${permission.class}`" v-model="permission.checked" :checked="permission.checked">
                             <label :for="`permission_${key}`">{{ permission.name }}</label>
@@ -170,7 +176,42 @@
                 ]
             }
         },
+        computed: {
+            checkPermissions () {
+                const me = this
+                let count = 0
+                let result = false
+                me.permissions.forEach((data, index) => {
+                    if (data.checked) {
+                        count++
+                    }
+                })
+                if (count == me.permissions.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
+            }
+        },
         methods: {
+            toggleSelectAllPermissions (event) {
+                const me = this
+                if (me.checkPermissions) {
+                    me.permissions.forEach((data, index) => {
+                        data.checked = false
+                    })
+                } else {
+                    me.permissions.forEach((data, index) => {
+                        data.checked = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             toggleClose () {
                 const me = this
                 me.$store.state.roleForm = false
