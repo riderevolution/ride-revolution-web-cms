@@ -172,14 +172,15 @@
                 currentMonth: 0,
                 currentYear: 0,
                 isPrev: false,
-                toggleCustomers: false,
-                minZoom: 1,
-                maxZoom: 3
+                toggleCustomers: false
             }
         },
         methods: {
             panZoomInit (instance, id) {
                 const me = this
+                let planWidth = document.querySelector('.plan_wrapper').offsetWidth
+                let planHeight = document.querySelector('.plan_wrapper').offsetHeight
+                instance.zoomAbs(planWidth / 2, planHeight / 2, 0.75)
                 document.getElementById('zoom_in').addEventListener('click', function(e) {
                     me.customZoom(instance, 1.25, true)
                 })
@@ -258,8 +259,12 @@
                         if (me.currentMonth == 0) {
                             me.currentMonth = 12
                             me.currentYear = me.currentYear - 1
-                            if (me.current < 0) {
-                                me.current = me.last
+                            if (me.current <= 0) {
+                                if (me.last <= 0) {
+                                    me.current = me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()
+                                } else {
+                                    me.current = me.last
+                                }
                             } else {
                                 me.current = me.$moment(`${me.currentYear}-${me.currentMonth}-${me.last}`, 'YYYY-MM-D').daysInMonth()
                             }

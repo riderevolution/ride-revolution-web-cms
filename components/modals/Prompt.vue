@@ -31,10 +31,10 @@
                 document.body.classList.remove('no_scroll')
                 me.$store.state.promptStatus = false
                 if (status) {
-                    me.$parent.prompt = true
+                    me.$parent.prompt = false
                     me.$parent.submissionSuccess()
                 } else {
-                    me.$parent.prompt = false
+                    me.$parent.prompt = true
                 }
             }
         }

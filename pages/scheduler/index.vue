@@ -296,11 +296,19 @@
                     let unixTimestamp = me.$moment(`${me.currentYear}-${me.currentMonth}-${scheduleCurrent}`, 'YYYY-MM-D').valueOf()
                     if (date == scheduleCurrent) {
                         if (data.schedule.private_class == 1) {
-                            result += `
-                                <a href="/${me.lastRoute}/${unixTimestamp}/${data.schedule.id}/edit" class="class_wrapper private">
-                                    <div class="class_text margin"><img src="/icons/private-class.svg" /><span>${data.schedule.start_time}</span></div>
-                                    <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
-                                </a>`
+                            if (data.schedule.enabled == 1) {
+                                result += `
+                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.schedule.id}/edit" class="class_wrapper private">
+                                        <div class="class_text margin"><img src="/icons/private-class.svg" /><span>${data.schedule.start_time}</span></div>
+                                        <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
+                                    </a>`
+                            } else {
+                                result += `
+                                    <a href="/${me.lastRoute}/${unixTimestamp}/${data.schedule.id}/edit" class="class_wrapper draft private">
+                                        <div class="class_text margin"><img src="/icons/private-class.svg" /><span>${data.schedule.start_time}</span></div>
+                                        <div class="class_text">${data.schedule.class_type.name} (${data.schedule.class_length})</div>
+                                    </a>`
+                            }
                         } else {
                             if (data.schedule.enabled == 1) {
                                 result += `

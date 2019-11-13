@@ -146,7 +146,7 @@
                                     </div>
                                     <div class="form_group">
                                         <label for="end_date">End Date <span>*</span></label>
-                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'">
+                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" :min="$moment().add(1, 'd').format('YYYY-MM-DD')" v-validate="'required'">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
                                     </div>
                                 </div>

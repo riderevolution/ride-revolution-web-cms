@@ -3251,9 +3251,52 @@ input::placeholder
             background-color: $white
             .vue-pan-zoom-item,
             .vue-pan-zoom-scene
-                margin: 30px 0
                 height: 450px
                 outline: none
+                overflow: hidden
+            .vue-pan-zoom-scene
+                .plan_wrapper
+                    margin: 30px
+                    height: inherit
+                    position: relative
+                    .seat_boxes
+                        position: absolute
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        .seat_position
+                            position: relative
+                            border-radius: 4px
+                            text-align: center
+                            cursor: pointer
+                            .seat_number
+                                position: absolute
+                                top: 50%
+                                left: 0
+                                right: 0
+                                text-align: center
+                                transform: translateY(-50%)
+                                sf_pro_bold(2.4vh)
+                                color: rgba(132, 143, 159, 0.3)
+                        &.left
+                            top: 0
+                            left: 0
+                            .seat_position
+                                flex: 0 0 calc(50% - 60px)
+                                margin: 30px
+                                padding: 30px 15px
+                        &.right
+                            top: 0
+                            right: 0
+                        &.bottom
+                            left: 0
+                            right: 0
+                            bottom: 0
+                            .seat_position
+                                flex: 0 0 75px
+                                height: 75px
+                                background-color: $white
+                                border: 1.5px solid $black
             .seat_legends
                 display: flex
                 flex-flow: row wrap

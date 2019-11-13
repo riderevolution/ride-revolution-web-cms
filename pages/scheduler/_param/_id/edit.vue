@@ -13,9 +13,9 @@
                         <div class="form_header_wrapper">
                             <h2 class="form_title">{{ $moment(parseInt($route.params.param)).format('MMMM D, YYYY (ddd)') }}</h2>
                             <div class="form_check toggler" @click="isPrivate ^= true">
-                                <input type="hidden" id="is_private" name="is_private" class="action_check" :value="(isPrivate) ? 1 : 0">
+                                <input type="hidden" id="private_class" name="private_class" class="action_check" :value="(isPrivate) ? 1 : 0">
                                 <div :class="`toggle ${(isPrivate) ? 'active' : ''}`"></div>
-                                <label for="is_private">Private Class</label>
+                                <label for="private_class">Private Class</label>
                             </div>
                         </div>
                         <div class="form_main_group">
@@ -146,7 +146,7 @@
                                     </div>
                                     <div class="form_group">
                                         <label for="end_date">End Date <span>*</span></label>
-                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" v-validate="'required'" v-model="res.end_date">
+                                        <input type="date" name="end_date" autocomplete="off" class="default_text date" :min="$moment().add(1, 'd').format('YYYY-MM-DD')" v-validate="'required'" v-model="res.end_date">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('end_date')">{{ errors.first('end_date') }}</span></transition>
                                     </div>
                                 </div>
@@ -156,7 +156,7 @@
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
                             <div class="form_check">
-                                <input type="checkbox" id="enabled" name="enabled" class="action_check" checked>
+                                <input type="checkbox" id="enabled" name="enabled" class="action_check" :checked="res.enabled">
                                 <label for="enabled">Activate</label>
                             </div>
                             <div class="button_group">
@@ -281,7 +281,7 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
-                        if (me.prompt) {
+                        if (!me.prompt) {
                             let formData = new FormData(document.getElementById('default_form'))
                             formData.append('_method', 'PATCH')
                             formData.append('start_time', `${me.form.start.hour}:${me.form.start.mins} ${me.form.start.convention}`)
@@ -311,7 +311,6 @@
                             })
                         } else {
                             me.$store.state.promptStatus = true
-                            me.prompt = true
                         }
                     } else {
                         me.$scrollTo('.validation_errors', {
@@ -341,6 +340,7 @@
                     me.customerTypes = res.data.schedule.customer_types
                     me.studios = res.data.schedule.studios
                     me.isRepeat = (me.res.repeat == 1) ? true : false
+                    me.prompt = (me.res.repeat == 1) ? true : false
                     me.isPrivate = (me.res.private_class == 1) ? true : false
                     me.form.instructor_id = me.res.instructor_schedules[0].user_id
                     me.loaded = true
