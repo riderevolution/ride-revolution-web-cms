@@ -7,7 +7,7 @@
                     <h1 class="header_title">Update {{ res.name }}</h1>
                 </div>
             </section>
-            <section id="content">
+            <section id="content" v-if="loaded">
                 <form id="default_form" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
@@ -57,9 +57,12 @@
                                 </div>
                             </div>
                             <div class="form_flex select_all">
-                                <label class="flex_label">Restrict access to studios:</label>
-                                <div class="form_check studios" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" :checked="studio.status">
+                                <label class="flex_label alternate">Restrict class to studios: <span>*</span></label>
+                                <div class="form_check select_all">
+                                    <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
+                                </div>
+                                <div class="form_check" v-for="(studio, key) in studios" :key="key">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checkedForReal" class="action_check">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -92,6 +95,7 @@
         },
         data () {
             return {
+                loaded: false,
                 all: false,
                 lastRoute: '',
                 prevRoute: '',
@@ -105,7 +109,42 @@
                 },
             }
         },
+        computed: {
+            checkStudio () {
+                const me = this
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (data.checkedForReal) {
+                        count++
+                    }
+                })
+                if (count == me.studios.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
+            }
+        },
         methods: {
+            toggleSelectAllStudio (event) {
+                const me = this
+                if (me.checkData) {
+                    me.studios.forEach((data, index) => {
+                        data.checkedForReal = false
+                    })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        data.checkedForReal = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             validateAdd (data, value, type) {
                 const me = this
                 switch (type) {
@@ -190,8 +229,9 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        formData.append('class_length', `${(me.form.classLength.hour * 3600) + (me.form.classLength.mins * 60) + (0 * 1)}+${me.form.classLength.hour}:${me.form.classLength.mins}`)
                         formData.append('_method', 'PATCH')
+                        formData.append('class_length', `${(me.form.classLength.hour * 3600) + (me.form.classLength.mins * 60) + (0 * 1)}+${me.form.classLength.hour}:${me.form.classLength.mins}`)
+                        formData.append('studios', JSON.stringify(me.studios))
                         me.loader(true)
                         me.$axios.post(`api/packages/class-types/${me.$route.params.param}`, formData).then(res => {
                             setTimeout( () => {
@@ -219,29 +259,16 @@
 						})
                     }
                 })
-            },
-            fetchStudios () {
-                const me = this
-                me.$axios.get('api/studios').then(res => {
-                    me.studios = res.data.studios
-                    me.studios.forEach((studio, index) => {
-                        studio.status = false
-                        me.res.studio_access.forEach((compare, index) => {
-                            if (studio.id == compare.studio_id) {
-                                studio.status = true
-                            }
-                        })
-                    })
-                })
             }
         },
         async mounted () {
             const me = this
             me.$axios.get(`api/packages/class-types/${me.$route.params.param}`).then(res => {
                 me.res = res.data.classType
+                me.studios = me.res.studios
                 me.form.classLength.hour = me.res.class_length.split('+')[1].split(':')[0]
                 me.form.classLength.mins = me.res.class_length.split('+')[1].split(':')[1]
-                me.fetchStudios()
+                me.loaded = true
             })
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
             me.prevRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 4]

@@ -57,9 +57,12 @@
                                 </div>
                             </div>
                             <div class="form_flex select_all">
-                                <label class="flex_label">Restrict access to studios:</label>
+                                <label class="flex_label alternate">Restrict class to studios: <span>*</span></label>
+                                <div class="form_check select_all">
+                                    <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
+                                </div>
                                 <div class="form_check" v-for="(studio, key) in studios" :key="key">
-                                    <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" :value="studio.id" class="action_check">
+                                    <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check">
                                     <label :for="`studio_${key}`">{{ studio.name }}</label>
                                 </div>
                             </div>
@@ -104,7 +107,42 @@
                 },
             }
         },
+        computed: {
+            checkStudio () {
+                const me = this
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (data.checked) {
+                        count++
+                    }
+                })
+                if (count == me.studios.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
+            }
+        },
         methods: {
+            toggleSelectAllStudio (event) {
+                const me = this
+                if (me.checkData) {
+                    me.studios.forEach((data, index) => {
+                        data.checked = false
+                    })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        data.checked = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             validateAdd (data, value, type) {
                 const me = this
                 switch (type) {
@@ -189,6 +227,7 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('class_length', `${(me.form.classLength.hour * 3600) + (me.form.classLength.mins * 60) + (0 * 1)}+${me.form.classLength.hour}:${me.form.classLength.mins}`)
+                        formData.append('studios', JSON.stringify(me.studios))
                         me.loader(true)
                         me.$axios.post('api/packages/class-types', formData).then(res => {
                             setTimeout( () => {
@@ -221,9 +260,6 @@
                 const me = this
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios
-                    me.studios.forEach((studio, index) => {
-                        studio.status = studioStatus
-                    })
                 })
             }
         },
