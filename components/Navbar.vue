@@ -48,19 +48,19 @@
                         title: 'Scheduler',
                         link: '/scheduler',
                         hasLink: true,
-                        class: 'scheduler',
+                        class: 'scheduler nav_parent_alt',
                         image: '/icons/navbar/scheduler-unselected.png'
                     },
                     {
                         title: 'Customers',
                         link: '/customers',
                         hasLink: true,
-                        class: 'customers',
+                        class: 'customers nav_parent_alt',
                         image: '/icons/navbar/customers-unselected.png'
                     },
                     {
                         title: 'Instructors',
-                        link: '/instructors',
+                        link: '/instructors nav_parent_alt',
                         hasLink: true,
                         class: 'instructors',
                         image: '/icons/navbar/instructors-unselected.png'

@@ -62,8 +62,11 @@
                                     <div class="form_select_custom" v-click-outside="closeCheckboxes">
                                         <span @click="toggleCheckboxes ^= true">Select Studios</span>
                                         <div :class="`form_check_custom ${(toggleCheckboxes) ? 'active' : ''}`">
+                                            <div class="check_custom select_all">
+                                                <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
+                                            </div>
                                             <div class="check_custom" v-for="(studio, key) in studios" :key="key">
-                                                <input type="checkbox" :id="`studio_${key}`" name="studio_access[]" class="action_check" :value="studio.id" checked>
+                                                <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check">
                                                 <label :for="`studio_${key}`">{{ studio.name }}</label>
                                             </div>
                                         </div>
@@ -165,7 +168,42 @@
                 variants: [0]
             }
         },
+        computed: {
+            checkStudio () {
+                const me = this
+                let count = 0
+                let result = false
+                me.studios.forEach((data, index) => {
+                    if (data.checked) {
+                        count++
+                    }
+                })
+                if (count == me.studios.length) {
+                    result = true
+                } else {
+                    result = false
+                }
+                return result
+            }
+        },
         methods: {
+            toggleSelectAllStudio (event) {
+                const me = this
+                if (me.checkStudio) {
+                    me.studios.forEach((data, index) => {
+                        data.checked = false
+                    })
+                } else {
+                    me.studios.forEach((data, index) => {
+                        data.checked = true
+                    })
+                }
+                if (event.target.classList.contains('checked')) {
+                    event.target.classList.remove('checked')
+                } else {
+                    event.target.classList.add('checked')
+                }
+            },
             closeCheckboxes () {
                 const me = this
                 me.toggleCheckboxes = false
@@ -200,6 +238,7 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('studios', JSON.stringify(me.studios))
                         me.loader(true)
                         me.$axios.post('api/inventory/products', formData).then(res => {
                             setTimeout( () => {

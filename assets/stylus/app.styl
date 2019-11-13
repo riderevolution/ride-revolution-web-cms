@@ -12,6 +12,7 @@ $light_red = #FFE5E6
 $white = #FFF
 $black = #383D40
 $black_alternate = #777
+$black_alternate2 = #5f6466
 $gray = #91939B
 $gray_alternate = #ABADB9
 $border = #DEDEDE
@@ -467,6 +468,30 @@ table
         margin-left: 5px
     &:hover
         background-color: rgba(171, 173, 185, 0.5)
+        transition: .3s ease-in-out
+.action_user_btn
+    display: inline-block
+    width: auto
+    sf_pro_medium(1.6vh)
+    text-decoration: none
+    outline: none
+    color: $white
+    padding: 12px 20px
+    background-color: $black_alternate2
+    border: 1px solid $black_alternate2
+    border-radius: 3px
+    position: relative
+    text-align: center
+    cursor: pointer
+    user-select: none
+    transition: .3s ease-in-out
+    &.margin
+        margin-left: 20px
+    &:hover,
+    &:focus
+        color: $black_alternate2
+        background-color: $white
+        border: 1px solid $white
         transition: .3s ease-in-out
 
 /**
@@ -1685,6 +1710,8 @@ input::placeholder
             display: flex
             align-items: center
             margin-bottom: 10px
+            &.select_all
+                flex: 0 0 100%
             &:last-child
                 margin-bottom: 0
             .action_check
@@ -3812,6 +3839,11 @@ input::placeholder
                                 background-color: $light_green
                                 border-left: 2px solid $green
                                 transition: .3s ease-in-out .1s
+                        &.nav_parent_alt
+                            &.nuxt-link-active
+                                background-color: $light_green
+                                border-left: 2px solid $green
+                                transition: .3s ease-in-out .1s
                         &.nuxt-link-exact-active,
                         &:hover,
                         &:focus
@@ -3952,6 +3984,104 @@ input::placeholder
                 margin-left: 10px
                 sf_pro_bold(1.8vh)
                 color: $border_alt2
+        &.user
+            position: relative
+            align-items: flex-start
+            background-color: $black
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
+            padding: 20px 40px 60px
+            .action_back_btn
+                color: $border_alt2
+                &:hover
+                    color: $green
+            .user_info
+                flex: 0 0 80%
+                display: flex
+                flex-flow: row wrap
+                align-items: flex-start
+                .user_image_default
+                    sf_pro_bold(2.4vh)
+                    text-transform: uppercase
+                    background-image: linear-gradient(137deg, $red, $orange)
+                    border-radius: 50%
+                    padding: 30px
+                    color: #fff
+                .user_details
+                    flex: 1 0 40%
+                    padding-left: 20px
+                    .user_name
+                        sf_pro_bold(2.6vh)
+                        color: $white
+                    .user_contact
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        margin: 10px 0 5px
+                        a
+                            display: block
+                            color: $white
+                            sf_pro_regular(1.6vh)
+                            &.number
+                                text-decoration: none
+                            &.email
+                                color: $blue
+                                margin-left: 20px
+                    .user_summary
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
+                        margin-bottom: 30px
+                        .summary
+                            sf_pro_regular(1.6vh)
+                            color: $border_alt2
+                            margin-left: 20px
+                            &.pending
+                                color: $red
+                            &:first-child
+                                margin-left: 0
+            .user_tabs
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: center
+                position: absolute
+                top: calc(100% - 20px)
+                left: 0
+                right: 0
+                text-align: center
+                z-index: 2
+                .tab_title
+                    position: relative
+                    padding: 20px 40px
+                    sf_pro_medium(1.8vh)
+                    color: $black
+                    background-color: $white
+                    text-decoration: none
+                    z-index: 1
+                    transition: .3s ease-in-out
+                    &:first-child
+                        border-radius: 5px 0 0 5px
+                    &:last-child
+                        border-radius: 0 5px 5px 0
+                    &::before
+                        content: ''
+                        position: absolute
+                        bottom: 0
+                        left: 0
+                        right: 0
+                        height: 0px
+                        background-color: $green
+                        opacity: 0
+                        transition: .3s ease-in-out
+                    &:hover,
+                    &.nuxt-link-active
+                        background-color: $light_green
+                        color: $green
+                        transition: .3s ease-in-out
+                        &::before
+                            opacity: 1
+                            height: 3px
+                            transition: .3s ease-in-out
         &.booker
             .action_wrapper
                 .actions
