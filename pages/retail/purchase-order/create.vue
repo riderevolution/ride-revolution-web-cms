@@ -25,7 +25,7 @@
                             </div>
                             <div class="form_group margin">
                                 <label for="studio_id">Studio</label>
-                                <select :class="`default_select alternate ${(!isSupplier) ? 'disabled' : '' }`" name="studio_id" v-model="form.studio" @change="searchVariants()">
+                                <select :class="`default_select alternate ${(!isSupplier) ? 'disabled' : (purchaseOrders.length > 0 ? 'disabled' : '') }`" name="studio_id" v-model="form.studio" @change="searchVariants()">
                                     <option value="" selected disabled>Select a Studio</option>
                                     <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                                 </select>
