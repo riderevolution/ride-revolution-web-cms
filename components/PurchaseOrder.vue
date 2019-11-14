@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="input_wrapper" :data-vv-scope="`purchase_order_form_${unique}`" v-if="type == 'create'">
-            <div class="input_content">{{ value.variant }}</div>
+            <div class="input_content">{{ value.product.name }} - {{ value.variant }}</div>
             <div class="input_content">{{ value.sku_id }}</div>
             <div class="input_content">{{ (value.sellable) ? 'Yes' : 'No' }}</div>
             <div class="input_content">{{ value.product.category.name }}</div>
