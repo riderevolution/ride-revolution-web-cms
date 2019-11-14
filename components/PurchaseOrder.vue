@@ -30,7 +30,7 @@
             <input type="hidden" name="product_id[]" v-model="value.product_id">
         </div>
         <div class="input_wrapper" v-if="type == 'show'">
-            <div class="input_content">{{ value.product_variant.variant }}</div>
+            <div class="input_content">{{ value.product_variant.product.name }} - {{ value.product_variant.variant }}</div>
             <div class="input_content">{{ value.product_variant.sku_id }}</div>
             <div class="input_content">{{ (value.product_variant.product.sellable == 1) ? 'Yes' : 'No' }}</div>
             <div class="input_content">{{ value.product_variant.product.category.name }}</div>
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="input_wrapper" :data-vv-scope="`purchase_order_form_${unique}`" v-if="type == 'edit'">
-            <div class="input_content">{{ value.product_variant.variant }}</div>
+            <div class="input_content">{{ value.product_variant.product.name }} - {{ value.product_variant.variant }}</div>
             <div class="input_content">{{ value.product_variant.sku_id }}</div>
             <div class="input_content">{{ (value.product_variant.product.sellable == 1) ? 'Yes' : 'No' }}</div>
             <div class="input_content">{{ value.product_variant.product.category.name }}</div>
@@ -75,7 +75,7 @@
             <input type="hidden" name="id[]" v-model="value.id">
         </div>
         <div class="input_wrapper" :data-vv-scope="`purchase_order_form_${unique}`" v-if="type == 'duplicate'">
-            <div class="input_content">{{ value.product_variant.variant }}</div>
+            <div class="input_content">{{ value.product_variant.product.name }} - {{ value.product_variant.variant }}</div>
             <div class="input_content">{{ value.product_variant.sku_id }}</div>
             <div class="input_content">{{ (value.product_variant.product.sellable == 1) ? 'Yes' : 'No' }}</div>
             <div class="input_content">{{ value.product_variant.product.category.name }}</div>

@@ -71,11 +71,11 @@
                 </div>
             </section>
             <section id="content" v-if="loaded">
-                <div class="cms_table_toggler">
+                <!-- <div class="cms_table_toggler">
                     <div :class="`status ${(package_status == 1) ? 'active' : ''}`" @click="togglePackages(1)">Products</div>
                     <div :class="`status ${(package_status == 2) ? 'active' : ''}`" @click="togglePackages(2)">Promotions</div>
                     <div :class="`status ${(package_status == 3) ? 'active' : ''}`" @click="togglePackages(3)">Gift Cards</div>
-                </div>
+                </div> -->
                 <table class="cms_table" v-if="res.productVariants && package_status == 1">
                     <thead>
                         <tr>
@@ -92,7 +92,7 @@
                     </thead>
                     <tbody v-if="res.productVariants.data.length > 0">
                         <tr v-for="(data, key) in res.productVariants.data" :key="key" :class="`${(data.quantity < data.reorder_point) ? 'threshold' : ''}`">
-                            <td>{{ data.variant }}</td>
+                            <td>{{ data.product.name }} - {{ data.variant }}</td>
                             <td>{{ data.sku_id }}</td>
                             <td>{{ data.product.category.name }}</td>
                             <td>
@@ -104,7 +104,11 @@
                                 </div>
                             </td>
                             <td>{{ data.product.supplier.name }}</td>
-                            <td>{{ data.quantity }}</td>
+                            <td>
+                                <p v-for="(productQuantity, key) in data.product_quantities">
+                                    {{ productQuantity.quantity }} - {{ productQuantity.studio.name }}
+                                </p>
+                            </td>
                             <td>PHP {{ totalCount(data.unit_price) }}</td>
                             <td>PHP {{ totalCount(data.sale_price) }}</td>
                             <td>{{ (data.product.sellable == 1) ? 'Yes' : 'No' }}</td>
