@@ -1,7 +1,7 @@
 <template>
     <div class="content">
-        <div id="admin" class="cms_dashboard">
-            <section id="top_content" class="user">
+        <div id="admin" class="cms_dashboard user">
+            <section id="top_content">
                 <nuxt-link :to="`/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="user_info">
                     <div class="user_image_default">
@@ -44,12 +44,16 @@
                         <div class="package_details">
                             <div class="package_status">
                                 <div class="box">
-                                    <p>48</p>
-                                    <label>Used</label>
+                                    <div class="overlay">
+                                        <p>48</p>
+                                        <label>Used</label>
+                                    </div>
                                 </div>
-                                <div class="box">
-                                    <p>2</p>
-                                    <label>Available</label>
+                                <div class="box margin">
+                                    <div class="overlay">
+                                        <p>2</p>
+                                        <label>Available</label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="package_date">
@@ -57,7 +61,7 @@
                                     <p>Apr. 04, 2019 / Apr 8, 2019</p>
                                     <label>Purchase Date / Activation Date</label>
                                 </div>
-                                <div class="date">
+                                <div class="date margin">
                                     <p>Apr 8, 2020</p>
                                     <label>Expiry date <a href="javascript:void(0)" class="expiry_btn">Edit</a></label>
                                 </div>
@@ -65,14 +69,53 @@
                             <div class="package_action">
                                 <a href="javascript:void(0)" class="action_success_btn">Book a Class</a>
                                 <div class="package_options">
-                                    <div class="option_btn">
-                                        Options
+                                    <div class="option_btn" @click.self="toggledOption($event)">Options</div>
+                                    <div class="option_selector">
+                                        <a href="javascript:void(0)" class="option_link">Transfer Package</a>
+                                        <a href="javascript:void(0)" class="option_link">Share Package</a>
+                                        <a href="javascript:void(0)" class="option_link">Freeze Package</a>
+                                        <a href="javascript:void(0)" class="option_link">Print Receipt</a>
                                     </div>
-                                    <div :class="`option_selector ${(toggledOption) ? 'toggled' : ''}`">
-                                        <a href="javascript:void(0)">Transfer Package</a>
-                                        <a href="javascript:void(0)">Share Package</a>
-                                        <a href="javascript:void(0)">Freeze Package</a>
-                                        <a href="javascript:void(0)">Print Receipt</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table_package">
+                        <h2 class="package_title shared">10 Class Package <span>Shared with Sheena Villeta</span></h2>
+                        <div class="package_details">
+                            <div class="package_status">
+                                <div class="box">
+                                    <div class="overlay">
+                                        <p>8</p>
+                                        <label>Used</label>
+                                    </div>
+                                </div>
+                                <div class="box margin">
+                                    <div class="overlay">
+                                        <p>2</p>
+                                        <label>Available</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="package_date">
+                                <div class="date">
+                                    <p>Apr. 04, 2019 / Apr 8, 2019</p>
+                                    <label>Purchase Date / Activation Date</label>
+                                </div>
+                                <div class="date margin">
+                                    <p>Apr 8, 2020</p>
+                                    <label>Expiry date <a href="javascript:void(0)" class="expiry_btn">Edit</a></label>
+                                </div>
+                            </div>
+                            <div class="package_action">
+                                <a href="javascript:void(0)" class="action_success_btn">Book a Class</a>
+                                <div class="package_options">
+                                    <div class="option_btn" @click.self="toggledOption($event)">Options</div>
+                                    <div class="option_selector">
+                                        <a href="javascript:void(0)" class="option_link">Transfer Package</a>
+                                        <a href="javascript:void(0)" class="option_link">Share Package</a>
+                                        <a href="javascript:void(0)" class="option_link">Freeze Package</a>
+                                        <a href="javascript:void(0)" class="option_link">Print Receipt</a>
                                     </div>
                                 </div>
                             </div>
@@ -94,11 +137,19 @@
         data () {
             return {
                 lastRoute: '',
-                toggledOption: false,
                 package_status: 1
             }
         },
         methods: {
+            toggledOption (event) {
+                const me = this
+                let element = event.target
+                if (element.parentNode.classList.contains('toggled')) {
+                    element.parentNode.classList.remove('toggled')
+                } else {
+                    element.parentNode.classList.add('toggled')
+                }
+            },
             togglePackages (status) {
                 const me = this
                 return me.package_status = status
