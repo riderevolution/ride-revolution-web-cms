@@ -34,6 +34,51 @@
                 </div>
             </section>
             <section id="content">
+                <div class="cms_table_toggler">
+                    <div :class="`status ${(package_status == 1) ? 'active' : ''}`" @click="togglePackages(1)">Owned</div>
+                    <div :class="`status ${(package_status == 2) ? 'active' : ''}`" @click="togglePackages(2)">Shared</div>
+                </div>
+                <div class="cms_table_package">
+                    <div class="table_package">
+                        <h2 class="package_title warning">50 Class Package <span>2 Days Left</span></h2>
+                        <div class="package_details">
+                            <div class="package_status">
+                                <div class="box">
+                                    <p>48</p>
+                                    <label>Used</label>
+                                </div>
+                                <div class="box">
+                                    <p>2</p>
+                                    <label>Available</label>
+                                </div>
+                            </div>
+                            <div class="package_date">
+                                <div class="date">
+                                    <p>Apr. 04, 2019 / Apr 8, 2019</p>
+                                    <label>Purchase Date / Activation Date</label>
+                                </div>
+                                <div class="date">
+                                    <p>Apr 8, 2020</p>
+                                    <label>Expiry date <a href="javascript:void(0)" class="expiry_btn">Edit</a></label>
+                                </div>
+                            </div>
+                            <div class="package_action">
+                                <a href="javascript:void(0)" class="action_success_btn">Book a Class</a>
+                                <div class="package_options">
+                                    <div class="option_btn">
+                                        Options
+                                    </div>
+                                    <div :class="`option_selector ${(toggledOption) ? 'toggled' : ''}`">
+                                        <a href="javascript:void(0)">Transfer Package</a>
+                                        <a href="javascript:void(0)">Share Package</a>
+                                        <a href="javascript:void(0)">Freeze Package</a>
+                                        <a href="javascript:void(0)">Print Receipt</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
@@ -48,7 +93,15 @@
         },
         data () {
             return {
-                lastRoute: ''
+                lastRoute: '',
+                toggledOption: false,
+                package_status: 1
+            }
+        },
+        methods: {
+            togglePackages (status) {
+                const me = this
+                return me.package_status = status
             }
         },
         mounted () {
