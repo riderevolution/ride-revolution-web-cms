@@ -8,7 +8,7 @@
                 </div>
             </section>
             <section id="content">
-                <form id="default_form" class="alternate" @submit.prevent="submissionSuccess()" enctype="multipart/form-data" v-if="loaded">
+                <form id="default_form" class="alternate" @submit.prevent="submissionSuccess()" v-if="loaded">
                     <div class="form_flex_wrapper">
                         <div class="form_wrapper main">
                             <div class="form_main_group">
@@ -66,11 +66,12 @@
                                                 <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
                                             </div>
                                             <div class="check_custom" v-for="(studio, key) in studios" :key="key">
-                                                <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check">
+                                                <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check" @change="hasStudio = true">
                                                 <label :for="`studio_${key}`">{{ studio.name }}</label>
                                             </div>
                                         </div>
                                     </div>
+                                    <transition name="slide"><span class="validation_errors" v-if="!hasStudio">The studios field is required</span></transition>
                                 </div>
                                 <div class="form_flex_radio_alternate">
                                     <label>Is this sellable? <span>*</span></label>
@@ -165,7 +166,8 @@
                 studios: [],
                 categories: [],
                 suppliers: [],
-                variants: [0]
+                variants: [0],
+                hasStudio: true
             }
         },
         computed: {
@@ -235,8 +237,15 @@
             },
             submissionSuccess () {
                 const me = this
+                let ctr = 0
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    me.studios.forEach((data, index) => {
+                        if (data.checked) {
+                            ctr++
+                        }
+                    })
+                    me.hasStudio = (ctr > 0) ? true : false
+                    if (valid && me.hasStudio) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('studios', JSON.stringify(me.studios))
                         me.loader(true)
@@ -261,9 +270,11 @@
                             }, 500)
                         })
                     } else {
-                        me.$scrollTo('.validation_errors', {
-							offset: -250
-						})
+                        setTimeout( () => {
+                            me.$scrollTo('.validation_errors', {
+    							offset: -250
+    						})
+                        }, 10)
                     }
                 })
             }
