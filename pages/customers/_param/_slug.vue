@@ -1,17 +1,18 @@
 <template>
     <div class="content">
-        <div id="admin" class="cms_dashboard user">
+        <div id="admin" class="cms_dashboard user" v-if="loaded">
             <section id="top_content">
                 <nuxt-link :to="`/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="user_info">
-                    <div class="user_image_default">
-                        AT
+                    <img :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
+                    <div class="user_image_default" v-else>
+                        {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
                     </div>
                     <div class="user_details">
-                        <h1 class="user_name">Ayiin Tolentino</h1>
+                        <h1 class="user_name">{{ customer.first_name }} {{ customer.last_name }}</h1>
                         <div class="user_contact">
-                            <a href="tel:0999 999 9999" class="number">0999 999 9999</a>
-                            <a href="mailto:ayiin.tolentino@gmail.com" class="email">ayiin.tolentino@gmail.com</a>
+                            <a :href="`tel:${customer.customer_details.co_contact_number}`" class="number">{{ customer.customer_details.co_contact_number }}</a>
+                            <a :href="`mailto:${customer.email}`" class="email">{{ customer.email }}</a>
                         </div>
                         <div class="user_summary">
                             <div class="summary">Completed Rides: 89</div>
@@ -46,7 +47,9 @@
         },
         data () {
             return {
+                loaded: false,
                 lastRoute: '',
+                customer: [],
                 tabs: [
                     {
                         name: 'Packages',
@@ -75,8 +78,29 @@
                 ],
             }
         },
+        methods: {
+            fetchData () {
+                const me = this
+                me.loader(true)
+                me.$axios.get(`api/customers/${me.$route.params.param}/${me.$route.params.slug}`).then(res => {
+                    if (res.data) {
+                        me.customer = res.data.customer
+                        me.loaded = true
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    me.rowCount = document.getElementsByTagName('th').length
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 300)
+                })
+            }
+        },
         mounted () {
             const me = this
+            me.fetchData()
             me.lastRoute = me.$route.path.split('/')[me.$route.path.split('/').length - 3]
         },
     }
