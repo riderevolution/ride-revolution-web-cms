@@ -30,7 +30,7 @@
                 const me = this
                 document.body.classList.remove('no_scroll')
                 me.$store.state.promptStatus = false
-                if (status) {
+                if (status && me.hasCancel) {
                     me.$parent.prompt = false
                     me.$parent.submissionSuccess()
                 } else {

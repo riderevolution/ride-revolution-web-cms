@@ -25,13 +25,7 @@
                     </div>
                 </div>
                 <div class="user_tabs">
-                    {{ tabs }}
-                    <a href="javascript:void(0)" class="tab_title">Packages</a>
-                    <a href="javascript:void(0)" class="tab_title">Badges</a>
-                    <a href="javascript:void(0)" class="tab_title">Upcoming Classes</a>
-                    <a href="javascript:void(0)" class="tab_title">Class History</a>
-                    <a href="javascript:void(0)" class="tab_title">Transactions</a>
-                    <a href="javascript:void(0)" class="tab_title">Details</a>
+                    <nuxt-link :to="tab.link" class="tab_title" v-for="(tab, key) in tabs" :key="key">{{ tab.name }}</nuxt-link>
                 </div>
             </section>
             <section id="content">
@@ -52,12 +46,33 @@
         },
         data () {
             return {
+                lastRoute: '',
                 tabs: [
                     {
-                        name: this.$route.params.slug
+                        name: 'Packages',
+                        link: `/customers/${this.$route.params.param}/packages`
+                    },
+                    {
+                        name: 'Badges',
+                        link: `/customers/${this.$route.params.param}/badges`
+                    },
+                    {
+                        name: 'Upcoming Classes',
+                        link: `/customers/${this.$route.params.param}/upcoming-classes`
+                    },
+                    {
+                        name: 'Class History',
+                        link: `/customers/${this.$route.params.param}/class-history`
+                    },
+                    {
+                        name: 'Transactions',
+                        link: `/customers/${this.$route.params.param}/transactions`
+                    },
+                    {
+                        name: 'Details',
+                        link: `/customers/${this.$route.params.param}/details`
                     }
                 ],
-                lastRoute: ''
             }
         },
         mounted () {

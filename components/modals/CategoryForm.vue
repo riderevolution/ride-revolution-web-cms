@@ -1,7 +1,7 @@
 <template>
     <div class="default_modal">
         <div class="background" @click="toggleClose()"></div>
-        <form id="default_form" class="overlay" @submit.prevent="submissionAddSuccess()" enctype="multipart/form-data" v-if="type == 0">
+        <form id="default_form" class="overlay" @submit.prevent="submissionAddSuccess()"v-if="type == 0">
             <div class="modal_wrapper">
                 <h2 class="form_title">Add a Category</h2>
                 <div class="form_close" @click="toggleClose()"></div>
@@ -20,7 +20,7 @@
                 </div>
             </div>
         </form>
-        <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()" enctype="multipart/form-data" v-else>
+        <form id="default_form" class="overlay" @submit.prevent="submissionUpdateSuccess()"v-else>
             <div class="modal_wrapper">
                 <h2 class="form_title">Update {{ res.name }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
@@ -86,7 +86,7 @@
                             me.$store.state.categoryForm = false
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
-                                    me.$parent.fetchData()
+                                    me.$parent.fetchData(1)
                                 }
                             }, 500)
                             setTimeout( () => {
@@ -125,7 +125,7 @@
                             me.$store.state.categoryForm = false
                             setTimeout( () => {
                                 if (!me.$store.state.errorStatus) {
-                                    me.$parent.fetchData()
+                                    me.$parent.fetchData(1)
                                 }
                             }, 500)
                             setTimeout( () => {

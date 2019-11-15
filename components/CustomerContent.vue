@@ -104,7 +104,7 @@
             },
             togglePackages (status) {
                 const me = this
-                return me.package_status = status
+                return me.packageStatus = status
             },
         },
         beforeMount () {

@@ -62,7 +62,7 @@
                     <tbody v-if="res.products.data.length > 0">
                         <tr v-for="(data, key) in res.products.data" :key="key">
                             <td>{{ data.name }}</td>
-                            <td>{{ data.description }}</td>
+                            <td>{{ data.truncated }}</td>
                             <td>{{ data.category.name }}</td>
                             <td>
                                 <div v-for="(studio, key) in data.studio_access" :key="key" v-if="data.studio_access.length != studios.length">
