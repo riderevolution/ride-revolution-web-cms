@@ -196,9 +196,11 @@
                             }, 500)
                         })
                     } else {
-                        me.$scrollTo('.validation_errors', {
-							offset: -250
-						})
+                        setTimeout( () => {
+                            me.$scrollTo('.validation_errors', {
+                                offset: -250
+                            })
+                        }, 10)
                     }
                 })
             }
