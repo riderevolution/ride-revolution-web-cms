@@ -667,6 +667,7 @@ table
                             overflow-y: auto
                             overflow-x: hidden
                             .breakdown_table
+                                table-layout: fixed
                                 thead
                                     th
                                         sf_pro_regular(1.6vh)
@@ -4066,7 +4067,7 @@ input::placeholder
                 left: 0
                 right: 0
                 text-align: center
-                z-index: 2
+                z-index: 1
                 .tab_title
                     position: relative
                     padding: 20px 40px
@@ -4093,7 +4094,7 @@ input::placeholder
                         opacity: 0
                         transition: .3s ease-in-out
                     &:hover,
-                    &.nuxt-link-active
+                    &.active
                         background-color: $light_green
                         color: $green
                         transition: .3s ease-in-out

@@ -217,12 +217,14 @@
                                 <thead>
                                     <tr>
                                         <th>Items</th>
-                                        <th>Price</th>
+                                        <th>Price Per Item</th>
+                                        <th>Computed Price</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, key) in totalPrice" :key="key">
-                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ data.item.name }}</td>
+                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
+                                        <td class="item_price" width="50%">PHP {{ totalCount(data.item.origPrice) }}</td>
                                         <td class="item_price" width="50%">PHP {{ totalCount(data.price) }}</td>
                                     </tr>
                                 </tbody>
