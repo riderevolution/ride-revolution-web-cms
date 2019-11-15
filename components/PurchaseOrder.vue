@@ -7,17 +7,17 @@
             <div class="input_content">{{ value.product.category.name }}</div>
             <div class="input_content">{{ value.product_quantities[0].quantity }}</div>
             <div class="input_content">
-                <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="quantity" @change="isQuantity = true">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.quantity[]`)">{{ errors.first(`purchase_order_form_${unique}.quantity[]`) }}</span></transition>
+                <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" :data-vv-name="`purchase_order_form_${unique}.quantity[]`" v-model="quantity" @change="isQuantity = true">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.quantity[]`)">The quantity field is required</span></transition>
             </div>
             <div class="input_content">PHP {{ value.unit_price }}</div>
             <div class="input_content">
-                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping" @input="updateTotal($event, 'shipping', unique)">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.shipping_cost[]`) }}</span></transition>
+                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping" @input="updateTotal($event, 'shipping', unique)" :data-vv-name="`purchase_order_form_${unique}.shipping_cost[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">The shipping cost field is required</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional"  @input="updateTotal($event, 'additional', unique)">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.additional_cost[]`) }}</span></transition>
+                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional"  @input="updateTotal($event, 'additional', unique)" :data-vv-name="`purchase_order_form_${unique}.additional_cost[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">The additional cost field is required</span></transition>
             </div>
             <div class="input_content alternate">
                 <span>PHP</span>
@@ -51,17 +51,17 @@
             <div class="input_content">{{ value.product_variant.product.category.name }}</div>
             <div class="input_content">{{ value.product_variant.product_quantities.quantity }}</div>
             <div class="input_content">
-                <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="quantity = value.quantity" @change="isQuantity = true">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.quantity[]`)">{{ errors.first(`purchase_order_form_${unique}.quantity[]`) }}</span></transition>
+                <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="quantity = value.quantity" @change="isQuantity = true" :data-vv-name="`purchase_order_form_${unique}.quantity[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.quantity[]`)">The quantity field is required</span></transition>
             </div>
             <div class="input_content">PHP {{ totalCount(value.product_variant.unit_price) }}</div>
             <div class="input_content">
-                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping = value.shipping_cost" @input="updateTotal($event, 'shipping', unique)">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.shipping_cost[]`) }}</span></transition>
+                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping = value.shipping_cost" @input="updateTotal($event, 'shipping', unique)" :data-vv-name="`purchase_order_form_${unique}.shipping_cost[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">The shipping cost field is required</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional = value.additional_cost"  @input="updateTotal($event, 'additional', unique)">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.additional_cost[]`) }}</span></transition>
+                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional = value.additional_cost"  @input="updateTotal($event, 'additional', unique)" :data-vv-name="`purchase_order_form_${unique}.additional_cost[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">The additional cost field is required</span></transition>
             </div>
             <div class="input_content alternate">
                 <span>PHP</span>
@@ -81,17 +81,17 @@
             <div class="input_content">{{ value.product_variant.product.category.name }}</div>
             <div class="input_content">{{ value.product_variant.product_quantities.quantity }}</div>
             <div class="input_content">
-                <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="quantity = value.quantity" @change="isQuantity = true">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.quantity[]`)">{{ errors.first(`purchase_order_form_${unique}.quantity[]`) }}</span></transition>
+                <input type="text" name="quantity[]" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="quantity = value.quantity" @change="isQuantity = true" :data-vv-name="`purchase_order_form_${unique}.quantity[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.quantity[]`)">The quantity field is required</span></transition>
             </div>
             <div class="input_content">PHP {{ totalCount(value.product_variant.unit_price) }}</div>
             <div class="input_content">
-                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping = value.shipping_cost" @input="updateTotal($event, 'shipping', unique)">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.shipping_cost[]`) }}</span></transition>
+                <input type="text" name="shipping_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="shipping = value.shipping_cost" @input="updateTotal($event, 'shipping', unique)" :data-vv-name="`purchase_order_form_${unique}.shipping_cost[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.shipping_cost[]`)">The shipping cost field is required</span></transition>
             </div>
             <div class="input_content">
-                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional = value.additional_cost"  @input="updateTotal($event, 'additional', unique)">
-                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">{{ errors.first(`purchase_order_form_${unique}.additional_cost[]`) }}</span></transition>
+                <input type="text" name="additional_cost[]" :class="`default_text ${(!isQuantity) ? 'disabled' : '' }`" autocomplete="off" v-validate="'required|decimal:2'" v-model="additional = value.additional_cost"  @input="updateTotal($event, 'additional', unique)" :data-vv-name="`purchase_order_form_${unique}.additional_cost[]`">
+                <transition name="slide"><span class="validation_errors" v-if="errors.has(`purchase_order_form_${unique}.additional_cost[]`)">The additional cost field is required</span></transition>
             </div>
             <div class="input_content alternate">
                 <span>PHP</span>
