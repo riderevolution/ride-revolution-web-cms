@@ -5,6 +5,7 @@ const createStore = () => {
         state: () => ({
             calendarDuplicateStatus: false,
             calendarClearStatus: false,
+            customerCreditQuickSaleStatus: false,
             quickSaleStatus: false,
             successfulStatus: false,
             promptStatus: false,

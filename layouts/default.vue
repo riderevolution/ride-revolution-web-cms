@@ -30,6 +30,9 @@
             <quick-sale v-if="$store.state.quickSaleStatus" />
         </transition>
         <transition name="fade">
+            <customer-credit-quick-sale v-if="$store.state.customerCreditQuickSaleStatus" />
+        </transition>
+        <transition name="fade">
             <successful v-if="$store.state.successfulStatus" />
         </transition>
     </div>
@@ -43,6 +46,7 @@
     import PasswordSent from '../components/modals/PasswordSent'
     import ResetSuccessful from '../components/modals/ResetSuccessful'
     import QuickSale from '../components/modals/QuickSale'
+    import CustomerCreditQuickSale from '../components/modals/CustomerCreditQuickSale'
     import Successful from '../components/modals/Successful'
     export default {
         components: {
@@ -52,6 +56,7 @@
             ErrorStatus,
             PasswordSent,
             ResetSuccessful,
+            CustomerCreditQuickSale,
             QuickSale,
             Successful
         },

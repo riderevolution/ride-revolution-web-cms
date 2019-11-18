@@ -1,0 +1,126 @@
+<template>
+    <div>
+        <div :class="`modal_tab_content_wrapper ${(value.isPromoPackageShow) ? 'no_qty' : '' }`" v-show="(isSearched) ? (value.isClassPackageShow == true) ? true : (value.isPromoPackageShow == true ? true : false) : false">
+            <div class="form_check">
+                <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value, value.id, unique, value.package_price)" :checked="value.isChecked">
+                <label :for="`product_${value.id}_${unique}`">{{ value.name }}</label>
+            </div>
+            <div class="total_price">PHP {{ totalCount(value.package_price) }}</div>
+            <div class="form_group">
+                <label>Qty.</label>
+                <div class="form_flex_input">
+                    <input type="text" name="quantity[]" :id="`quantity_${unique}`" class="default_text number" maxlength="1" autocomplete="off" v-model="quantity" v-validate="'numeric|min_value:1|max_value:1'" @input="recomputeTotal(value.id, unique, value.package_price)">
+                    <div class="up" @click="addCount(value.id, unique, value.package_price)"></div>
+                    <div class="down" @click="subtractCount(value.id, unique, value.package_price)"></div>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('quantity[]')">{{ errors.first('quantity[]') }}</span></transition>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            unique: {
+                type: Number,
+                default: 0
+            },
+            value: {
+                default: function() {
+                    return 0
+                }
+            }
+        },
+        data () {
+            return {
+                quantity: 1,
+                isSearched: true
+            }
+        },
+        methods: {
+            recomputeTotal (id, key, price) {
+                const me = this
+                let element = document.getElementById(`product_${id}_${key}`)
+                let quantity = document.getElementById(`quantity_${key}`).value
+                if (element.checked) {
+                    me.$parent.totalPrice.forEach((data, index) => {
+                        if (data.id == key) {
+                            data.quantity = quantity
+                            data.price =  parseInt(quantity) * price
+                        }
+                    })
+                }
+            },
+            addCount (id, key, price) {
+                const me = this
+                let element = document.getElementById(`product_${id}_${key}`)
+                let data
+                data = parseInt(me.quantity)
+                if (data != 99) {
+                    data != 0 && (me.quantity = 0)
+                    me.quantity = (data += 1)
+                    if (element.checked) {
+                        me.$parent.totalPrice.forEach((data, index) => {
+                            if (data.id == key) {
+                                data.quantity = me.quantity
+                                data.price =  parseInt(me.quantity) * price
+                            }
+                        })
+                    }
+                }
+            },
+            subtractCount (id, key, price) {
+                const me = this
+                let element = document.getElementById(`product_${id}_${key}`)
+                let data
+                data = parseInt(me.quantity)
+                data > 1 && (me.quantity = (data -= 1))
+                if (element.checked) {
+                    me.$parent.totalPrice.forEach((data, index) => {
+                        if (data.id == key) {
+                            data.quantity = me.quantity
+                            data.price =  parseInt(me.quantity) * price
+                        }
+                    })
+                }
+            },
+            toggleChecked (data, id, key, price) {
+                const me = this
+                let element = document.getElementById(`product_${id}_${key}`)
+                let quantity = document.getElementById(`quantity_${key}`).value
+                if (element.checked) {
+                    me.$parent.totalPrice.push(
+                        {
+                            id: key,
+                            quantity: quantity,
+                            item: {
+                                id: data.id,
+                                sku: data.sku_id,
+                                name: data.name,
+                                origPrice: data.package_price,
+                                product: data
+                            },
+                            type: (me.value.isPromoPackageShow) ? 'promo-package' : 'class-package',
+                            price: parseInt(quantity) * price
+                        }
+                    )
+                } else {
+                    me.$parent.totalPrice.forEach((data, index) => {
+                        if (data.id == key) {
+                            me.$parent.totalPrice.splice(index, 1)
+                        }
+                    })
+                }
+                switch (me.$parent.toCompare.package) {
+                    case 0:
+                        me.$parent.classPackages[key].isChecked ^= true
+                        break
+                    case 1:
+                        me.$parent.promoPackages[key].isChecked ^= true
+                        break
+                }
+            }
+        }
+    }
+</script>

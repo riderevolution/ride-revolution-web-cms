@@ -20,7 +20,7 @@
                             <div class="summary pending">Pending Payment: Php 500.00</div>
                         </div>
                         <div class="user_action">
-                            <a href="javascript:void(0)" class="action_user_btn">Buy Credits</a>
+                            <a href="javascript:void(0)" class="action_user_btn" @click="toggleCreditQuickSale()">Buy Credits</a>
                             <a href="javascript:void(0)" class="action_user_btn margin">Buy Products</a>
                         </div>
                     </div>
@@ -96,6 +96,11 @@
                         me.loader(false)
                     }, 300)
                 })
+            },
+            toggleCreditQuickSale () {
+                const me = this
+                me.$store.state.customerCreditQuickSaleStatus = true
+                document.body.classList.add('no_scroll')
             }
         },
         mounted () {
