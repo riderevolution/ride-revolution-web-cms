@@ -83,9 +83,23 @@
                     <div class="booker_content">
                         <div class="booker_seats">
                             <div class="seat_controls">
-                                <button id="zoom_in">Zoom in</button>
-                                <button id="zoom_out">Zoom out</button>
-                                <button id="reset">Reset</button>
+                                <div class="left_side">
+                                    <div class="class_options">
+                                        <select class="default_select alternate" name="class_options">
+                                            <option value="" disabled selected>Class Options</option>
+                                            <option :value="key" v-for="(classOption, key) in classOptions" :key="key">{{ classOption }}</option>
+                                        </select>
+                                    </div>
+                                    <label class="booker_label">Lorem Ipsum</label>
+                                    <div class="controls">
+                                        <button id="zoom_in">Zoom in</button>
+                                        <button id="zoom_out" class="margin">Zoom out</button>
+                                        <button id="reset" class="margin">Reset</button>
+                                    </div>
+                                </div>
+                                <div class="right_side">
+                                    <button id="reload">Reload</button>
+                                </div>
                             </div>
                             <panZoom @init="panZoomInit" :options="{
                                 bounds: true,
@@ -167,6 +181,8 @@
                 results: [],
                 customers: [],
                 schedules: [],
+                customerTypes: [],
+                classOptions: ['Email Class', 'Print Sign-in Sheet', 'Print Room', 'Print Waitlist', 'Customers with Pending Payment', 'Customer Info', 'Attendance Log'],
                 current: 0,
                 last: 0,
                 test: 0,
@@ -341,14 +357,14 @@
                 switch (type) {
                     case 'next':
                         me.results.push({
-                            abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
+                            abbr: (me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('D') == me.$moment().format('D')) ? 'Today' : me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
                             date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY'),
                             value: data
                         })
                         break
                     case 'prev':
                         me.results.unshift({
-                            abbr: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
+                            abbr: (me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('D') == me.$moment().format('D')) ? 'Today' : me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('ddd'),
                             date: me.$moment(`${me.currentYear}-${me.currentMonth}-${data}`, 'YYYY-MM-D').format('MMMM D, YYYY'),
                             value: data
                         })
@@ -424,6 +440,9 @@
                 })
                 me.$axios.get('api/studios?enabled=1').then(res => {
                     me.studios = res.data.studios
+                })
+                me.$axios.get('api/extras/customer-types').then(res => {
+                    me.customerTypes = res.data.customerTypes
                 })
                 me.populateClasses()
             }
