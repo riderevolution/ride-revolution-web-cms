@@ -27,6 +27,7 @@
                                     </div>
                                 </div>
                                 <div class="button_group">
+                                    <button type="button" class="action_success_btn">Pay Later</button>
                                     <button type="button" class="action_btn alternate" @click="takePayment(2)">Take Payment</button>
                                 </div>
                             </div>
