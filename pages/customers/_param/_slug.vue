@@ -20,8 +20,8 @@
                             <div class="summary pending">Pending Payment: Php 500.00</div>
                         </div>
                         <div class="user_action">
-                            <a href="javascript:void(0)" class="action_user_btn" @click="toggleCreditQuickSale()">Buy Credits</a>
-                            <a href="javascript:void(0)" class="action_user_btn margin">Buy Products</a>
+                            <a href="javascript:void(0)" class="action_user_btn" @click="toggleQuickSale('credit')">Buy Credits</a>
+                            <a href="javascript:void(0)" class="action_user_btn margin" @click="toggleQuickSale('product')">Buy Products</a>
                         </div>
                     </div>
                 </div>
@@ -97,9 +97,16 @@
                     }, 300)
                 })
             },
-            toggleCreditQuickSale () {
+            toggleQuickSale (type) {
                 const me = this
-                me.$store.state.customerCreditQuickSaleStatus = true
+                switch (type) {
+                    case 'credit':
+                        me.$store.state.customerCreditQuickSaleStatus = true
+                        break
+                    case 'product':
+                        me.$store.state.customerProductQuickSaleStatus = true
+                        break
+                }
                 document.body.classList.add('no_scroll')
             }
         },
