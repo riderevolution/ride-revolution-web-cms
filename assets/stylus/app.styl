@@ -3286,27 +3286,65 @@ input::placeholder
                 align-items: center
                 border-bottom: 1px solid $border
                 button
+                    position: relative
                     padding: 0
                     width: 40px
                     height: 40px
                     background-color: transparent
-                    background-position: center center
-                    background-repeat: no-repeat
-                    background-size: contain
                     border: none
                     box-shadow: none
                     outline: none
                     font-size: 0
                     &.margin
                         margin-left: 5px
+                    &::before,
+                    &::after
+                        content: ''
+                        position: absolute
+                        background-position: center center
+                        background-repeat: no-repeat
+                        background-size: contain
+                        width: 100%
+                        height: 100%
+                        top: 50%
+                        left: 50%
+                        transform: translate(-50%, -50%)
+                        opacity: 1
+                        visibility: visible
+                        transition: .3s ease-in-out
+                    &::after
+                        opacity: 0
+                        visibility: hidden
+                        transition: .3s ease-in-out
                     &#zoom_in
-                        background-image: url('/icons/zoom-in.svg')
+                        &::before
+                            background-image: url('/icons/zoom-in.svg')
+                        &::after
+                            background-image: url('/icons/zoom-in-selected.svg')
                     &#zoom_out
-                        background-image: url('/icons/zoom-out.svg')
+                        &::before
+                            background-image: url('/icons/zoom-out.svg')
+                        &::after
+                            background-image: url('/icons/zoom-out-selected.svg')
                     &#reset
-                        background-image: url('/icons/full-screen.svg')
+                        &::before
+                            background-image: url('/icons/full-screen.svg')
+                        &::after
+                            background-image: url('/icons/full-screen-selected.svg')
                     &#reload
-                        background-image: url('/icons/reload.svg')
+                        &::before
+                            background-image: url('/icons/reload.svg')
+                        &::after
+                            background-image: url('/icons/reload-selected.svg')
+                    &:hover
+                        &::before
+                            opacity: 0
+                            visibility: hidden
+                            transition: .3s ease-in-out
+                        &::after
+                            opacity: 1
+                            visibility: visible
+                            transition: .3s ease-in-out
                 .left_side
                     padding: 20px
                     flex: 1 0 50%
@@ -3338,6 +3376,12 @@ input::placeholder
                     margin: 30px
                     height: inherit
                     position: relative
+                    .no_results
+                        text-align: center
+                        sf_pro_medium(50px)
+                        color: $gray_alternate
+                        text-align: center
+                        padding-top: 100px
                     .seat_boxes
                         position: absolute
                         display: flex
@@ -3375,6 +3419,15 @@ input::placeholder
                             &.bottom_alt
                                 bottom: calc(0% + 50px)
                                 left: calc(0% - 65px)
+                        &.layout_3
+                            &.bottom
+                                bottom: calc(75%)
+                            &.bottom_alt
+                                bottom: calc(75% - 115px)
+                                left: calc(0% - 65px)
+                            &.bottom_alt_2
+                                bottom: calc(75% - 230px)
+                                justify-content: center
                         &.left
                             align-items: flex-start
                             top: calc(0% - 180px)

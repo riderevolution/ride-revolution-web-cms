@@ -32,6 +32,8 @@
             data: {
                 default: null
             }
+        },
+        methods: {
         }
     }
 </script>

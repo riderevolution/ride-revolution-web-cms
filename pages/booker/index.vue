@@ -199,6 +199,10 @@
             getStudio (event) {
                 const me = this
                 me.studioID = event.target.value
+                document.querySelectorAll('.content_wrapper .class_accordion').forEach((value, index) => {
+                    value.classList.remove('toggled')
+                    value.querySelector('.accordion_content').style.height = 0
+                })
                 setTimeout(() => {
                     me.$refs.plan.fetchSeats(me.studioID)
                 }, 10)
@@ -403,7 +407,7 @@
                 const me = this
                 const target = event.target
                 if (!target.parentNode.classList.contains('toggled')) {
-                    await me.$axios.get(`api/schedules?month=${month}&year=${year}&day=${day}`).then(res => {
+                    await me.$axios.get(`api/schedules?month=${month}&year=${year}&day=${day}&studio_id=${me.studioID}`).then(res => {
                         if (res.data) {
                             me.schedules = res.data.schedules
                         }

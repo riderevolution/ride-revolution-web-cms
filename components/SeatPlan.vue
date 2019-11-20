@@ -1,6 +1,9 @@
 <template>
     <div class="plan_wrapper">
-        <seat-plan-box v-for="(seat, key) in seats" :data="seat.data" :position="seat.position" :layout="seat.layout" :key="key"/>
+        <seat-plan-box v-for="(seat, key) in seats" :data="seat.data" :position="seat.position" :layout="seat.layout" :key="key" v-if="hasFetchSeat" />
+        <div class="no_results" v-if="!hasFetchSeat">
+            Please select a Studio.
+        </div>
     </div>
 </template>
 
@@ -13,6 +16,7 @@
         data () {
             return {
                 temp: [],
+                hasFetchSeat: false,
                 seats: {
                     left: {
                         position: 'left',
@@ -72,6 +76,7 @@
                 }).then(() => {
                     setTimeout( () => {
                         me.loader(false)
+                        me.hasFetchSeat = true
                     }, 500)
                 })
             }

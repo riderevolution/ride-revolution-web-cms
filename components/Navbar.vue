@@ -60,9 +60,9 @@
                     },
                     {
                         title: 'Instructors',
-                        link: '/instructors nav_parent_alt',
+                        link: '/instructors',
                         hasLink: true,
-                        class: 'instructors',
+                        class: 'instructors nav_parent_alt',
                         image: '/icons/navbar/instructors-unselected.png'
                     },
                     {
