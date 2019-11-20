@@ -5,7 +5,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Booker</h1>
                     <div class="actions">
-                        <form class="customer_filter_flex" id="filter">
+                        <form class="customer_filter_flex" id="filter" @submit.prevent>
                             <div class="form_group customer">
                                 <label for="studio_id">Studio</label>
                                 <select class="default_select alternate" name="studio_id" @change="getStudio($event)">
@@ -15,10 +15,10 @@
                             </div>
                             <div class="form_group margin" v-click-outside="closeMe">
                                 <label for="q">Find a Customer</label>
-                                <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" class="default_text search_alternate" @click="toggleCustomers ^= true">
-                                <div :class="`customer_selection ${(customers.length > 6) ? 'scrollable' : ''}`" v-if="toggleCustomers">
+                                <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" :class="`default_text search_alternate ${(selectCustomer) ? '' : 'disabled'}`" @click="toggleCustomers ^= true" @input="searchCustomer($event)">
+                                <div :class="`customer_selection ${(customerLength > 6) ? 'scrollable' : ''}`" v-if="toggleCustomers">
                                     <div class="customer_selection_list">
-                                        <div class="customer_wrapper" :id="`customer_${customer.id}`" v-for="(customer, key) in customers" :key="key">
+                                        <div class="customer_wrapper" v-if="customerLength > 0" :id="`customer_${customer.id}`" v-for="(customer, key) in populateCustomers" :key="key" @click="getCustomer(customer)">
                                             <img :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
                                             <div class="customer_image" v-else>
                                                 {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
@@ -27,12 +27,45 @@
                                                 {{ customer.first_name }} {{ customer.last_name }}
                                             </div>
                                         </div>
+                                        <div class="no_results" v-if="customerLength == 0" >
+                                            No customer(s) found.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="customer_selected">
-                                <div class="customer_label">No Customer Selected</div>
-                                <div class="customer_text">Find a Customer / Scan QR Code</div>
+                            <div :class="`customer_selected ${(customer != '') ? 'selected' : ''}`">
+                                <div class="customer_picked">
+                                    <transition name="fade">
+                                        <div class="customer_header" v-if="customer != ''">
+                                            <img :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
+                                            <div class="customer_image" v-else>
+                                                {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
+                                            </div>
+                                            <div class="customer_details">
+                                                <h2 class="customer_name">Sample Lorem</h2>
+                                                <div class="customer_info">
+                                                    <span>Birthday: 10/31/95</span>
+                                                    <span>0999 999 9999</span>
+                                                    <span>Store Credit: 500</span>
+                                                    <span>Shoe Size: 12</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </transition>
+                                    <transition name="fade">
+                                        <div class="customer_footer" v-if="customer != ''">
+                                            <a href="javascript:void(0)">Attendance</a>
+                                            <a href="javascript:void(0)">Packages</a>
+                                            <a href="javascript:void(0)">Redeem</a>
+                                            <a href="javascript:void(0)">Buy Credits</a>
+                                            <a href="javascript:void(0)">Buy Products</a>
+                                        </div>
+                                    </transition>
+                                </div>
+                                <div v-if="customer == ''">
+                                    <div class="customer_label">No Customer Selected</div>
+                                    <div class="customer_text">Find a Customer / Scan QR Code</div>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -179,7 +212,9 @@
                 status: 1,
                 studios: [],
                 results: [],
+                customer: '',
                 customers: [],
+                customerLength: 0,
                 schedules: [],
                 customerTypes: [],
                 classOptions: ['Email Class', 'Print Sign-in Sheet', 'Print Room', 'Print Waitlist', 'Customers with Pending Payment', 'Customer Info', 'Attendance Log'],
@@ -191,13 +226,44 @@
                 currentMonth: 0,
                 currentYear: 0,
                 isPrev: false,
+                selectCustomer: false,
                 toggleCustomers: false,
                 zoomCtr: 0.55
             }
         },
+        computed: {
+            populateCustomers () {
+                const me = this
+                let results = []
+                results = me.customers
+                return results
+            }
+        },
         methods: {
+            getCustomer (data) {
+                const me = this
+                me.customer = data
+            },
+            searchCustomer (event) {
+                const me = this
+                let value = event.target.value
+                let formData = new FormData()
+                formData.append('q', value)
+                formData.append('forBooker', 1)
+                formData.append('enabled', 1)
+                me.$axios.post('api/customers/search', formData).then(res => {
+                    if (res.data) {
+                        me.customers = res.data.customers
+                        me.customerLength = me.customers.length
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                })
+            },
             getStudio (event) {
                 const me = this
+                me.selectCustomer = true
                 me.studioID = event.target.value
                 document.querySelectorAll('.content_wrapper .class_accordion').forEach((value, index) => {
                     value.classList.remove('toggled')
@@ -422,44 +488,14 @@
                     target.parentNode.classList.remove('toggled')
                 }
             },
-            submissionSuccess () {
-                const me = this
-                let formData = new FormData(document.getElementById('filter'))
-                formData.append('enabled', me.status)
-                me.loader(true)
-                me.$axios.post(`api/customers/search`, formData).then(res => {
-                    me.res = res.data
-                }).catch(err => {
-                    me.$store.state.errorList = err.response.data.errors
-                    me.$store.state.errorStatus = true
-                }).then(() => {
-                    setTimeout( () => {
-                        me.loader(false)
-                    }, 500)
-                })
-            },
-            toggleStatus (id, enabled, status) {
-                const me = this
-                me.$store.state.confirmStatus = true
-                setTimeout( () => {
-                    me.$refs.enabled.confirm.table_name = 'roles'
-                    me.$refs.enabled.confirm.id = id
-                    me.$refs.enabled.confirm.enabled = enabled
-                    me.$refs.enabled.confirm.status = status
-                    me.$refs.enabled.confirm.type = 'role'
-                }, 100)
-                document.body.classList.add('no_scroll')
-            },
-            toggleOnOff (value) {
-                const me = this
-                me.status = value
-                me.fetchData(value)
-            },
             fetchData (value) {
                 const me = this
                 me.loader(true)
                 me.$axios.get(`api/customers?enabled=${value}`).then(res => {
-                    me.customers = res.data.customers.data
+                    if (res.data) {
+                        me.customers = res.data.customers.data
+                        me.customerLength = me.customers.length
+                    }
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
