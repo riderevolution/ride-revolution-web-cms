@@ -79,7 +79,12 @@
                             },
                             {
                                 number: 1
-                            },
+                            }
+                        ]
+                    },
+                    bottom_alt: {
+                        position: 'bottom_alt',
+                        numbers: [
                             {
                                 number: 28
                             },

@@ -9,8 +9,8 @@
                             <div class="form_group customer">
                                 <label for="studio_id">Studio</label>
                                 <select class="default_select alternate" name="studio_id">
-                                    <option value="" selected>All Studios</option>
-                                    <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
+                                    <option value="" selected disabled>Select a Studio</option>
+                                    <option :value="studio.studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.studio.name }}</option>
                                 </select>
                             </div>
                             <div class="form_group margin" v-click-outside="closeMe">
@@ -125,7 +125,7 @@
                             <div class="booker_notepad">
                                 <h2 class="footer_title">Notepad</h2>
                                 <div class="notepad_text">
-                                    <textarea name="notepad" rows="10"></textarea>
+                                    <textarea name="notepad" rows="10" v-model="notePad" @focusout="updateNotes($event)"></textarea>
                                 </div>
                             </div>
                             <div class="booker_waitlist">
@@ -183,6 +183,7 @@
                 schedules: [],
                 customerTypes: [],
                 classOptions: ['Email Class', 'Print Sign-in Sheet', 'Print Room', 'Print Waitlist', 'Customers with Pending Payment', 'Customer Info', 'Attendance Log'],
+                notePad: '',
                 current: 0,
                 last: 0,
                 test: 0,
@@ -194,6 +195,22 @@
             }
         },
         methods: {
+            updateNotes (event) {
+                const me = this
+                let id = me.$store.state.user.id
+                let formData = new FormData()
+                formData.append('_method', 'PATCH')
+                formData.append('user_id', id)
+                formData.append('note', event.target.value)
+                me.$axios.post('api/extras/update-user-notepad', formData).then(res => {
+                    if (res.data) {
+                        console.log(res.data.message)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                })
+            },
             panZoomInit (instance, id) {
                 const me = this
                 let planWidth = document.querySelector('.plan_wrapper').getBoundingClientRect().width
@@ -431,15 +448,16 @@
                 me.loader(true)
                 me.$axios.get(`api/customers?enabled=${value}`).then(res => {
                     me.customers = res.data.customers.data
-                    me.loaded = true
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
                 }).then(() => {
+                    setTimeout( () => {
+                        me.studios = me.$store.state.user.staff_details.studio_access
+                        me.notePad = me.$store.state.user.notepad
+                    }, 100)
                     me.rowCount = document.getElementsByTagName('th').length
-                })
-                me.$axios.get('api/studios?enabled=1').then(res => {
-                    me.studios = res.data.studios
+                    me.loaded = true
                 })
                 me.$axios.get('api/extras/customer-types').then(res => {
                     me.customerTypes = res.data.customerTypes

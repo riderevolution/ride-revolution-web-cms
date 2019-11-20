@@ -34,6 +34,11 @@ const createStore = () => {
                 first_name: '',
                 current_studio_id: '',
                 staff_details: {
+                    studio_access: [
+                        {
+                            studio: {}
+                        }
+                    ],
                     role: {
                         display_name: '',
                     }
