@@ -131,7 +131,7 @@
                             <div class="booker_waitlist">
                                 <div class="footer_header">
                                     <h2 class="footer_title">Waitlist (3)</h2>
-                                    <a href="javascript:void(0)" class="action_success_btn">Add to Wishlist</a>
+                                    <a href="javascript:void(0)" class="action_success_btn">Add to Waitlist</a>
                                 </div>
                                 <table class="cms_waitlist">
                                     <thead>
