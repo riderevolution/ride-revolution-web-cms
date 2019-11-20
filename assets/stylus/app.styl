@@ -3360,31 +3360,45 @@ input::placeholder
                                 text-align: center
                                 transform: translateY(-50%)
                                 sf_pro_bold(2.4vh)
-                                color: rgba(132, 143, 159, 0.3)
+                                color: rgba(132, 143, 159, 0.5)
+                        &.layout_1
+                            &.bottom
+                                bottom: calc(0% + 170px)
+                            &.bottom_alt
+                                bottom: calc(0% + 50px)
+                                left: calc(0% - 65px)
+                            &.bottom_alt_2
+                                bottom: calc(0% - 70px)
+                        &.layout_2
+                            &.bottom
+                                bottom: calc(0% + 170px)
+                            &.bottom_alt
+                                bottom: calc(0% + 50px)
+                                left: calc(0% - 65px)
                         &.left
                             align-items: flex-start
-                            top: calc(0% - 105px)
-                            left: calc(0% - 80px)
+                            top: calc(0% - 180px)
+                            left: calc(0% - 60px)
                             .seat_position
                                 flex: 0 0 calc(50% - 52.5px)
                                 &:nth-child(2)
                                     top: calc(0px + 60px)
                                 &:last-child
-                                    top: calc(0px + 100px)
+                                    top: calc(0px + 60px)
                         &.right
                             align-items: flex-start
-                            top: calc(0% - 105px)
-                            right: calc(0% - 230px)
+                            top: calc(0% - 180px)
+                            right: calc(0% - 45px)
                             .seat_position
                                 flex: 0 0 calc(50% - 52.5px)
                                 &:first-child
                                     top: calc(0px + 60px)
                                 &:nth-child(3)
-                                    top: calc(0px + 100px)
-                        &.bottom
-                            left: 0
-                            right: 0
-                            bottom: 0
+                                    top: calc(0px + 60px)
+                        &.bottom,
+                        &.bottom_alt,
+                        &.bottom_alt_2
+                            width: 100%
                             .seat_position
                                 flex: 0 0 calc(10% - 30px)
             .seat_legends

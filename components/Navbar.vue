@@ -140,7 +140,7 @@
                 const elements = document.querySelectorAll('.nav_list .toggled .sub_wrapper')
                 if (me.isHovered) {
                     document.querySelector('.navbar_container').classList.add('toggled')
-                    document.querySelector('.admin_flex .content').classList.add('toggled')
+                    // document.querySelector('.admin_flex .content').classList.add('toggled')
                     elements.forEach((element, index) => {
                         setTimeout( () => {
                             const length = element.querySelectorAll('.sub_nav_list').length
@@ -155,7 +155,7 @@
                 const me = this
                 const elements = document.querySelectorAll('.nav_list .toggled .sub_wrapper')
                 document.querySelector('.navbar_container').classList.remove('toggled')
-                document.querySelector('.admin_flex .content').classList.remove('toggled')
+                // document.querySelector('.admin_flex .content').classList.remove('toggled')
                 elements.forEach((element, index) => {
                     setTimeout( () => {
                         const length = element.querySelectorAll('.sub_nav_list').length
@@ -168,7 +168,7 @@
             },
             resetToggle () {
                 document.querySelector('.navbar_container').classList.remove('toggled')
-                document.querySelector('.admin_flex .content').classList.remove('toggled')
+                // document.querySelector('.admin_flex .content').classList.remove('toggled')
             },
             toggleChild(event) {
                 const me = this

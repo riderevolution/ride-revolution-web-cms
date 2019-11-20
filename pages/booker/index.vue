@@ -8,7 +8,7 @@
                         <form class="customer_filter_flex" id="filter">
                             <div class="form_group customer">
                                 <label for="studio_id">Studio</label>
-                                <select class="default_select alternate" name="studio_id">
+                                <select class="default_select alternate" name="studio_id" @change="getStudio($event)">
                                     <option value="" selected disabled>Select a Studio</option>
                                     <option :value="studio.studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.studio.name }}</option>
                                 </select>
@@ -104,7 +104,7 @@
                             <panZoom @init="panZoomInit" :options="{
                                 bounds: true,
                                 boundsPadding: 0.2,
-                                minZoom: 0.2,
+                                minZoom: 0.25,
                                 maxZoom: 1,
                                 zoomDoubleClickSpeed: 1,
                                 beforeWheel: panZoomBeforeWheel,
@@ -112,7 +112,7 @@
                                 smoothScroll: false,
                                 onTouch: panZoomTouch
                             }">
-                                <seat-plan />
+                                <seat-plan ref="plan" />
                             </panZoom>
                             <div class="seat_legends">
                                 <div class="legend_title gray"><span></span> Booked</div>
@@ -184,6 +184,7 @@
                 customerTypes: [],
                 classOptions: ['Email Class', 'Print Sign-in Sheet', 'Print Room', 'Print Waitlist', 'Customers with Pending Payment', 'Customer Info', 'Attendance Log'],
                 notePad: '',
+                studioID: 0,
                 current: 0,
                 last: 0,
                 test: 0,
@@ -191,10 +192,17 @@
                 currentYear: 0,
                 isPrev: false,
                 toggleCustomers: false,
-                zoomCtr: 0.6
+                zoomCtr: 0.55
             }
         },
         methods: {
+            getStudio (event) {
+                const me = this
+                me.studioID = event.target.value
+                setTimeout(() => {
+                    me.$refs.plan.fetchSeats(me.studioID)
+                }, 10)
+            },
             updateNotes (event) {
                 const me = this
                 let id = me.$store.state.user.id
@@ -215,7 +223,7 @@
                 const me = this
                 let planWidth = document.querySelector('.plan_wrapper').getBoundingClientRect().width
                 let planHeight = document.querySelector('.plan_wrapper').getBoundingClientRect().height
-                instance.zoomAbs(planWidth / 2, planHeight / 2, 0.6)
+                instance.zoomAbs(planWidth / 2, planHeight / 2, 0.55)
                 planWidth = instance.getTransform().x
                 planHeight = instance.getTransform().y
                 document.getElementById('zoom_in').addEventListener('click', function(e) {
@@ -226,15 +234,15 @@
                 })
                 document.getElementById('reset').addEventListener('click', function(e) {
                     if (me.zoomCtr >= 1) {
-                        me.zoomCtr = 0.6
+                        me.zoomCtr = 0.55
                     }
                     if (me.zoomCtr <= 0.99999) {
-                        me.zoomCtr = 1.4
+                        me.zoomCtr = 1.35
                     }
                     instance.getTransform().x = planWidth
                     instance.getTransform().y = planHeight
-                    instance.getTransform().scale = 0.6
-                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.6, 0, 0, 0.6, ${planWidth}, ${planHeight})`
+                    instance.getTransform().scale = 0.55
+                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${planWidth}, ${planHeight})`
                 })
             },
             panZoomBeforeWheel (e) {
@@ -254,17 +262,17 @@
                 switch (type) {
                     case 'in':
                         if (me.zoomCtr <= 0.99999) {
-                            me.zoomCtr = 1.4
+                            me.zoomCtr = 1.35
                         }
                         instance.smoothZoom((planWidth / 2) + me.zoomCtr, (planHeight / 2) + me.zoomCtr, me.zoomCtr)
-                        me.zoomCtr += 0.2
+                        me.zoomCtr += 0.25
                         break
                     case 'out':
                         if (me.zoomCtr >= 1.0) {
-                            me.zoomCtr = 0.6
+                            me.zoomCtr = 0.55
                         }
                         instance.smoothZoom((planWidth / 2) + me.zoomCtr, (planHeight / 2) + me.zoomCtr, me.zoomCtr)
-                        me.zoomCtr -= 0.2
+                        me.zoomCtr -= 0.25
                         break
                 }
             },
