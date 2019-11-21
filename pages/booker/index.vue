@@ -34,35 +34,38 @@
                                 </div>
                             </div>
                             <div :class="`customer_selected ${(customer != '') ? 'selected' : ''}`">
-                                <div class="customer_picked">
-                                    <transition name="fade">
-                                        <div class="customer_header" v-if="customer != ''">
-                                            <img :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
-                                            <div class="customer_image" v-else>
-                                                {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
-                                            </div>
-                                            <div class="customer_details">
-                                                <h2 class="customer_name">Sample Lorem</h2>
-                                                <div class="customer_info">
-                                                    <span>Birthday: 10/31/95</span>
-                                                    <span>0999 999 9999</span>
-                                                    <span>Store Credit: 500</span>
-                                                    <span>Shoe Size: 12</span>
-                                                </div>
+                                <div class="customer_picked" v-if="customer != ''">
+                                    <div class="customer_header">
+                                        <img class="customer_image" :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
+                                        <div class="customer_default_image" v-else>
+                                            {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
+                                        </div>
+                                        <div class="customer_details">
+                                            <h2 class="customer_name">
+                                                {{ customer.first_name }} {{ customer.last_name }}
+                                                <div class="types" v-if="customer.customer_details.customer_type.images.length > 0"><img :src="customer.customer_details.customer_type.images[0].path_resized" /></div>
+                                                <a :href="`mailto:${customer.email}`" class="email">
+                                                    <img src="/icons/email-icon.svg" />
+                                                    <span>Email</span>
+                                                </a>
+                                            </h2>
+                                            <div class="customer_info">
+                                                <span>Birthday: {{ $moment(customer.customer_details.co_birthdate).format('M/D/YY') }}</span>
+                                                <span>{{ customer.customer_details.co_contact_number }}</span>
+                                                <span>Store Credit: 500</span>
+                                                <span>Shoe Size: {{ customer.customer_details.co_shoe_size }}</span>
                                             </div>
                                         </div>
-                                    </transition>
-                                    <transition name="fade">
-                                        <div class="customer_footer" v-if="customer != ''">
-                                            <a href="javascript:void(0)">Attendance</a>
-                                            <a href="javascript:void(0)">Packages</a>
-                                            <a href="javascript:void(0)">Redeem</a>
-                                            <a href="javascript:void(0)">Buy Credits</a>
-                                            <a href="javascript:void(0)">Buy Products</a>
-                                        </div>
-                                    </transition>
+                                    </div>
+                                    <div class="customer_footer" v-if="customer != ''">
+                                        <a href="javascript:void(0)">Attendance</a>
+                                        <a href="javascript:void(0)">Packages</a>
+                                        <a href="javascript:void(0)">Redeem</a>
+                                        <a href="javascript:void(0)" @click="toggleQuickSale('credit')">Buy Credits</a>
+                                        <a href="javascript:void(0)" @click="toggleQuickSale('product')">Buy Products</a>
+                                    </div>
                                 </div>
-                                <div v-if="customer == ''">
+                                <div class="no_results" v-else>
                                     <div class="customer_label">No Customer Selected</div>
                                     <div class="customer_text">Find a Customer / Scan QR Code</div>
                                 </div>
@@ -240,8 +243,22 @@
             }
         },
         methods: {
+            toggleQuickSale (type) {
+                const me = this
+                switch (type) {
+                    case 'credit':
+                        me.$store.state.customerCreditQuickSaleStatus = true
+                        break
+                    case 'product':
+                        me.$store.state.customerProductQuickSaleStatus = true
+                        break
+                }
+                document.body.classList.add('no_scroll')
+            },
             getCustomer (data) {
                 const me = this
+                me.toggleCustomers = false
+                me.$store.state.customerID = data.id
                 me.customer = data
             },
             searchCustomer (event) {

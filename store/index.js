@@ -30,6 +30,7 @@ const createStore = () => {
             contentLoaded: false,
             isLoading: false,
             token: '',
+            customerID: 0,
             user: {
                 first_name: '',
                 current_studio_id: '',

@@ -4464,30 +4464,50 @@ input::placeholder
                             position: relative
                             flex: 1 0 auto
                             margin-left: 20px
-                            padding: 40px 20px
                             background-color: $white
                             border: 2px dashed $border_alt2
                             border-radius: 3px
                             text-align: center
+                            height: 100%
+                            min-height: 135px
                             transition: .3s ease-in-out
                             &.selected
-                                text-align: left
-                                border: 2px dashed $white
+                                border: 2px dashed $green
+                                border-radius: 3px
                                 transition: .3s ease-in-out
+                                .no_results
+                                    opacity: 0
+                                    visibility: hidden
+                                    transition: .3s ease-in-out
+                                .customer_picked
+                                    transform: translateY(0px)
+                                    opacity: 1
+                                    visibility: visible
+                                    transition: .3s ease-in-out
                             .customer_picked
-                                opacity: 1
-                                visibility: visible
+                                text-align: left
+                                position: absolute
+                                top: 0
+                                left: 0
+                                right: 0
+                                bottom: 0
+                                z-index: 2
+                                opacity: 0
+                                visibility: hidden
                                 transition: .3s ease-in-out
+                                transform: translateY(15px)
                                 .customer_header
                                     display: flex
                                     flex-flow: row wrap
                                     align-items: center
                                     justify-content: flex-start
-                                    img
+                                    padding: 20px 20px 0
+                                    margin-bottom: 20px
+                                    .customer_image
                                         width: 50px
                                         height: 50px
                                         border-radius: 90%
-                                    .customer_image
+                                    .customer_default_image
                                         sf_pro_bold(17px)
                                         text-transform: uppercase
                                         background-image: linear-gradient(137deg, $red, $orange)
@@ -4496,13 +4516,77 @@ input::placeholder
                                         color: #fff
                                     .customer_details
                                         padding-left: 10px
-                            .customer_label
-                                sf_pro_regular(18px)
-                                color: $border_alt2
-                            .customer_text
-                                sf_pro_regular(15px)
-                                color: $black
-                                margin-top: 10px
+                                        .customer_name
+                                            sf_pro_medium(18px)
+                                            color: $green
+                                            padding-bottom: 5px
+                                            display: flex
+                                            flex-flow: row wrap
+                                            align-items: center
+                                            .types
+                                                sf_pro_regular(12px)
+                                                padding-left: 5px
+                                                img
+                                                    width: 17px
+                                                    height: 17px
+                                            .email
+                                                padding-left: 10px
+                                                sf_pro_regular(14px)
+                                                color: $blue
+                                                text-decoration: none
+                                                img
+                                                    width: 23px
+                                                    height: 100%
+                                        .customer_info
+                                            span
+                                                sf_pro_regular(15px)
+                                                color: $gray_alternate
+                                .customer_footer
+                                    display: flex
+                                    flex-flow: row wrap
+                                    align-items: center
+                                    justify-content: center
+                                    text-align: center
+                                    border-top: 1px solid $border
+                                    a
+                                        flex: 1 0 auto
+                                        padding: 10px
+                                        sf_pro_regular(15px)
+                                        color: $black
+                                        background-color: transparent
+                                        text-decoration: none
+                                        border-right: 1px solid $border
+                                        transition: .3s ease-in-out
+                                        &:last-child
+                                            border-right: 1px solid transparent
+                                        &:hover,
+                                        &:focus
+                                            color: $green
+                                            background-color: $light_green
+                                            transition: .3s ease-in-out
+                            .no_results
+                                position: absolute
+                                top: 50%
+                                left: 0
+                                right: 0
+                                opacity: 1
+                                visibility: visible
+                                z-index: 0
+                                transform: translateY(-50%)
+                                transition: .3s ease-in-out
+                                .customer_label
+                                    opacity: 1
+                                    visibility: visible
+                                    sf_pro_regular(18px)
+                                    color: $border_alt2
+                                    transition: .3s ease-in-out
+                                .customer_text
+                                    opacity: 1
+                                    visibility: visible
+                                    sf_pro_regular(15px)
+                                    color: $black
+                                    margin-top: 10px
+                                    transition: .3s ease-in-out
         &.table
             box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
             padding: 60px 40px 40px

@@ -99,6 +99,7 @@
             },
             toggleQuickSale (type) {
                 const me = this
+                me.$store.state.customerID = me.$route.params.param
                 switch (type) {
                     case 'credit':
                         me.$store.state.customerCreditQuickSaleStatus = true
