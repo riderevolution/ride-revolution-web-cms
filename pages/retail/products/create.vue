@@ -60,13 +60,13 @@
                                 <div class="form_group">
                                     <label>Restrict to which studios: <span>*</span></label>
                                     <div class="form_select_custom" v-click-outside="closeCheckboxes">
-                                        <span @click="toggleCheckboxes ^= true">Select Studios</span>
+                                        <span @click="toggleCheckboxes ^= true">{{ studioLabel }}</span>
                                         <div :class="`form_check_custom ${(toggleCheckboxes) ? 'active' : ''}`">
                                             <div class="check_custom select_all">
                                                 <div :class="`custom_action_check ${(checkStudio) ? 'checked' : ''}`" @click.prevent="toggleSelectAllStudio($event)">Select All</div>
                                             </div>
                                             <div class="check_custom" v-for="(studio, key) in studios" :key="key">
-                                                <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check" @change="hasStudio = true">
+                                                <input type="checkbox" :id="`studio_${key}`" name="studios" v-model="studio.checked" class="action_check" @change="checkStudioValue()">
                                                 <label :for="`studio_${key}`">{{ studio.name }}</label>
                                             </div>
                                         </div>
@@ -158,6 +158,7 @@
                 error: false,
                 lastRoute: '',
                 prevRoute: '',
+                studioLabel: 'Select Studios',
                 form: {
                     title: '',
                     category: [],
@@ -189,15 +190,33 @@
             }
         },
         methods: {
+            checkStudioValue () {
+                const me = this
+                let count = 0
+                if (me.checkStudio) {
+                    me.studios.forEach((data, index) => {
+                        if (data.checked) {
+                            count++
+                        }
+                    })
+                }
+                if (count == me.studios.length) {
+                    me.studioLabel = 'All Studios Selected'
+                } else {
+                    me.studioLabel = 'Select Studios'
+                }
+            },
             toggleSelectAllStudio (event) {
                 const me = this
                 if (me.checkStudio) {
                     me.studios.forEach((data, index) => {
                         data.checked = false
+                        me.studioLabel = 'Select Studios'
                     })
                 } else {
                     me.studios.forEach((data, index) => {
                         data.checked = true
+                        me.studioLabel = 'All Studios Selected'
                     })
                 }
                 if (event.target.classList.contains('checked')) {

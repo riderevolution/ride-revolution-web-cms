@@ -28,14 +28,14 @@
         methods: {
             toggleClose (status) {
                 const me = this
-                document.body.classList.remove('no_scroll')
-                me.$store.state.promptStatus = false
                 if (status && me.hasCancel) {
                     me.$parent.prompt = false
                     me.$parent.submissionSuccess()
+                    document.body.classList.remove('no_scroll')
                 } else {
                     me.$parent.prompt = true
                 }
+                me.$store.state.promptStatus = false
             }
         }
     }
