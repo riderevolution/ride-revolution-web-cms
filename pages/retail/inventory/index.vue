@@ -106,7 +106,7 @@
                             <td>{{ data.product.supplier.name }}</td>
                             <td>
                                 <p v-for="(productQuantity, key) in data.product_quantities">
-                                    {{ productQuantity.quantity }} - {{ productQuantity.studio.name }}
+                                    <span :class="`${(productQuantity.quantity > 0) ? 'green' : 'red' }`">{{ productQuantity.quantity }}</span> - {{ productQuantity.studio.name }}
                                 </p>
                             </td>
                             <td>PHP {{ totalCount(data.unit_price) }}</td>

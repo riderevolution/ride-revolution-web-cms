@@ -48,7 +48,7 @@
                             <th>Supplier</th>
                             <th>Studio</th>
                             <th>Shipping Cost</th>
-                            <th>Additional Cost</th>
+                            <!-- <th>Additional Cost</th> -->
                             <th>Total</th>
                             <th>Requisition Date</th>
                             <th>Status</th>
@@ -60,7 +60,7 @@
                             <td>{{ data.studio.name }}</td>
                             <td>{{ data.supplier.name }}</td>
                             <td>PHP {{ totalCount(data.total_shipping_cost) }}</td>
-                            <td>PHP {{ totalCount(data.total_additional_cost) }}</td>
+                            <!-- <td>PHP {{ totalCount(data.total_additional_cost) }}</td> -->
                             <td>PHP {{ totalCount(data.total_cost) }}</td>
                             <td>{{ formatDate(data.created_at) }}</td>
                             <td :class="`${(data.paid == 1) ? 'green' : 'red'}`" v-if="status != -1">{{ (data.paid == 1) ? 'Paid' : 'Unpaid' }}</td>
