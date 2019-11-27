@@ -243,7 +243,7 @@
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
                                         <td>
-                                            <div class="close_wrapper alternate" @click="removeOrder(key)">
+                                            <div class="close_wrapper alternate" @click="removeOrder(key, data.item.id)">
                                                 <div class="close_icon"></div>
                                             </div>
                                         </td>
@@ -393,9 +393,13 @@
             }
         },
         methods: {
-            removeOrder (key) {
+            removeOrder (key, id) {
                 const me = this
-                me.products[key].isChecked = false
+                me.products.forEach((data, index) => {
+                    if (data.id == id) {
+                        me.products[index].isChecked = false
+                    }
+                })
                 me.totalPrice.splice(key, 1)
             },
             recomputeTotal (id, quantity, key, price) {

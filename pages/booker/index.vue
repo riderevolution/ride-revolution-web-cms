@@ -446,6 +446,14 @@
                 me.currentMonth = parseInt(me.$moment().format('M'))
                 me.currentYear = parseInt(me.$moment().format('YYYY'))
                 for (let i = 0; i < 7; i++) {
+                    if (currentDate > me.$moment(`${me.currentYear}-${me.currentMonth}`, 'YYYY-MM').daysInMonth()) {
+                        currentDate = 1
+                        me.currentMonth = me.currentMonth + 1
+                        if (me.currentMonth == 13) {
+                            me.currentMonth = 1
+                            me.currentYear = me.currentYear + 1
+                        }
+                    }
                     me.results.push({
                         abbr: (i == 0 ) ? 'Today' : me.$moment(`${me.currentYear}-${me.currentMonth}-${currentDate}`, 'YYYY-MM-D').format('ddd'),
                         date: me.$moment(`${me.currentYear}-${me.currentMonth}-${currentDate}`, 'YYYY-MM-D').format('MMMM D, YYYY'),

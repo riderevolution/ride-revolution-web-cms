@@ -72,10 +72,14 @@
                                 <input type="radio" id="cash" value="cash" name="payment_method" class="action_radio" @change="checkPayment('cash')">
                                 <label for="cash">Cash</label>
                             </div>
+                            <div class="form_radio">
+                                <input type="radio" id="store_credits" value="store-credits" name="payment_method" class="action_radio" @change="checkPayment('store-credits')">
+                                <label for="store-credits">Store Credits</label>
+                            </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 0 || form.paymentType == 2">
                             <div class="form_group">
-                                <label for="bank">Bank<span>*</span></label>
+                                <label for="bank">Bank <span>*</span></label>
                                 <select class="default_select alternate" name="bank" v-validate="'required'">
                                     <option value="" selected disabled>Select a Bank</option>
                                     <option value="bpi">Bank of the Philippines Islands</option>
@@ -86,8 +90,8 @@
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.bank')">{{ errors.first('checkout_form.bank') }}</span></transition>
                             </div>
                             <div class="form_group">
-                                <label for="type_of_card">Type of Card<span>*</span></label>
-                                <select class="default_select alternate" name="type_of_card" v-validate="'required'">
+                                <label for="type_of_card">Type of Card <span>*</span></label>
+                                <select class="default_select alternate" name="type_of_card" v-validate="'required'" v-model="cardType">
                                     <option value="" selected disabled>Select Type of Card</option>
                                     <option value="mastercard">Mastercard</option>
                                     <option value="visa">Visa</option>
@@ -96,6 +100,11 @@
                                     <option value="amex">American Express</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.type_of_card')">{{ errors.first('checkout_form.type_of_card') }}</span></transition>
+                            </div>
+                            <div class="form_group" v-if="cardType == 'others'">
+                                <label for="others">Others <span>*</span></label>
+                                <input type="text" name="others" class="default_text" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.others')">{{ errors.first('checkout_form.others') }}</span></transition>
                             </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 1">
@@ -150,15 +159,35 @@
                                 <thead>
                                     <tr>
                                         <th>Items</th>
+                                        <th>Qty.</th>
                                         <th>Price Per Item</th>
                                         <th>Computed Price</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody v-if="totalPrice.length > 0">
                                     <tr v-for="(data, key) in totalPrice" :key="key">
-                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
-                                        <td class="item_price" width="50%">PHP {{ totalCount(data.item.origPrice) }}</td>
-                                        <td class="item_price" width="50%">PHP {{ totalCount(data.price) }}</td>
+                                        <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
+                                        <td width="15%">
+                                            <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
+                                                <input type="text" name="quantity" :id="`quantity_${key}`" class="disabled default_text number" maxlength="1" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="'numeric|min_value:1|max_value:1'">
+                                                <div class="up" v-if="data.type == 'product'" @click="addCount(data.id, data.quantity, key, data.package_price)"></div>
+                                                <div class="down" v-if="data.type == 'product'" @click="subtractCount(data.id, data.quantity, key, data.package_price)"></div>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has(`breakdown_${key}.quantity`)">The quantity field is required</span></transition>
+                                            </div>
+                                        </td>
+                                        <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
+                                        <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
+                                        <td>
+                                            <div class="close_wrapper alternate" @click="removeOrder(data.type, key, data.item.id)">
+                                                <div class="close_icon"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody class="no_results" v-else>
+                                    <tr>
+                                        <td colspan="4">No Product(s) Found.</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -229,7 +258,8 @@
                 },
                 unique: 0,
                 totalPrice: [],
-                toCheckout: []
+                toCheckout: [],
+                cardType: ''
             }
         },
         computed: {
@@ -282,6 +312,26 @@
             }
         },
         methods: {
+            removeOrder (type, key, id) {
+                const me = this
+                switch (type) {
+                    case 'class-package':
+                        me.classPackages.forEach((data, index) => {
+                            if (data.id == id) {
+                                me.classPackages[index].isChecked = false
+                            }
+                        })
+                        break
+                    case 'promo-package':
+                        me.promoPackages.forEach((data, index) => {
+                            if (data.id == id) {
+                                me.promoPackages[index].isChecked = false
+                            }
+                        })
+                        break
+                }
+                me.totalPrice.splice(key, 1)
+            },
             submitQuickSale () {
                 const me = this
                 let formData = new FormData()
@@ -301,36 +351,41 @@
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
                 formData.append('studio_id', me.$store.state.user.current_studio_id)
                 formData.append('user_id', me.$store.state.customerID)
-                me.$validator.validateAll('checkout_form').then(valid => {
-                    if (valid) {
-                        // me.loader(true)
-                        me.$axios.post('api/quick-sale', formData).then(res => {
-                            console.log(res.data);
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.$store.state.successfulStatus = true
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 200)
-                        // }).catch(err => {
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         me.loader(false)
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$store.state.quickSaleStatus = false
-                        //         }
-                        //     }, 200)
-                        })
-                    } else {
-                        setTimeout( () => {
-                            document.querySelector('.validation_errors').scrollIntoView({block: 'center', behavior: 'smooth'})
-                        }, 10)
-                    }
-                })
+                if (me.totalPrice.length > 0) {
+                    me.$validator.validateAll('checkout_form').then(valid => {
+                        if (valid) {
+                            // me.loader(true)
+                            me.$axios.post('api/quick-sale', formData).then(res => {
+                                console.log(res.data);
+                            //     setTimeout( () => {
+                            //         if (res.data) {
+                            //             me.$store.state.successfulStatus = true
+                            //         } else {
+                            //             me.$store.state.errorList.push('Sorry, Something went wrong')
+                            //             me.$store.state.errorStatus = true
+                            //         }
+                            //     }, 200)
+                            // }).catch(err => {
+                            //     me.$store.state.errorList = err.response.data.errors
+                            //     me.$store.state.errorStatus = true
+                            // }).then(() => {
+                            //     setTimeout( () => {
+                            //         me.loader(false)
+                            //         if (!me.$store.state.errorStatus) {
+                            //             me.$store.state.quickSaleStatus = false
+                            //         }
+                            //     }, 200)
+                            })
+                        } else {
+                            setTimeout( () => {
+                                document.querySelector('.validation_errors').scrollIntoView({block: 'center', behavior: 'smooth'})
+                            }, 10)
+                        }
+                    })
+                } else {
+                    me.message = 'Please select a product before placing your order'
+                    me.$store.state.promptStatus = true
+                }
             },
             takePayment (step) {
                 const me = this
@@ -341,7 +396,7 @@
                         document.getElementById('step2').classList.remove('slide_in')
                         break
                     case 2:
-                        if (me.totalPrice.length > 0) {
+                        if (document.querySelector('.validation_errors') === null && me.totalPrice.length > 0) {
                             me.nextStep = 2
                             document.getElementById('step2').classList.add('slide_in')
                             document.getElementById('step1').classList.remove('slide_in')
@@ -370,7 +425,11 @@
                     case 'cash':
                         me.form.paymentType = 4
                         break
+                    case 'store-credits':
+                        me.form.paymentType = 5
+                        break
                 }
+                me.cardType = ''
                 me.form.change = 0
             },
             submitFilter () {

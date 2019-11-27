@@ -689,6 +689,12 @@ table
                                             margin-right: 20px
                                             .default_text
                                                 padding: 10px 15px
+                                .no_results
+                                    background-color: $white
+                                    sf_pro_regular(16px)
+                                    color: $black
+                                    padding: 20px 35px
+                                    text-align: center
                         .breakdown_total
                             display: flex
                             flex-flow: row wrap
@@ -829,7 +835,7 @@ table
                             .form_check
                                 flex: 1 0 40%
                             .total_price
-                                flex: 0 0 10%
+                                flex: 0 0 auto
                                 sf_pro_regular(15px)
                                 color: $black
                             .form_group
@@ -841,6 +847,7 @@ table
                                 label
                                     sf_pro_semibold(15px)
                                     margin-bottom: 0
+                                    margin-left: 10px
                                     margin-right: 10px
                                 .form_flex_input
                                     flex: 1 0 33.33%

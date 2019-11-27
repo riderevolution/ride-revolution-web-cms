@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div :class="`modal_tab_content_wrapper ${(value.isPromoPackageShow) ? 'no_qty' : '' }`" v-show="(isSearched) ? (value.isClassPackageShow == true) ? true : (value.isPromoPackageShow == true ? true : false) : false">
+        <div class="modal_tab_content_wrapper" v-show="(isSearched) ? (value.isClassPackageShow == true) ? true : (value.isPromoPackageShow == true ? true : false) : false">
             <div class="form_check">
                 <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value, value.id, unique, value.package_price)" :checked="value.isChecked">
                 <label :for="`product_${value.id}_${unique}`">{{ value.name }}</label>
