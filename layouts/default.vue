@@ -74,6 +74,20 @@
                 ]
             }
         },
+        methods: {
+            windowScroll() {
+                const me = this
+                let selector = document.querySelector('.cms_table')
+                if (selector) {
+                    let bounding = selector.getBoundingClientRect()
+                    if (bounding.top < 0) {
+                        selector.querySelector('thead').classList.add('sticky')
+                    } else {
+                        selector.querySelector('thead').classList.remove('sticky')
+                    }
+                }
+            },
+        },
         async mounted () {
             const me = this
             if (!me.routes.includes(me.$route.path)) {
@@ -81,6 +95,12 @@
             }
             document.addEventListener('contextmenu', event => event.preventDefault())
             document.body.classList.add('cms')
+        },
+        beforeMount () {
+            window.addEventListener('scroll', this.windowScroll)
+        },
+        beforeDestroy () {
+            window.removeEventListener('scroll', this.windowScroll)
         },
         head () {
             return {

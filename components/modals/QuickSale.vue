@@ -83,12 +83,16 @@
                                                 </div>
                                             </transition>
                                             <div class="form_group no_margin">
-                                                <label for="custom_card_personal_message">Personal Message <span>*</span></label>
-                                                <textarea name="custom_card_personal_message" autocomplete="off" rows="8" class="default_text" v-model="customGiftCard.customCardPersonalMessage" v-validate="'required'"></textarea>
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_personal_message') && showErrors">{{ errors.first('custom_gift_form.custom_card_personal_message') }}</span></transition>
+                                                <label for="custom_card_personal_message">Personal Message</label>
+                                                <textarea name="custom_card_personal_message" autocomplete="off" rows="8" class="default_text" v-model="customGiftCard.customCardPersonalMessage"></textarea>
                                             </div>
                                         </div>
                                         <div class="form_main_group no_border">
+                                            <div class="form_group">
+                                                <label for="customer_card_recipient_number">Recipient's Mobile Number <span>*</span></label>
+                                                <input type="text" name="customer_card_recipient_number" autocomplete="off" class="default_text" v-model="customGiftCard.customCardRecipientNumber" v-validate="'required|number'">
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.customer_card_recipient_number') && showErrors">{{ errors.first('custom_gift_form.customer_card_recipient_number') }}</span></transition>
+                                            </div>
                                             <div class="form_group">
                                                 <label for="custom_card_recipient_email">Recipient's Email <span>*</span></label>
                                                 <input type="email" name="custom_card_recipient_email" autocomplete="off" class="default_text" v-model="customGiftCard.customCardRecipientEmail" v-validate="'required|email'">
@@ -138,6 +142,10 @@
                             <div class="form_radio">
                                 <input type="radio" id="cash" value="cash" name="payment_method" class="action_radio" @change="checkPayment('cash')">
                                 <label for="cash">Cash</label>
+                            </div>
+                            <div class="form_radio">
+                                <input type="radio" id="store_credits" value="store-credits" name="payment_method" class="action_radio" @change="checkPayment('store-credits')">
+                                <label for="store_credits">Store Credits</label>
                             </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 0 || form.paymentType == 2">
@@ -205,9 +213,15 @@
                                 <input type="text" name="cash_tendered" class="default_text" v-validate="`required|min_value:${form.total}|decimal:2`" v-model="form.change">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered')">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
                             </div>
+                        </div>
+                        <div class="form_main_group" v-if="form.paymentType == 5">
                             <div class="form_group">
-                                <label for="change">Change (PHP)</label>
-                                <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
+                                <label class="label_flex" for="store_credit_amount">
+                                    <span class="label">Amount</span>
+                                    <span>Available Store Credits: 5,000</span>
+                                </label>
+                                <input type="text" name="store_credit_amount" class="default_text" v-validate="`required|min_value:${form.total}|decimal:2`">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.store_credit_amount')">{{ errors.first('checkout_form.store_credit_amount') }}</span></transition>
                             </div>
                         </div>
                     </div>
@@ -217,15 +231,30 @@
                                 <thead>
                                     <tr>
                                         <th>Items</th>
+                                        <th>Qty.</th>
                                         <th>Price Per Item</th>
                                         <th>Computed Price</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(data, key) in totalPrice" :key="key">
-                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
-                                        <td class="item_price" width="50%">PHP {{ totalCount(data.item.origPrice) }}</td>
-                                        <td class="item_price" width="50%">PHP {{ totalCount(data.price) }}</td>
+                                    <tr v-for="(data, key) in showBreakDown" :key="key">
+                                        <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
+                                        <td width="15%">
+                                            <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
+                                                <input type="text" name="quantity" :id="`quantity_${key}`" :class="`${(data.type != 'product') ? 'disabled' : ''} default_text number`" maxlength="2" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="`numeric|min_value:1|${(data.item.product.product_quantities) ? `max_value:${data.item.product.product_quantities[0].quantity}` : '' }`" @input="recomputeTotal(data.id, data.quantity, key, (!data.isGiftShow) ? data.item.product.sale_price : data.item.product.class_package.package_price)">
+                                                <div class="up" v-if="data.type == 'product'" @click="addCount(data.id, data.quantity, key, (!data.isGiftShow) ? data.item.product.sale_price : data.item.product.class_package.package_price)"></div>
+                                                <div class="down" v-if="data.type == 'product'" @click="subtractCount(data.id, data.quantity, key, (!data.isGiftShow) ? data.item.product.sale_price : data.item.product.class_package.package_price)"></div>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has(`breakdown_${key}.quantity`)">The quantity field is required</span></transition>
+                                            </div
+                                        </td>
+                                        <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
+                                        <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
+                                        <td>
+                                            <div class="close_wrapper alternate" @click="removeOrder(key)">
+                                                <div class="close_icon"></div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -237,7 +266,7 @@
                     </div>
                     <div class="footer_side">
                         <div class="form_group_disclaimer">
-                            <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Note: Promo code won’t be applicable to promo products/packages.</span></div>
+                            <!-- <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Note: Promo code won’t be applicable to promo products/packages.</span></div> -->
                         </div>
                         <div class="button_group">
                             <button type="button" class="action_btn" @click="takePayment(1)">Go Back</button>
@@ -300,6 +329,7 @@
                     customCardPredefinedTitle: '',
                     customCardCustomTitle: '',
                     customCardPersonalMessage: '',
+                    customCardRecipientNumber: '',
                     customCardRecipientEmail: ''
                 },
                 isProduct: true,
@@ -313,6 +343,11 @@
             }
         },
         computed: {
+            showBreakDown () {
+                const me = this
+                let result = me.totalPrice
+                return result
+            },
             computeChange () {
                 const me = this
                 let value = (me.form.change == '') ? 0 : parseFloat(me.form.change)
@@ -365,6 +400,47 @@
             }
         },
         methods: {
+            removeOrder (key) {
+                const me = this
+                me.products[key].isChecked = false
+                me.totalPrice.splice(key, 1)
+            },
+            recomputeTotal (id, quantity, key, price) {
+                const me = this
+                me.totalPrice.forEach((data, index) => {
+                    if (data.id == id) {
+                        data.quantity = quantity
+                        data.price =  parseInt(quantity) * price
+                    }
+                })
+            },
+            addCount (id, quantity, key, price) {
+                const me = this
+                let data
+                data = parseInt(quantity)
+                if (data != 99) {
+                    data != 0 && (quantity = 0)
+                    quantity = (data += 1)
+                    me.totalPrice.forEach((data, index) => {
+                        if (data.id == id) {
+                            data.quantity = quantity
+                            data.price = parseInt(quantity) * price
+                        }
+                    })
+                }
+            },
+            subtractCount (id, quantity, key, price) {
+                const me = this
+                let data
+                data = parseInt(quantity)
+                data > 1 && (quantity = (data -= 1))
+                me.totalPrice.forEach((data, index) => {
+                    if (data.id == id) {
+                        data.quantity = quantity
+                        data.price =  parseInt(quantity) * price
+                    }
+                })
+            },
             submitQuickSale () {
                 const me = this
                 let formData = new FormData()
@@ -461,6 +537,9 @@
                         break
                     case 'cash':
                         me.form.paymentType = 4
+                        break
+                    case 'store-credits':
+                        me.form.paymentType = 5
                         break
                 }
                 me.form.change = 0

@@ -45,21 +45,28 @@
                 <section id="content" v-if="loaded">
                     <div class="cms_table_input alternate">
                         <div class="header_wrapper">
-                            <div class="input_header">Product Name</div>
+                            <div class="input_header name">Product Name</div>
                             <div class="input_header">SKU ID</div>
                             <div class="input_header">Sellable</div>
                             <div class="input_header">Category</div>
                             <div class="input_header">In Stock</div>
                             <div class="input_header">Qty.</div>
                             <div class="input_header">Unit Price</div>
-                            <div class="input_header">Shipping Cost</div>
-                            <div class="input_header">Additional Cost</div>
+                            <!-- <div class="input_header">Shipping Cost</div> -->
+                            <!-- <div class="input_header">Additional Cost</div> -->
                             <div class="input_header">Cost</div>
                         </div>
                         <div class="content_wrapper" v-if="res.purchase_order_products.length > 0">
                             <purchase-order :type="'duplicate'" class="input_content_wrapper" ref="orders" :unique="key" :value="data" v-for="(data, key) in res.purchase_order_products" :key="key" />
                             <div class="footer_wrapper">
-                                <div class="footer_cost">Total Additional Cost: PHP {{ computeAdditional }}</div>
+                                <div class="footer_form_group">
+                                    <label for="name">Shipping Cost:</label>
+                                    <div class="footer_input">
+                                        <input type="text" name="shipping" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="form.total_shipping">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has(`shipping`)">{{ errors.first('shipping') }}</span></transition>
+                                    </div>
+                                </div>
+                                <!-- <div class="footer_cost">Total Additional Cost: PHP {{ computeAdditional }}</div> -->
                                 <div class="footer_cost">Total Shipping Cost: PHP {{ computeShipping }}</div>
                                 <div class="footer_total_cost">Total: <span class="total_cost">PHP {{ getAllCost }}</span></div>
                             </div>
@@ -124,14 +131,14 @@
             },
             computeShipping () {
                 const me = this
-                let shipping = 0.00
-                me.form.shipping.forEach((item, index) => {
-                    if (item.unique !== undefined) {
-                        shipping = shipping + parseFloat(item.value)
-                    }
-                })
-                me.form.total_shipping = shipping
-                return me.totalCount(shipping)
+                // let shipping = 0.00
+                // me.form.shipping.forEach((item, index) => {
+                //     if (item.unique !== undefined) {
+                //         shipping = shipping + parseFloat(item.value)
+                //     }
+                // })
+                // me.form.total_shipping = shipping
+                return me.totalCount(me.form.total_shipping)
             },
             computeAdditional () {
                 const me = this
@@ -153,22 +160,22 @@
                         me.res = res.data.purchaseOrder
                         me.loaded = true
                         if (me.res.purchase_order_products.length > 0) {
-                            for (let i = me.form.shipping.length; i < me.res.purchase_order_products.length; i++) {
-                                me.form.shipping.push(
-                                    {
-                                        unique: i,
-                                        value: 0.00
-                                    }
-                                )
-                            }
-                            for (let j = me.form.additional.length; j < me.res.purchase_order_products.length; j++) {
-                                me.form.additional.push(
-                                    {
-                                        unique: j,
-                                        value: 0.00
-                                    }
-                                )
-                            }
+                            // for (let i = me.form.shipping.length; i < me.res.purchase_order_products.length; i++) {
+                            //     me.form.shipping.push(
+                            //         {
+                            //             unique: i,
+                            //             value: 0.00
+                            //         }
+                            //     )
+                            // }
+                            // for (let j = me.form.additional.length; j < me.res.purchase_order_products.length; j++) {
+                            //     me.form.additional.push(
+                            //         {
+                            //             unique: j,
+                            //             value: 0.00
+                            //         }
+                            //     )
+                            // }
                             for (let k = me.form.total.length; k < me.res.purchase_order_products.length; k++) {
                                 me.form.total.push(
                                     {

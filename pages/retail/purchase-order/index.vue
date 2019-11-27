@@ -7,9 +7,9 @@
                     <div class="actions">
                         <div class="total">Total: {{ totalItems(res.purchaseOrders.total) }}</div>
                         <div class="toggler">
-                            <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Paid</div>
                             <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Unpaid</div>
-                            <div :class="`status ${(status == -1) ? 'active' : ''}`" @click="toggleOnOff(-1)">Delivered</div>
+                            <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Paid</div>
+                            <div :class="`status ${(status == -1) ? 'active' : ''}`" @click="toggleOnOff(-1)">Received</div>
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,7 @@
                 loaded: false,
                 prevRoute: '',
                 rowCount: 0,
-                status: 1,
+                status: 0,
                 res: [],
                 suppliers: [],
                 studios: [],
@@ -115,7 +115,7 @@
                 }).then(() => {
                     setTimeout( () => {
                         me.loader(false)
-                    }, 500)
+                    }, 650)
                 })
             },
             formatDate (value) {
@@ -141,7 +141,7 @@
                     me.rowCount = document.getElementsByTagName('th').length
                     setTimeout( () => {
                         me.loader(false)
-                    }, 300)
+                    }, 650)
                 })
             },
             async fetchStudiosSuppliers () {
@@ -156,7 +156,7 @@
         },
         async mounted () {
             const me = this
-            me.fetchData(1)
+            me.fetchData(0)
             me.fetchStudiosSuppliers()
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })

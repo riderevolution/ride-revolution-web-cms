@@ -25,21 +25,21 @@
             <section id="content" v-if="loaded">
                 <div class="cms_table_input alternate">
                     <div class="header_wrapper">
-                        <div class="input_header">Product Name</div>
+                        <div class="input_header name">Product Name</div>
                         <div class="input_header">SKU ID</div>
                         <div class="input_header">Sellable</div>
                         <div class="input_header">Category</div>
                         <div class="input_header">In Stock</div>
                         <div class="input_header">Qty.</div>
                         <div class="input_header">Unit Price</div>
-                        <div class="input_header">Shipping Cost</div>
-                        <div class="input_header">Additional Cost</div>
+                        <!-- <div class="input_header">Shipping Cost</div> -->
+                        <!-- <div class="input_header">Additional Cost</div> -->
                         <div class="input_header">Cost</div>
                     </div>
                     <div class="content_wrapper" v-if="res.purchase_order_products.length > 0">
                         <purchase-order class="input_content_wrapper" :type="'show'" :unique="key" :value="data" v-for="(data, key) in res.purchase_order_products" :key="key" />
                         <div class="footer_wrapper">
-                            <div class="footer_cost">Total Additional Cost: PHP {{ totalCount(res.total_additional_cost) }}</div>
+                            <!-- <div class="footer_cost">Total Additional Cost: PHP {{ totalCount(res.total_additional_cost) }}</div> -->
                             <div class="footer_cost">Total Shipping Cost: PHP {{ totalCount(res.total_shipping_cost) }}</div>
                             <div class="footer_total_cost">Total: <span class="total_cost">PHP {{ totalCount(res.total_cost) }}</span></div>
                         </div>

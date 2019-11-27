@@ -35,7 +35,7 @@
                                 <input type="text" name="po_number" placeholder="Enter P.O. Number" autocomplete="off" :class="`uppercase default_text ${(!isStudio) ? 'disabled' : '' }`" v-validate="'required'">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('po_number')">{{ errors.first('po_number') }}</span></transition>
                             </div>
-                            <div class="form_group margin" v-click-outside="closeMe">
+                            <div class="form_group margin alternate" v-click-outside="closeMe">
                                 <label>Search a Product</label>
                                 <input type="text" autocomplete="off" placeholder="Add a product" :class="`default_text search_alternate ${(!isStudio) ? 'disabled' : '' }`" @click="autocomplete ^= true">
                                 <div :class="`cms_autocomplete ${(variants.length >= 8) ? 'scrollable' : ''}`" v-if="autocomplete">
@@ -49,21 +49,28 @@
                 <section id="content" v-if="loaded">
                     <div class="cms_table_input alternate" v-if="isSupplier && isStudio">
                         <div class="header_wrapper">
-                            <div class="input_header">Product Name</div>
+                            <div class="input_header name">Product Name</div>
                             <div class="input_header">SKU ID</div>
                             <div class="input_header">Sellable</div>
                             <div class="input_header">Category</div>
                             <div class="input_header">In Stock</div>
                             <div class="input_header">Qty.</div>
                             <div class="input_header">Unit Price</div>
-                            <div class="input_header">Shipping Cost</div>
-                            <div class="input_header">Additional Cost</div>
+                            <!-- <div class="input_header">Shipping Cost</div> -->
+                            <!-- <div class="input_header">Additional Cost</div> -->
                             <div class="input_header">Cost</div>
                         </div>
                         <div class="content_wrapper" v-if="purchaseOrders.length > 0">
                             <purchase-order :type="'create'" :class="`input_content_wrapper ${(data.product_quantities[0].quantity < data.reorder_point) ? 'threshold' : ''}`" ref="orders" :unique="key" :value="data" v-for="(data, key) in purchaseOrders" :key="key" />
                             <div class="footer_wrapper">
-                                <div class="footer_cost">Total Additional Cost: PHP {{ computeAdditional }}</div>
+                                <div class="footer_form_group">
+                                    <label for="name">Shipping Cost:</label>
+                                    <div class="footer_input">
+                                        <input type="text" name="shipping" class="default_text" autocomplete="off" v-validate="'required|numeric'" v-model="form.total_shipping">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has(`shipping`)">{{ errors.first('shipping') }}</span></transition>
+                                    </div>
+                                </div>
+                                <!-- <div class="footer_cost">Total Additional Cost: PHP {{ computeAdditional }}</div> -->
                                 <div class="footer_cost">Total Shipping Cost: PHP {{ computeShipping }}</div>
                                 <div class="footer_total_cost">Total: <span class="total_cost">PHP {{ getAllCost }}</span></div>
                             </div>
@@ -136,19 +143,19 @@
                         total = total + parseFloat(item.value)
                     }
                 })
-                me.form.total_cost = total
-                return me.totalCount(total)
+                me.form.total_cost = total + parseFloat(me.form.total_shipping)
+                return me.totalCount(total + parseFloat(me.form.total_shipping))
             },
             computeShipping () {
                 const me = this
-                let shipping = 0.00
-                me.form.shipping.forEach((item, index) => {
-                    if (item.unique !== undefined) {
-                        shipping = shipping + parseFloat(item.value)
-                    }
-                })
-                me.form.total_shipping = shipping
-                return me.totalCount(shipping)
+                // let shipping = 0.00
+                // me.form.shipping.forEach((item, index) => {
+                //     if (item.unique !== undefined) {
+                //         shipping = shipping + parseFloat(item.value)
+                //     }
+                // })
+                // me.form.total_shipping = shipping
+                return me.totalCount(me.form.total_shipping)
             },
             computeAdditional () {
                 const me = this
@@ -183,22 +190,22 @@
                             }
                         })
                     })
-                    for (let i = me.form.shipping.length; i < me.purchaseOrders.length; i++) {
-                        me.form.shipping.push(
-                            {
-                                unique: i,
-                                value: 0.00
-                            }
-                        )
-                    }
-                    for (let j = me.form.additional.length; j < me.purchaseOrders.length; j++) {
-                        me.form.additional.push(
-                            {
-                                unique: j,
-                                value: 0.00
-                            }
-                        )
-                    }
+                    // for (let i = me.form.shipping.length; i < me.purchaseOrders.length; i++) {
+                    //     me.form.shipping.push(
+                    //         {
+                    //             unique: i,
+                    //             value: 0.00
+                    //         }
+                    //     )
+                    // }
+                    // for (let j = me.form.additional.length; j < me.purchaseOrders.length; j++) {
+                    //     me.form.additional.push(
+                    //         {
+                    //             unique: j,
+                    //             value: 0.00
+                    //         }
+                    //     )
+                    // }
                     for (let k = me.form.total.length; k < me.purchaseOrders.length; k++) {
                         me.form.total.push(
                             {
@@ -246,7 +253,7 @@
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('po_id', me.randomID)
-                        formData.append('total_additional_cost', me.form.total_additional)
+                        // formData.append('total_additional_cost', me.form.total_additional)
                         formData.append('total_shipping_cost',  me.form.total_shipping)
                         formData.append('total_cost', me.form.total_cost)
                         me.loader(true)

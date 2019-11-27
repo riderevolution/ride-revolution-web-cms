@@ -625,6 +625,7 @@ table
             .modal_tab_wrapper
                 display: flex
                 flex-flow: row wrap
+                align-items: flex-start
                 &.alternate
                     padding: 30px
                     justify-content: space-between
@@ -663,11 +664,11 @@ table
                             border-right: 2px dashed $border
                             padding: 20px 20px 80px
                             height: 100%
-                            max-height: 300px
+                            min-height: 300px
+                            max-height: 400px
                             overflow-y: auto
                             overflow-x: hidden
                             .breakdown_table
-                                table-layout: fixed
                                 thead
                                     th
                                         sf_pro_regular(16px)
@@ -677,12 +678,17 @@ table
                                         padding-bottom: 10px
                                 tbody
                                     td
+                                        position: relative
                                         color: $black
                                         padding: 5px 0
                                         &.item_name
                                             sf_pro_semibold(16px)
                                         &.item_price
                                             sf_pro_regular(16px)
+                                        .form_flex_input
+                                            margin-right: 20px
+                                            .default_text
+                                                padding: 10px 15px
                         .breakdown_total
                             display: flex
                             flex-flow: row wrap
@@ -952,11 +958,13 @@ input::placeholder
         border: 1px solid $black
         transition: .3s ease-in-out
 
+#custom_gift_form
+    margin: 20px auto 0
+
 #default_form,
 #custom_gift_form
     width: 100%
     max-width: 50%
-    margin: 20px auto 0
     &.alternate
         max-width: 100%
         .form_flex_wrapper
@@ -1222,6 +1230,28 @@ input::placeholder
         border-top: 8px solid $green
         transform: translateY(-50%)
         cursor: pointer
+    .validation_errors
+        position: absolute
+        top: calc(100% + 5px)
+        background-color: $red
+        color: $white
+        sf_pro_medium(14px)
+        z-index: 2
+        padding: 5px 10px
+        border-radius: 5px
+        user-select: none
+        left: 0
+        &::before
+            content: ""
+            position: absolute
+            bottom: calc(100% - 1px)
+            width: 0
+            height: 0
+            border-left: 7px solid transparent
+            border-right: 7px solid transparent
+            border-bottom: 7px solid $red
+            left: 17px
+            z-index: 1
 
 .form_check
     position: relative
@@ -1543,7 +1573,7 @@ input::placeholder
         background-color: $red
         color: $white
         sf_pro_medium(14px)
-        z-index: 1
+        z-index: 2
         padding: 5px 10px
         border-radius: 5px
         user-select: none
@@ -1899,6 +1929,8 @@ input::placeholder
         justify-content: flex-start
         padding: 0 30px
         .input_header
+            &.name
+                flex: 1 0 20%
             flex: 1 0 10%
             sf_pro_semibold(16px)
             color: $gray
@@ -1925,17 +1957,55 @@ input::placeholder
                         .default_content
                             color: $red
             .input_wrapper
+                position: relative
                 padding: 0 30px
                 display: flex
                 flex-flow: row wrap
                 align-items: center
                 justify-content: flex-start
+                .input_info
+                    position: absolute
+                    left: calc(0% + 6px)
+                    top: 50%
+                    transform: translateY(-50%)
+                    img
+                        cursor: pointer
+                        width: 18px
+                        height: 18px
+                    .info_text
+                        position: absolute
+                        width: 100px
+                        height: 100%
+                        top: calc(100% + 10px)
+                        left: calc(0% - 40px)
+                        background-color: $red
+                        color: $white
+                        sf_pro_medium(14px)
+                        z-index: 1
+                        padding: 2px 10px
+                        border-radius: 5px
+                        user-select: none
+                        text-align: center
+                        &::before
+                            content: ""
+                            position: absolute
+                            bottom: calc(100% - 1px)
+                            width: 0
+                            height: 0
+                            border-left: 7px solid transparent
+                            border-right: 7px solid transparent
+                            border-bottom: 7px solid $red
+                            left: 50%
+                            z-index: 1
+                            transform: translateX(-50%)
                 .input_content
                     position: relative
                     flex: 1 0 10%
                     sf_pro_regular(16px)
                     color: $black
                     padding: 20px 20px 20px 0
+                    &.name
+                        flex: 1 0 20%
                     &.alternate
                         display: flex
                         flex-flow: row wrap
@@ -2030,6 +2100,43 @@ input::placeholder
         .footer_wrapper
             text-align: right
             padding: 30px
+            .footer_form_group
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: flex-end
+                margin-bottom: 10px
+                label
+                    sf_pro_medium(18px)
+                    color: $border_alt2
+                    margin-right: 10px
+                .footer_input
+                    position: relative
+                    flex: 0 0 100px
+                    .default_text
+                        padding: 10px 15px
+                    .validation_errors
+                        position: absolute
+                        top: calc(100% + 5px)
+                        background-color: $red
+                        color: $white
+                        sf_pro_medium(14px)
+                        z-index: 1
+                        padding: 5px 10px
+                        border-radius: 5px
+                        user-select: none
+                        left: 0
+                        &::before
+                            content: ""
+                            position: absolute
+                            bottom: calc(100% - 1px)
+                            width: 0
+                            height: 0
+                            border-left: 7px solid transparent
+                            border-right: 7px solid transparent
+                            border-bottom: 7px solid $red
+                            left: 17px
+                            z-index: 1
             .footer_cost
                 sf_pro_medium(18px)
                 color: $border_alt2
@@ -2059,21 +2166,31 @@ input::placeholder
             td
                 padding: 10px 20px
 .cms_table
+    position: relative
     border-collapse: collapse
     width: 100%
     border-radius: 10px
     margin-bottom: 60px
     thead
-        th
-            sf_pro_semibold(16px)
-            color: $gray
-            text-align: left
-            padding: 15px 30px
-            background-color: transparent
-            &:first-child
-                border-radius: 10px 0 0 0
-            &:last-child
-                border-radius: 0 10px 0 0
+        &.sticky
+            th
+                background-color: $green
+                position: sticky
+                top: calc(0% + 80px)
+                color: $white
+                transition: .3s ease-in-out
+        tr
+            th
+                sf_pro_semibold(16px)
+                color: $gray
+                text-align: left
+                padding: 15px 30px
+                background-color: transparent
+                transition: .3s ease-in-out
+                &:first-child
+                    border-radius: 10px 0 0 0
+                &:last-child
+                    border-radius: 0 10px 0 0
     tbody
         border-radius: 3px
         box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
@@ -4781,6 +4898,9 @@ input::placeholder
                     .form_group
                         margin-top: 20px
                         margin-bottom: 0
+                        &.alternate
+                            .default_text
+                                width: 350px
                         .default_select,
                         .default_text
                             width: 250px
