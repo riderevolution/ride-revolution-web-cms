@@ -218,15 +218,31 @@
                                 <thead>
                                     <tr>
                                         <th>Items</th>
+                                        <th>Qty.</th>
                                         <th>Price Per Item</th>
                                         <th>Computed Price</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, key) in totalPrice" :key="key">
-                                        <td class="item_name" width="50%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
-                                        <td class="item_price" width="50%">PHP {{ totalCount(data.item.origPrice) }}</td>
-                                        <td class="item_price" width="50%">PHP {{ totalCount(data.price) }}</td>
+                                        {{ data.item.origPrice }}
+                                        <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
+                                        <td width="15%">
+                                            <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
+                                                <input type="text" name="quantity" :id="`quantity_${key}`" class="disabled default_text number" maxlength="1" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="'numeric|min_value:1|max_value:1'">
+                                                <div class="up" v-if="data.type == 'product'" @click="addCount(data.id, data.quantity, key, data.package_price)"></div>
+                                                <div class="down" v-if="data.type == 'product'" @click="subtractCount(data.id, data.quantity, key, data.package_price)"></div>
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has(`breakdown_${key}.quantity`)">The quantity field is required</span></transition>
+                                            </div>
+                                        </td>
+                                        <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
+                                        <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
+                                        <td>
+                                            <div class="close_wrapper alternate" @click="removeOrder(data.type, key, data.item.id)">
+                                                <div class="close_icon"></div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

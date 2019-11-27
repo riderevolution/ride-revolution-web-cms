@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="modal_tab_content_wrapper" v-show="(isSearched) ? (value.isClassPackageShow == true) ? true : (value.isPromoPackageShow == true ? true : false) : false">
+        <div class="modal_tab_content_wrapper no_qty" v-show="(isSearched) ? (value.isClassPackageShow) ? true : (value.isPromoPackageShow ? true : false) : false">
             <div class="form_check">
-                <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value, value.id, unique, value.package_price)" :checked="value.isChecked">
+                <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value, value.id, unique, value.package_price)" :checked="(value.isChecked == false) ? false : true ">
                 <label :for="`product_${value.id}_${unique}`">{{ value.name }}</label>
             </div>
             <div class="total_price">PHP {{ totalCount(value.package_price) }}</div>
-            <div class="form_group">
+            <div class="form_group" v-if="value.id == 0">
                 <label>Qty.</label>
                 <div class="form_flex_input">
                     <input type="text" name="quantity[]" :id="`quantity_${unique}`" class="default_text number" maxlength="1" autocomplete="off" v-model="quantity" v-validate="'numeric|min_value:1|max_value:1'" @input="recomputeTotal(value.id, unique, value.package_price)">
@@ -42,7 +42,7 @@
             recomputeTotal (id, key, price) {
                 const me = this
                 let element = document.getElementById(`product_${id}_${key}`)
-                let quantity = document.getElementById(`quantity_${key}`).value
+                let quantity = me.quantity
                 if (element.checked) {
                     me.$parent.totalPrice.forEach((data, index) => {
                         if (data.id == key) {
@@ -88,7 +88,7 @@
             toggleChecked (data, id, key, price) {
                 const me = this
                 let element = document.getElementById(`product_${id}_${key}`)
-                let quantity = document.getElementById(`quantity_${key}`).value
+                let quantity = me.quantity
                 if (element.checked) {
                     me.$parent.totalPrice.push(
                         {
@@ -112,14 +112,7 @@
                         }
                     })
                 }
-                switch (me.$parent.toCompare.package) {
-                    case 0:
-                        me.$parent.classPackages[key].isChecked ^= true
-                        break
-                    case 1:
-                        me.$parent.promoPackages[key].isChecked ^= true
-                        break
-                }
+                me.$parent.products[key].isChecked ^= true
             }
         }
     }

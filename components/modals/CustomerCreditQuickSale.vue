@@ -166,7 +166,7 @@
                                     </tr>
                                 </thead>
                                 <tbody v-if="totalPrice.length > 0">
-                                    <tr v-for="(data, key) in totalPrice" :key="key">
+                                    <tr v-for="(data, key) in showBreakDown" :key="key">
                                         <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
                                         <td width="15%">
                                             <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
@@ -179,7 +179,7 @@
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
                                         <td>
-                                            <div class="close_wrapper alternate" @click="removeOrder(data.type, key, data.item.id)">
+                                            <div class="close_wrapper alternate" @click="removeOrder(key, data.item.id)">
                                                 <div class="close_icon"></div>
                                             </div>
                                         </td>
@@ -228,8 +228,7 @@
                 nextStep: 1,
                 status: 0,
                 total: 0,
-                classPackages: [],
-                promoPackages: [],
+                products: [],
                 menus: [
                     {
                         id: 1,
@@ -263,6 +262,11 @@
             }
         },
         computed: {
+            showBreakDown () {
+                const me = this
+                let result = me.totalPrice
+                return result
+            },
             computeChange () {
                 const me = this
                 let value = (me.form.change == '') ? 0 : parseFloat(me.form.change)
@@ -293,43 +297,40 @@
                 let status = true
                 switch (me.toCompare.package) {
                     case 0:
-                        me.classPackages.forEach((classPackage, index) => {
-                            classPackage.isClassPackageShow = true
-                            classPackage.isPromoPackageShow = false
+                        me.products.forEach((product, index) => {
+                            if (product.is_promo == 0) {
+                                product.isClassPackageShow = true
+                                product.isGiftShow = true
+                            } else {
+                                product.isPromoPackageShow = false
+                            }
                         })
-                        status = true
                         break
                     case 1:
-                        me.promoPackages.forEach((promoPackage, index) => {
-                            promoPackage.isClassPackageShow = false
-                            promoPackage.isPromoPackageShow = true
+                        me.products.forEach((product, index) => {
+                            if (product.is_promo == 1) {
+                                product.isPromoPackageShow = true
+                                product.isGiftShow = true
+                            } else {
+                                product.isClassPackageShow = false
+                            }
+
                         })
-                        status = false
                         break
                 }
-                products = (status) ? me.classPackages : me.promoPackages
+                products = me.products
                 return products
             }
         },
         methods: {
-            removeOrder (type, key, id) {
+            removeOrder (key, id) {
                 const me = this
-                switch (type) {
-                    case 'class-package':
-                        me.classPackages.forEach((data, index) => {
-                            if (data.id == id) {
-                                me.classPackages[index].isChecked = false
-                            }
-                        })
-                        break
-                    case 'promo-package':
-                        me.promoPackages.forEach((data, index) => {
-                            if (data.id == id) {
-                                me.promoPackages[index].isChecked = false
-                            }
-                        })
-                        break
-                }
+                me.products.forEach((data, index) => {
+                    if (data.id == id) {
+                        me.products[index].isChecked = false
+                        console.log(me.products[index].isChecked)
+                    }
+                })
                 me.totalPrice.splice(key, 1)
             },
             submitQuickSale () {
@@ -493,15 +494,15 @@
                 let count = 0
                 switch (type) {
                     case 'class-package':
-                        me.classPackages.forEach((classPackage, index) => {
-                            if (classPackage.is_promo == 0) {
+                        me.products.forEach((product, index) => {
+                            if (product.is_promo == 0) {
                                 count++
                             }
                         })
                         break
                     case 'promo-package':
-                        me.promoPackages.forEach((promoPackage, index) => {
-                            if (promoPackage.is_promo == 1) {
+                        me.products.forEach((product, index) => {
+                            if (product.is_promo == 1) {
                                 count++
                             }
                         })
@@ -539,9 +540,17 @@
                 const me = this
                 me.$axios.get(`api/packages/class-packages/for-buy-credits?studio_id=${me.$store.state.user.current_studio_id}&user_id=${me.$route.params.param}`).then(res => {
                     if (res.data) {
-                        me.classPackages = res.data.classPackages
-                        me.classPackages.forEach((classPackage, index) => {
+                        res.data.classPackages.forEach((classPackage, index) => {
                             classPackage.isChecked = false
+                            me.products.push(classPackage)
+                        })
+                        me.$axios.get(`api/packages/class-packages/for-buy-credits?studio_id=${me.$store.state.user.current_studio_id}&user_id=${me.$route.params.param}&is_promo=1`).then(res => {
+                            if (res.data) {
+                                res.data.classPackages.forEach((promoPackage, index) => {
+                                    promoPackage.isChecked = false
+                                    me.products.push(promoPackage)
+                                })
+                            }
                         })
                     }
                 }).catch(err => {
@@ -549,14 +558,6 @@
                     me.$store.state.errorStatus = true
                 }).then(() => {
                     me.countTotalItems('class-package')
-                })
-                me.$axios.get(`api/packages/class-packages/for-buy-credits?studio_id=${me.$store.state.user.current_studio_id}&user_id=${me.$route.params.param}&is_promo=1`).then(res => {
-                    if (res.data) {
-                        me.promoPackages = res.data.classPackages
-                        me.promoPackages.forEach((promoPackage, index) => {
-                            promoPackage.isChecked = false
-                        })
-                    }
                 })
                 me.form.id = me.randomString()
             }
