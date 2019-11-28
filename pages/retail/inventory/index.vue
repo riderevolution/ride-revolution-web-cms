@@ -36,7 +36,7 @@
                         </div>
                         <div class="form_group margin">
                             <label for="studio_id">Studio</label>
-                            <select class="default_select alternate" name="studio_id">
+                            <select class="default_select alternate" id="studio_select" name="studio_id">
                                 <option value="" selected>All Studios</option>
                                 <option :value="studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.name }}</option>
                             </select>
@@ -106,7 +106,8 @@
                             <td>{{ data.product.supplier.name }}</td>
                             <td>
                                 <p v-for="(productQuantity, key) in data.product_quantities">
-                                    <span :class="`${(productQuantity.quantity > 0) ? 'green' : 'red' }`">{{ productQuantity.quantity }}</span> - {{ productQuantity.studio.name }}
+                                    <span :class="`${(productQuantity.quantity > 0) ? 'green' : 'red' }`" v-if="studioID == ''">{{ productQuantity.quantity }}<span> - {{ productQuantity.studio.name }}</span></span>
+                                    <span :class="`${(productQuantity.quantity > 0) ? 'green' : 'red' }`" v-else-if="studioID == productQuantity.studio.id">{{ productQuantity.quantity }}<span> - {{ productQuantity.studio.name }}</span></span>
                                 </p>
                             </td>
                             <td>PHP {{ totalCount(data.unit_price) }}</td>
@@ -213,7 +214,8 @@
                 categories: [],
                 suppliers: [],
                 studios: [],
-                classPackages: []
+                classPackages: [],
+                studioID: ''
             }
         },
         methods: {
@@ -252,6 +254,7 @@
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
                 }).then(() => {
+                    me.studioID = document.getElementById('studio_select').value
                     setTimeout( () => {
                         me.loader(false)
                     }, 500)
