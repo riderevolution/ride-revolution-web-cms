@@ -84,12 +84,16 @@
                                                 </div>
                                             </transition>
                                             <div class="form_group no_margin">
-                                                <label for="custom_card_personal_message">Personal Message <span>*</span></label>
-                                                <textarea name="custom_card_personal_message" autocomplete="off" rows="8" class="default_text" v-model="customGiftCard.customCardPersonalMessage" v-validate="'required'"></textarea>
-                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.custom_card_personal_message') && showErrors">{{ errors.first('custom_gift_form.custom_card_personal_message') }}</span></transition>
+                                                <label for="custom_card_personal_message">Personal Message</label>
+                                                <textarea name="custom_card_personal_message" autocomplete="off" rows="8" class="default_text" v-model="customGiftCard.customCardPersonalMessage"></textarea>
                                             </div>
                                         </div>
                                         <div class="form_main_group no_border">
+                                            <div class="form_group">
+                                                <label for="customer_card_recipient_number">Recipient's Mobile Number <span>*</span></label>
+                                                <input type="text" name="customer_card_recipient_number" autocomplete="off" class="default_text" v-model="customGiftCard.customCardRecipientNumber" v-validate="'required|numeric'">
+                                                <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.customer_card_recipient_number') && showErrors">{{ errors.first('custom_gift_form.customer_card_recipient_number') }}</span></transition>
+                                            </div>
                                             <div class="form_group">
                                                 <label for="custom_card_recipient_email">Recipient's Email <span>*</span></label>
                                                 <input type="email" name="custom_card_recipient_email" autocomplete="off" class="default_text" v-model="customGiftCard.customCardRecipientEmail" v-validate="'required|email'">
@@ -158,16 +162,22 @@
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.bank')">{{ errors.first('checkout_form.bank') }}</span></transition>
                             </div>
                             <div class="form_group">
-                                <label for="type_of_card">Type of Card<span>*</span></label>
-                                <select class="default_select alternate" name="type_of_card" v-validate="'required'">
+                                <label for="type_of_card">Type of Card <span>*</span></label>
+                                <select class="default_select alternate" name="type_of_card" v-validate="'required'" v-model="cardType">
                                     <option value="" selected disabled>Select Type of Card</option>
                                     <option value="mastercard">Mastercard</option>
                                     <option value="visa">Visa</option>
                                     <option value="cirrus">Cirrus</option>
                                     <option value="jcb">JCB</option>
                                     <option value="amex">American Express</option>
+                                    <option value="others">Others</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.type_of_card')">{{ errors.first('checkout_form.type_of_card') }}</span></transition>
+                            </div>
+                            <div class="form_group" v-if="cardType == 'others'">
+                                <label for="others">Others <span>*</span></label>
+                                <input type="text" name="others" class="default_text" v-validate="'required'">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.others')">{{ errors.first('checkout_form.others') }}</span></transition>
                             </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 1">
@@ -238,31 +248,40 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr v-for="(data, key) in totalPrice" :key="key">
-                                        <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
+                                <tbody v-if="totalPrice.length > 0">
+                                    <tr v-for="(data, key) in showBreakDown" :key="key">
+                                        <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product) ? (data.item.product.product ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name) : data.item.name }}</td>
                                         <td width="15%">
                                             <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
-                                                <input type="text" name="quantity" :id="`quantity_${key}`" class="disabled default_text number" maxlength="1" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="'numeric|min_value:1|max_value:1'">
-                                                <div class="up" v-if="data.type == 'product'" @click="addCount(data.id, data.quantity, key, data.package_price)"></div>
-                                                <div class="down" v-if="data.type == 'product'" @click="subtractCount(data.id, data.quantity, key, data.package_price)"></div>
+                                                <input type="text" name="quantity" :id="`quantity_${key}`" :class="`${(data.type == 'gift-card' || data.type == 'custom-gift-card') ? 'disabled' : ''} default_text number`" maxlength="1" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="`numeric|min_value:1|${(data.type != 'custom-gift-card') ? (data.item.product.product_quantities ? `max_value:${data.item.product.product_quantities[0].quantity}` : '') : '' }`">
+                                                <div class="up" v-if="data.type == 'product' || data.type == 'store-credit'" @click="addCount(data.id, data.quantity, key, (data.type == 'product') ? data.item.product.sale_price : (data.type == 'gift-card' ? data.item.product.class_package.package_price : data.item.product.amount ))"></div>
+                                                <div class="down" v-if="data.type == 'product' || data.type == 'store-credit'" @click="subtractCount(data.id, data.quantity, key, (data.type == 'product') ? data.item.product.sale_price : (data.type == 'gift-card' ? data.item.product.class_package.package_price : data.item.product.amount ))"></div>
                                                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`breakdown_${key}.quantity`)">The quantity field is required</span></transition>
                                             </div>
                                         </td>
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
                                         <td>
-                                            <div class="close_wrapper alternate" @click="removeOrder(data.type, key, data.item.id)">
+                                            <div class="close_wrapper alternate" @click="removeOrder(key, data.item.id)">
                                                 <div class="close_icon"></div>
                                             </div>
                                         </td>
+                                    </tr>
+                                </tbody>
+                                <tbody class="no_results" v-else>
+                                    <tr>
+                                        <td colspan="4">No Product(s) Found.</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="breakdown_total">
                             <div class="promo">
-
+                                <div class="form_group">
+                                    <label for="promo_code">Promo Code</label>
+                                    <input type="text" name="promo_code" class="default_text">
+                                </div>
+                                <button type="button" class="action_btn alternate">Apply</button>
                             </div>
                             <div class="total_wrapper">
                                 <div class="total_title">Total</div>
@@ -354,6 +373,11 @@
             }
         },
         computed: {
+            showBreakDown () {
+                const me = this
+                let result = me.totalPrice
+                return result
+            },
             computeChange () {
                 const me = this
                 let value = (me.form.change == '') ? 0 : parseFloat(me.form.change)
@@ -421,6 +445,51 @@
             }
         },
         methods: {
+            removeOrder (key, id) {
+                const me = this
+                me.products.forEach((data, index) => {
+                    if (data.id == id) {
+                        me.products[index].isChecked = false
+                    }
+                })
+                me.totalPrice.splice(key, 1)
+            },
+            recomputeTotal (id, quantity, key, price) {
+                const me = this
+                me.totalPrice.forEach((data, index) => {
+                    if (data.id == id) {
+                        data.quantity = quantity
+                        data.price =  parseInt(quantity) * price
+                    }
+                })
+            },
+            addCount (id, quantity, key, price) {
+                const me = this
+                let data
+                data = parseInt(quantity)
+                if (data != 99) {
+                    data != 0 && (quantity = 0)
+                    quantity = (data += 1)
+                    me.totalPrice.forEach((data, index) => {
+                        if (data.id == id) {
+                            data.quantity = quantity
+                            data.price = parseInt(quantity) * price
+                        }
+                    })
+                }
+            },
+            subtractCount (id, quantity, key, price) {
+                const me = this
+                let data
+                data = parseInt(quantity)
+                data > 1 && (quantity = (data -= 1))
+                me.totalPrice.forEach((data, index) => {
+                    if (data.id == id) {
+                        data.quantity = quantity
+                        data.price =  parseInt(quantity) * price
+                    }
+                })
+            },
             submitQuickSale () {
                 const me = this
                 let formData = new FormData()
@@ -737,9 +806,9 @@
                 const me = this
                 me.$axios.get(`api/inventory/product-variants-for-quick-sale?studio_id=${me.$store.state.user.current_studio_id}`).then(res => {
                     if (res.data) {
-                        me.products = res.data.productVariants
-                        me.products.forEach((product, index) => {
+                        res.data.productVariants.forEach((product, index) => {
                             product.isChecked = false
+                            me.products.push(product)
                         })
                         me.fetchTabContents()
                         me.$axios.get('api/inventory/gift-cards?enabled=1&status=0').then(res => {

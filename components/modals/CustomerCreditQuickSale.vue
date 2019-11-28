@@ -98,6 +98,7 @@
                                     <option value="cirrus">Cirrus</option>
                                     <option value="jcb">JCB</option>
                                     <option value="amex">American Express</option>
+                                    <option value="others">Others</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.type_of_card')">{{ errors.first('checkout_form.type_of_card') }}</span></transition>
                             </div>

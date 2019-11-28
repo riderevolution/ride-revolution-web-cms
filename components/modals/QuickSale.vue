@@ -90,7 +90,7 @@
                                         <div class="form_main_group no_border">
                                             <div class="form_group">
                                                 <label for="customer_card_recipient_number">Recipient's Mobile Number <span>*</span></label>
-                                                <input type="text" name="customer_card_recipient_number" autocomplete="off" class="default_text" v-model="customGiftCard.customCardRecipientNumber" v-validate="'required|number'">
+                                                <input type="text" name="customer_card_recipient_number" autocomplete="off" class="default_text" v-model="customGiftCard.customCardRecipientNumber" v-validate="'required|numeric'">
                                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('custom_gift_form.customer_card_recipient_number') && showErrors">{{ errors.first('custom_gift_form.customer_card_recipient_number') }}</span></transition>
                                             </div>
                                             <div class="form_group">
@@ -235,10 +235,10 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, key) in showBreakDown" :key="key">
-                                        <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
+                                        <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product) ? (data.item.product.product ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name) : data.item.name }}</td>
                                         <td width="15%">
                                             <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
-                                                <input type="text" name="quantity" :id="`quantity_${key}`" :class="`${(data.type != 'product') ? 'disabled' : ''} default_text number`" maxlength="2" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="`numeric|min_value:1|${(data.item.product.product_quantities) ? `max_value:${data.item.product.product_quantities[0].quantity}` : '' }`" @input="recomputeTotal(data.id, data.quantity, key, (!data.isGiftShow) ? data.item.product.sale_price : data.item.product.class_package.package_price)">
+                                                <input type="text" name="quantity" :id="`quantity_${key}`" :class="`${(data.type != 'product') ? 'disabled' : ''} default_text number`" maxlength="2" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="`numeric|min_value:1|${(data.type != 'custom-gift-card') ? (data.item.product.product_quantities ? `max_value:${data.item.product.product_quantities[0].quantity}` : '') : '' }`" @input="recomputeTotal(data.id, data.quantity, key, (!data.isGiftShow) ? data.item.product.sale_price : data.item.product.class_package.package_price)">
                                                 <div class="up" v-if="data.type == 'product'" @click="addCount(data.id, data.quantity, key, (!data.isGiftShow) ? data.item.product.sale_price : data.item.product.class_package.package_price)"></div>
                                                 <div class="down" v-if="data.type == 'product'" @click="subtractCount(data.id, data.quantity, key, (!data.isGiftShow) ? data.item.product.sale_price : data.item.product.class_package.package_price)"></div>
                                                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`breakdown_${key}.quantity`)">The quantity field is required</span></transition>
@@ -255,9 +255,18 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="breakdown_total alternate">
-                            <div class="total_title">Total</div>
-                            <div class="total_price">PHP {{ computeTotal }}</div>
+                        <div class="breakdown_total">
+                            <div class="promo">
+                                <div class="form_group">
+                                    <label for="promo_code">Promo Code</label>
+                                    <input type="text" name="promo_code" class="default_text">
+                                </div>
+                                <button type="button" class="action_btn alternate">Apply</button>
+                            </div>
+                            <div class="total_wrapper">
+                                <div class="total_title">Total</div>
+                                <div class="total_price">PHP {{ computeTotal }}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="footer_side">
