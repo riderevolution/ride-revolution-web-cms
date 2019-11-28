@@ -140,6 +140,10 @@
                                 <input type="radio" id="cash" value="cash" name="payment_method" class="action_radio" @change="checkPayment('cash')">
                                 <label for="cash">Cash</label>
                             </div>
+                            <div class="form_radio">
+                                <input type="radio" id="store_credits" value="store-credits" name="payment_method" class="action_radio" @change="checkPayment('store-credits')">
+                                <label for="store_credits">Store Credits</label>
+                            </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 0 || form.paymentType == 2">
                             <div class="form_group">
@@ -211,6 +215,16 @@
                                 <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
                             </div>
                         </div>
+                        <div class="form_main_group" v-if="form.paymentType == 5">
+                            <div class="form_group">
+                                <label for="store_credit_amount">
+                                    <span class="label">Amount</span>
+                                    <span>Available Store Credits: 5,000</span>
+                                </label>
+                                <input type="text" name="store_credit_amount" class="default_text" v-validate="`required|min_value:100|decimal:2`">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.store_credit_amount')">{{ errors.first('checkout_form.store_credit_amount') }}</span></transition>
+                            </div>
+                        </div>
                     </div>
                     <div class="right_side">
                         <div class="breakdown_wrapper">
@@ -226,7 +240,6 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(data, key) in totalPrice" :key="key">
-                                        {{ data.item.origPrice }}
                                         <td class="item_name" width="35%">({{ data.quantity }}) {{ (data.item.product.product) ? `${data.item.product.product.name} - ${data.item.name}` : data.item.name }}</td>
                                         <td width="15%">
                                             <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
@@ -248,8 +261,13 @@
                             </table>
                         </div>
                         <div class="breakdown_total">
-                            <div class="total_title">Total</div>
-                            <div class="total_price">PHP {{ computeTotal }}</div>
+                            <div class="promo">
+
+                            </div>
+                            <div class="total_wrapper">
+                                <div class="total_title">Total</div>
+                                <div class="total_price">PHP {{ computeTotal }}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="footer_side">
@@ -331,7 +349,8 @@
                 },
                 unique: 0,
                 totalPrice: [],
-                toCheckout: []
+                toCheckout: [],
+                cardType: ''
             }
         },
         computed: {
@@ -500,7 +519,11 @@
                     case 'cash':
                         me.form.paymentType = 4
                         break
+                    case 'store-credits':
+                        me.form.paymentType = 5
+                        break
                 }
+                me.cardType = ''
                 me.form.change = 0
             },
             submitFilter () {

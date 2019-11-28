@@ -698,17 +698,43 @@ table
                         .breakdown_total
                             display: flex
                             flex-flow: row wrap
-                            align-items: center
+                            align-items: flex-end
                             justify-content: space-between
                             background-color: $white
                             box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.09)
                             padding: 20px
-                            .total_title
-                                sf_pro_regular(20px)
-                                color: $black
-                            .total_price
-                                sf_pro_bold(30px)
-                                color: $red
+                            &.alternate
+                                .total_title
+                                    sf_pro_regular(30px)
+                                    color: $black
+                                .total_price
+                                    sf_pro_bold(30px)
+                                    color: $red
+                            .promo
+                                display: flex
+                                flex-flow: row wrap
+                                align-items: flex-end
+                                flex: 0 0 50%
+                                .form_group
+                                    flex: 1 0 30%
+                                    margin-bottom: 0
+                                    input
+                                        padding: 12px 15px
+                                .action_btn
+                                    width: auto
+                                    padding: 12px 17px
+                            .total_wrapper
+                                display: flex
+                                flex-flow: row wrap
+                                align-items: center
+                                flex: 0 0 auto
+                                .total_title
+                                    sf_pro_regular(30px)
+                                    color: $black
+                                    padding-right: 10px
+                                .total_price
+                                    sf_pro_bold(30px)
+                                    color: $red
                     .footer_side
                         flex: 1 0 100%
                         display: flex

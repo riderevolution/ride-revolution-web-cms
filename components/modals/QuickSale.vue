@@ -215,6 +215,10 @@
                                 <input type="text" name="cash_tendered" class="default_text" v-validate="`required|min_value:${form.total}|decimal:2`" v-model="form.change">
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.cash_tendered')">{{ errors.first('checkout_form.cash_tendered') }}</span></transition>
                             </div>
+                            <div class="form_group">
+                                <label for="change">Change (PHP)</label>
+                                <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
+                            </div>
                         </div>
                     </div>
                     <div class="right_side">
@@ -251,7 +255,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="breakdown_total">
+                        <div class="breakdown_total alternate">
                             <div class="total_title">Total</div>
                             <div class="total_price">PHP {{ computeTotal }}</div>
                         </div>

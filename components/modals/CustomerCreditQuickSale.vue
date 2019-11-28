@@ -74,7 +74,7 @@
                             </div>
                             <div class="form_radio">
                                 <input type="radio" id="store_credits" value="store-credits" name="payment_method" class="action_radio" @change="checkPayment('store-credits')">
-                                <label for="store-credits">Store Credits</label>
+                                <label for="store_credits">Store Credits</label>
                             </div>
                         </div>
                         <div class="form_main_group" v-if="form.paymentType == 0 || form.paymentType == 2">
@@ -152,6 +152,16 @@
                                 <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
                             </div>
                         </div>
+                        <div class="form_main_group" v-if="form.paymentType == 5">
+                            <div class="form_group">
+                                <label for="store_credit_amount">
+                                    <span class="label">Amount</span>
+                                    <span>Available Store Credits: 5,000</span>
+                                </label>
+                                <input type="text" name="store_credit_amount" class="default_text" v-validate="`required|min_value:100|decimal:2`">
+                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.store_credit_amount')">{{ errors.first('checkout_form.store_credit_amount') }}</span></transition>
+                            </div>
+                        </div>
                     </div>
                     <div class="right_side">
                         <div class="breakdown_wrapper">
@@ -171,8 +181,6 @@
                                         <td width="15%">
                                             <div class="form_flex_input" :data-vv-scope="`breakdown_${key}`">
                                                 <input type="text" name="quantity" :id="`quantity_${key}`" class="disabled default_text number" maxlength="1" autocomplete="off" :data-vv-name="`breakdown_${key}.quantity`" v-model="data.quantity" v-validate="'numeric|min_value:1|max_value:1'">
-                                                <div class="up" v-if="data.type == 'product'" @click="addCount(data.id, data.quantity, key, data.package_price)"></div>
-                                                <div class="down" v-if="data.type == 'product'" @click="subtractCount(data.id, data.quantity, key, data.package_price)"></div>
                                                 <transition name="slide"><span class="validation_errors" v-if="errors.has(`breakdown_${key}.quantity`)">The quantity field is required</span></transition>
                                             </div>
                                         </td>
@@ -193,8 +201,17 @@
                             </table>
                         </div>
                         <div class="breakdown_total">
-                            <div class="total_title">Total</div>
-                            <div class="total_price">PHP {{ computeTotal }}</div>
+                            <div class="promo">
+                                <div class="form_group">
+                                    <label for="promo_code">Promo Code</label>
+                                    <input type="text" name="promo_code" class="default_text">
+                                </div>
+                                <button type="button" class="action_btn alternate">Apply</button>
+                            </div>
+                            <div class="total_wrapper">
+                                <div class="total_title">Total</div>
+                                <div class="total_price">PHP {{ computeTotal }}</div>
+                            </div>
                         </div>
                     </div>
                     <div class="footer_side">

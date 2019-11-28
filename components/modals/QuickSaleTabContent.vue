@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div :class="`modal_tab_content_wrapper ${(value.isGiftShow) ? 'no_qty' : '' }`" v-show="(isSearched) ? (value.isProductShow == true) ? $parent.toCompare.product == value.product.product_category_id : (value.isGiftShow == true ? true : false) : false">
+        <div :class="`modal_tab_content_wrapper ${(value.isGiftShow) ? 'no_qty' : '' }`" v-show="(isSearched) ? (value.isProductShow) ? $parent.toCompare.product == value.product.product_category_id : (value.isGiftShow ? true : false) : false">
             <div class="form_check">
                 <input type="checkbox" :id="`product_${value.id}_${unique}`" name="product[]" class="action_check" @change="toggleChecked(value, value.id, unique, (!value.isGiftShow) ? value.sale_price : value.class_package.package_price)" :checked="value.isChecked">
                 <label :for="`product_${value.id}_${unique}`">{{ (!value.isGiftShow) ? (value.product ? `${value.product.name} - ${value.variant}` : value.variant) : value.card_code }}</label>
             </div>
-            <div class="total_price">PHP {{ totalCount((!value.isGiftShow) ? value.sale_price : value.class_package.package_price) }}</div>
+            <div class="total_price">{{ `${(value.isGiftShow) ? `${value.class_package.name} - ` : ''}` }}PHP {{ totalCount((!value.isGiftShow) ? value.sale_price : value.class_package.package_price) }}</div>
             <div class="form_group" v-if="!value.isGiftShow">
                 <label>Qty.</label>
                 <div class="form_flex_input">
