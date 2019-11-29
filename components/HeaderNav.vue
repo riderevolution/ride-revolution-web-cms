@@ -28,8 +28,13 @@
             </div>
             <div class="user_select">
                 <div class="select_header">
-                    <div class="header_name">{{ $store.state.user.first_name }}</div>
-                    <div class="header_role">{{ $store.state.user.staff_details.role.display_name }}</div>
+                    <div class="select_info">
+                        <div class="header_name">{{ $store.state.user.first_name }}</div>
+                        <div class="header_role">{{ $store.state.user.staff_details.role.display_name }}</div>
+                    </div>
+                    <div class="header_studio">
+                        <a href="javascript:void(0)" class="action_btn white" @click="changeStudio()">Change Studio</a>
+                    </div>
                 </div>
                 <div class="select_footer">
                     <nuxt-link to="/my-account" class="select_item account" @click.native.self="isToggled = false">My Account</nuxt-link>
@@ -51,8 +56,12 @@
             }
         },
         methods: {
-            /**
-             * Toggler custom select */
+            changeStudio () {
+                const me = this
+                me.isToggled = false
+                me.$store.state.changeStudioStatus = true
+                document.body.classList.add('no_scroll')
+            },
             showSelect () {
                 this.isToggled ^= true
             },

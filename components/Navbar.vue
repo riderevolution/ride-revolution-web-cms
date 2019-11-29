@@ -1,13 +1,13 @@
 <template>
     <div class="navbar_container" @mouseover="resetHoverToggle()" @mouseleave="resetLeaveToggle()">
         <div class="navbar">
-            <div class="logo">
+            <nuxt-link to="/" class="logo">
                 <img src="/logo.png" />
                 <div class="logo_title">
                     Ride <br/>
                     Revolution
                 </div>
-            </div>
+            </nuxt-link>
             <ul class="nav_list">
                 <li class="item_wrapper" v-for="(navItem, parent_key) in navItems" :key="parent_key">
                     <nuxt-link :class="`nav_item ${navItem.class} ${(navItem.subItems) ? 'nav_parent' : ''}`" :to="navItem.link" v-if="navItem.hasLink" @click.native.self="resetToggle()">{{ navItem.title }}</nuxt-link>

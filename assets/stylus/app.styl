@@ -419,6 +419,24 @@ table
     cursor: pointer
     user-select: none
     transition: .3s ease-in-out
+    &.white
+        sf_pro_medium(14px)
+        width: auto
+        padding: 10px 12px
+        color: $white
+        background-color: transparent
+        border: 1px solid $white
+        transition: .3s ease-in-out
+        &:hover
+            border: 1px solid $white
+            background-color: $white
+            color: $orange
+            transition: .3s ease-in-out
+        &:focus
+            border: 1px solid $white
+            background-color: $white
+            color: $red
+            transition: .3s ease-in-out
     &.margin
         margin-left: 20px
     &.alternate
@@ -3934,16 +3952,24 @@ input::placeholder
                     outline: none
                     display: block
                 .select_header
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    justify-content: space-between
                     padding: 20px
                     background-image: linear-gradient(to right, $red, $orange)
                     border-radius: 5px 5px 0 0
-                    .header_name
-                        sf_pro_regular(18px)
-                        color: $white
-                    .header_role
-                        sf_pro_light(14px)
-                        color: #F8F8FB
-                        margin-top: 5px
+                    .select_info
+                        .header_name
+                            sf_pro_regular(18px)
+                            color: $white
+                        .header_role
+                            sf_pro_light(14px)
+                            color: #F8F8FB
+                            margin-top: 5px
+                    .header_studio
+                        .action_btn
+                            flex: 0 0 auto
                 .select_footer
                     display: flex
                     justify-content: space-between

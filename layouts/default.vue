@@ -38,6 +38,9 @@
         <transition name="fade">
             <successful v-if="$store.state.successfulStatus" />
         </transition>
+        <transition name="fade">
+            <studio-changer v-if="$store.state.changeStudioStatus" />
+        </transition>
     </div>
 </template>
 
@@ -52,6 +55,7 @@
     import CustomerCreditQuickSale from '../components/modals/CustomerCreditQuickSale'
     import CustomerProductQuickSale from '../components/modals/CustomerProductQuickSale'
     import Successful from '../components/modals/Successful'
+    import StudioChanger from '../components/modals/StudioChanger'
     export default {
         components: {
             Navbar,
@@ -63,7 +67,8 @@
             CustomerCreditQuickSale,
             CustomerProductQuickSale,
             QuickSale,
-            Successful
+            Successful,
+            StudioChanger
         },
         data () {
             return {
