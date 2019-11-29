@@ -9,8 +9,8 @@
                         <div class="uppercase">P.O. {{ res.purchase_order_number }}</div>
                         <span class="header_id">ID: {{ res.po_id }}</span>
                         <div class="form_check alternate">
-                            <input type="checkbox" id="paid" name="paid" class="action_check" :checked="(res.paid == 1)">
-                            <label for="paid">Paid</label>
+                            <input type="checkbox" id="validate" name="paid" class="action_check" :checked="(res.paid == 1)" @change="tickPaid(res.paid)">
+                            <label for="validate">Paid</label>
                         </div>
                     </h1>
                     <div class="action_buttons">
@@ -60,6 +60,9 @@
             </form>
         </div>
         <transition name="fade">
+            <prompt-validate v-if="$store.state.promptValidateStatus" :message="message" :category="'purchase-order'" />
+        </transition>
+        <transition name="fade">
             <confirm-delete v-if="$store.state.deleteStatus" ref="delete" :url="`api/inventory/purchase-order-products`" />
         </transition>
         <foot v-if="$store.state.isAuth" />
@@ -67,11 +70,13 @@
 </template>
 
 <script>
+    import PromptValidate from '../../../../components/modals/PromptValidate'
     import PurchaseOrder from '../../../../components/PurchaseOrder'
     import Foot from '../../../../components/Foot'
     import ConfirmDelete from '../../../../components/modals/ConfirmDelete'
     export default {
         components: {
+            PromptValidate,
             PurchaseOrder,
             Foot,
             ConfirmDelete
@@ -83,6 +88,7 @@
                 prevRoute: '',
                 variants: [],
                 res: [],
+                message: '',
                 form: {
                     supplier: '',
                     studio: '',
@@ -131,6 +137,16 @@
             }
         },
         methods: {
+            tickPaid (status) {
+                const me = this
+                if (status != 1) {
+                    me.message = 'Are you sure that this has been paid? Please confirm.'
+                } else {
+                    me.message = 'Are you sure that this is unpaid? Please confirm.'
+                }
+                me.$store.state.promptValidateStatus = true
+                document.body.classList.add('no_scroll')
+            },
             formatDate (value) {
                 if (value) {
                     return this.$moment(value).format('MMM DD, YYYY')

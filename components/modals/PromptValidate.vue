@@ -1,8 +1,8 @@
 <template>
     <div class="default_modal">
-        <div class="background" @click="toggleClose()"></div>
+        <div class="background" @click.once="toggleClose()"></div>
         <div class="confirmation_wrapper">
-            <div class="form_close" @click="toggleClose()"></div>
+            <div class="form_close" @click.once="toggleClose()"></div>
             <div class="confirmation_text">
                 {{ message }}
             </div>
@@ -11,7 +11,7 @@
                     <input type="password" name="curent_user_password" placeholder="Enter your password" class="default_text" v-validate="'required'">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('curent_user_password')">{{ errors.first('curent_user_password') }}</span></transition>
                 </div>
-                <div class="action_success_btn confirm margin" @click="toggleClose(true)">Confirm</div>
+                <div class="action_success_btn confirm margin" @click.once="toggleClose(true)">Confirm</div>
             </div>
         </div>
     </div>

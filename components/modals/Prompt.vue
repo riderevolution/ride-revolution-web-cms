@@ -1,13 +1,13 @@
 <template>
     <div class="default_modal">
-        <div class="background" @click="toggleClose()"></div>
+        <div class="background" @click.once="toggleClose()"></div>
         <div class="confirmation_wrapper">
             <div class="confirmation_text">
                 {{ message }}
             </div>
             <div class="button_group">
-                <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose(false)" v-if="hasCancel">Cancel</a>
-                <div class="action_success_btn confirm margin" @click="toggleClose(true)">Confirm</div>
+                <a href="javascript:void(0)" class="action_cancel_btn" @click.once="toggleClose(false)" v-if="hasCancel">Cancel</a>
+                <div class="action_success_btn confirm margin" @click.once="toggleClose(true)">Confirm</div>
             </div>
         </div>
     </div>
