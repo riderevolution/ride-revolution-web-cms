@@ -889,6 +889,30 @@ table
         background-color: $white
         padding: 80px 100px
         transform: translate(-50%, -50%)
+        .form_close
+            position: absolute
+            width: 20px
+            height: 20px
+            top: calc(0% + 10px)
+            right: calc(0% + 10px)
+            &::before
+                content: ''
+                position: absolute
+                top: 0
+                right: calc(0% + 8px)
+                width: 2px
+                height: 20px
+                background-color: $border_alt2
+                transform: rotate(45deg)
+            &::after
+                content: ''
+                position: absolute
+                top: 0
+                right: calc(0% + 8px)
+                width: 2px
+                height: 20px
+                background-color: $border_alt2
+                transform: rotate(-45deg)
         .confirmation_title
             neutra_text(25px)
             color: $black
@@ -911,6 +935,14 @@ table
         .button_group
             margin-top: 50px
             justify-content: center
+            &.alternate
+                .form_group
+                    flex: 1 0 30%
+                    margin-bottom: 0
+                    input
+                        padding: 17px 15px
+                .action_success_btn
+                    width: auto
 /**
  * Default Form */
 .default_select

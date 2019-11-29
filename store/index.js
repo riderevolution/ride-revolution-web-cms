@@ -9,6 +9,7 @@ const createStore = () => {
             customerProductQuickSaleStatus: false,
             quickSaleStatus: false,
             successfulStatus: false,
+            promptValidateStatus: false,
             promptStatus: false,
             importStatus: false,
             resetSuccessfulStatus: false,

@@ -9,8 +9,8 @@
                             <div>New Purchase Orders</div>
                             <span class="header_id">ID: {{ randomID }}</span>
                             <div class="form_check alternate">
-                                <input type="checkbox" id="paid" name="paid" class="action_check">
-                                <label for="paid">Paid</label>
+                                <input type="checkbox" id="validate" name="paid" class="action_check" @change="tickPaid($event)">
+                                <label for="validate">Paid</label>
                             </div>
                         </h1>
                     </div>
@@ -91,15 +91,20 @@
                 </section>
             </form>
         </div>
+        <transition name="fade">
+            <prompt-validate v-if="$store.state.promptValidateStatus" :message="message" :category="'purchase-order'" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
 
 <script>
+    import PromptValidate from '../../../components/modals/PromptValidate'
     import PurchaseOrder from '../../../components/PurchaseOrder'
     import Foot from '../../../components/Foot'
     export default {
         components: {
+            PromptValidate,
             PurchaseOrder,
             Foot
         },
@@ -122,6 +127,7 @@
                 studios: [],
                 variants: [],
                 purchaseOrders: [],
+                message: '',
                 form: {
                     supplier: '',
                     studio: '',
@@ -170,6 +176,17 @@
             }
         },
         methods: {
+            tickPaid (event) {
+                const me = this
+                let value = event.target.value
+                if (value) {
+                    me.message = 'Are you sure that this has been paid? Please confirm.'
+                } else {
+                    me.message = 'Are you sure that this is unpaid? Please confirm.'
+                }
+                me.$store.state.promptValidateStatus = true
+                document.body.classList.add('no_scroll')
+            },
             closeMe () {
                 const me = this
                 me.autocomplete = false
