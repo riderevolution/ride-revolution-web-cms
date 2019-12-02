@@ -207,7 +207,7 @@
                                     <label for="promo_code">Promo Code</label>
                                     <input type="text" name="promo_code" class="default_text">
                                 </div>
-                                <button type="button" class="action_btn alternate">Apply</button>
+                                <button type="button" class="action_btn alternate" @click="applyPromo()">Apply</button>
                             </div>
                             <div class="total_wrapper">
                                 <div class="total_title">Total</div>
@@ -276,7 +276,8 @@
                 unique: 0,
                 totalPrice: [],
                 toCheckout: [],
-                cardType: ''
+                cardType: '',
+                promoApplied: false
             }
         },
         computed: {
@@ -341,6 +342,34 @@
             }
         },
         methods: {
+            applyPromo () {
+                const me = this
+                let formData = new FormData()
+                let total = 0
+                let productForm = new FormData(document.getElementById('product_form'))
+                let checkout = new FormData(document.getElementById('step2'))
+
+                me.totalPrice.forEach((data, index) => {
+                    total += data.price
+                })
+
+                checkout.append('total', total)
+                checkout.append('transaction_id', me.form.id)
+                productForm.append('items', JSON.stringify(me.totalPrice))
+
+                formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
+                formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
+                formData.append('studio_id', me.$store.state.user.current_studio_id)
+                formData.append('user_id', me.$store.state.customerID)
+                me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
+                    if (res.data) {
+                        console.log(res.data);
+                        me.promoApplied = true
+                    }
+                }).catch(err => {
+                    me.promoApplied = false
+                })
+            },
             removeOrder (key, id) {
                 const me = this
                 me.products.forEach((data, index) => {

@@ -8,7 +8,7 @@
                 <div class="modal_main_group alternate">
                     <div class="form_group">
                         <label for="studio">Select a Studio <span>*</span></label>
-                        <select class="default_select" name="studio">
+                        <select class="default_select" name="studio" v-model="studio">
                             <option value="" selected disabled>Select a Studio</option>
                             <option :value="studio.id" v-for="(studio, key) in studios" :key="key" v-if="studio.id != currentStudio.id">{{ studio.name }}</option>
                         </select>
@@ -33,6 +33,7 @@
     export default {
         data () {
             return {
+                studio: '',
                 studios: [],
                 currentStudio: []
             }
@@ -42,6 +43,19 @@
                 const me = this
                 me.$store.state.changeStudioStatus = false
                 document.body.classList.remove('no_scroll')
+            },
+            submissionSuccess () {
+                const me = this
+                setTimeout( () => {
+                    me.$store.state.user.current_studio_id = me.studio
+                    me.$axios.get('api/studios').then(res => {
+                        if (res.data) {
+                            me.studios = res.data.studios
+                        }
+                    })
+                    me.$store.state.changeStudioStatus = false
+                    document.body.classList.remove('no_scroll')
+                }, 10)
             }
         },
         mounted () {
