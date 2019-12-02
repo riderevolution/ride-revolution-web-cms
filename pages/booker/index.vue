@@ -233,6 +233,8 @@
                 toggleCustomers: false,
                 zoomCtr: 0.55,
                 customInstance: [],
+                customWidth: 0,
+                customHeight: 0
             }
         },
         computed: {
@@ -289,7 +291,7 @@
                 })
                 setTimeout(() => {
                     me.$refs.plan.fetchSeats(me.studioID)
-                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${planWidth}, ${planHeight})`
+                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
                 }, 10)
             },
             updateNotes (event) {
@@ -314,6 +316,8 @@
                 let planWidth = document.querySelector('.plan_wrapper').getBoundingClientRect().width
                 let planHeight = document.querySelector('.plan_wrapper').getBoundingClientRect().height
                 instance.zoomAbs(planWidth / 2, planHeight / 2, 0.55)
+                me.customWidth = instance.getTransform().x
+                me.customHeight = instance.getTransform().y
                 planWidth = instance.getTransform().x
                 planHeight = instance.getTransform().y
                 document.getElementById('zoom_in').addEventListener('click', function(e) {
