@@ -26,16 +26,25 @@
                 </div>
             </div>
         </form>
+        <transition name="fade">
+            <prompt v-if="$store.state.promptStatus" :message="message" :hasChange="true" />
+        </transition>
     </div>
 </template>
 
 <script>
+    import Prompt from './Prompt'
     export default {
+        components: {
+            Prompt
+        },
         data () {
             return {
+                message: '',
                 studio: '',
                 studios: [],
-                currentStudio: []
+                currentStudio: [],
+                selectedStudio: []
             }
         },
         methods: {
@@ -46,16 +55,26 @@
             },
             submissionSuccess () {
                 const me = this
-                setTimeout( () => {
-                    me.$store.state.user.current_studio_id = me.studio
-                    me.$axios.get('api/studios').then(res => {
-                        if (res.data) {
-                            me.studios = res.data.studios
+                me.loader(true)
+                me.$axios.get(`api/studios/${me.studio}`).then(res => {
+                    if (res.data) {
+                        me.selectedStudio = res.data.studio
+                        setTimeout( () => {
+                            me.$store.state.user.current_studio_id = me.selectedStudio.id
+                        }, 10)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                        if (!me.$store.state.errorStatus) {
+                            me.$store.state.promptStatus = true
+                            me.message = `You have successfully changed your studio from ${me.currentStudio.name} to ${me.selectedStudio.name}`
                         }
-                    })
-                    me.$store.state.changeStudioStatus = false
-                    document.body.classList.remove('no_scroll')
-                }, 10)
+                    }, 500)
+                })
             }
         },
         mounted () {
