@@ -66,7 +66,8 @@
                 this.isToggled ^= true
             },
             toggleNotification () {
-                this.isToggledNotif ^= true
+                const me = this
+                me.isToggledNotif ^= true
             },
             closeMe () {
                 this.isToggled = false

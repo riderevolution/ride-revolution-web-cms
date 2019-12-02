@@ -3435,7 +3435,7 @@ input::placeholder
                         padding: 20px
                         text-decoration: none
                         box-shadow: 0px 0px 15px transparent
-                        border-left: 2px solid transparent
+                        border-left: 2px solid $border
                         border-bottom: 1px solid $border
                         transition: .3s ease-in-out
                         .class_title
@@ -4342,6 +4342,9 @@ input::placeholder
             color: $gray
 
 #admin
+    #content
+        &.main
+            padding: 60px 55px
     &.user
         #top_content
             position: relative
@@ -5031,6 +5034,7 @@ input::placeholder
             .default_select
                 width: 210px
                 sf_pro_regular(22px)
+                margin-left: 15px
         .information
             padding: 40px
 

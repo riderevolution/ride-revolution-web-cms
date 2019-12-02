@@ -4,7 +4,7 @@
             <section id="top_content">
                 <h1 class="header_title">Dashboard</h1>
             </section>
-            <section id="content">
+            <section id="content" class="main">
                 <nuxt-link to="/branch/greenbelt" class="cms_summary wrapper">
                     <div class="summary_header">
                         <h2 class="header_title">Greenbelt</h2>
