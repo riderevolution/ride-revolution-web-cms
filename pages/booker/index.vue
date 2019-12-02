@@ -231,7 +231,8 @@
                 isPrev: false,
                 selectCustomer: false,
                 toggleCustomers: false,
-                zoomCtr: 0.55
+                zoomCtr: 0.55,
+                customInstance: [],
             }
         },
         computed: {
@@ -288,6 +289,7 @@
                 })
                 setTimeout(() => {
                     me.$refs.plan.fetchSeats(me.studioID)
+                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${planWidth}, ${planHeight})`
                 }, 10)
             },
             updateNotes (event) {
@@ -308,6 +310,7 @@
             },
             panZoomInit (instance, id) {
                 const me = this
+                me.customInstance = instance
                 let planWidth = document.querySelector('.plan_wrapper').getBoundingClientRect().width
                 let planHeight = document.querySelector('.plan_wrapper').getBoundingClientRect().height
                 instance.zoomAbs(planWidth / 2, planHeight / 2, 0.55)
