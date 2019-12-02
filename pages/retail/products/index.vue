@@ -166,7 +166,7 @@
                     me.rowCount = document.getElementsByTagName('th').length
                     setTimeout( () => {
                         me.loader(false)
-                    }, 300)
+                    }, 500)
                 })
                 me.$axios.get('api/studios').then(res => {
                     me.studios = res.data.studios

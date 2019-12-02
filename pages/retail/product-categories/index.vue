@@ -146,7 +146,7 @@
                     me.rowCount = document.getElementsByTagName('th').length
                     setTimeout( () => {
                         me.loader(false)
-                    }, 300)
+                    }, 500)
                 })
             }
         },
