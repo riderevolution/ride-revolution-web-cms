@@ -3681,23 +3681,31 @@ input::placeholder
                     span
                         margin-right: 5px
                         display: inline-block
-                        width: 15px
-                        height: 15px
+                        width: 17px
+                        height: 17px
                         border-radius: 50%
                         background-color: $black
                         border: 1px solid $black
                     &.gray
                         span
                             background-color: $border
+                            border: 1px solid $border
                     &.green
                         span
                             background-color: $light_green
+                            border: 1px solid $light_green
                     &.white
                         span
                             background-color: $white
+                            border: 1px solid $black
                     &.gradient
                         span
-                            background-color: $gray_alternate
+                            background-color: transparent
+                            border: 1px solid $border
+                            background-image: url('/icons/blocked-seat-legend.svg')
+                            background-position: center
+                            background-repeat: no-repeat
+                            background-size: cover
                     &.margin
                         margin-left: 20px
         .booker_footer
