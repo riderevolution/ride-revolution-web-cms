@@ -383,13 +383,12 @@
                 formData.append('user_id', me.$store.state.customerID)
                 if (me.promoApplied) {
                     me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
-                        if (res.data) {
-                            if (res.data != 0) {
-                                me.totalPrice = res.data.items
-                            } else {
-                                me.$store.state.promptStatus = true
-                                me.message = 'This promo code is not available anymore.'
-                            }
+                        if (res.data != 0) {
+                            me.totalPrice = res.data.items
+                        } else {
+                            me.promoApplied = false
+                            me.$store.state.promptStatus = true
+                            me.message = 'This promo code is not available anymore.'
                         }
                     }).catch(err => {
                         console.log(err)
