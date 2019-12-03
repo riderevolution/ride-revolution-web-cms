@@ -464,6 +464,12 @@ table
         background-color: $blue_alt
         color: $white
         transition: .3s ease-in-out
+    &.disabled
+        pointer-events: none
+        color: $black
+        background-color: $border_alt
+        border: 1px solid #ccc
+        transition: .3s ease-in-out
 .action_highlight
     sf_pro_regular(15px)
     color: $green

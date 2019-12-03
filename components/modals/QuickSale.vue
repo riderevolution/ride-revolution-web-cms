@@ -259,9 +259,9 @@
                             <div class="promo">
                                 <div class="form_group">
                                     <label for="promo_code">Promo Code</label>
-                                    <input type="text" name="promo_code" class="default_text">
+                                    <input type="text" name="promo_code" :class="`default_text ${(promoApplied) ? 'disabled' : ''}`">
                                 </div>
-                                <button type="button" class="action_btn alternate" @click="applyPromo()">Apply</button>
+                                <button type="button" :class="`${(promoApplied) ? 'disabled' : ''} action_btn alternate`" @click="applyPromo()">Apply</button>
                             </div>
                             <div class="total_wrapper">
                                 <div class="total_title">Total</div>
@@ -282,17 +282,22 @@
             </div>
         </div>
         <transition name="fade">
-            <prompt v-if="$store.state.promptStatus" :message="message" />
+            <prompt v-if="$store.state.promptStatus" :message="message" :hasPromoQuick="promoApplied" :hasCancel="cancel" />
+        </transition>
+        <transition name="fade">
+            <prompt-promo v-if="$store.state.promptPromoStatus" :message="message" />
         </transition>
     </div>
 </template>
 
 <script>
     import QuickSaleTabContent from './QuickSaleTabContent'
+    import PromptPromo from './PromptPromo'
     import Prompt from './Prompt'
     export default {
         components: {
             QuickSaleTabContent,
+            PromptPromo,
             Prompt
         },
         data () {
@@ -346,7 +351,8 @@
                 totalPrice: [],
                 toCheckout: [],
                 cardType: '',
-                promoApplied: false
+                promoApplied: false,
+                cancel: false
             }
         },
         computed: {
@@ -427,14 +433,19 @@
                 formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
                 formData.append('studio_id', me.$store.state.user.current_studio_id)
-                me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
-                    if (res.data) {
-                        console.log(res.data);
-                        me.promoApplied = true
-                    }
-                }).catch(err => {
-                    me.promoApplied = false
-                })
+                if (me.promoApplied) {
+                    me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
+                        if (res.data) {
+                            me.totalPrice = res.data.items
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                        me.promoApplied = false
+                    })
+                } else {
+                    me.message = 'Are you sure you want to use this promo code?'
+                    me.$store.state.promptPromoStatus = true
+                }
             },
             removeOrder (key, id) {
                 const me = this

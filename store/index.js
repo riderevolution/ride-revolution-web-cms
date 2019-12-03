@@ -10,6 +10,7 @@ const createStore = () => {
             customerProductQuickSaleStatus: false,
             quickSaleStatus: false,
             successfulStatus: false,
+            promptPromoStatus: false,
             promptValidateStatus: false,
             promptStatus: false,
             importStatus: false,
