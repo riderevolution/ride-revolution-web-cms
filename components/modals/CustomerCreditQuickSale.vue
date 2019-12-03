@@ -362,7 +362,6 @@
                 const me = this
                 let formData = new FormData()
                 let total = 0
-                let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
                 let productForm = new FormData(document.getElementById('product_form'))
                 let checkout = new FormData(document.getElementById('step2'))
 
@@ -378,14 +377,19 @@
                 checkout.append('transaction_id', me.form.id)
                 productForm.append('items', JSON.stringify(me.totalPrice))
 
-                formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
                 formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
                 formData.append('studio_id', me.$store.state.user.current_studio_id)
+                formData.append('user_id', me.$store.state.customerID)
                 if (me.promoApplied) {
                     me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
                         if (res.data) {
-                            me.totalPrice = res.data.items
+                            if (res.data != 0) {
+                                me.totalPrice = res.data.items
+                            } else {
+                                me.$store.state.promptStatus = true
+                                me.message = 'This promo code is not available anymore.'
+                            }
                         }
                     }).catch(err => {
                         console.log(err)

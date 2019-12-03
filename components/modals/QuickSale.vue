@@ -285,7 +285,7 @@
             </div>
         </div>
         <transition name="fade">
-            <prompt v-if="$store.state.promptStatus" :message="message" :hasPromoQuick="promoApplied" :hasCancel="cancel" />
+            <prompt v-if="$store.state.promptStatus" :message="message" />
         </transition>
         <transition name="fade">
             <prompt-promo v-if="$store.state.promptPromoStatus" :message="message" />
@@ -450,7 +450,12 @@
                 if (me.promoApplied) {
                     me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
                         if (res.data) {
-                            me.totalPrice = res.data.items
+                            if (res.data != 0) {
+                                me.totalPrice = res.data.items
+                            } else {
+                                me.$store.state.promptStatus = true
+                                me.message = 'This promo code is not available anymore.'
+                            }
                         }
                     }).catch(err => {
                         console.log(err)

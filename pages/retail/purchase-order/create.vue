@@ -37,7 +37,7 @@
                             </div>
                             <div class="form_group margin alternate" v-click-outside="closeMe">
                                 <label>Search a Product</label>
-                                <input type="text" autocomplete="off" placeholder="Add a product" :class="`default_text search_alternate ${(!isStudio) ? 'disabled' : '' }`" @click="autocomplete ^= true">
+                                <input type="text" autocomplete="off" placeholder="Add a product name only" :class="`default_text search_alternate ${(!isStudio) ? 'disabled' : '' }`" @click="autocomplete ^= true" @input="filterVariants($event)">
                                 <div :class="`cms_autocomplete ${(variants.length >= 8) ? 'scrollable' : ''}`" v-if="autocomplete">
                                     <div class="autocomplete_title" v-for="(variant, key) in variants" :key="key" @click="addVariant(variant)" v-if="variants.length > 0">{{ variant.product.name }} - {{ variant.variant }}</div>
                                     <div class="autocomplete_title" v-if="variants.length == 0">No Product(s) Found.</div>
@@ -232,6 +232,20 @@
                         )
                     }
                 }
+            },
+            filterVariants () {
+                const me = this
+                let value = event.target.value
+                me.$axios.get(`api/extras/purchase-orders-products-filter?supplier_id=${me.form.supplier}&studio_id=${me.form.studio}&q=${value}`).then(res => {
+                    me.variants = res.data.productVariants
+                    me.purchaseOrders = []
+                    me.variants.forEach((variant, vindex) => {
+                        if (variant.quantity < variant.reorder_point) {
+                            me.purchaseOrders.push(variant)
+                        }
+                    })
+                    me.fetchItems()
+                })
             },
             searchVariants () {
                 const me = this
