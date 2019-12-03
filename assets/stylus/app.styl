@@ -708,7 +708,16 @@ table
                                         &.item_name
                                             sf_pro_semibold(16px)
                                         &.item_price
+                                            position: relative
                                             sf_pro_regular(16px)
+                                            .prev_price
+                                                position: absolute
+                                                top: 0
+                                                sf_pro_medium(13px)
+                                                color: $red
+                                                text-decoration: line-through
+                                            p
+                                                margin: 0
                                         .form_flex_input
                                             margin-right: 20px
                                             .default_text

@@ -245,7 +245,10 @@
                                             </div
                                         </td>
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
-                                        <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
+                                        <td class="item_price" width="25%">
+                                            <p :class="`${(data.discounted_price) ? 'prev_price' : ''}`" >PHP {{ totalCount(data.price) }}</p>
+                                            <p v-if="data.discounted_price">PHP {{ totalCount(data.discounted_price) }}</p>
+                                        </td>
                                         <td>
                                             <div class="close_wrapper alternate" @click="removeOrder(key, data.item.id)">
                                                 <div class="close_icon"></div>
@@ -351,8 +354,7 @@
                 totalPrice: [],
                 toCheckout: [],
                 cardType: '',
-                promoApplied: false,
-                cancel: false
+                promoApplied: false
             }
         },
         computed: {
@@ -368,19 +370,27 @@
                 let change = 0
                 if (value != 0) {
                     me.totalPrice.forEach((data, index) => {
-                        total += data.price
+                        if (data.discounted_price) {
+                            total += data.discounted_price
+                        } else {
+                            total += data.price
+                        }
                     })
                 } else {
                     change = 0
                 }
                 change = value - parseFloat(total)
-                return change
+                return me.totalCount(change)
             },
             computeTotal () {
                 const me = this
                 let total = 0
                 me.totalPrice.forEach((data, index) => {
-                    total += data.price
+                    if (data.discounted_price) {
+                        total += data.discounted_price
+                    } else {
+                        total += data.price
+                    }
                 })
                 me.form.total = total
                 return me.totalCount(total)
@@ -422,7 +432,11 @@
                 let checkout = new FormData(document.getElementById('step2'))
 
                 me.totalPrice.forEach((data, index) => {
-                    total += data.price
+                    if (data.discounted_price) {
+                        total += data.discounted_price
+                    } else {
+                        total += data.price
+                    }
                 })
 
                 checkout.append('total', total)
@@ -501,7 +515,11 @@
                 let checkout = new FormData(document.getElementById('step2'))
 
                 me.totalPrice.forEach((data, index) => {
-                    total += data.price
+                    if (data.discounted_price) {
+                        total += data.discounted_price
+                    } else {
+                        total += data.price
+                    }
                 })
 
                 checkout.append('total', total)

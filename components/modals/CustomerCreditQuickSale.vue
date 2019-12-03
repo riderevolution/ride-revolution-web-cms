@@ -186,7 +186,10 @@
                                             </div>
                                         </td>
                                         <td class="item_price" width="25%">PHP {{ totalCount(data.item.origPrice) }}</td>
-                                        <td class="item_price" width="25%">PHP {{ totalCount(data.price) }}</td>
+                                        <td class="item_price" width="25%">
+                                            <p :class="`${(data.discounted_price) ? 'prev_price' : ''}`" >PHP {{ totalCount(data.price) }}</p>
+                                            <p v-if="data.discounted_price">PHP {{ totalCount(data.discounted_price) }}</p>
+                                        </td>
                                         <td>
                                             <div class="close_wrapper alternate" @click="removeOrder(key, data.item.id)">
                                                 <div class="close_icon"></div>
@@ -230,15 +233,20 @@
         <transition name="fade">
             <prompt v-if="$store.state.promptStatus" :message="message" />
         </transition>
+        <transition name="fade">
+            <prompt-promo v-if="$store.state.promptPromoStatus" :message="message" />
+        </transition>
     </div>
 </template>
 
 <script>
     import CustomerCreditQuickSaleTabContent from './CustomerCreditQuickSaleTabContent'
+    import PromptPromo from './PromptPromo'
     import Prompt from './Prompt'
     export default {
         components: {
             CustomerCreditQuickSaleTabContent,
+            PromptPromo,
             Prompt
         },
         data () {
@@ -293,19 +301,27 @@
                 let change = 0
                 if (value != 0) {
                     me.totalPrice.forEach((data, index) => {
-                        total += data.price
+                        if (data.discounted_price) {
+                            total += data.discounted_price
+                        } else {
+                            total += data.price
+                        }
                     })
                 } else {
                     change = 0
                 }
                 change = value - parseFloat(total)
-                return change
+                return me.totalCount(change)
             },
             computeTotal () {
                 const me = this
                 let total = 0
                 me.totalPrice.forEach((data, index) => {
-                    total += data.price
+                    if (data.discounted_price) {
+                        total += data.discounted_price
+                    } else {
+                        total += data.price
+                    }
                 })
                 me.form.total = total
                 return me.totalCount(total)
@@ -346,29 +362,39 @@
                 const me = this
                 let formData = new FormData()
                 let total = 0
+                let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
                 let productForm = new FormData(document.getElementById('product_form'))
                 let checkout = new FormData(document.getElementById('step2'))
 
                 me.totalPrice.forEach((data, index) => {
-                    total += data.price
+                    if (data.discounted_price) {
+                        total += data.discounted_price
+                    } else {
+                        total += data.price
+                    }
                 })
 
                 checkout.append('total', total)
                 checkout.append('transaction_id', me.form.id)
                 productForm.append('items', JSON.stringify(me.totalPrice))
 
+                formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
                 formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
                 formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
                 formData.append('studio_id', me.$store.state.user.current_studio_id)
-                formData.append('user_id', me.$store.state.customerID)
-                me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
-                    if (res.data) {
-                        console.log(res.data);
-                        me.promoApplied = true
-                    }
-                }).catch(err => {
-                    me.promoApplied = false
-                })
+                if (me.promoApplied) {
+                    me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
+                        if (res.data) {
+                            me.totalPrice = res.data.items
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                        me.promoApplied = false
+                    })
+                } else {
+                    me.message = 'Are you sure you want to use this promo code?'
+                    me.$store.state.promptPromoStatus = true
+                }
             },
             removeOrder (key, id) {
                 const me = this
@@ -388,7 +414,11 @@
                 let checkout = new FormData(document.getElementById('step2'))
 
                 me.totalPrice.forEach((data, index) => {
-                    total += data.price
+                    if (data.discounted_price) {
+                        total += data.discounted_price
+                    } else {
+                        total += data.price
+                    }
                 })
 
                 checkout.append('total', total)
