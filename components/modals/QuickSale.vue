@@ -529,6 +529,7 @@
 
                 checkout.append('total', total)
                 checkout.append('transaction_id', me.form.id)
+                checkout.append('promo_applied', me.promoApplied)
                 productForm.append('items', JSON.stringify(me.totalPrice))
 
                 formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
