@@ -449,14 +449,13 @@
                 formData.append('studio_id', me.$store.state.user.current_studio_id)
                 if (me.promoApplied) {
                     me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
-                        console.log(res.data)
-                        me.promoApplied = false
-                        // if (res.data != 0) {
-                        //     me.totalPrice = res.data.items
-                        // } else {
-                        //     me.$store.state.promptStatus = true
-                        //     me.message = 'This promo code is not available anymore.'
-                        // }
+                        if (res.data != 0) {
+                            me.totalPrice = res.data.items
+                        } else {
+                            me.promoApplied = false
+                            me.$store.state.promptStatus = true
+                            me.message = 'This promo code is not available anymore.'
+                        }
                     }).catch(err => {
                         console.log(err)
                         me.promoApplied = false
@@ -539,26 +538,27 @@
                 if (me.totalPrice.length > 0) {
                     me.$validator.validateAll('checkout_form').then(valid => {
                         if (valid) {
-                            me.loader(true)
+                            me.loader(false)
                             me.$axios.post('api/quick-sale', formData).then(res => {
-                                setTimeout( () => {
-                                    if (res.data) {
-                                        me.$store.state.successfulStatus = true
-                                    } else {
-                                        me.$store.state.errorList.push('Sorry, Something went wrong')
-                                        me.$store.state.errorStatus = true
-                                    }
-                                }, 200)
-                            }).catch(err => {
-                                me.$store.state.errorList = err.response.data.errors
-                                me.$store.state.errorStatus = true
-                            }).then(() => {
-                                setTimeout( () => {
-                                    me.loader(false)
-                                    if (!me.$store.state.errorStatus) {
-                                        me.$store.state.quickSaleStatus = false
-                                    }
-                                }, 200)
+                                console.log(res.data)
+                            //     setTimeout( () => {
+                            //         if (res.data) {
+                            //             me.$store.state.successfulStatus = true
+                            //         } else {
+                            //             me.$store.state.errorList.push('Sorry, Something went wrong')
+                            //             me.$store.state.errorStatus = true
+                            //         }
+                            //     }, 200)
+                            // }).catch(err => {
+                            //     me.$store.state.errorList = err.response.data.errors
+                            //     me.$store.state.errorStatus = true
+                            // }).then(() => {
+                            //     setTimeout( () => {
+                            //         me.loader(false)
+                            //         if (!me.$store.state.errorStatus) {
+                            //             me.$store.state.quickSaleStatus = false
+                            //         }
+                            //     }, 200)
                             })
                         } else {
                             setTimeout( () => {
