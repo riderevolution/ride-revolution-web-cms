@@ -450,6 +450,7 @@
                 if (me.promoApplied) {
                     me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
                         console.log(res.data)
+                        me.promoApplied = false
                         // if (res.data != 0) {
                         //     me.totalPrice = res.data.items
                         // } else {
