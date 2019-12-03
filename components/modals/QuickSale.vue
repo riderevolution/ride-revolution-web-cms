@@ -449,14 +449,13 @@
                 formData.append('studio_id', me.$store.state.user.current_studio_id)
                 if (me.promoApplied) {
                     me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
-                        if (res.data != 0) {
-                            console.log('meron')
-                            me.totalPrice = res.data.items
-                        } else {
-                            console.log('wala')
-                            me.$store.state.promptStatus = true
-                            me.message = 'This promo code is not available anymore.'
-                        }
+                        console.log(res.data)
+                        // if (res.data != 0) {
+                        //     me.totalPrice = res.data.items
+                        // } else {
+                        //     me.$store.state.promptStatus = true
+                        //     me.message = 'This promo code is not available anymore.'
+                        // }
                     }).catch(err => {
                         console.log(err)
                         me.promoApplied = false
