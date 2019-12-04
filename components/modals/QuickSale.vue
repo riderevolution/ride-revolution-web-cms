@@ -538,27 +538,26 @@
                 if (me.totalPrice.length > 0) {
                     me.$validator.validateAll('checkout_form').then(valid => {
                         if (valid) {
-                            me.loader(false)
+                            me.loader(true)
                             me.$axios.post('api/quick-sale', formData).then(res => {
-                                console.log(res.data)
-                            //     setTimeout( () => {
-                            //         if (res.data) {
-                            //             me.$store.state.successfulStatus = true
-                            //         } else {
-                            //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                            //             me.$store.state.errorStatus = true
-                            //         }
-                            //     }, 200)
-                            // }).catch(err => {
-                            //     me.$store.state.errorList = err.response.data.errors
-                            //     me.$store.state.errorStatus = true
-                            // }).then(() => {
-                            //     setTimeout( () => {
-                            //         me.loader(false)
-                            //         if (!me.$store.state.errorStatus) {
-                            //             me.$store.state.quickSaleStatus = false
-                            //         }
-                            //     }, 200)
+                                setTimeout( () => {
+                                    if (res.data) {
+                                        me.$store.state.successfulStatus = true
+                                    } else {
+                                        me.$store.state.errorList.push('Sorry, Something went wrong')
+                                        me.$store.state.errorStatus = true
+                                    }
+                                }, 200)
+                            }).catch(err => {
+                                me.$store.state.errorList = err.response.data.errors
+                                me.$store.state.errorStatus = true
+                            }).then(() => {
+                                setTimeout( () => {
+                                    me.loader(false)
+                                    if (!me.$store.state.errorStatus) {
+                                        me.$store.state.quickSaleStatus = false
+                                    }
+                                }, 200)
                             })
                         } else {
                             setTimeout( () => {
