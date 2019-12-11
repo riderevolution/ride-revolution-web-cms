@@ -464,45 +464,51 @@
         methods: {
             applyPromo () {
                 const me = this
-                let formData = new FormData()
-                let total = 0
-                let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
-                let productForm = new FormData(document.getElementById('product_form'))
-                let checkout = new FormData(document.getElementById('step2'))
+                if (document.getElementsByName("promo_code").value != null) {
+                    let formData = new FormData()
+                    let total = 0
+                    let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
+                    let productForm = new FormData(document.getElementById('product_form'))
+                    let checkout = new FormData(document.getElementById('step2'))
 
-                me.totalPrice.forEach((data, index) => {
-                    if (data.discounted_price) {
-                        total += data.discounted_price
-                    } else {
-                        total += data.price
-                    }
-                })
-
-                checkout.append('total', total)
-                checkout.append('transaction_id', me.form.id)
-                productForm.append('items', JSON.stringify(me.totalPrice))
-
-                formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
-                formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
-                formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
-                formData.append('studio_id', me.$store.state.user.current_studio_id)
-                formData.append('user_id', me.$store.state.customerID)
-                if (me.promoApplied) {
-                    me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
-                        if (res.data != 0) {
-                            me.totalPrice = res.data.items
+                    me.totalPrice.forEach((data, index) => {
+                        if (data.discounted_price) {
+                            total += data.discounted_price
                         } else {
-                            me.promoApplied = false
-                            me.$store.state.promptStatus = true
-                            me.message = 'This promo code is not available anymore.'
+                            total += data.price
                         }
-                    }).catch(err => {
-                        console.log(err)
-                        me.promoApplied = false
                     })
+
+                    checkout.append('total', total)
+                    checkout.append('transaction_id', me.form.id)
+                    productForm.append('items', JSON.stringify(me.totalPrice))
+
+                    formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
+                    formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
+                    formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
+                    formData.append('studio_id', me.$store.state.user.current_studio_id)
+                    formData.append('user_id', me.$store.state.customerID)
+                    if (me.promoApplied) {
+                        me.$axios.post('api/quick-sale/apply-promo', formData).then(res => {
+                            if (res.data != 0) {
+                                me.totalPrice = res.data.items
+                            } else {
+                                me.promoApplied = false
+                                me.$store.state.promptStatus = true
+                                me.message = 'This promo code is not available anymore.'
+                            }
+                        }).catch(err => {
+                            console.log(err)
+                            me.promoApplied = false
+                        })
+                    } else {
+                        me.message = 'Are you sure you want to use this promo code?'
+                        me.$store.state.promptPromoStatus = true
+                    }
                 } else {
-                    me.message = 'Are you sure you want to use this promo code?'
-                    me.$store.state.promptPromoStatus = true
+                    me.promoApplied = false
+                    me.$store.state.promptStatus = true
+                    me.message = 'Please enter a promo code.'
                 }
             },
             removeOrder (key, id) {
@@ -577,26 +583,26 @@
                 formData.append('user_id', me.$store.state.customerID)
                 me.$validator.validateAll('checkout_form').then(valid => {
                     if (valid) {
-                        // me.loader(true)
+                        me.loader(true)
                         me.$axios.post('api/quick-sale', formData).then(res => {
-                        //     setTimeout( () => {
-                        //         if (res.data) {
-                        //             me.$store.state.successfulStatus = true
-                        //         } else {
-                        //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                        //             me.$store.state.errorStatus = true
-                        //         }
-                        //     }, 200)
-                        // }).catch(err => {
-                        //     me.$store.state.errorList = err.response.data.errors
-                        //     me.$store.state.errorStatus = true
-                        // }).then(() => {
-                        //     setTimeout( () => {
-                        //         me.loader(false)
-                        //         if (!me.$store.state.errorStatus) {
-                        //             me.$store.state.quickSaleStatus = false
-                        //         }
-                        //     }, 200)
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.$store.state.successfulStatus = true
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 200)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                if (!me.$store.state.errorStatus) {
+                                    me.$store.state.customerProductQuickSaleStatus = false
+                                }
+                            }, 200)
                         })
                     } else {
                         setTimeout( () => {
