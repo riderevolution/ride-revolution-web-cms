@@ -6,30 +6,34 @@
                 <div :class="`status ${(packageStatus == 2) ? 'active' : ''}`" @click="togglePackages(2)">Shared</div>
             </div>
             <div class="cms_table_package">
-                <div class="table_package" v-for="(data, key) in resPackages" :key="key">
-                    <h2 :class="`package_title ${data.class}`">{{ data.name }} <span>{{ data.label }}</span></h2>
+                <div class="table_package" v-for="(data, key) in value.user_package_counts" :key="key">
+                    <h2 class="package_title">
+                        {{ data.class_package.name }}
+                        <span class="warning" v-if="checkWarning(data)">{{ violator.warning }} Days Left</span>
+                        <!-- <span class="shared">Shared with Sheena Villeta</span> -->
+                    </h2>
                     <div class="package_details">
                         <div class="package_status">
                             <div class="box">
                                 <div class="overlay">
-                                    <p>48</p>
+                                    <p>{{ data.count }}</p>
                                     <label>Used</label>
                                 </div>
                             </div>
                             <div class="box margin">
                                 <div class="overlay">
-                                    <p>2</p>
+                                    <p>{{ (parseInt(data.count) == data.class_package.class_count) ? data.count : parseInt(data.count) - data.class_package.class_count }}</p>
                                     <label>Available</label>
                                 </div>
                             </div>
                         </div>
                         <div class="package_date">
                             <div class="date">
-                                <p>Apr. 04, 2019 / Apr 8, 2019</p>
+                                <p>{{ formatDate(data.created_at) }} / {{ (data.activation_date != 'NA') ? formatDate(data.activation_date) : 'N/A' }}</p>
                                 <label>Purchase Date / Activation Date</label>
                             </div>
                             <div class="date margin">
-                                <p>Apr 8, 2020</p>
+                                <p>{{ formatDate(data.class_package.computed_expiration_date) }}</p>
                                 <!-- <label>Expiry date <a href="javascript:void(0)" class="expiry_btn">Edit</a></label> -->
                                 <label>Expiry date</label>
                             </div>
@@ -59,26 +63,39 @@
             type: {
                 type: String,
                 default: 'packages'
+            },
+            value: {
+                default: null
             }
         },
         data () {
             return {
-                packageStatus: 1,
-                resPackages: [
-                    {
-                        name: '50 Class Package',
-                        class: 'warning',
-                        label: '2 days left'
-                    },
-                    {
-                        name: '10 Class Package',
-                        class: 'shared',
-                        label: 'Shared with Sheena Villeta'
-                    }
-                ]
+                violator: {
+                    warning: 0,
+                    shared: 0,
+                    transferred: 0,
+                    freeze: 0,
+                },
+                packageStatus: 1
             }
         },
         methods: {
+            formatDate (value) {
+                if (value) {
+                    return this.$moment(value).format('MMM DD, YYYY')
+                }
+            },
+            checkWarning (data) {
+                const me = this
+                let expiry = me.$moment(data.class_package.computed_expiration_date)
+                let current = me.$moment()
+                if (parseInt(expiry.diff(current, 'days')) <= 10) {
+                    me.violator.warning = expiry.diff(current, 'days')
+                    return true
+                } else {
+                    return false
+                }
+            },
             toggledOption (event) {
                 const me = this
                 let element = event.target

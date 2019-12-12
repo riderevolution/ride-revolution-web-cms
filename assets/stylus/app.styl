@@ -248,6 +248,7 @@ table
         .wrapper
             height: 560px
             overflow-y: scroll
+            margin-right: 5px
             .notification_wrapper
                 display: flex
                 flex-flow: row wrap
@@ -4480,21 +4481,21 @@ input::placeholder
                     &:last-child
                         border-bottom: 2px dashed transparent
                     .package_title
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
                         sf_pro_bold(22px)
                         color: $black
                         span
                             sf_pro_medium(12px)
-                            vertical-align: middle
                             border-radius: 5px
                             padding: 5px
                             margin-left: 10px
                             text-transform: uppercase
-                        &.shared
-                            span
+                            &.shared
                                 color: $blue
                                 background-color: $light_blue
-                        &.warning
-                            span
+                            &.warning
                                 color: $white
                                 background-color: $red
                     .package_details
