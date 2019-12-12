@@ -350,7 +350,7 @@
         methods: {
             applyPromo () {
                 const me = this
-                if (document.getElementsByName("promo_code").value != NULL) {
+                if (document.getElementsByName("promo_code")[0].value != "") {
                     let formData = new FormData()
                     let total = 0
                     let productForm = new FormData(document.getElementById('product_form'))
