@@ -30,7 +30,8 @@
                             </div>
                             <div class="date margin">
                                 <p>Apr 8, 2020</p>
-                                <label>Expiry date <a href="javascript:void(0)" class="expiry_btn">Edit</a></label>
+                                <!-- <label>Expiry date <a href="javascript:void(0)" class="expiry_btn">Edit</a></label> -->
+                                <label>Expiry date</label>
                             </div>
                         </div>
                         <div class="package_action">
