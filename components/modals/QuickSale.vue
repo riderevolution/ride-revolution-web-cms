@@ -425,7 +425,7 @@
         methods: {
             applyPromo () {
                 const me = this
-                if (document.getElementsByName("promo_code").value != null) {
+                if (document.getElementsByName("promo_code").value != NULL) {
                     let formData = new FormData()
                     let total = 0
                     let customGiftCard = new FormData(document.getElementById('custom_gift_form'))

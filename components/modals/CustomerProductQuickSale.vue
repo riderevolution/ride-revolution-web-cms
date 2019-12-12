@@ -225,16 +225,6 @@
                                 <input type="text" name="change" class="default_text disabled" v-model="computeChange" v-validate="'required'">
                             </div>
                         </div>
-                        <div class="form_main_group" v-if="form.paymentType == 5">
-                            <div class="form_group">
-                                <label for="store_credit_amount">
-                                    <span class="label">Amount</span>
-                                    <span>Available Store Credits: 5,000</span>
-                                </label>
-                                <input type="text" name="store_credit_amount" class="default_text" v-validate="`required|min_value:100|decimal:2`">
-                                <transition name="slide"><span class="validation_errors" v-if="errors.has('checkout_form.store_credit_amount')">{{ errors.first('checkout_form.store_credit_amount') }}</span></transition>
-                            </div>
-                        </div>
                     </div>
                     <div class="right_side">
                         <div class="breakdown_wrapper">
@@ -464,7 +454,7 @@
         methods: {
             applyPromo () {
                 const me = this
-                if (document.getElementsByName("promo_code").value != null) {
+                if (document.getElementsByName("promo_code").value != NULL) {
                     let formData = new FormData()
                     let total = 0
                     let customGiftCard = new FormData(document.getElementById('custom_gift_form'))

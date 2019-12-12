@@ -16,7 +16,7 @@
                         </div>
                         <div class="user_summary">
                             <div class="summary">Completed Rides: 89</div>
-                            <div class="summary">Store Credits: 2,000</div>
+                            <div class="summary">Store Credits: {{ (customer.store_credits) ? totalItems(customer.store_credits.amount) : 0 }}</div>
                             <div class="summary pending">Pending Payment: Php 500.00</div>
                         </div>
                         <div class="user_action">
@@ -30,7 +30,7 @@
                 </div>
             </section>
             <section id="content">
-                <customer-content :type="$route.params.slug" />
+                <customer-content :value="customer" :type="$route.params.slug" />
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
