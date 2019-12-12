@@ -144,7 +144,7 @@
                                 <input type="radio" id="cash" value="cash" name="payment_method" class="action_radio" @change="checkPayment('cash')">
                                 <label for="cash">Cash</label>
                             </div>
-                            <div class="form_radio">
+                            <div class="form_radio" v-if="hasStoreCredits">
                                 <input type="radio" id="store_credits" value="store-credits" name="payment_method" class="action_radio" @change="checkPayment('store-credits')">
                                 <label for="store_credits">Store Credits</label>
                             </div>
@@ -315,6 +315,7 @@
         },
         data () {
             return {
+                hasStoreCredits: true,
                 nextStep: 1,
                 status: 0,
                 total: 0,
@@ -612,6 +613,14 @@
                         break
                     case 2:
                         if (me.totalPrice.length > 0) {
+                            me.totalPrice.forEach((data, index) => {
+                                if (data.type == "store-credit") {
+                                    me.hasStoreCredits = false
+                                    return false
+                                } else {
+                                    me.hasStoreCredits = true
+                                }
+                            })
                             me.nextStep = 2
                             document.getElementById('step2').classList.add('slide_in')
                             document.getElementById('step1').classList.remove('slide_in')
