@@ -464,7 +464,7 @@
         methods: {
             applyPromo () {
                 const me = this
-                if (document.getElementsByName("promo_code").value != null) {
+                if (document.getElementsByName("promo_code")[0].value != null) {
                     let formData = new FormData()
                     let total = 0
                     let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
@@ -574,6 +574,7 @@
 
                 checkout.append('total', total)
                 checkout.append('transaction_id', me.form.id)
+                checkout.append('promo_applied', me.promoApplied)
                 productForm.append('items', JSON.stringify(me.totalPrice))
 
                 formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
