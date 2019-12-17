@@ -3580,7 +3580,55 @@ input::placeholder
                     justify-content: space-between
                     border-right: 1px solid $border
                     .class_options
+                        display: flex
+                        flex-flow: row wrap
+                        align-items: center
                         flex: 0 0 auto
+                        .default_select
+                            width: auto
+                        .class_info
+                            position: relative
+                            margin-left: 10px
+                            label
+                                display: block
+                                sf_pro_regular(15px)
+                                color: $gray_alternate
+                                margin-bottom: 15px
+                            .overlay
+                                position: absolute
+                                top: calc(100% + 30px)
+                                left: 0
+                                z-index: 3
+                                width: 400px
+                                background-color: $white
+                                padding: 20px 20px 10px 20px
+                                border-radius: 3px
+                                box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.16)
+                                opacity: 0
+                                visibility: hidden
+                                transition: .3s ease-in-out
+                                .type_content
+                                    display: flex
+                                    flex-flow: row wrap
+                                    align-items: center
+                                    justify-content: space-between
+                                    .type
+                                        flex: 0 0 48%
+                                        display: flex
+                                        flex-flow: row wrap
+                                        align-items: center
+                                        margin-bottom: 10px
+                                        img
+                                            width: 20px
+                                        .type_title
+                                            sf_pro_regular(15px)
+                                            color: $black
+                                            padding-left: 10px
+                                &.active
+                                    top: calc(100% + 10px)
+                                    opacity: 1
+                                    visibility: visible
+                                    transition: .3s ease-in-out
                     .booker_label
                         sf_pro_regular(18px)
                         color: $gray_alternate

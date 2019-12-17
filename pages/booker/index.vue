@@ -93,7 +93,7 @@
                             <div class="class_accordion" v-for="(result, key) in results" :key="key">
                                 <div class="accordion_header" @click.self="toggleClass($event, $moment(result.date).format('M'), $moment(result.date).format('D'), $moment(result.date).format('YYYY'))">{{ result.abbr }} | {{ result.date }}</div>
                                 <div class="accordion_content">
-                                    <a href="javascript:void(0)" class="class_content" v-for="(data, key) in schedules" :key="key">
+                                    <a href="javascript:void(0)" :id="`class_`" class="class_content" v-for="(data, key) in schedules" :key="key">
                                         <div class="class_title">
                                             <span>{{ data.schedule.start_time }}, {{ data.schedule.class_type.name }}</span>
                                             <div class="class_status full">
@@ -125,6 +125,26 @@
                                             <option value="" disabled selected>Class Options</option>
                                             <option :value="key" v-for="(classOption, key) in classOptions" :key="key">{{ classOption }}</option>
                                         </select>
+                                        <div class="class_info">
+                                            <img id="legend_toggler" @click="toggleLegends($event)" src="/icons/info-icon.svg" />
+                                            <div class="overlay">
+                                                <label>Customer Legend</label>
+                                                <div class="type_content">
+                                                    <div class="type" v-for="(data, key) in customerTypes" :key="key">
+                                                        <img :src="data.images[0].path" />
+                                                        <div class="type_title">{{ data.name }}</div>
+                                                    </div>
+                                                    <div class="type">
+                                                        <img src="/icons/pending-payment-icon.svg" />
+                                                        <div class="type_title">Pending Payment</div>
+                                                    </div>
+                                                    <div class="type">
+                                                        <img src="/icons/broken-bike-icon.svg" />
+                                                        <div class="type_title">Broken Bike</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <label class="booker_label">Lorem Ipsum</label>
                                     <div class="controls">
@@ -246,6 +266,25 @@
             }
         },
         methods: {
+            toggleOverlays (e) {
+                const me = this
+                let target = e.target
+                let element = document.getElementById(`legend_toggler`)
+                if (element !== target) {
+                    if (element.nextElementSibling.classList.contains('active')) {
+                        element.nextElementSibling.classList.remove('active')
+                    }
+                }
+            },
+            toggleLegends (event) {
+                const me = this
+                let element = event.target
+                if (element.nextElementSibling.classList.contains('active')) {
+                    element.nextElementSibling.classList.remove('active')
+                } else {
+                    element.nextElementSibling.classList.add('active')
+                }
+            },
             toggleQuickSale (type) {
                 const me = this
                 switch (type) {
@@ -504,6 +543,11 @@
             async toggleClass (event, month, day, year) {
                 const me = this
                 const target = event.target
+                let accordions = document.querySelectorAll('.booker_classes .content_wrapper .class_accordion')
+                accordions.forEach((accordion, index) => {
+                    accordion.classList.remove('toggled')
+                    accordion.querySelector('.accordion_content').style.height = 0
+                })
                 if (!target.parentNode.classList.contains('toggled')) {
                     await me.$axios.get(`api/schedules?month=${month}&year=${year}&day=${day}&studio_id=${me.studioID}`).then(res => {
                         if (res.data) {
@@ -551,6 +595,12 @@
             setTimeout( () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 300)
+        },
+        beforeMount () {
+            document.addEventListener('click', this.toggleOverlays)
+        },
+        beforeDestroy () {
+            document.removeEventListener('click', this.toggleOverlays)
         }
     }
 </script>
