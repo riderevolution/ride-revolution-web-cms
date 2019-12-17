@@ -1,6 +1,6 @@
 <template>
     <div class="plan_wrapper">
-        <seat-plan-box v-for="(seat, key) in seats" :data="seat.data" :position="seat.position" :layout="seat.layout" :key="key" v-if="hasFetchSeat" />
+        <seat-plan-box v-for="(seat, key) in seats" :data="seat.data" :position="seat.position" :layout="seat.layout" :total="ctr" :key="key" v-if="hasFetchSeat" />
         <div class="no_results" v-if="!hasFetchSeat">
             Please select a Studio.
         </div>
@@ -15,6 +15,7 @@
         },
         data () {
             return {
+                ctr: 0,
                 temp: [],
                 hasFetchSeat: false,
                 seats: {
@@ -68,6 +69,7 @@
                                     me.seats.bottom_alt_2.data.push(seat)
                                     break
                             }
+                            me.ctr++
                         })
                     }
                 }).catch(err => {

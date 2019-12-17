@@ -535,7 +535,7 @@
                     setTimeout( () => {
                         me.studios = me.$store.state.user.staff_details.studio_access
                         me.notePad = me.$store.state.user.notepad
-                    }, 100)
+                    }, 200)
                     me.rowCount = document.getElementsByTagName('th').length
                     me.loaded = true
                 })

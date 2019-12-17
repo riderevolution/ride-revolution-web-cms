@@ -2114,9 +2114,9 @@ input::placeholder
                         span
                             flex: 0 1 auto
                         .default_content
-                            flex: 1 1 75%;
-                            width: 100%;
-                            margin-left: 5px;
+                            flex: 1 1 75%
+                            width: 100%
+                            margin-left: 5px
                     .default_content
                         display: inline-block
                         background-color: transparent
@@ -3619,9 +3619,28 @@ input::placeholder
                             text-align: center
                             cursor: pointer
                             margin: 15px
-                            padding: 40px 20px
+                            padding: 45px 20px
                             background-color: $white
                             border: 1.5px solid $black
+                            transition: .3s ease-in-out
+                            &.sign_out
+                                background-color: $light_green
+                                border: 1.5px solid transparent
+                                transition: .3s ease-in-out
+                                .seat_action
+                                    background-image: url('/icons/sign-out.svg')
+                                .seat_number
+                                    color: rgba(132, 143, 159, 0.4)
+                                    transition: .3s ease-in-out
+                            &.sign_in
+                                background-color: #EDEDED
+                                border: 1.5px solid transparent
+                                transition: .3s ease-in-out
+                                .seat_action
+                                    background-image: url('/icons/sign-in.svg')
+                                .seat_number
+                                    color: rgba(132, 143, 159, 0.4)
+                                    transition: .3s ease-in-out
                             .seat_number
                                 position: absolute
                                 top: 50%
@@ -3629,8 +3648,79 @@ input::placeholder
                                 right: 0
                                 text-align: center
                                 transform: translateY(-50%)
-                                sf_pro_bold(24px)
-                                color: rgba(132, 143, 159, 0.5)
+                                sf_pro_bold(30px)
+                                color: $black
+                                transition: .3s ease-in-out
+                            .seat_menu
+                                position: absolute
+                                top: 0
+                                left: calc(0% + 5px)
+                                z-index: 2
+                                font-size: 14px
+                                cursor: pointer
+                            .seat_overlay_menu
+                                position: absolute
+                                background-color: $white
+                                border-radius: 5px
+                                width: 160px
+                                top: calc(0% + 30px)
+                                left: 0
+                                right: unset
+                                opacity: 0
+                                z-index: 3
+                                visibility: hidden
+                                list-style: none
+                                padding: 0
+                                text-align: left
+                                box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
+                                transition: .3s ease-in-out
+                                .seat_item
+                                    display: block
+                                    sf_pro_regular(15px)
+                                    color: $black
+                                    text-decoration: none
+                                    padding: 10px 20px
+                                    background-color: transparent
+                                    transition: .3s ease-in-out
+                                    &:hover
+                                        color: $green
+                                        background-color: $light_green
+                                        transition: .3s ease-in-out
+                                &.active
+                                    top: calc(0% + 15px)
+                                    opacity: 1
+                                    visibility: visible
+                                    transition: .3s ease-in-out
+                            .seat_pending
+                                position: absolute
+                                z-index: 2
+                                top: 0
+                                right: 20px
+                                width: 28px
+                                height: 28px
+                                background-image: url('/icons/pending-payment-icon.svg')
+                                background-position: calc(50% - 1px) calc(0% + 3px)
+                                background-repeat: no-repeat
+                                background-size: 80%
+                                opacity: 1
+                                cursor: pointer
+                                transition: 0.3s ease-in-out
+                            .seat_action
+                                position: absolute
+                                z-index: 2
+                                top: calc(0% - 8px)
+                                right: calc(0% - 20px)
+                                width: 40px
+                                height: 38px
+                                background-position: 50% calc(0% + -14px)
+                                background-repeat: no-repeat
+                                background-size: 190%
+                                opacity: 1
+                                cursor: pointer
+                                transition: .3s ease-in-out
+                                &:hover
+                                    opacity: 0.5
+                                    transition: .3s ease-in-out
                         &.layout_1
                             &.bottom
                                 bottom: calc(0% + 170px)
