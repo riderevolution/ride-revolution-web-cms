@@ -3485,7 +3485,8 @@ input::placeholder
                         &:last-child
                             border-bottom: 1px solid transparent
                         &:hover,
-                        &:focus
+                        &:focus,
+                        &.active
                             border-left: 2px solid $green
                             box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1)
                             transition: .3s ease-in-out
@@ -4859,6 +4860,7 @@ input::placeholder
                                 border-radius: 3px
                                 transition: .3s ease-in-out
                                 .no_results
+                                    transform: translateY(-15px)
                                     opacity: 0
                                     visibility: hidden
                                     transition: .3s ease-in-out
@@ -4924,6 +4926,10 @@ input::placeholder
                                             span
                                                 sf_pro_regular(15px)
                                                 color: $gray_alternate
+                                        .close_wrapper
+                                            top: calc(0% + 5px)
+                                            right: calc(0% + 5px)
+                                            transform: translateY(0%)
                                 .customer_footer
                                     display: flex
                                     flex-flow: row wrap

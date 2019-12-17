@@ -34,41 +34,48 @@
                                 </div>
                             </div>
                             <div :class="`customer_selected ${(customer != '') ? 'selected' : ''}`">
-                                <div class="customer_picked" v-if="customer != ''">
-                                    <div class="customer_header">
-                                        <img class="customer_image" :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
-                                        <div class="customer_default_image" v-else>
-                                            {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
-                                        </div>
-                                        <div class="customer_details">
-                                            <h2 class="customer_name">
-                                                {{ customer.first_name }} {{ customer.last_name }}
-                                                <div class="types" v-if="customer.customer_details.customer_type.images.length > 0"><img :src="customer.customer_details.customer_type.images[0].path_resized" /></div>
-                                                <a :href="`mailto:${customer.email}`" class="email">
-                                                    <img src="/icons/email-icon.svg" />
-                                                    <span>Email</span>
-                                                </a>
-                                            </h2>
-                                            <div class="customer_info">
-                                                <span>Birthday: {{ $moment(customer.customer_details.co_birthdate).format('M/D/YY') }}</span>
-                                                <span>{{ customer.customer_details.co_contact_number }}</span>
-                                                <span>Store Credit: 500</span>
-                                                <span>Shoe Size: {{ customer.customer_details.co_shoe_size }}</span>
+                                <transition name="fade">
+                                    <div class="customer_picked" v-if="customer != ''">
+                                        <div class="customer_header">
+                                            <img class="customer_image" :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
+                                            <div class="customer_default_image" v-else>
+                                                {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
+                                            </div>
+                                            <div class="customer_details">
+                                                <h2 class="customer_name">
+                                                    {{ customer.first_name }} {{ customer.last_name }}
+                                                    <div class="types" v-if="customer.customer_details.customer_type.images.length > 0"><img :src="customer.customer_details.customer_type.images[0].path_resized" /></div>
+                                                    <a :href="`mailto:${customer.email}`" class="email">
+                                                        <img src="/icons/email-icon.svg" />
+                                                        <span>Email</span>
+                                                    </a>
+                                                </h2>
+                                                <div class="customer_info">
+                                                    <span>Birthday: {{ $moment(customer.customer_details.co_birthdate).format('M/D/YY') }}</span>
+                                                    <span>{{ customer.customer_details.co_contact_number }}</span>
+                                                    <span>Store Credit: 500</span>
+                                                    <span>Shoe Size: {{ customer.customer_details.co_shoe_size }}</span>
+                                                </div>
+                                                <div class="close_wrapper alternate" @click="customer = ''">
+                                                    <div class="close_icon"></div>
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="customer_footer" v-if="customer != ''">
+                                            <a href="javascript:void(0)">Attendance</a>
+                                            <a href="javascript:void(0)">Packages</a>
+                                            <a href="javascript:void(0)">Redeem</a>
+                                            <a href="javascript:void(0)" @click="toggleQuickSale('credit')">Buy Credits</a>
+                                            <a href="javascript:void(0)" @click="toggleQuickSale('product')">Buy Products</a>
+                                        </div>
                                     </div>
-                                    <div class="customer_footer" v-if="customer != ''">
-                                        <a href="javascript:void(0)">Attendance</a>
-                                        <a href="javascript:void(0)">Packages</a>
-                                        <a href="javascript:void(0)">Redeem</a>
-                                        <a href="javascript:void(0)" @click="toggleQuickSale('credit')">Buy Credits</a>
-                                        <a href="javascript:void(0)" @click="toggleQuickSale('product')">Buy Products</a>
+                                </transition>
+                                <transition name="fade">
+                                    <div class="no_results" v-if="customer == ''">
+                                        <div class="customer_label">No Customer Selected</div>
+                                        <div class="customer_text">Find a Customer / Scan QR Code</div>
                                     </div>
-                                </div>
-                                <div class="no_results" v-else>
-                                    <div class="customer_label">No Customer Selected</div>
-                                    <div class="customer_text">Find a Customer / Scan QR Code</div>
-                                </div>
+                                </transition>
                             </div>
                         </form>
                     </div>
@@ -93,7 +100,7 @@
                             <div class="class_accordion" v-for="(result, key) in results" :key="key">
                                 <div class="accordion_header" @click.self="toggleClass($event, $moment(result.date).format('M'), $moment(result.date).format('D'), $moment(result.date).format('YYYY'))">{{ result.abbr }} | {{ result.date }}</div>
                                 <div class="accordion_content">
-                                    <a href="javascript:void(0)" :id="`class_`" class="class_content" v-for="(data, key) in schedules" :key="key">
+                                    <a href="javascript:void(0)" :id="`class_${key}`" class="class_content" v-for="(data, key) in schedules" :key="key" @click.self="getBookings($event, data)">
                                         <div class="class_title">
                                             <span>{{ data.schedule.start_time }}, {{ data.schedule.class_type.name }}</span>
                                             <div class="class_status full">
@@ -266,13 +273,35 @@
             }
         },
         methods: {
+            getBookings (event, data) {
+                const me = this
+                let target = event.target
+                me.schedules.forEach((schedule, index) => {
+                    let element = document.getElementById(`class_${index}`)
+                    if (target === element) {
+                        if (element.classList.contains('active')) {
+                            element.classList.remove('active')
+                        } else {
+                            element.classList.add('active')
+                        }
+                    } else {
+                        element.classList.remove('active')
+                    }
+                })
+                setTimeout(() => {
+                    me.$refs.plan.fetchSeats(data.id, me.studioID)
+                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
+                }, 10)
+            },
             toggleOverlays (e) {
                 const me = this
                 let target = e.target
                 let element = document.getElementById(`legend_toggler`)
                 if (element !== target) {
-                    if (element.nextElementSibling.classList.contains('active')) {
-                        element.nextElementSibling.classList.remove('active')
+                    if (element.nextElementSibling.length > 0) {
+                        if (element.nextElementSibling.classList.contains('active')) {
+                            element.nextElementSibling.classList.remove('active')
+                        }
                     }
                 }
             },
@@ -329,7 +358,7 @@
                     value.querySelector('.accordion_content').style.height = 0
                 })
                 setTimeout(() => {
-                    me.$refs.plan.fetchSeats(me.studioID)
+                    me.$refs.plan.fetchSeats(null, me.studioID)
                     document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
                 }, 10)
             },
@@ -545,8 +574,10 @@
                 const target = event.target
                 let accordions = document.querySelectorAll('.booker_classes .content_wrapper .class_accordion')
                 accordions.forEach((accordion, index) => {
-                    accordion.classList.remove('toggled')
-                    accordion.querySelector('.accordion_content').style.height = 0
+                    if (accordion !== target.parentNode) {
+                        accordion.classList.remove('toggled')
+                        accordion.querySelector('.accordion_content').style.height = 0
+                    }
                 })
                 if (!target.parentNode.classList.contains('toggled')) {
                     await me.$axios.get(`api/schedules?month=${month}&year=${year}&day=${day}&studio_id=${me.studioID}`).then(res => {
