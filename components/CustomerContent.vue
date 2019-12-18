@@ -29,11 +29,11 @@
                         </div>
                         <div class="package_date">
                             <div class="date">
-                                <p>{{ formatDate(data.created_at) }} / {{ (data.activation_date != 'NA') ? formatDate(data.activation_date) : 'N/A' }}</p>
+                                <p>{{ formatDate(data.created_at, false) }} / {{ (data.activation_date != 'NA') ? formatDate(data.activation_date, false) : 'N/A' }}</p>
                                 <label>Purchase Date / Activation Date</label>
                             </div>
                             <div class="date margin">
-                                <p>{{ formatDate(data.class_package.computed_expiration_date) }}</p>
+                                <p>{{ formatDate(data.class_package.computed_expiration_date, false) }}</p>
                                 <!-- <label>Expiry date <a href="javascript:void(0)" class="expiry_btn">Edit</a></label> -->
                                 <label>Expiry date</label>
                             </div>
@@ -55,7 +55,59 @@
             </div>
         </div>
         <div v-if="type == 'transactions'">
-            asdasd
+            <div class="cms_table_accordion alt">
+                <div class="header_wrapper">
+                    <div class="accordion_header">Transanction Date</div>
+                    <div class="accordion_header">Branch</div>
+                    <div class="accordion_header">Total Qty.</div>
+                    <div class="accordion_header">Payment Method</div>
+                    <div class="accordion_header">Total Price</div>
+                    <div class="accordion_header action">Status</div>
+                </div>
+                <div :class="`content_wrapper ${(data.open) ? 'toggled' : ''} ${(data.status == 'paid') ? 'alt' : ''}`" v-for="(data, key) in value.payments" v-if="value.payments.length > 0">
+                    <div class="toggler" @click="toggleAccordion($event, key)"></div>
+                    <div class="content_headers">
+                        <div class="accordion_content">{{ formatDate(data.created_at, true) }}</div>
+                        <div class="accordion_content">2</div>
+                        <div class="accordion_content">{{ countVariantQty(data.payment_items) }}</div>
+                        <div class="accordion_content capital">{{ replacer(data.payment_method.method) }}</div>
+                        <div class="accordion_content red">Php {{ totalCount(data.total) }}</div>
+                        <div class="accordion_actions action">
+                            <div :class="`action_status ${(data.status == 'paid') ? 'green' : 'red' }`">{{ data.status }}</div>
+                            <a class="accordion_action_edit" href="javascript:void(0)" @click="toggleForm(data.id)" v-if="data.status == 'pending'">Pay Now</a>
+                        </div>
+                    </div>
+                    <!-- Accordion User per Role -->
+                    <div class="accordion_table">
+                        <table class="cms_table">
+                            <thead>
+                                <tr>
+                                    <th class="padding_left">Product</th>
+                                    <th>Category</th>
+                                    <th>Qty</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody v-if="data.payment_items.length > 0">
+                                <tr v-for="(item, key) in data.payment_items" :key="key">
+                                    <td class="padding_left">{{ (item.product_variant) ? `${item.product_variant.product.name} ${item.product_variant.variant}` : (item.class_package ? 'asdasd' : 'asdasdasdasd') }}</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
+                            <tbody class="no_results" v-else>
+                                <tr>
+                                    <td :colspan="rowCount">No Result(s) Found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="no_results" v-if="value.payments.length == 0">
+                    No Result(s) Found.
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -83,6 +135,24 @@
             }
         },
         methods: {
+            countVariantQty (items) {
+                const me = this
+                let ctr = 0
+                items.forEach((item, index) => {
+                    ctr += parseInt(item.quantity)
+                })
+                return ctr
+            },
+            toggleAccordion (event, key) {
+                const me = this
+                const target = event.target
+                me.value.payments[key].open ^= true
+                if (me.value.payments[key].open) {
+                    target.parentNode.querySelector('.accordion_table').style.height = `${target.parentNode.querySelector('.accordion_table').scrollHeight}px`
+                } else {
+                    target.parentNode.querySelector('.accordion_table').style.height = 0
+                }
+            },
             getCurrentCustomer () {
                 const me = this
                 me.$axios.get(`api/customers/${me.$route.params.param}`).then(res => {
@@ -95,9 +165,13 @@
                 })
                 me.$router.push('/booker')
             },
-            formatDate (value) {
+            formatDate (value, withTime) {
                 if (value) {
-                    return this.$moment(value).format('MMM DD, YYYY')
+                    if (withTime) {
+                        return this.$moment(value).format('MMM DD, YYYY hh:mm A')
+                    } else {
+                        return this.$moment(value).format('MMM DD, YYYY')
+                    }
                 }
             },
             checkWarning (data) {
@@ -123,17 +197,18 @@
             toggleOverlays (e) {
                 const me = this
                 let target = e.target
-                me.value.user_package_counts.forEach((result, index) => {
-                    let option = document.getElementById(`option_${index}`)
-                    if (option != null) {
-                        if (option !== target && option !== target.parentNode.previousElementSibling) {
-                            if (option.parentNode.classList.contains('toggled')) {
-                                option.parentNode.classList.remove('toggled')
+                if (me.value.user_package_counts) {
+                    me.value.user_package_counts.forEach((result, index) => {
+                        let option = document.getElementById(`option_${index}`)
+                        if (option != null) {
+                            if (option !== target && option !== target.parentNode.previousElementSibling) {
+                                if (option.parentNode.classList.contains('toggled')) {
+                                    option.parentNode.classList.remove('toggled')
+                                }
                             }
                         }
-                    }
-                })
-
+                    })
+                }
             },
             togglePackages (status) {
                 const me = this
