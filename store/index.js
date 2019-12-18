@@ -8,6 +8,7 @@ const createStore = () => {
             calendarClearStatus: false,
             customerCreditQuickSaleStatus: false,
             customerProductQuickSaleStatus: false,
+            customerPendingQuickSaleStatus: false,
             quickSaleStatus: false,
             successfulStatus: false,
             successfulLaterStatus: false,

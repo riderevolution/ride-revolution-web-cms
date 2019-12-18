@@ -6,7 +6,7 @@
                 <div :class="`status ${(packageStatus == 2) ? 'active' : ''}`" @click="togglePackages(2)">Shared</div>
             </div>
             <div class="cms_table_package">
-                <div class="table_package" v-for="(data, key) in value.user_package_counts" :key="key">
+                <div class="table_package" v-for="(data, key) in value.user_package_counts" :key="key" v-if="value.user_package_counts.length > 0">
                     <h2 class="package_title">
                         {{ data.class_package.name }}
                         <span class="warning" v-if="checkWarning(data)">{{ violator.warning }} Days Left</span>
@@ -16,13 +16,13 @@
                         <div class="package_status">
                             <div class="box">
                                 <div class="overlay">
-                                    <p>{{ data.count }}</p>
+                                    <p>{{ parseInt(data.class_package.class_count) - parseInt(data.count) }}</p>
                                     <label>Used</label>
                                 </div>
                             </div>
                             <div class="box margin">
                                 <div class="overlay">
-                                    <p>{{ (parseInt(data.count) == data.class_package.class_count) ? data.count : parseInt(data.count) - data.class_package.class_count }}</p>
+                                    <p>{{ (data.class_package.class_count_unlimited == 1) ? 'Unlimited' : (parseInt(data.count) == data.class_package.class_count) ? data.count : parseInt(data.class_package.class_count) - parseInt(data.count) }}</p>
                                     <label>Available</label>
                                 </div>
                             </div>
@@ -51,6 +51,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="no_results" v-if="value.user_package_counts.length == 0">
+                    No Package(s) Found.
                 </div>
             </div>
         </div>
@@ -109,11 +112,18 @@
                 </div>
             </div>
         </div>
+        <transition name="fade">
+            <customer-pending-quick-sale :value="transaction" v-if="$store.state.customerPendingQuickSaleStatus" />
+        </transition>
     </div>
 </template>
 
 <script>
+    import CustomerPendingQuickSale from '../components/modals/CustomerPendingQuickSale'
     export default {
+        components: {
+            CustomerPendingQuickSale,
+        },
         props: {
             type: {
                 type: String,
@@ -131,10 +141,21 @@
                     transferred: 0,
                     freeze: 0,
                 },
-                packageStatus: 1
+                packageStatus: 1,
+                transaction: []
             }
         },
         methods: {
+            toggleForm (id) {
+                const me = this
+                me.$axios.get(`api/show-payment/${id}`).then(res => {
+                    if (res.data) {
+                        me.transaction = res.data.payment
+                        me.$store.state.customerPendingQuickSaleStatus = true
+                        document.body.classList.add('no_scroll')
+                    }
+                })
+            },
             countVariantQty (items) {
                 const me = this
                 let ctr = 0
