@@ -68,7 +68,7 @@
                     <div class="toggler" @click="toggleAccordion($event, key)"></div>
                     <div class="content_headers">
                         <div class="accordion_content">{{ formatDate(data.created_at, true) }}</div>
-                        <div class="accordion_content">2</div>
+                        <div class="accordion_content">{{ data.studio.name }}</div>
                         <div class="accordion_content">{{ countVariantQty(data.payment_items) }}</div>
                         <div class="accordion_content capital">{{ replacer(data.payment_method.method) }}</div>
                         <div class="accordion_content red">Php {{ totalCount(data.total) }}</div>
@@ -90,10 +90,10 @@
                             </thead>
                             <tbody v-if="data.payment_items.length > 0">
                                 <tr v-for="(item, key) in data.payment_items" :key="key">
-                                    <td class="padding_left">{{ (item.product_variant) ? `${item.product_variant.product.name} ${item.product_variant.variant}` : (item.class_package ? 'asdasd' : 'asdasdasdasd') }}</td>
-                                    <td>1</td>
-                                    <td>1</td>
-                                    <td>1</td>
+                                    <td class="padding_left">{{ (item.product_variant) ? `${item.product_variant.product.name} ${item.product_variant.variant}` : (item.class_package ? 'asdasd' : item.store_credit.name) }}</td>
+                                    <td>{{ (item.product_variant) ? item.product_variant.product.category.name : 'N/A' }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>Php {{ totalCount(data.total) }}</td>
                                 </tr>
                             </tbody>
                             <tbody class="no_results" v-else>
