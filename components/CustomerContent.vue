@@ -39,7 +39,7 @@
                             </div>
                         </div>
                         <div class="package_action">
-                            <a href="javascript:void(0)" class="action_success_btn">Book a Class</a>
+                            <a href="/booker" class="action_success_btn" @click.prevent="getCurrentCustomer()">Book a Class</a>
                             <div class="package_options">
                                 <div class="option_btn" :id="`option_${key}`" @click.self="toggledOption($event)">Options</div>
                                 <div class="option_selector">
@@ -53,6 +53,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-if="type == 'transactions'">
+            asdasd
         </div>
     </div>
 </template>
@@ -80,6 +83,18 @@
             }
         },
         methods: {
+            getCurrentCustomer () {
+                const me = this
+                me.$axios.get(`api/customers/${me.$route.params.param}`).then(res => {
+                    if (res.data) {
+                        me.$store.state.customer = res.data.user
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                })
+                me.$router.push('/booker')
+            },
             formatDate (value) {
                 if (value) {
                     return this.$moment(value).format('MMM DD, YYYY')
@@ -108,7 +123,7 @@
             toggleOverlays (e) {
                 const me = this
                 let target = e.target
-                me.resPackages.forEach((result, index) => {
+                me.value.user_package_counts.forEach((result, index) => {
                     let option = document.getElementById(`option_${index}`)
                     if (option != null) {
                         if (option !== target && option !== target.parentNode.previousElementSibling) {

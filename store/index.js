@@ -10,6 +10,7 @@ const createStore = () => {
             customerProductQuickSaleStatus: false,
             quickSaleStatus: false,
             successfulStatus: false,
+            successfulLaterStatus: false,
             promptPromoStatus: false,
             promptValidateStatus: false,
             promptStatus: false,
@@ -35,6 +36,7 @@ const createStore = () => {
             token: '',
             customerID: 0,
             customerStoreCredit: 0,
+            customer: null,
             user: {
                 first_name: '',
                 current_studio_id: '',

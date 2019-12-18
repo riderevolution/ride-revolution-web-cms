@@ -27,7 +27,7 @@
                                     </div>
                                 </div>
                                 <div class="button_group">
-                                    <button type="button" class="action_success_btn">Pay Later</button>
+                                    <button type="button" class="action_success_btn" @click="payLater()">Pay Later</button>
                                     <button type="button" class="action_btn alternate" @click="takePayment(2)">Take Payment</button>
                                 </div>
                             </div>
@@ -453,6 +453,60 @@
             }
         },
         methods: {
+            payLater () {
+                const me = this
+                let formData = new FormData()
+                let total = 0
+                let customGiftCard = new FormData(document.getElementById('custom_gift_form'))
+                let productForm = new FormData(document.getElementById('product_form'))
+                let checkout = new FormData(document.getElementById('step2'))
+
+                me.totalPrice.forEach((data, index) => {
+                    if (data.discounted_price) {
+                        total += data.discounted_price
+                    } else {
+                        total += data.price
+                    }
+                })
+
+                checkout.append('total', total)
+                checkout.append('transaction_id', me.form.id)
+                checkout.append('promo_applied', me.promoApplied)
+                productForm.append('items', JSON.stringify(me.totalPrice))
+
+                formData.append('customGiftCard', JSON.stringify(Object.fromEntries(customGiftCard)))
+                formData.append('productForm', JSON.stringify(Object.fromEntries(productForm)))
+                formData.append('checkout', JSON.stringify(Object.fromEntries(checkout)))
+                formData.append('studio_id', me.$store.state.user.current_studio_id)
+                formData.append('user_id', me.$store.state.customerID)
+                formData.append('payLater', 1)
+                if (me.totalPrice.length > 0) {
+                    me.loader(true)
+                    me.$axios.post('api/quick-sale', formData).then(res => {
+                        setTimeout( () => {
+                            if (res.data) {
+                                me.$store.state.successfulLaterStatus = true
+                            } else {
+                                me.$store.state.errorList.push('Sorry, Something went wrong')
+                                me.$store.state.errorStatus = true
+                            }
+                        }, 200)
+                    }).catch(err => {
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
+                    }).then(() => {
+                        setTimeout( () => {
+                            me.loader(false)
+                            if (!me.$store.state.errorStatus) {
+                                me.$store.state.customerProductQuickSaleStatus = false
+                            }
+                        }, 200)
+                    })
+                } else {
+                    me.message = 'Please select a product before paying later.'
+                    me.$store.state.promptStatus = true
+                }
+            },
             applyPromo () {
                 const me = this
                 if (document.getElementsByName("promo_code")[0].value != "") {
