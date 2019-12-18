@@ -90,7 +90,7 @@
                             </thead>
                             <tbody v-if="data.payment_items.length > 0">
                                 <tr v-for="(item, key) in data.payment_items" :key="key">
-                                    <td class="padding_left">{{ (item.product_variant) ? `${item.product_variant.product.name} ${item.product_variant.variant}` : (item.class_package ? 'asdasd' : item.store_credit.name) }}</td>
+                                    <td class="padding_left"><b>{{ (item.type == 'custom-gift-card') ? 'Digital Gift Card - ' : 'Physical Gift Card - ' }}</b> {{ (item.product_variant) ? `${item.product_variant.product.name} ${item.product_variant.variant}` : (item.class_package ? item.class_package.name : (item.store_credit ? item.store_credit.name : item.gift_card.card_code )) }}</td>
                                     <td>{{ (item.product_variant) ? item.product_variant.product.category.name : 'N/A' }}</td>
                                     <td>{{ item.quantity }}</td>
                                     <td>Php {{ totalCount(data.total) }}</td>
