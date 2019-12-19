@@ -78,6 +78,9 @@ table
     width: 100%
     border-collapse: collapse
 
+.hidden
+    display: none
+
 /**
  * Default Loader **/
 .loader_wrapper
@@ -2977,6 +2980,14 @@ input::placeholder
                 table-layout: fixed
                 .padding_left
                     padding: 20px 30px 20px 60px
+                .price
+                    position: relative
+                    .prev_price
+                        position: absolute
+                        top: 0
+                        sf_pro_medium(13px)
+                        color: $red
+                        text-decoration: line-through
     .no_results
         background-color: $white
         sf_pro_regular(16px)
@@ -4540,6 +4551,9 @@ input::placeholder
         &.main
             padding: 60px 55px
     &.user
+        &.alt
+            #content
+                margin-bottom: 80px
         #top_content
             position: relative
             align-items: flex-start

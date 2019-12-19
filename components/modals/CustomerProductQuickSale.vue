@@ -272,9 +272,9 @@
                             <div class="promo">
                                 <div class="form_group">
                                     <label for="promo_code">Promo Code</label>
-                                    <input type="text" name="promo_code" class="default_text">
+                                    <input type="text" name="promo_code" :class="`default_text ${(promoApplied) ? 'disabled' : ''}`">
                                 </div>
-                                <button type="button" class="action_btn alternate" @click="applyPromo()">Apply</button>
+                                <button type="button" :class="`${(promoApplied) ? 'disabled' : ''} action_btn alternate`" @click="applyPromo()">Apply</button>
                             </div>
                             <div class="total_wrapper">
                                 <div class="total_title">Total</div>
@@ -486,6 +486,9 @@
                         setTimeout( () => {
                             if (res.data) {
                                 me.$store.state.successfulLaterStatus = true
+                                if (me.$route.params.slug == 'transactions') {
+                                    document.getElementById('transactions').click()
+                                }
                             } else {
                                 me.$store.state.errorList.push('Sorry, Something went wrong')
                                 me.$store.state.errorStatus = true
@@ -634,6 +637,9 @@
                             setTimeout( () => {
                                 if (res.data) {
                                     me.$store.state.successfulStatus = true
+                                    if (me.$route.params.slug == 'transactions') {
+                                        document.getElementById('transactions').click()
+                                    }
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true

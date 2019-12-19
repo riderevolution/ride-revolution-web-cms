@@ -67,14 +67,14 @@
                     <div class="accordion_header">Total Price</div>
                     <div class="accordion_header action">Status</div>
                 </div>
-                <div :class="`content_wrapper ${(data.open) ? 'toggled' : ''} ${(data.status == 'paid') ? 'alt' : ''}`" v-for="(data, key) in value.payments" v-if="value.payments.length > 0">
+                <div :class="`content_wrapper ${(data.open) ? 'toggled' : ''} ${(data.status == 'paid') ? 'alt' : ''}`" v-for="(data, key) in transactions" v-if="transactions.length > 0">
                     <div class="toggler" @click="toggleAccordion($event, key)"></div>
                     <div class="content_headers">
                         <div class="accordion_content">{{ formatDate(data.created_at, true) }}</div>
                         <div class="accordion_content">{{ data.studio.name }}</div>
                         <div class="accordion_content">{{ countVariantQty(data.payment_items) }}</div>
                         <div class="accordion_content capital">{{ replacer(data.payment_method.method) }}</div>
-                        <div class="accordion_content red">Php {{ totalCount(data.total) }}</div>
+                        <div :class="`accordion_content ${(data.status == 'pending') ? 'red' : ''}`">Php {{ totalCount(data.total) }}</div>
                         <div class="accordion_actions action">
                             <div :class="`action_status ${(data.status == 'paid') ? 'green' : 'red' }`">{{ data.status }}</div>
                             <a class="accordion_action_edit" href="javascript:void(0)" @click="toggleForm(data.id)" v-if="data.status == 'pending'">Pay Now</a>
@@ -93,10 +93,13 @@
                             </thead>
                             <tbody v-if="data.payment_items.length > 0">
                                 <tr v-for="(item, key) in data.payment_items" :key="key">
-                                    <td class="padding_left"><b>{{ (item.type == 'custom-gift-card') ? 'Digital Gift Card - ' : 'Physical Gift Card - ' }}</b> {{ (item.product_variant) ? `${item.product_variant.product.name} ${item.product_variant.variant}` : (item.class_package ? item.class_package.name : (item.store_credit ? item.store_credit.name : item.gift_card.card_code )) }}</td>
+                                    <td class="padding_left"><b>{{ (item.type == 'custom-gift-card') ? 'Digital Gift Card - ' : (item.type == 'physical-gift-card' ? 'Physical Gift Card - ' : '') }}</b> {{ (item.product_variant) ? `${item.product_variant.product.name} ${item.product_variant.variant}` : (item.class_package ? item.class_package.name : (item.store_credit ? item.store_credit.name : item.gift_card.card_code )) }}</td>
                                     <td>{{ (item.product_variant) ? item.product_variant.product.category.name : 'N/A' }}</td>
                                     <td>{{ item.quantity }}</td>
-                                    <td>Php {{ totalCount(data.total) }}</td>
+                                    <td class="price">
+                                        <p :class="`${(data.promo_code_used !== null) ? 'prev_price' : ''}`" >PHP {{ totalCount(data.originalTotal) }}</p>
+                                        <p v-if="data.promo_code_used !== null">PHP {{ totalCount(data.total) }}</p>
+                                    </td>
                                 </tr>
                             </tbody>
                             <tbody class="no_results" v-else>
@@ -107,10 +110,11 @@
                         </table>
                     </div>
                 </div>
-                <div class="no_results" v-if="value.payments.length == 0">
+                <div class="no_results" v-if="transactions.length == 0">
                     No Result(s) Found.
                 </div>
             </div>
+            <button type="button" class="hidden" id="transactions" @click="populateTransactions()"></button>
         </div>
         <transition name="fade">
             <customer-pending-quick-sale :value="transaction" v-if="$store.state.customerPendingQuickSaleStatus" />
@@ -142,15 +146,25 @@
                     freeze: 0,
                 },
                 packageStatus: 1,
+                transactions: [],
                 transaction: []
             }
         },
         methods: {
+            populateTransactions () {
+                const me = this
+                me.$axios.get(`api/customers/${me.$route.params.param}/${me.$route.params.slug}`).then(res => {
+                    if (res.data) {
+                        me.transactions = res.data.customer.payments
+                    }
+                })
+            },
             toggleForm (id) {
                 const me = this
                 me.$axios.get(`api/show-payment/${id}`).then(res => {
                     if (res.data) {
                         me.transaction = res.data.payment
+                        me.$store.state.customerID = me.$route.params.param
                         me.$store.state.customerPendingQuickSaleStatus = true
                         document.body.classList.add('no_scroll')
                     }
@@ -167,8 +181,8 @@
             toggleAccordion (event, key) {
                 const me = this
                 const target = event.target
-                me.value.payments[key].open ^= true
-                if (me.value.payments[key].open) {
+                me.transactions[key].open ^= true
+                if (me.transactions[key].open) {
                     target.parentNode.querySelector('.accordion_table').style.height = `${target.parentNode.querySelector('.accordion_table').scrollHeight}px`
                 } else {
                     target.parentNode.querySelector('.accordion_table').style.height = 0
@@ -235,6 +249,12 @@
                 const me = this
                 return me.packageStatus = status
             },
+        },
+        mounted () {
+            const me = this
+            if (me.$route.params.slug == 'transactions') {
+                me.transactions = me.value.payments
+            }
         },
         beforeMount () {
             document.addEventListener('click', this.toggleOverlays)

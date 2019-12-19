@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <div id="admin" class="cms_dashboard user" v-if="loaded">
+        <div id="admin" :class="`cms_dashboard user ${($route.params.slug == 'transactions') ? 'alt' : ''}`" v-if="loaded">
             <section id="top_content">
                 <nuxt-link :to="`/${lastRoute}`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>{{ lastRoute }}</span></nuxt-link>
                 <div class="user_info">
