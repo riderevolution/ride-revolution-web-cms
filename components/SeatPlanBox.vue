@@ -77,7 +77,8 @@
                 const me = this
                 switch (type) {
                     case 'comp':
-
+                        me.$store.state.assignStatus = true
+                        document.body.classList.add('no_scroll')
                         break
                     case 'broken':
 

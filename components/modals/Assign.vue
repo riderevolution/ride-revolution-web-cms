@@ -1,17 +1,27 @@
 <template>
     <div class="default_modal">
         <div class="background" @click="toggleClose()"></div>
-        <form id="default_form" class="overlay" @submit.prevent="submissionSuccess()">
+        <form id="default_form" class="overlay assign" @submit.prevent="submissionSuccess()">
             <div class="modal_wrapper">
-                <h2 class="form_title">Current: {{ currentStudio.name }}</h2>
+                <h2 class="form_title">{{ (type == 1) ? 'Assign a Guest' : 'Block Bike (Comp)' }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group alternate">
                     <div class="form_group">
-                        <label for="studio">Select a Studio <span>*</span></label>
-                        <select class="default_select" name="studio" v-model="studio">
-                            <option value="" selected disabled>Select a Studio</option>
-                            <option :value="studio.id" v-for="(studio, key) in studios" :key="key" v-if="studio.id != currentStudio.id">{{ studio.name }}</option>
-                        </select>
+                        <div class="form_flex_radio">
+                            <div class="form_radio">
+                                <input type="radio" id="member" value="member" name="assign_type" class="action_radio" checked @change="getAssign($event)">
+                                <label for="member">Member</label>
+                            </div>
+                            <div class="form_radio">
+                                <input type="radio" id="non-member" value="non-member" name="assign_type" class="action_radio" @change="getAssign($event)">
+                                <label for="non-member">Non-member</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form_group">
+                        <label for="customer">Find a Customer <span>*</span></label>
+                        <input type="text" name="customer" autocomplete="off" autofocus class="default_text search_alternate" v-validate="'required'">
+                        <transition name="slide"><span class="validation_errors" v-if="errors.has('customer')">{{ errors.first('customer') }}</span></transition>
                     </div>
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
@@ -19,7 +29,7 @@
                             </div>
                             <div class="button_group">
                                 <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose()">Cancel</a>
-                                <button type="submit" name="submit" class="action_success_btn margin alternate">Change Studio</button>
+                                <button type="submit" name="submit" class="action_success_btn margin alternate">{{ (type == 1) ? 'Assign' : 'Block' }}</button>
                             </div>
                         </div>
                     </div>
@@ -38,6 +48,12 @@
         components: {
             Prompt
         },
+        props: {
+            type: {
+                type: Number,
+                default: 0
+            }
+        },
         data () {
             return {
                 message: '',
@@ -50,45 +66,16 @@
         methods: {
             toggleClose () {
                 const me = this
-                me.$store.state.changeStudioStatus = false
+                me.$store.state.assignStatus = false
                 document.body.classList.remove('no_scroll')
             },
             submissionSuccess () {
                 const me = this
-                me.loader(true)
-                me.$axios.get(`api/studios/${me.studio}`).then(res => {
-                    if (res.data) {
-                        me.selectedStudio = res.data.studio
-                        setTimeout( () => {
-                            me.$store.state.user.current_studio_id = me.selectedStudio.id
-                        }, 10)
-                    }
-                }).catch(err => {
-                    me.$store.state.errorList = err.response.data.errors
-                    me.$store.state.errorStatus = true
-                }).then(() => {
-                    setTimeout( () => {
-                        me.loader(false)
-                        if (!me.$store.state.errorStatus) {
-                            me.$store.state.promptStatus = true
-                            me.message = `You have successfully changed your studio from ${me.currentStudio.name} to ${me.selectedStudio.name}`
-                        }
-                    }, 500)
-                })
             }
         },
         mounted () {
             const me = this
-            me.$axios.get(`api/studios/${me.$store.state.user.current_studio_id}`).then(res => {
-                if (res.data) {
-                    me.currentStudio = res.data.studio
-                }
-            })
-            me.$axios.get('api/studios').then(res => {
-                if (res.data) {
-                    me.studios = res.data.studios
-                }
-            })
+
         }
     }
 </script>

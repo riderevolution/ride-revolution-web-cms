@@ -225,6 +225,9 @@
         <transition name="fade">
             <prompt v-if="$store.state.promptStatus" :message="message" />
         </transition>
+        <transition name="fade">
+            <assign v-if="$store.state.assignStatus" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
@@ -233,11 +236,13 @@
     import Foot from '../../components/Foot'
     import SeatPlan from '../../components/SeatPlan'
     import Prompt from '../../components/modals/Prompt'
+    import Assign from '../../components/modals/Assign'
     export default {
         components: {
             Foot,
             SeatPlan,
-            Prompt
+            Prompt,
+            Assign
         },
         data () {
             return {
