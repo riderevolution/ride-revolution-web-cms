@@ -77,11 +77,15 @@
                 const me = this
                 switch (type) {
                     case 'comp':
+                        me.$parent.assignType = 0
                         me.$store.state.assignStatus = true
                         document.body.classList.add('no_scroll')
                         break
                     case 'broken':
-
+                        me.$parent.hasCancel = true
+                        me.$parent.message = 'Are you sure you want to continue?'
+                        me.$store.state.promptStatus = true
+                        document.body.classList.add('no_scroll')
                         break
                 }
             },

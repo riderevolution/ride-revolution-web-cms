@@ -1,13 +1,13 @@
 <template>
     <div class="default_modal">
-        <div class="background" @click.once="toggleClose((hasChange || hasCancel) ? true : false)"></div>
+        <div class="background" @click.once="toggleClose((hasChange || hasCancel) ? true : false, false)"></div>
         <div class="confirmation_wrapper">
             <div class="confirmation_text">
                 {{ message }}
             </div>
             <div class="button_group">
-                <a href="javascript:void(0)" class="action_cancel_btn" @click.once="toggleClose((hasChange || hasCancel) ? true : false)" v-if="hasCancel">Cancel</a>
-                <div class="action_success_btn confirm margin" @click.once="toggleClose(true)">Confirm</div>
+                <a href="javascript:void(0)" class="action_cancel_btn" @click.once="toggleClose((hasChange || hasCancel) ? true : false, false)" v-if="hasCancel">Cancel</a>
+                <div class="action_success_btn confirm margin" @click.once="toggleClose(true, true)">Confirm</div>
             </div>
         </div>
     </div>
@@ -30,9 +30,9 @@
             }
         },
         methods: {
-            toggleClose (status) {
+            toggleClose (status, confirm) {
                 const me = this
-                if (status && me.hasCancel) {
+                if (status && me.hasCancel && confirm) {
                     me.$parent.prompt = false
                     me.$parent.submissionSuccess()
                     document.body.classList.remove('no_scroll')

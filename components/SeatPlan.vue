@@ -17,6 +17,9 @@
             return {
                 ctr: 0,
                 temp: [],
+                assignType: 0,
+                hasCancel: false,
+                message: '',
                 hasFetchSeat: false,
                 seats: {
                     left: {

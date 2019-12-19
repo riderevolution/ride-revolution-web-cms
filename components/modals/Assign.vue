@@ -128,9 +128,6 @@
                 </div>
             </div>
         </form>
-        <transition name="fade">
-            <prompt v-if="$store.state.promptStatus" :message="message" :hasChange="true" />
-        </transition>
     </div>
 </template>
 
@@ -188,7 +185,7 @@
                         let formData = new FormData(document.getElementById('default_form'))
                         if (me.customer != '') {
                             formData.append('customer', JSON.stringify(me.customer))
-                            me.loader(true)
+                            // me.loader(true)
                             // me.$axios.post('api/customers', formData).then(res => {
                             //     setTimeout( () => {
                             //         if (res.data) {

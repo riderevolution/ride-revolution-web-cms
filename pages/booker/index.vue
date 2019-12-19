@@ -223,10 +223,10 @@
             </section>
         </div>
         <transition name="fade">
-            <prompt v-if="$store.state.promptStatus" :message="message" />
+            <prompt v-if="$store.state.promptStatus" :message="($refs.plan.hasCancel) ? $refs.plan.message : message" :hasCancel="$refs.plan.hasCancel" />
         </transition>
         <transition name="fade">
-            <assign v-if="$store.state.assignStatus" />
+            <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
         </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
@@ -286,6 +286,23 @@
             }
         },
         methods: {
+            submissionSuccess () {
+                const me = this
+                // me.$axios.post('api/customers', formData).then(res => {
+                //     if (res.data) {
+                //         me.notify('Added')
+                //     }
+                // }).catch(err => {
+                //     me.$store.state.errorList = err.response.data.errors
+                //     me.$store.state.errorStatus = true
+                // }).then(() => {
+                //     setTimeout( () => {
+                //         $refs.plan.hasCancel = false
+                //         me.$store.state.promptStatus = false
+                //         document.body.classList.remove('no_scroll')
+                //     }, 500)
+                // })
+            },
             getBookings (data, sunique, unique) {
                 const me = this
                 if (me.studioID) {
