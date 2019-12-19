@@ -8,10 +8,11 @@
                         <form class="customer_filter_flex" id="filter" @submit.prevent>
                             <div class="form_group customer">
                                 <label for="studio_id">Studio</label>
-                                <select class="default_select alternate" name="studio_id" @change="getStudio($event)">
+                                <select :class="`default_select alternate ${(!selectStudio) ? 'highlighted' : ''}`" name="studio_id" @change="getStudio($event)">
                                     <option value="" selected disabled>Select a Studio</option>
                                     <option :value="studio.studio.id" v-for="(studio, key) in studios" :key="key">{{ studio.studio.name }}</option>
                                 </select>
+                                <transition name="slide"><span class="validation_errors alt" v-if="!selectStudio">Select Studio</span></transition>
                             </div>
                             <div class="form_group margin" v-click-outside="closeMe">
                                 <label for="q">Find a Customer</label>
@@ -100,7 +101,7 @@
                             <div class="class_accordion" v-for="(result, key) in results" :key="key">
                                 <div class="accordion_header" @click.self="toggleClass($event, $moment(result.date).format('M'), $moment(result.date).format('D'), $moment(result.date).format('YYYY'))">{{ result.abbr }} | {{ result.date }}</div>
                                 <div class="accordion_content">
-                                    <a href="javascript:void(0)" :id="`class_${key}`" class="class_content" v-for="(data, key) in schedules" :key="key" @click.self="getBookings($event, data)">
+                                    <a href="javascript:void(0)" :id="`class_${dkey}_${key}`" class="class_content" v-for="(data, dkey) in schedules" :key="dkey" @click="getBookings(data, dkey, key)">
                                         <div class="class_title">
                                             <span>{{ data.schedule.start_time }}, {{ data.schedule.class_type.name }}</span>
                                             <div class="class_status full">
@@ -221,6 +222,9 @@
                 </div>
             </section>
         </div>
+        <transition name="fade">
+            <prompt v-if="$store.state.promptStatus" :message="message" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
@@ -228,10 +232,12 @@
 <script>
     import Foot from '../../components/Foot'
     import SeatPlan from '../../components/SeatPlan'
+    import Prompt from '../../components/modals/Prompt'
     export default {
         components: {
             Foot,
-            SeatPlan
+            SeatPlan,
+            Prompt
         },
         data () {
             return {
@@ -261,7 +267,9 @@
                 zoomCtr: 0.55,
                 customInstance: [],
                 customWidth: 0,
-                customHeight: 0
+                customHeight: 0,
+                message: '',
+                selectStudio: true
             }
         },
         computed: {
@@ -273,25 +281,33 @@
             }
         },
         methods: {
-            getBookings (event, data) {
+            getBookings (data, sunique, unique) {
                 const me = this
-                let target = event.target
-                me.schedules.forEach((schedule, index) => {
-                    let element = document.getElementById(`class_${index}`)
-                    if (target === element) {
+                if (me.studioID) {
+                    let element = document.getElementById(`class_${sunique}_${unique}`)
+                    let parents = document.querySelectorAll('.booker_classes .content_wrapper .class_accordion')
+                    parents.forEach((parent, pindex) => {
+                        let children = parent.querySelectorAll('.accordion_content .class_content')
+                        children.forEach((child, cindex) => {
+                            child.classList.remove('active')
+                        })
+                    })
+                    if (element) {
                         if (element.classList.contains('active')) {
                             element.classList.remove('active')
                         } else {
                             element.classList.add('active')
                         }
-                    } else {
-                        element.classList.remove('active')
                     }
-                })
-                setTimeout(() => {
-                    me.$refs.plan.fetchSeats(data.id, me.studioID)
-                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
-                }, 10)
+                    setTimeout(() => {
+                        me.$refs.plan.fetchSeats(data.id, me.studioID)
+                        document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
+                    }, 10)
+                } else {
+                    me.selectStudio = false
+                    me.$store.state.promptStatus = true
+                    me.message = 'Please select a studio first.'
+                }
             },
             toggleOverlays (e) {
                 const me = this
@@ -361,6 +377,7 @@
                     me.$refs.plan.fetchSeats(null, me.studioID)
                     document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
                 }, 10)
+                me.selectStudio = true
             },
             updateNotes (event) {
                 const me = this
@@ -600,6 +617,9 @@
                 me.loader(true)
                 me.$axios.get(`api/customers?enabled=${value}`).then(res => {
                     if (res.data) {
+                        if (me.$store.state.customer !== null) {
+                            me.customer = me.$store.state.customer
+                        }
                         me.customers = res.data.customers.data
                         me.customerLength = me.customers.length
                     }

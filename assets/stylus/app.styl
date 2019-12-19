@@ -997,6 +997,8 @@ table
     background-position: calc(100% - 15px) center
     background-repeat: no-repeat
     transition: .3s ease-in-out
+    &.highlighted
+        border: 1px solid $green
     &.disabled
         pointer-events: none
         background-color: $border_alt
@@ -1682,6 +1684,10 @@ input::placeholder
         border-radius: 5px
         user-select: none
         left: 0
+        &.alt
+            background-color: $green
+            &::before
+                border-bottom: 7px solid $green
         &::before
             content: ""
             position: absolute
