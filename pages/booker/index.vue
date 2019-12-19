@@ -19,13 +19,13 @@
                                 <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" :class="`default_text search_alternate ${(selectCustomer) ? '' : 'disabled'}`" @click="toggleCustomers ^= true" @input="searchCustomer($event)">
                                 <div :class="`customer_selection ${(customerLength > 6) ? 'scrollable' : ''}`" v-if="toggleCustomers">
                                     <div class="customer_selection_list">
-                                        <div class="customer_wrapper" v-if="customerLength > 0" :id="`customer_${customer.id}`" v-for="(customer, key) in populateCustomers" :key="key" @click="getCustomer(customer)">
-                                            <img :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
+                                        <div class="customer_wrapper" v-if="customerLength > 0 && customer.id != data.id" :id="`customer_${data.id}`" v-for="(data, key) in populateCustomers" :key="key" @click="getCustomer(data)">
+                                            <img :src="data.customer_details.images[0].path_resized" v-if="data.customer_details.images.length > 0" />
                                             <div class="customer_image" v-else>
-                                                {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
+                                                {{ data.first_name.charAt(0) }}{{ data.last_name.charAt(0) }}
                                             </div>
                                             <div class="customer_name">
-                                                {{ customer.first_name }} {{ customer.last_name }}
+                                                {{ data.first_name }} {{ data.last_name }}
                                             </div>
                                         </div>
                                         <div class="no_results" v-if="customerLength == 0" >

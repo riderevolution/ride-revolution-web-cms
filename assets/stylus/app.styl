@@ -926,6 +926,22 @@ table
         background-color: $white
         padding: 80px 100px
         transform: translate(-50%, -50%)
+        .icon
+            text-align: center
+            margin-bottom: 25px
+            #modal_check_icon
+                .icon_1,
+                .icon_2
+                    stroke: $green
+                    stroke-width: 2px
+                    stroke-dasharray: 500
+                    animation: dash 2s linear
+                .icon_1,
+                .icon_2,
+                .icon_4
+                    fill:none
+                .icon_3
+                    stroke:none
         .form_close
             position: absolute
             width: 20px
@@ -1109,6 +1125,96 @@ input::placeholder
             .modal_wrapper
                 .form_title
                     text-align: center
+            .customer_filter
+                .form_group
+                    position: relative
+                    .customer_selection
+                        position: absolute
+                        top: 105%
+                        z-index: 2
+                        background-color: #fff
+                        width: 100%
+                        padding: 10px 3px 10px 0
+                        border-radius: 3px
+                        box-shadow: 20px 20px 40px rgba(0,0,0,0.16)
+                        &.scrollable
+                            .customer_selection_list
+                                height: 350px
+                                overflow-x: hidden
+                                overflow-y: auto
+                                .customer_wrapper
+                                    margin-right: 5px
+                                    padding: 10px 0
+                        .customer_selection_list
+                            .customer_wrapper
+                                display: flex
+                                flex-flow: row wrap
+                                align-items: center
+                                background-color: transparent
+                                padding: 10px 20px
+                                transition: .3s ease-in-out
+                                img
+                                    flex: 0 0 35px
+                                    width: 35px
+                                    border-radius: 50%
+                                .customer_image
+                                    position: relative
+                                    text-transform: uppercase
+                                    background-image: linear-gradient(137deg, $red, $orange)
+                                    sf_pro_regular(16px)
+                                    border-radius: 50%
+                                    padding: 8px
+                                    color: $white
+                                .customer_name
+                                    sf_pro_medium(16px)
+                                    color: $black
+                                    padding-left: 20px
+                                    transition: .3s ease-in-out
+                                &:hover
+                                    background-color: $light_green
+                                    transition: .3s ease-in-out
+                                    .customer_name
+                                        color: $green
+                                        transition: .3s ease-in-out
+                            .no_results
+                                text-align: center
+                                sf_pro_medium(16px)
+                                color: $black
+                                transition: .3s ease-in-out
+            .customer_picked
+                .customer_header
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    justify-content: flex-start
+                    margin-bottom: 60px
+                    .customer_image
+                        width: 50px
+                        height: 50px
+                        border-radius: 90%
+                    .customer_default_image
+                        sf_pro_bold(17px)
+                        text-transform: uppercase
+                        background-image: linear-gradient(137deg, $red, $orange)
+                        border-radius: 50%
+                        padding: 15px
+                        color: #fff
+                    .customer_details
+                        padding-left: 10px
+                        .customer_name
+                            sf_pro_medium(18px)
+                            color: $green
+                            padding-bottom: 5px
+                            display: flex
+                            flex-flow: row wrap
+                            align-items: center
+                        .customer_info
+                            span
+                                sf_pro_regular(15px)
+                                color: $gray_alternate
+            .form_footer_wrapper
+                .form_flex
+                    justify-content: center
         &.alternate
             max-width: 75%
     .form_wrapper
@@ -5365,3 +5471,11 @@ input::placeholder
 		opacity: 1
     }
 }
+
+@keyframes dash
+    from {
+        stroke-dashoffset: 500
+    }
+    to {
+        stroke-dashoffset: 0
+    }
