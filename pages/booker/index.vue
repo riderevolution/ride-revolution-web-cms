@@ -369,6 +369,9 @@
                 me.toggleCustomers = false
                 me.$store.state.customerID = data.id
                 me.customer = data
+                setTimeout( () => {
+                    me.$refs.plan.hasCustomer = true
+                }, 10)
             },
             searchCustomer (event) {
                 const me = this
@@ -641,6 +644,9 @@
                     if (res.data) {
                         if (me.$store.state.customer !== null) {
                             me.customer = me.$store.state.customer
+                            setTimeout( () => {
+                                me.$refs.plan.hasCustomer = true
+                            }, 10)
                         }
                         me.customers = res.data.customers.data
                         me.customerLength = me.customers.length

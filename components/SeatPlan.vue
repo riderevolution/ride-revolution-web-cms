@@ -18,6 +18,7 @@
                 ctr: 0,
                 temp: [],
                 assignType: 0,
+                hasCustomer: false,
                 hasCancel: false,
                 message: '',
                 hasFetchSeat: false,
