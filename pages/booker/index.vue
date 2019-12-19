@@ -57,7 +57,7 @@
                                                     <span>Store Credit: 500</span>
                                                     <span>Shoe Size: {{ customer.customer_details.co_shoe_size }}</span>
                                                 </div>
-                                                <div class="close_wrapper alternate" @click="customer = ''">
+                                                <div class="close_wrapper alternate" @click="removeCustomer()">
                                                     <div class="close_icon"></div>
                                                 </div>
                                             </div>
@@ -286,6 +286,13 @@
             }
         },
         methods: {
+            removeCustomer () {
+                const me = this
+                me.customer = ''
+                setTimeout( () => {
+                    me.$refs.plan.hasCustomer = false
+                }, 10)
+            },
             submissionSuccess () {
                 const me = this
                 // me.$axios.post('api/customers', formData).then(res => {

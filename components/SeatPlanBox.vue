@@ -1,50 +1,50 @@
 <template>
     <div :class="`seat_boxes ${position} ${layout}`" v-if="data.length > 0">
         <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, lkey) in data" v-if="position == 'left'">
-            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
         <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, rkey) in data" v-if="position == 'right'">
-            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
         <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, bkey) in data" v-if="position == 'bottom'">
-            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
         <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, bkey) in data" v-if="position == 'bottom_alt'">
-            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
         <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, bkey) in data" v-if="position == 'bottom_alt_2'">
-            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" v-if="!$parent.hasCustomer" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
