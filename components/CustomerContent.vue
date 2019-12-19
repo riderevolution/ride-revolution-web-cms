@@ -1,6 +1,6 @@
 <template>
     <div class="customer_tab_content">
-        <div v-if="type == 'packages'">
+        <div v-if="type == 'packages' && loaded">
             <div class="cms_table_toggler">
                 <div :class="`status ${(packageStatus == 1) ? 'active' : ''}`" @click="togglePackages(1)">Owned</div>
                 <div :class="`status ${(packageStatus == 2) ? 'active' : ''}`" @click="togglePackages(2)">Shared</div>
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="type == 'transactions'">
+        <div v-if="type == 'transactions' && loaded">
             <div class="cms_table_accordion alt">
                 <div class="header_wrapper">
                     <div class="accordion_header">Transanction Date</div>
@@ -67,7 +67,7 @@
                     <div class="accordion_header">Total Price</div>
                     <div class="accordion_header action">Status</div>
                 </div>
-                <div :class="`content_wrapper ${(data.open) ? 'toggled' : ''} ${(data.status == 'paid') ? 'alt' : ''}`" v-for="(data, key) in transactions" v-if="transactions.length > 0">
+                <div :class="`content_wrapper ${(data.open) ? 'toggled' : ''} ${(data.status == 'paid') ? 'alt' : ''}`" v-for="(data, key) in res.data" v-if="res.data.length > 0">
                     <div class="toggler" @click="toggleAccordion($event, key)"></div>
                     <div class="content_headers">
                         <div class="accordion_content">{{ formatDate(data.created_at, true) }}</div>
@@ -80,7 +80,6 @@
                             <a class="accordion_action_edit" href="javascript:void(0)" @click="toggleForm(data.id)" v-if="data.status == 'pending'">Pay Now</a>
                         </div>
                     </div>
-                    <!-- Accordion User per Role -->
                     <div class="accordion_table">
                         <table class="cms_table">
                             <thead>
@@ -110,10 +109,11 @@
                         </table>
                     </div>
                 </div>
-                <div class="no_results" v-if="transactions.length == 0">
+                <div class="no_results" v-if="res.data.length == 0">
                     No Result(s) Found.
                 </div>
             </div>
+            <pagination :apiRoute="`api/customers/${$route.params.param}/${$route.params.slug}`" :current="res.current_page" :last="res.last_page" :total="res.total" />
             <button type="button" class="hidden" id="transactions" @click="populateTransactions()"></button>
         </div>
         <transition name="fade">
@@ -124,9 +124,11 @@
 
 <script>
     import CustomerPendingQuickSale from '../components/modals/CustomerPendingQuickSale'
+    import Pagination from '../components/Pagination'
     export default {
         components: {
             CustomerPendingQuickSale,
+            Pagination
         },
         props: {
             type: {
@@ -139,6 +141,7 @@
         },
         data () {
             return {
+                loaded: false,
                 violator: {
                     warning: 0,
                     shared: 0,
@@ -146,7 +149,7 @@
                     freeze: 0,
                 },
                 packageStatus: 1,
-                transactions: [],
+                res: [],
                 transaction: []
             }
         },
@@ -155,7 +158,15 @@
                 const me = this
                 me.$axios.get(`api/customers/${me.$route.params.param}/${me.$route.params.slug}`).then(res => {
                     if (res.data) {
-                        me.transactions = res.data.customer.payments
+                        me.res = res.data.customer.payments
+                        if (me.res) {
+                            me.$parent.pendingPayment = 0
+                            me.res.data.forEach((payment, index) => {
+                                if (payment.status == 'pending') {
+                                    me.$parent.pendingPayment += parseFloat(payment.total)
+                                }
+                            })
+                        }
                     }
                 })
             },
@@ -181,8 +192,8 @@
             toggleAccordion (event, key) {
                 const me = this
                 const target = event.target
-                me.transactions[key].open ^= true
-                if (me.transactions[key].open) {
+                me.res.data[key].open ^= true
+                if (me.res.data[key].open) {
                     target.parentNode.querySelector('.accordion_table').style.height = `${target.parentNode.querySelector('.accordion_table').scrollHeight}px`
                 } else {
                     target.parentNode.querySelector('.accordion_table').style.height = 0
@@ -253,8 +264,9 @@
         mounted () {
             const me = this
             if (me.$route.params.slug == 'transactions') {
-                me.transactions = me.value.payments
+                me.res = me.value.payments
             }
+            me.loaded = true
         },
         beforeMount () {
             document.addEventListener('click', this.toggleOverlays)

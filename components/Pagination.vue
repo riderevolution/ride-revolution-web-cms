@@ -20,6 +20,10 @@
             last: {
                 type: Number,
                 default: 1
+            },
+            total: {
+                type: Number,
+                default: 1
             }
         },
         methods: {
@@ -28,7 +32,11 @@
                 if (current != last) {
                     me.loader(true)
                     me.$axios.get(`${me.apiRoute}?page=${current + 1}`).then(res => {
-                        me.$parent.res = res.data
+                        if (me.$route.params.slug == 'transactions') {
+                            me.$parent.res = res.data.customer.payments
+                        } else {
+                            me.$parent.res = res.data
+                        }
                     }).catch(err => {
                         me.$store.state.errorList = err.response.data.errors
                         me.$store.state.errorStatus = true
@@ -43,7 +51,11 @@
                 const me = this
                 me.loader(true)
                 me.$axios.get(`${me.apiRoute}?page=${count}`).then(res => {
-                    me.$parent.res = res.data
+                    if (me.$route.params.slug == 'transactions') {
+                        me.$parent.res = res.data.customer.payments
+                    } else {
+                        me.$parent.res = res.data
+                    }
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
@@ -58,7 +70,11 @@
                 if (current != 1) {
                     me.loader(true)
                     me.$axios.get(`${me.apiRoute}?page=${current - 1}`).then(res => {
-                        me.$parent.res = res.data
+                        if (me.$route.params.slug == 'transactions') {
+                            me.$parent.res = res.data.customer.payments
+                        } else {
+                            me.$parent.res = res.data
+                        }
                     }).catch(err => {
                         me.$store.state.errorList = err.response.data.errors
                         me.$store.state.errorStatus = true

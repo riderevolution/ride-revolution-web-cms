@@ -17,7 +17,7 @@
                         <div class="user_summary">
                             <div class="summary">Completed Rides: 89</div>
                             <div class="summary">Store Credits: {{ (customer.store_credits) ? totalItems(customer.store_credits.amount) : 0 }}</div>
-                            <div class="summary pending">Pending Payment: Php 500.00</div>
+                            <div class="summary pending">Pending Payment: Php {{ totalCount(pendingPayment) }}</div>
                         </div>
                         <div class="user_action">
                             <a href="javascript:void(0)" class="action_user_btn" @click="toggleQuickSale('credit')">Buy Credits</a>
@@ -50,6 +50,7 @@
                 loaded: false,
                 lastRoute: '',
                 customer: [],
+                pendingPayment: 0,
                 tabs: [
                     {
                         name: 'Packages',
@@ -85,6 +86,14 @@
                 me.$axios.get(`api/customers/${me.$route.params.param}/${me.$route.params.slug}`).then(res => {
                     if (res.data) {
                         me.customer = res.data.customer
+                        if (me.customer.payments) {
+                            me.pendingPayment = 0
+                            me.customer.payments.data.forEach((payment, index) => {
+                                if (payment.status == 'pending') {
+                                    me.pendingPayment += parseFloat(payment.total)
+                                }
+                            })
+                        }
                         me.loaded = true
                     }
                 }).catch(err => {
@@ -94,7 +103,7 @@
                     me.rowCount = document.getElementsByTagName('th').length
                     setTimeout( () => {
                         me.loader(false)
-                    }, 300)
+                    }, 500)
                 })
             },
             toggleQuickSale (type) {
