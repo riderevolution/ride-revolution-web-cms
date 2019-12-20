@@ -6,7 +6,7 @@
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
-            <div class="seat_number">{{ seat.number }}</div>
+            <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
@@ -16,7 +16,7 @@
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
-            <div class="seat_number">{{ seat.number }}</div>
+            <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
@@ -26,7 +26,7 @@
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
-            <div class="seat_number">{{ seat.number }}</div>
+            <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
@@ -36,7 +36,7 @@
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
-            <div class="seat_number">{{ seat.number }}</div>
+            <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
@@ -46,7 +46,7 @@
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
             </ul>
-            <div class="seat_number">{{ seat.number }}</div>
+            <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
         </div>
@@ -73,6 +73,10 @@
             }
         },
         methods: {
+            signIn (id) {
+                const me = this
+                alert(id)
+            },
             seatStatus (type) {
                 const me = this
                 switch (type) {
