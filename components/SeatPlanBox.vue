@@ -76,7 +76,8 @@
             signIn (id) {
                 const me = this
                 if (me.$store.state.customerID != 0) {
-                    alert(id)
+                    me.$store.state.customerPackageStatus = true
+                    document.body.classList.add('no_scroll')
                 } else {
                     me.$parent.message = 'Please select a customer first.'
                     me.$parent.$parent.$parent.findCustomer = false

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 const createStore = () => {
     return new Vuex.Store({
         state: () => ({
+            customerPackageStatus: false,
             assignStatus: false,
             changeStudioStatus: false,
             calendarDuplicateStatus: false,

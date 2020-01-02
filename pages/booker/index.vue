@@ -232,6 +232,9 @@
         <transition name="fade">
             <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
         </transition>
+        <transition name="fade">
+            <customer-package v-if="$store.state.customerPackageStatus" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
@@ -241,6 +244,7 @@
     import SeatPlan from '../../components/SeatPlan'
     import Prompt from '../../components/modals/Prompt'
     import PromptBooker from '../../components/modals/PromptBooker'
+    import CustomerPackage from '../../components/modals/CustomerPackage'
     import Assign from '../../components/modals/Assign'
     export default {
         components: {
@@ -248,6 +252,7 @@
             SeatPlan,
             Prompt,
             PromptBooker,
+            CustomerPackage,
             Assign
         },
         data () {

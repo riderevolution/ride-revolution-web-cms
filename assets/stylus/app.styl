@@ -1595,6 +1595,36 @@ input::placeholder
     &.select_all
         .form_radio
             margin-bottom: 20px
+    &.alternate
+        .form_radio
+            flex: 0 0 100%
+            border-bottom: 2px dashed $border
+            padding: 30px 15px
+            &:first-child
+                padding: 0 15px 30px
+            &:last-child
+                border-bottom: 2px dashed transparent
+            &.toggled
+                label
+                    color: $green
+                    transition: .3s ease-in-out
+                    .id
+                        color: $green
+                        transition: .3s ease-in-out
+            label
+                flex: 1 0 auto
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: space-between
+                sf_pro_semibold(18px)
+                transition: .3s ease-in-out
+                p
+                    margin-bottom: 0
+                .id
+                    sf_pro_regular(15px)
+                    color: $border_alt2
+                    transition: .3s ease-in-out
     label
         flex: 0 auto
         margin-left: 10px
