@@ -16,7 +16,8 @@
                             </div>
                             <div class="form_group margin" v-click-outside="closeMe">
                                 <label for="q">Find a Customer</label>
-                                <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" :class="`default_text search_alternate ${(selectCustomer) ? '' : 'disabled'}`" @click="toggleCustomers ^= true" @input="searchCustomer($event)">
+                                <input type="text" name="q" autocomplete="off" placeholder="Search for a customer" :class="`default_text search_alternate ${(selectCustomer) ? '' : 'disabled'} ${(!findCustomer && customer == '') ? 'highlighted' : ''}`" @click="toggleCustomers ^= true" @input="searchCustomer($event)">
+                                <transition name="slide"><span class="validation_errors alt" v-if="!findCustomer && customer == ''">Select Customer</span></transition>
                                 <div :class="`customer_selection ${(customerLength > 6) ? 'scrollable' : ''}`" v-if="toggleCustomers">
                                     <div class="customer_selection_list">
                                         <div class="customer_wrapper" v-if="customerLength > 0 && customer.id != data.id" :id="`customer_${data.id}`" v-for="(data, key) in populateCustomers" :key="key" @click="getCustomer(data)">
@@ -226,6 +227,9 @@
             <prompt v-if="$store.state.promptStatus" :message="($refs.plan.hasCancel) ? $refs.plan.message : message" :hasCancel="$refs.plan.hasCancel" />
         </transition>
         <transition name="fade">
+            <prompt-booker v-if="$store.state.promptBookerStatus" :message="$refs.plan.message" />
+        </transition>
+        <transition name="fade">
             <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
         </transition>
         <foot v-if="$store.state.isAuth" />
@@ -236,12 +240,14 @@
     import Foot from '../../components/Foot'
     import SeatPlan from '../../components/SeatPlan'
     import Prompt from '../../components/modals/Prompt'
+    import PromptBooker from '../../components/modals/PromptBooker'
     import Assign from '../../components/modals/Assign'
     export default {
         components: {
             Foot,
             SeatPlan,
             Prompt,
+            PromptBooker,
             Assign
         },
         data () {
@@ -274,7 +280,8 @@
                 customWidth: 0,
                 customHeight: 0,
                 message: '',
-                selectStudio: true
+                selectStudio: true,
+                findCustomer: true
             }
         },
         computed: {
@@ -289,6 +296,8 @@
             removeCustomer () {
                 const me = this
                 me.customer = ''
+                me.$store.state.customerID = 0
+                me.findCustomer = true
                 setTimeout( () => {
                     me.$refs.plan.hasCustomer = false
                 }, 10)
@@ -336,6 +345,9 @@
                     me.selectStudio = false
                     me.$store.state.promptStatus = true
                     me.message = 'Please select a studio first.'
+                    me.$scrollTo('.validation_errors', {
+                        offset: -250
+                    })
                 }
             },
             toggleOverlays (e) {

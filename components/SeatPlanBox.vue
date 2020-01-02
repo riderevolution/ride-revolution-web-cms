@@ -75,7 +75,14 @@
         methods: {
             signIn (id) {
                 const me = this
-                alert(id)
+                if (me.$store.state.customerID != 0) {
+                    alert(id)
+                } else {
+                    me.$parent.message = 'Please select a customer first.'
+                    me.$parent.$parent.$parent.findCustomer = false
+                    me.$store.state.promptBookerStatus = true
+                    document.body.classList.add('no_scroll')
+                }
             },
             seatStatus (type) {
                 const me = this

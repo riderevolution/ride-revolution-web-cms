@@ -14,6 +14,7 @@ const createStore = () => {
             successfulStatus: false,
             successfulLaterStatus: false,
             promptPromoStatus: false,
+            promptBookerStatus: false,
             promptValidateStatus: false,
             promptStatus: false,
             importStatus: false,

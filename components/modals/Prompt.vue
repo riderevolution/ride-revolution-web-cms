@@ -37,6 +37,9 @@
                     me.$parent.submissionSuccess()
                     document.body.classList.remove('no_scroll')
                     me.$store.state.promptStatus = false
+                    setTimeout( () => {
+                        me.$parent.$refs.plan.hasCancel = false
+                    }, 10)
                 } else if (status && me.hasChange) {
                     me.$store.state.promptStatus = false
                     setTimeout( () => {
@@ -44,8 +47,13 @@
                         document.body.classList.remove('no_scroll')
                     }, 250)
                 } else {
+                    me.$store.state.promptStatus = false
+                    setTimeout( () => {
+                        me.$parent.$refs.plan.hasCancel = false
+                    }, 10)
                     me.$parent.prompt = true
                     me.$store.state.promptStatus = false
+                    document.body.classList.remove('no_scroll')
                 }
             }
         }
