@@ -29,14 +29,15 @@
                     </div>
                     <transition name="fade">
                         <div class="form_group" v-if="form.comp == 'other'">
-                            <label for="other">Indicate Reason</label>
-                            <input type="text" name="indicate_reason" class="default_text">
+                            <label for="comp_reason_body">Indicate Reason</label>
+                            <input type="text" name="comp_reason_body" class="default_text">
                         </div>
                     </transition>
                     <div class="customer_filter">
                         <div class="form_group" v-click-outside="closeMe">
                             <label for="customer">Find a Customer</label>
                             <input type="text" name="customer" autocomplete="off" placeholder="Search for a customer" autofocus class="default_text search_alternate" @click="toggleCustomers ^= true" @input="searchCustomer($event)">
+                            <transition name="slide"><span class="validation_errors" v-if="findCustomer && customer == ''">Select Customer</span></transition>
                             <div :class="`customer_selection ${(customerLength > 6) ? 'scrollable' : ''}`" v-if="toggleCustomers">
                                 <div class="customer_selection_list">
                                     <div class="customer_wrapper" v-if="customerLength > 0" :id="`customer_${customer.id}`" v-for="(customer, key) in populateCustomers" :key="key" @click="getCustomer(customer)">
@@ -108,8 +109,8 @@
                     </div>
                     <transition name="fade">
                         <div class="form_group" v-if="form.comp == 'other'">
-                            <label for="other">Indicate Reason</label>
-                            <input type="text" name="indicate_reason" class="default_text">
+                            <label for="comp_reason_body">Indicate Reason</label>
+                            <input type="text" name="comp_reason_body" class="default_text">
                         </div>
                     </transition>
                     <div class="form_group">
@@ -145,6 +146,7 @@
         },
         data () {
             return {
+                findCustomer: false,
                 form: {
                     comp: '',
                     assign: 'member'
@@ -183,30 +185,38 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        if (me.customer != '') {
-                            formData.append('customer', JSON.stringify(me.customer))
-                            // me.loader(true)
-                            // me.$axios.post('api/customers', formData).then(res => {
-                            //     setTimeout( () => {
-                            //         if (res.data) {
-                            //             me.notify('Added')
-                            //         } else {
-                            //             me.$store.state.errorList.push('Sorry, Something went wrong')
-                            //             me.$store.state.errorStatus = true
-                            //         }
-                            //     }, 500)
-                            // }).catch(err => {
-                            //     me.$store.state.errorList = err.response.data.errors
-                            //     me.$store.state.errorStatus = true
-                            // }).then(() => {
-                            //     setTimeout( () => {
-                            //         me.$store.state.assignStatus = false
-                            //         document.body.classList.remove('no_scroll')
-                            //         me.loader(false)
-                            //     }, 500)
-                            // })
+                        if (me.customer != '' && me.form.assign == 'member') {
+                            formData.append('email', me.customer.email)
                         }
+                        formData.append('staff_id', me.$store.state.user.id)
+                        formData.append('seat_id', me.$store.state.seatID)
+                        formData.append('scheduled_date_id', me.$store.state.scheduleID)
+                        me.loader(true)
+                        me.$axios.post('api/comp', formData).then(res => {
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Seat has been Updated')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.$store.state.assignStatus = false
+                                document.body.classList.remove('no_scroll')
+                                me.loader(false)
+                                me.$parent.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.$parent.studioID)
+                                document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.$parent.customWidth}, ${me.$parent.customHeight})`
+                            }, 500)
+                        })
                     } else {
+                        if (me.customer == '') {
+                            me.findCustomer = true
+                        }
                         setTimeout( () => {
                             document.querySelector('.validation_errors').scrollIntoView({block: 'center', behavior: 'smooth'})
                         }, 10)
@@ -217,6 +227,7 @@
                 const me = this
                 me.toggleCustomers = false
                 me.customer = data
+                me.findCustomer = false
             },
             searchCustomer (event) {
                 const me = this

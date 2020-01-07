@@ -92,7 +92,7 @@
                         me.$axios.post('api/inventory/purchase-orders', formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
-                                    me.notify('Added')
+                                    me.notify('Content has been Added')
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true

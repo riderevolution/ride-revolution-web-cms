@@ -1,54 +1,109 @@
 <template>
     <div :class="`seat_boxes ${position} ${layout}`" v-if="data.length > 0">
-        <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, lkey) in data" v-if="position == 'left'">
+        <div :class="`seat_position ${(seat.status == 'open') ? (seat.comp.length > 0 ? 'comp' : '') : (seat.bookings.length > 0 ? 'sign_in' : 'comp blocked')}`" v-for="(seat, lkey) in data" v-if="position == 'left'">
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
+            <div class="seat_info" v-if="seat.comp.length > 0">
+                <div class="info_image">
+                    <img :src="seat.comp[0].user.customer_details.customer_type.image.path" />
+                </div>
+                <h2 v-line-clamp="1">{{ seat.comp[0].user.first_name }} {{ seat.comp[0].user.last_name }}</h2>
+            </div>
+            <div class="seat_info_blocked">
+                <div class="info_image">
+                    <img src="/icons/broken-bike-icon.svg" />
+                </div>
+            </div>
         </div>
-        <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, rkey) in data" v-if="position == 'right'">
+        <div :class="`seat_position ${(seat.status == 'open') ? (seat.comp.length > 0 ? 'comp' : '') : (seat.bookings.length > 0 ? 'sign_in' : 'comp blocked')}`" v-for="(seat, rkey) in data" v-if="position == 'right'">
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
+            <div class="seat_info" v-if="seat.comp.length > 0">
+                <div class="info_image">
+                    <img :src="seat.comp[0].user.customer_details.customer_type.image.path" />
+                </div>
+                <h2 v-line-clamp="1">{{ seat.comp[0].user.first_name }} {{ seat.comp[0].user.last_name }}</h2>
+            </div>
+            <div class="seat_info_blocked">
+                <div class="info_image">
+                    <img src="/icons/broken-bike-icon.svg" />
+                </div>
+            </div>
         </div>
-        <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, bkey) in data" v-if="position == 'bottom'">
+        <div :class="`seat_position ${(seat.status == 'open') ? (seat.comp.length > 0 ? 'comp' : '') : (seat.bookings.length > 0 ? 'sign_in' : 'comp blocked')}`" v-for="(seat, bkey) in data" v-if="position == 'bottom'">
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
+            <div class="seat_info" v-if="seat.comp.length > 0">
+                <div class="info_image">
+                    <img :src="seat.comp[0].user.customer_details.customer_type.image.path" />
+                </div>
+                <h2 v-line-clamp="1">{{ seat.comp[0].user.first_name }} {{ seat.comp[0].user.last_name }}</h2>
+            </div>
+            <div class="seat_info_blocked">
+                <div class="info_image">
+                    <img src="/icons/broken-bike-icon.svg" />
+                </div>
+            </div>
         </div>
-        <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, bkey) in data" v-if="position == 'bottom_alt'">
+        <div :class="`seat_position ${(seat.status == 'open') ? (seat.comp.length > 0 ? 'comp' : '') : (seat.bookings.length > 0 ? 'sign_in' : 'comp blocked')}`" v-for="(seat, bkey) in data" v-if="position == 'bottom_alt'">
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
+            <div class="seat_info" v-if="seat.comp.length > 0">
+                <div class="info_image">
+                    <img :src="seat.comp[0].user.customer_details.customer_type.image.path" />
+                </div>
+                <h2 v-line-clamp="1">{{ seat.comp[0].user.first_name }} {{ seat.comp[0].user.last_name }}</h2>
+            </div>
+            <div class="seat_info_blocked">
+                <div class="info_image">
+                    <img src="/icons/broken-bike-icon.svg" />
+                </div>
+            </div>
         </div>
-        <div :class="`seat_position ${(seat.status == 'open') ? '' : 'sign_in'}`" v-for="(seat, bkey) in data" v-if="position == 'bottom_alt_2'">
+        <div :class="`seat_position ${(seat.status == 'open') ? (seat.comp.length > 0 ? 'comp' : '') : (seat.bookings.length > 0 ? 'sign_in' : 'comp blocked')}`" v-for="(seat, bkey) in data" v-if="position == 'bottom_alt_2'">
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('comp')">Comp</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus('broken')">Broken Bike</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'comp')">Comp</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat.id, 'broken')">Broken Bike</a></li>
             </ul>
             <div class="seat_number" @click="signIn(seat.id)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="seat.status == 'sign-out'"></div>
             <div class="seat_action" @click.self="toggleAction()"></div>
+            <div class="seat_info" v-if="seat.comp.length > 0">
+                <div class="info_image">
+                    <img :src="seat.comp[0].user.customer_details.customer_type.image.path" />
+                </div>
+                <h2 v-line-clamp="1">{{ seat.comp[0].user.first_name }} {{ seat.comp[0].user.last_name }}</h2>
+            </div>
+            <div class="seat_info_blocked">
+                <div class="info_image">
+                    <img src="/icons/broken-bike-icon.svg" />
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -84,8 +139,9 @@
                     me.$store.state.promptBookerStatus = true
                     document.body.classList.add('no_scroll')
                 }
+                me.$store.state.seatID = id
             },
-            seatStatus (type) {
+            seatStatus (id, type) {
                 const me = this
                 switch (type) {
                     case 'comp':
@@ -100,6 +156,7 @@
                         document.body.classList.add('no_scroll')
                         break
                 }
+                me.$store.state.seatID = id
             },
             toggleMenu (event) {
                 const me = this

@@ -166,7 +166,7 @@
                                 <label for="name">Choose a Type <span>*</span></label>
                                 <select class="default_select alternate" name="type" v-validate="'required'">
                                     <option value="" selected disabled>Choose a Type</option>
-                                    <option :value="type.id" v-for="(type, index) in types">{{ type.name }}</option>
+                                    <option :value="type.id" :selected="type.id == 38" v-for="(type, index) in types">{{ type.name }}</option>
                                 </select>
                                 <transition name="slide"><span class="validation_errors" v-if="errors.has('type')">{{ errors.first('type') }}</span></transition>
                             </div>
@@ -356,7 +356,7 @@
                             me.$axios.post('api/customers', formData).then(res => {
                                 setTimeout( () => {
                                     if (res.data) {
-                                        me.notify('Added')
+                                        me.notify('Content has been Added')
                                     } else {
                                         me.$store.state.errorList.push('Sorry, Something went wrong')
                                         me.$store.state.errorStatus = true

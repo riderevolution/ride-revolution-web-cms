@@ -3497,7 +3497,7 @@ input::placeholder
  * Default Alert */
 .cms_alert
     &#success
-        position: absolute
+        position: fixed
         top: 50px
         right: 0
         left: 0
@@ -3871,6 +3871,15 @@ input::placeholder
                             background-color: $white
                             border: 1.5px solid $black
                             transition: .3s ease-in-out
+                            &.comp
+                                background-color: #F0F1F2
+                                background-image: url('/icons/blocked-seat.svg')
+                                background-repeat: no-repeat
+                                background-position: center
+                                background-size: cover
+                                border: 1.5px solid $gray_alternate
+                                .seat_number
+                                    color: $gray_alternate
                             &.sign_out
                                 background-color: $light_green
                                 border: 1.5px solid transparent
@@ -3889,6 +3898,33 @@ input::placeholder
                                 .seat_number
                                     color: rgba(132, 143, 159, 0.4)
                                     transition: .3s ease-in-out
+                            &.blocked
+                                .seat_info_blocked
+                                    opacity: 1
+                                    visibility: visible
+                                    transition: .3s ease-in-out
+                            .seat_info_blocked
+                                opacity: 0
+                                visibility: hidden
+                                transition: .3s ease-in-out
+                            .seat_info,
+                            .seat_info_blocked
+                                position: absolute
+                                bottom: 0
+                                left: 0
+                                padding: 0 5px 5px 5px
+                                text-align: left
+                                .info_image
+                                    display: flex
+                                    flex-flow: row wrap
+                                    align-items: center
+                                    justify-content: flex-start
+                                    img
+                                        width: auto
+                                        height: 20px
+                                h2
+                                    sf_pro_regular(13px)
+                                    color: $black
                             .seat_number
                                 position: absolute
                                 top: 50%

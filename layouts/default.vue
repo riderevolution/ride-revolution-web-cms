@@ -2,7 +2,7 @@
     <div id="admin_container" >
         <transition name="slide">
             <div id="success" class="cms_alert" v-if="$store.state.isNotify">
-                Content has been {{ $store.state.notificationMessage }}!
+                {{ $store.state.notificationMessage }}!
             </div>
         </transition>
         <transition name="fade">

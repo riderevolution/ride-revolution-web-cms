@@ -8,7 +8,7 @@
                 <div class="modal_main_group">
                     <div class="form_flex_radio alternate margin">
                         <div class="form_radio" v-for="(data, key) in res" :key="key">
-                            <input type="radio" :id="`package_${key}`" :value="data.class_package.id" name="packages" class="action_radio" @change="selectPackage(key)">
+                            <input type="radio" :id="`package_${key}`" :value="data.class_package.id" name="packages" class="action_radio" @change="selectPackage(data, key)">
                             <label :for="`package_${key}`">
                                 <p>{{ data.class_package.name }}</p>
                                 <p class="id">Package ID: {{ data.class_package.sku_id }}</p>
@@ -31,14 +31,16 @@
     export default {
         data () {
             return {
-                res: []
+                res: [],
+                class_package_id: []
             }
         },
         methods: {
-            selectPackage (key) {
+            selectPackage (data, key) {
                 const me = this
                 let element = document.getElementById(`package_${key}`)
-                me.res.forEach((data, index) => {
+                me.class_package_id = data.class_package.id
+                me.res.forEach((value, index) => {
                     if (index == key) {
                         element.parentNode.classList.add('toggled')
                     } else {
@@ -53,36 +55,43 @@
             },
             submissionSuccess () {
                 const me = this
-                // me.$validator.validateAll().then(valid => {
-                //     if (valid) {
-                //         let formData = new FormData(document.getElementById('default_form'))
-                //         me.loader(true)
-                //         me.$axios.post('api/inventory/product-categories', formData).then(res => {
-                //             setTimeout( () => {
-                //                 if (res.data) {
-                //                     me.notify('Added')
-                //                 } else {
-                //                     me.$store.state.errorList.push('Sorry, Something went wrong')
-                //                     me.$store.state.errorStatus = true
-                //                 }
-                //             }, 500)
-                //         }).catch(err => {
-                //             me.$store.state.errorList = err.response.data.errors
-                //             me.$store.state.errorStatus = true
-                //         }).then(() => {
-                //             me.$store.state.customerPackageStatus = false
-                //             setTimeout( () => {
-                //                 me.loader(false)
-                //             }, 500)
-                //             document.body.classList.remove('no_scroll')
-                //         })
-                //     } else {
-                //         me.$scrollTo('.validation_errors', {
-                //             container: '.default_modal',
-                //             offset: -250
-                //         })
-                //     }
-                // })
+                me.$validator.validateAll().then(valid => {
+                    if (valid) {
+                        let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('scheduled_date_id', me.$store.state.scheduleID)
+                        formData.append('seat_id', me.$store.state.seatID)
+                        formData.append('user_id', me.$store.state.customerID)
+                        formData.append('class_package_id', me.class_package_id)
+                        me.loader(true)
+                        me.$axios.post('api/bookings', formData).then(res => {
+                            console.log(res.data);
+                            setTimeout( () => {
+                                if (res.data) {
+                                    me.notify('Seat has been Reserved')
+                                } else {
+                                    me.$store.state.errorList.push('Sorry, Something went wrong')
+                                    me.$store.state.errorStatus = true
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            me.$store.state.customerPackageStatus = false
+                            setTimeout( () => {
+                                me.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.studioID)
+                                document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
+                                me.loader(false)
+                            }, 500)
+                            document.body.classList.remove('no_scroll')
+                        })
+                    } else {
+                        me.$scrollTo('.validation_errors', {
+                            container: '.default_modal',
+                            offset: -250
+                        })
+                    }
+                })
             }
         },
         async mounted () {

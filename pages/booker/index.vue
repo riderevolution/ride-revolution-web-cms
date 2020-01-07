@@ -298,6 +298,28 @@
             }
         },
         methods: {
+            blockBike () {
+                const me = this
+                if (me.$store.state.seatID != 0) {
+                    let formData = new FormData()
+                    formData.append('status', 'blocked')
+                    formData.append('_method', 'PATCH')
+                    me.$axios.post(`api/seats/update-status/${me.$store.state.seatID}`, formData).then(res => {
+                        if (res.data) {
+                            me.notify('Seat has been Blocked')
+                        }
+                    }).catch(err => {
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
+                    }).then(() => {
+                        setTimeout( () => {
+                            me.$refs.plan.hasCancel = false
+                            me.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.studioID)
+                            document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
+                        }, 500)
+                    })
+                }
+            },
             removeCustomer () {
                 const me = this
                 me.customer = ''
@@ -311,7 +333,7 @@
                 const me = this
                 // me.$axios.post('api/customers', formData).then(res => {
                 //     if (res.data) {
-                //         me.notify('Added')
+                //         me.notify('Content has been Added')
                 //     }
                 // }).catch(err => {
                 //     me.$store.state.errorList = err.response.data.errors
@@ -354,6 +376,7 @@
                         offset: -250
                     })
                 }
+                me.$store.state.scheduleID = data.id
             },
             toggleOverlays (e) {
                 const me = this
@@ -422,10 +445,10 @@
                     value.classList.remove('toggled')
                     value.querySelector('.accordion_content').style.height = 0
                 })
-                setTimeout(() => {
-                    me.$refs.plan.fetchSeats(null, me.studioID)
-                    document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
-                }, 10)
+                // setTimeout(() => {
+                //     me.$refs.plan.fetchSeats(null, me.studioID)
+                //     document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
+                // }, 10)
                 me.selectStudio = true
             },
             updateNotes (event) {

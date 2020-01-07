@@ -52,22 +52,24 @@
                 let target = e.target
                 for (let i = 1; i < me.ctr + 1; i++) {
                     let element = document.getElementById(`seat_menu_${i}`)
-                    if (element !== target && element !== target.parentNode.parentNode.parentNode.previousElementSibling) {
-                        if (element.nextElementSibling !== null) {
-                            if (element.nextElementSibling.classList.contains('active')) {
-                                element.nextElementSibling.classList.remove('active')
+                    if (element !== null) {
+                        if (element !== target && element !== target.parentNode.parentNode.parentNode.previousElementSibling) {
+                            if (element.nextElementSibling !== null) {
+                                if (element.nextElementSibling.classList.contains('active')) {
+                                    element.nextElementSibling.classList.remove('active')
+                                }
                             }
                         }
                     }
                 }
             },
-            fetchSeats (schedule_id = null, id) {
+            fetchSeats (schedule_id, id) {
                 const me = this
                 let layout = `layout_${id}`
                 me.seats = { left: { position: 'left', layout: layout, data: [] }, right: { position: 'right', layout: layout, data: [] }, bottom: { position: 'bottom', layout: layout, data: [] }, bottom_alt: { position: 'bottom_alt', layout: layout, data: [] }, bottom_alt_2: { position: 'bottom_alt_2', layout: layout, data: [] }, }
                 me.loader(true)
                 if (schedule_id != null) {
-                    me.$axios.get(`api/seats?studio_id=${id}&schedule_id=`).then(res => {
+                    me.$axios.get(`api/seats?studio_id=${id}&scheduled_date_id=${schedule_id}`).then(res => {
                         if (res.data) {
                             me.temp = res.data.seats
                             me.temp.forEach((seat , index) => {

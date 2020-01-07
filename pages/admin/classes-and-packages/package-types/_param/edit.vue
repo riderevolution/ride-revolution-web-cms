@@ -121,7 +121,7 @@
                         me.$axios.post(`api/packages/package-types/${me.$route.params.param}`, formData).then(res => {
                             setTimeout( () => {
                                 if (res.data) {
-                                    me.notify('Updated')
+                                    me.notify('Content has been Updated')
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
