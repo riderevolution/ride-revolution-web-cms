@@ -52,7 +52,7 @@
                 let target = e.target
                 for (let i = 1; i < me.ctr + 1; i++) {
                     let element = document.getElementById(`seat_menu_${i}`)
-                    if (element !== null) {
+                    if (element !== null && target.parentNode.parentNode.parentNode.previousElementSibling !== null) {
                         if (element !== target && element !== target.parentNode.parentNode.parentNode.previousElementSibling) {
                             if (element.nextElementSibling !== null) {
                                 if (element.nextElementSibling.classList.contains('active')) {

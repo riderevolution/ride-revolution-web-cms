@@ -233,7 +233,7 @@
             <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
         </transition>
         <transition name="fade">
-            <customer-package v-if="$store.state.customerPackageStatus" />
+            <customer-package v-if="$store.state.customerPackageStatus" :studioID="studioID" />
         </transition>
         <foot v-if="$store.state.isAuth" />
     </div>

@@ -29,6 +29,12 @@
 
 <script>
     export default {
+        props: {
+            studioID: {
+                type: String,
+                default: 0
+            }
+        },
         data () {
             return {
                 res: [],
@@ -64,7 +70,6 @@
                         formData.append('class_package_id', me.class_package_id)
                         me.loader(true)
                         me.$axios.post('api/bookings', formData).then(res => {
-                            console.log(res.data);
                             setTimeout( () => {
                                 if (res.data) {
                                     me.notify('Seat has been Reserved')
@@ -79,7 +84,7 @@
                         }).then(() => {
                             me.$store.state.customerPackageStatus = false
                             setTimeout( () => {
-                                me.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.studioID)
+                                me.$parent.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.studioID)
                                 document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
                                 me.loader(false)
                             }, 500)
