@@ -230,7 +230,13 @@
             <prompt-booker v-if="$store.state.promptBookerStatus" :message="$refs.plan.message" />
         </transition>
         <transition name="fade">
+            <prompt-sign-out v-if="$store.state.promptSignOutStatus" />
+        </transition>
+        <transition name="fade">
             <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
+        </transition>
+        <transition name="fade">
+            <remove-assign v-if="$store.state.removeAssignStatus" />
         </transition>
         <transition name="fade">
             <customer-package v-if="$store.state.customerPackageStatus" :studioID="studioID" />
@@ -244,16 +250,20 @@
     import SeatPlan from '../../components/SeatPlan'
     import Prompt from '../../components/modals/Prompt'
     import PromptBooker from '../../components/modals/PromptBooker'
+    import PromptSignOut from '../../components/modals/PromptSignOut'
     import CustomerPackage from '../../components/modals/CustomerPackage'
     import Assign from '../../components/modals/Assign'
+    import RemoveAssign from '../../components/modals/RemoveAssign'
     export default {
         components: {
             Foot,
             SeatPlan,
             Prompt,
             PromptBooker,
+            PromptSignOut,
             CustomerPackage,
-            Assign
+            Assign,
+            RemoveAssign
         },
         data () {
             return {
@@ -298,25 +308,52 @@
             }
         },
         methods: {
+            removeAssign () {
+                const me = this
+                if (me.$store.state.compID != 0) {
+                    me.$axios.delete(`api/comp/${me.$store.state.compID}`).then(res => {
+                        if (res.data) {
+                            setTimeout( () => {
+                                me.$refs.plan.hasCancel = false
+                                me.getSeats()
+                            }, 10)
+                        }
+                    })
+                }
+            },
             blockBike () {
                 const me = this
                 if (me.$store.state.seatID != 0) {
                     let formData = new FormData()
-                    formData.append('status', 'blocked')
                     formData.append('_method', 'PATCH')
-                    me.$axios.post(`api/seats/update-status/${me.$store.state.seatID}`, formData).then(res => {
+                    me.$axios.get(`api/seats/${me.$store.state.seatID}`).then(res => {
                         if (res.data) {
-                            me.notify('Seat has been Blocked')
+                            if (res.data.seat.status == 'open') {
+                                formData.append('status', 'blocked')
+                            } else {
+                                formData.append('status', 'open')
+                            }
+                            me.$axios.post(`api/seats/update-status/${me.$store.state.seatID}`, formData).then(res => {
+                                if (res.data) {
+                                    if (res.data.seat.status == 'open') {
+                                        me.notify('Seat has been Open')
+                                    } else {
+                                        me.notify('Seat has been Blocked')
+                                    }
+                                }
+                            }).catch(err => {
+                                me.$store.state.errorList = err.response.data.errors
+                                me.$store.state.errorStatus = true
+                            }).then(() => {
+                                setTimeout( () => {
+                                    me.$refs.plan.hasCancel = false
+                                    me.getSeats()
+                                }, 500)
+                            })
                         }
                     }).catch(err => {
                         me.$store.state.errorList = err.response.data.errors
                         me.$store.state.errorStatus = true
-                    }).then(() => {
-                        setTimeout( () => {
-                            me.$refs.plan.hasCancel = false
-                            me.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.studioID)
-                            document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
-                        }, 500)
                     })
                 }
             },
@@ -436,6 +473,11 @@
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
                 })
+            },
+            getSeats () {
+                const me = this
+                me.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.studioID)
+                document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.customWidth}, ${me.customHeight})`
             },
             getStudio (event) {
                 const me = this
