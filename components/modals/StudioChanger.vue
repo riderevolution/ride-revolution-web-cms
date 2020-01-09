@@ -6,13 +6,18 @@
                 <h2 class="form_title">Current: {{ currentStudio.name }}</h2>
                 <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group alternate">
-                    <div class="form_group">
+                    <div class="form_flex_button">
                         <label for="studio">Select a Studio <span>*</span></label>
+                        <div :id="`studio_${key}`" :class="`flex_button ${(data.id == currentStudio.id) ? 'active' : ''}`" v-for="(data, key) in studios" :key="key" @click="selectStudio(data, key)">
+                            {{ data.name }}
+                        </div>
+                    </div>
+                    <!-- <div class="form_group">
                         <select class="default_select" name="studio" v-model="studio">
                             <option value="" selected disabled>Select a Studio</option>
                             <option :value="studio.id" v-for="(studio, key) in studios" :key="key" v-if="studio.id != currentStudio.id">{{ studio.name }}</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
                             <div class="form_check default">
@@ -48,6 +53,17 @@
             }
         },
         methods: {
+            selectStudio (data, key) {
+                const me = this
+                let element = document.getElementById(`studio_${key}`)
+                element.classList.add('active')
+                me.studios.forEach((element, index) => {
+                    if (key != index) {
+                        document.getElementById(`studio_${index}`).classList.remove('active')
+                    }
+                })
+                me.studio = data.id
+            },
             toggleClose () {
                 const me = this
                 me.$store.state.changeStudioStatus = false

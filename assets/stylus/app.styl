@@ -1333,6 +1333,40 @@ input::placeholder
             .form_check
                 margin-bottom: 0px
 
+.form_flex_button
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: flex-start
+    label
+        flex: 0 0 100%
+        user-select: none
+        display: block
+        sf_pro_regular(16px)
+        font-weight: normal
+        color: $black
+        margin-left: 20px
+        margin-bottom: 10px
+        span
+            color: $green
+    .flex_button
+        flex: 0 0 calc(33.33% - 40px)
+        margin: 0 20px
+        cursor: pointer
+        text-align: center
+        sf_pro_medium(18px)
+        color: $blue
+        background-color: $light_blue
+        border: 1px solid $blue
+        padding: 20px 10px
+        border-radius: 4px
+        transition: .3s ease-in-out
+        &.active,
+        &:hover
+            color: $white
+            background-color: $blue
+            transition: .3s ease-in-out
+
 .form_flex
     display: flex
     flex-flow: row wrap
