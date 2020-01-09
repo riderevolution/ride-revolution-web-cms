@@ -5,7 +5,7 @@
                 <div class="action_wrapper">
                     <h1 class="header_title">Booker</h1>
                     <div class="actions">
-                        <form class="customer_filter_flex" id="filter" @submit.prevent>
+                        <form :class="`customer_filter_flex ${($store.state.disableBookerUI) ? 'disable_booker' : ''}`" id="filter" @submit.prevent>
                             <div class="form_group customer">
                                 <label for="studio_id">Studio</label>
                                 <select :class="`default_select alternate ${(!selectStudio) ? 'highlighted' : ''}`" name="studio_id" @change="getStudio($event)">
@@ -85,7 +85,7 @@
             </section>
             <section id="content" v-if="loaded">
                 <div class="booker_wrapper">
-                    <div class="booker_classes">
+                    <div :class="`booker_classes ${($store.state.disableBookerUI) ? 'disable_booker' : ''}`">
                         <div class="header_wrapper">
                             <div class="booker_header">
                                 <div class="booker_prev" @click="generatePrevClasses()">
@@ -130,7 +130,7 @@
                             <div class="seat_controls">
                                 <div class="left_side">
                                     <div class="class_options">
-                                        <select class="default_select alternate" name="class_options">
+                                        <select :class="`default_select alternate ${($store.state.disableBookerUI) ? 'disable_booker' : ''}`" name="class_options">
                                             <option value="" disabled selected>Class Options</option>
                                             <option :value="key" v-for="(classOption, key) in classOptions" :key="key">{{ classOption }}</option>
                                         </select>
@@ -166,7 +166,7 @@
                                         <button id="reset" class="margin">Reset</button>
                                     </div>
                                 </div>
-                                <div class="right_side">
+                                <div :class="`right_side ${($store.state.disableBookerUI) ? 'disable_booker' : ''}`">
                                     <button id="reload">Reload</button>
                                 </div>
                             </div>
@@ -190,7 +190,7 @@
                                 <div class="legend_title margin gradient"><span></span> Blocked/Comp</div>
                             </div>
                         </div>
-                        <div class="booker_footer">
+                        <div :class="`booker_footer ${($store.state.disableBookerUI) ? 'disable_booker' : ''}`">
                             <div class="booker_notepad">
                                 <h2 class="footer_title">Notepad</h2>
                                 <div class="notepad_text">

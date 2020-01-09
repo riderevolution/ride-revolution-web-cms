@@ -3570,6 +3570,12 @@ input::placeholder
     .booker_classes
         flex: 0 0 25%
         background-color: $white
+        opacity: 1
+        transition: .3s ease-in-out
+        &.disable_booker
+            opacity: 0.5
+            pointer-events: none
+            transition: .3s ease-in-out
         .header_wrapper
             display: flex
             flex-flow: row wrap
@@ -3786,6 +3792,12 @@ input::placeholder
                         flex: 0 0 auto
                         .default_select
                             width: auto
+                            opacity: 1
+                            transition: .3s ease-in-out
+                            &.disable_booker
+                                opacity: 0.5
+                                pointer-events: none
+                                transition: .3s ease-in-out
                         .class_info
                             position: relative
                             margin-left: 10px
@@ -3840,6 +3852,12 @@ input::placeholder
                     padding: 20px
                     flex: 0 0 auto
                     text-align: center
+                    opacity: 1
+                    transition: .3s ease-in-out
+                    &.disable_booker
+                        opacity: 0.5
+                        pointer-events: none
+                        transition: .3s ease-in-out
             .vue-pan-zoom-item,
             .vue-pan-zoom-scene
                 height: 450px
@@ -4159,6 +4177,12 @@ input::placeholder
             flex-flow: row wrap
             align-items: flex-start
             justify-content: space-between
+            opacity: 1
+            transition: .3s ease-in-out
+            &.disable_booker
+                opacity: 0.5
+                pointer-events: none
+                transition: .3s ease-in-out
             .footer_header
                 display: flex
                 flex-flow: row wrap
@@ -5083,10 +5107,16 @@ input::placeholder
                 .actions
                     flex: 0 0 65%
                     .customer_filter_flex
+                        &.disable_booker
+                            opacity: 0.5
+                            pointer-events: none
+                            transition: .3s ease-in-out
                         flex: 1 0 auto
                         display: flex
                         flex-flow: row wrap
                         align-items: center
+                        opacity: 1
+                        transition: .3s ease-in-out
                         .form_group
                             position: relative
                             flex: 0 0 30%
