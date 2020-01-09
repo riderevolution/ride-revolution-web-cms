@@ -25,6 +25,7 @@ const createStore = () => {
             promptSwitchSeatStatus: false,
             promptSignOutStatus: false,
             promptBookerStatus: false,
+            promptBookerActionStatus: false,
             promptValidateStatus: false,
             promptStatus: false,
             importStatus: false,

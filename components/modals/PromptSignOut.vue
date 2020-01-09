@@ -8,7 +8,7 @@
             </div>
             <div class="button_group">
                 <a href="javascript:void(0)" class="action_cancel_btn" @click.once="toggleClose(false)">Cancel</a>
-                <div class="action_success_btn confirm margin" @click.once="toggleClose(true)">Continue</div>
+                <div class="action_success_btn confirm margin alternate" @click.once="toggleClose(true)">Continue</div>
             </div>
         </div>
     </div>

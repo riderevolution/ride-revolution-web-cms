@@ -1,16 +1,21 @@
 <template>
     <div :class="`seat_boxes ${position} ${layout}`" v-if="data.length > 0">
-        <div :class="`seat_position ${(seat.status == 'open' && $store.state.disableBookerUI) ? 'available' : ''} ${(seat.bookings.length > 0 && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id) ? 'highlight' : ''} ${(seat.status == 'open') ? '' : (seat.status == 'comp' ? (seat.comp.length > 0 ? 'comp' : '') : (seat.status == 'reserved') ? (seat.bookings.length > 0 ? 'sign_in' : '') : (seat.status == 'blocked' ? 'comp blocked' : (seat.status == 'signed-in' ? 'sign_out' : '')))}`" v-for="(seat, lkey) in data">
+        <div :class="`seat_position ${(seat.status == 'open' && $store.state.disableBookerUI) ? 'available' : ''} ${(seat.bookings.length > 0 && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id)) ? 'highlight' : ''} ${(seat.status == 'open') ? '' : (seat.status == 'comp' ? (seat.comp.length > 0 ? 'comp' : '') : (seat.status == 'reserved') ? (seat.bookings.length > 0 && seat.bookings[0].user != null ? 'sign_in' : 'sign_in_guest') : (seat.status == 'blocked' ? 'comp blocked' : (seat.status == 'signed-in' ? 'sign_out' : '')))}`" v-for="(seat, lkey) in data">
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer && seat.status == 'open'">&#x25CF;&#x25CF;&#x25CF;</div>
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer && (seat.status == 'comp' || seat.status == 'blocked')">&#x25CF;&#x25CF;&#x25CF;</div>
-            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="seat.bookings.length > 0 && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id && seat.status != 'signed-in'">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="seat.bookings.length > 0 && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id) && seat.status != 'signed-in'">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="seat.bookings.length > 0 && seat.bookings[0].original_booker_id == $parent.$parent.$parent.customer.id && seat.status != 'signed-in'">&#x25CF;&#x25CF;&#x25CF;</div>
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$parent.hasCustomer && seat.bookings.length > 0 && seat.status != 'signed-in'">&#x25CF;&#x25CF;&#x25CF;</div>
             <ul class="seat_overlay_menu">
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat, seat.status, 'comp')" v-if="(!$parent.hasCustomer && seat.status == 'open') || (seat.status == 'comp')">{{ (seat.status == 'comp') ? 'Remove Comp' : 'Comp' }}</a></li>
                 <li><a href="javascript:void(0)" class="seat_item" @click="seatStatus(seat, seat.status, 'broken')" v-if="(!$parent.hasCustomer && seat.status == 'open') || (seat.status == 'blocked')">{{ (seat.status == 'blocked') ? 'Make Vacant' : 'Broken Bike' }}</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" v-if="seat.bookings.length > 0 && seat.status == 'reserved' && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id" @click="switchPackage(seat.bookings[0].id, seat.bookings[0].class_package_id)">Switch Package</a></li>
-                <li><a href="javascript:void(0)" class="seat_item" v-if="seat.bookings.length > 0 && seat.status == 'reserved' && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id" @click="switchSeat(seat.bookings[0].id)">Switch Seat</a></li>
-                <li><a href="javascript:void(0)" class="seat_item cancel" v-if="seat.bookings.length > 0 && seat.status == 'reserved' && !$parent.hasCustomer">Cancel Seat</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" v-if="(seat.bookings.length > 0 && seat.status == 'reserved') && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id)" @click="switchPackage(seat.bookings[0].id, seat.bookings[0].class_package_id)">Switch Package</a></li>
+                <li><a href="javascript:void(0)" class="seat_item" v-if="(seat.bookings.length > 0 && seat.status == 'reserved') && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id)" @click="switchSeat(seat.bookings[0].id)">Switch Seat</a></li>
+
+                <li><a href="javascript:void(0)" class="seat_item cancel" v-if="(seat.bookings.length > 0 && seat.status == 'reserved') && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id || seat.bookings[0].original_booker_id == $parent.$parent.$parent.customer.id)">{{ (seat.bookings[0].user != null) ? 'Cancel Seat' : 'Cancel Guest' }}</a></li>
+
+                <li><a href="javascript:void(0)" class="seat_item cancel" v-if="seat.bookings.length > 0 && seat.status == 'reserved' && !$parent.hasCustomer">{{ (seat.bookings[0].user != null) ? 'Cancel Seat' : 'Cancel Guest' }}</a></li>
+
             </ul>
             <div class="seat_available" @click="toggleSwitchSeat(seat.id)" v-if="$store.state.disableBookerUI && seat.bookings.length <= 0"></div>
             <div class="seat_number" @click="signIn(seat.status, seat.id)">{{ seat.number }}</div>
@@ -20,10 +25,13 @@
                 <div class="info_image" v-if="seat.comp.length > 0 && seat.comp[0].user_id != null">
                     <img :src="seat.comp[0].user.customer_details.customer_type.image.path" />
                 </div>
-                <div class="info_image" v-if="seat.bookings.length > 0">
+                <div class="info_image" v-if="seat.bookings.length > 0 && seat.bookings[0].user != null">
                     <img :src="seat.bookings[0].user.customer_details.customer_type.image.path" />
                 </div>
-                <h2 v-line-clamp="1">{{ (seat.comp.length > 0) ? (seat.comp[0].user_id != null ? seat.comp[0].user.first_name : seat.comp[0].email) : seat.bookings[0].user.first_name }} {{ (seat.comp.length > 0) ? (seat.comp[0].user_id != null ? seat.comp[0].user.last_name : '') : seat.bookings[0].user.last_name }}</h2>
+                <div class="info_image" v-if="seat.bookings.length > 0 && seat.bookings[0].is_guest == 1">
+                    <img src="/icons/guest-icon.svg" />
+                </div>
+                <h2 v-line-clamp="1">{{ (seat.comp.length > 0) ? (seat.comp[0].user_id != null ? seat.comp[0].user.first_name : seat.comp[0].email) : (seat.bookings.length > 0 && seat.bookings[0].user != null ? seat.bookings[0].user.first_name : seat.bookings[0].guest_first_name) }} {{ (seat.comp.length > 0) ? (seat.comp[0].user_id != null ? seat.comp[0].user.last_name : '') : (seat.bookings.length > 0 && seat.bookings[0].user != null ? seat.bookings[0].user.last_name : seat.bookings[0].guest_last_name) }}</h2>
             </div>
             <div class="seat_info_blocked">
                 <div class="info_image">
@@ -64,7 +72,9 @@
                 const me = this
                 me.$store.state.bookingID = booking_id
                 me.$store.state.disableBookerUI = true
-                me.notify('Please select a new seat', false)
+                me.$parent.message = 'Please select a new seat.'
+                me.$store.state.promptBookerStatus = true
+                document.body.classList.add('no_scroll')
             },
             switchPackage (booking_id, class_package_id) {
                 const me = this
@@ -82,14 +92,21 @@
                         formData.append('scheduled_date_id', me.$store.state.scheduleID)
                         formData.append('user_id', me.$store.state.customerID)
                         me.$axios.post('api/extras/check-if-user-is-booked-already', formData).then(res => {
-                            if (res.data) {
+                            if (res.data.guest >= 5) {
                                 me.$parent.message = 'The user has already booked on the selected schedule.'
                                 me.$store.state.promptBookerStatus = true
+                                document.body.classList.add('no_scroll')
                             } else {
-                                me.$store.state.customerPackageStatus = true
-                                me.$parent.$parent.$parent.packageMethod = 'create'
+                                if (res.data.result == 0) {
+                                    me.$store.state.customerPackageStatus = true
+                                    me.$parent.$parent.$parent.packageMethod = 'create'
+                                    document.body.classList.add('no_scroll')
+                                } else {
+                                    me.$parent.assignType = 1
+                                    me.$store.state.assignStatus = true
+                                    document.body.classList.add('no_scroll')
+                                }
                             }
-                            document.body.classList.add('no_scroll')
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true

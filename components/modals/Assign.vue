@@ -18,7 +18,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form_group">
+                    <div class="form_group" v-if="type == 0">
                         <label for="comp_reason">Comp Reason <span>*</span></label>
                         <select class="default_select alternate" name="comp_reason" v-validate="'required'" v-model="form.comp">
                             <option value="" selected disabled>Select a Reason</option>
@@ -36,17 +36,17 @@
                     <div class="customer_filter">
                         <div class="form_group" v-click-outside="closeMe">
                             <label for="customer">Find a Customer</label>
-                            <input type="text" name="customer" autocomplete="off" placeholder="Search for a customer" autofocus class="default_text search_alternate" @click="toggleCustomers ^= true" @input="searchCustomer($event)">
+                            <input type="text" name="customer" autocomplete="off" placeholder="Search for a customer" class="default_text search_alternate" @click="toggleCustomers ^= true" @input="searchCustomer($event)">
                             <transition name="slide"><span class="validation_errors" v-if="findCustomer && customer == ''">Select Customer</span></transition>
                             <div :class="`customer_selection ${(customerLength > 6) ? 'scrollable' : ''}`" v-if="toggleCustomers">
                                 <div class="customer_selection_list">
-                                    <div class="customer_wrapper" v-if="customerLength > 0" :id="`customer_${customer.id}`" v-for="(customer, key) in populateCustomers" :key="key" @click="getCustomer(customer)">
-                                        <img :src="customer.customer_details.images[0].path_resized" v-if="customer.customer_details.images.length > 0" />
+                                    <div class="customer_wrapper" v-if="customerLength > 0 && customer.id != data.id" :id="`customer_${data.id}`" v-for="(data, key) in populateCustomers" :key="key" @click="getCustomer(data)">
+                                        <img :src="data.customer_details.images[0].path_resized" v-if="data.customer_details.images.length > 0" />
                                         <div class="customer_image" v-else>
-                                            {{ customer.first_name.charAt(0) }}{{ customer.last_name.charAt(0) }}
+                                            {{ data.first_name.charAt(0) }}{{ data.last_name.charAt(0) }}
                                         </div>
                                         <div class="customer_name">
-                                            {{ customer.first_name }} {{ customer.last_name }}
+                                            {{ data.first_name }} {{ data.last_name }}
                                         </div>
                                     </div>
                                     <div class="no_results" v-if="customerLength == 0" >
@@ -80,7 +80,7 @@
                         <div class="form_flex">
                             <div class="button_group">
                                 <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose()">Cancel</a>
-                                <button type="submit" name="submit" class="action_success_btn margin alternate">{{ (type == 1) ? 'Assign' : 'Block' }}</button>
+                                <button type="submit" name="submit" class="action_success_btn margin alternate">{{ (type == 1) ? 'Assign Guest' : 'Block' }}</button>
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form_group">
+                    <div class="form_group" v-if="type == 0">
                         <label for="comp_reason">Comp Reason <span>*</span></label>
                         <select class="default_select alternate" name="comp_reason" v-validate="'required'" v-model="form.comp">
                             <option value="" selected disabled>Select a Reason</option>
@@ -113,16 +113,33 @@
                             <input type="text" name="comp_reason_body" class="default_text">
                         </div>
                     </transition>
-                    <div class="form_group">
+                    <div class="form_flex" v-if="type == 1">
+                        <div class="form_group">
+                            <label for="guest_first_name">First Name <span>*</span></label>
+                            <input type="text" name="guest_first_name" autocomplete="off" class="default_text" v-validate="'required'">
+                            <transition name="slide"><span class="validation_errors" v-if="errors.has('guest_first_name')">{{ errors.first('guest_first_name') }}</span></transition>
+                        </div>
+                        <div class="form_group">
+                            <label for="guest_last_name">Last Name <span>*</span></label>
+                            <input type="text" name="guest_last_name" autocomplete="off" class="default_text" v-validate="'required'">
+                            <transition name="slide"><span class="validation_errors" v-if="errors.has('guest_last_name')">{{ errors.first('guest_last_name') }}</span></transition>
+                        </div>
+                    </div>
+                    <div class="form_group" v-if="type == 0">
                         <label for="email">Email Address <span>*</span></label>
                         <input type="email" name="email" autocomplete="off" class="default_text" v-validate="'required|email'">
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('email')">{{ errors.first('email') }}</span></transition>
+                    </div>
+                    <div class="form_group" v-else>
+                        <label for="guest_email">Email Address <span>*</span></label>
+                        <input type="email" name="guest_email" autocomplete="off" class="default_text" v-validate="'required|email'">
+                        <transition name="slide"><span class="validation_errors" v-if="errors.has('guest_email')">{{ errors.first('guest_email') }}</span></transition>
                     </div>
                     <div class="form_footer_wrapper">
                         <div class="form_flex">
                             <div class="button_group">
                                 <a href="javascript:void(0)" class="action_cancel_btn" @click="toggleClose()">Cancel</a>
-                                <button type="submit" name="submit" class="action_success_btn margin alternate">{{ (type == 1) ? 'Assign' : 'Block' }}</button>
+                                <button type="submit" name="submit" class="action_success_btn margin alternate">{{ (type == 1) ? 'Assign Guest' : 'Block' }}</button>
                             </div>
                         </div>
                     </div>
@@ -185,34 +202,69 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        if (me.customer != '' && me.form.assign == 'member') {
-                            formData.append('email', me.customer.email)
-                        }
-                        formData.append('staff_id', me.$store.state.user.id)
-                        formData.append('seat_id', me.$store.state.seatID)
                         formData.append('scheduled_date_id', me.$store.state.scheduleID)
                         me.loader(true)
-                        me.$axios.post('api/comp', formData).then(res => {
-                            setTimeout( () => {
+                        if (me.type == 0) {
+                            if (me.customer != '' && me.form.assign == 'member') {
+                                formData.append('email', me.customer.email)
+                            }
+                            formData.append('staff_id', me.$store.state.user.id)
+                            formData.append('seat_id', me.$store.state.seatID)
+                            me.$axios.post('api/comp', formData).then(res => {
                                 if (res.data) {
-                                    me.notify('Seat has been Updated')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
+                                    setTimeout( () => {
+                                        me.$parent.actionMessage = 'Seat has been updated to a Comp.'
+                                        me.$store.state.promptBookerActionStatus = true
+                                    }, 500)
                                 }
-                            }, 500)
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
+                            }).catch(err => {
+                                me.$store.state.errorList = err.response.data.errors
+                                me.$store.state.errorStatus = true
+                            }).then(() => {
                                 me.$store.state.assignStatus = false
-                                document.body.classList.remove('no_scroll')
-                                me.$parent.getSeats()
-                                me.$parent.$refs.plan.assignType = 0
-                                me.loader(false)
-                            }, 500)
-                        })
+                                setTimeout( () => {
+                                    me.$parent.getSeats()
+                                    me.$parent.$refs.plan.assignType = 0
+                                }, 500)
+                            })
+                        } else {
+                            let formData2 = new FormData()
+                            formData2.append('scheduled_date_id', me.$store.state.scheduleID)
+                            formData2.append('user_id', me.$store.state.customerID)
+                            me.$axios.post('api/extras/check-user-booking', formData2).then(res => {
+                                if (res.data) {
+                                    if (me.customer != '' && me.form.assign == 'member') {
+                                        formData.append('guest_email', me.customer.email)
+                                    }
+                                    formData.append('is_guest', 1)
+                                    formData.append('seat_id', me.$store.state.seatID)
+                                    formData.append('user_id', me.$store.state.customerID)
+                                    formData.append('class_package_id', res.data.booking.class_package_id)
+                                    me.$axios.post('api/bookings', formData).then(res => {
+                                        if (res.data) {
+                                            setTimeout( () => {
+                                                me.$parent.actionMessage = 'Seat has been reserved to a Guest.'
+                                                me.$store.state.promptBookerActionStatus = true
+                                            }, 500)
+                                        }
+                                    }).catch(err => {
+                                        me.$store.state.errorList = err.response.data.errors
+                                        me.$store.state.errorStatus = true
+                                    }).then(() => {
+                                        me.$store.state.assignStatus = false
+                                        setTimeout( () => {
+                                            me.$parent.getSeats()
+                                            me.$store.state.bookingID = 0
+                                            me.$store.state.classPackageID = 0
+                                            me.$store.state.seatID = 0
+                                        }, 500)
+                                    })
+                                }
+                            }).catch(err => {
+                                me.$store.state.errorList = err.response.data.errors
+                                me.$store.state.errorStatus = true
+                            })
+                        }
                     } else {
                         if (me.customer == '') {
                             me.findCustomer = true

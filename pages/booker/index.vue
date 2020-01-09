@@ -104,13 +104,13 @@
                                 <div class="accordion_content">
                                     <a href="javascript:void(0)" :id="`class_${dkey}_${key}`" class="class_content" v-for="(data, dkey) in schedules" :key="dkey" @click="getBookings(data, dkey, key)">
                                         <div class="class_title">
-                                            <span>{{ data.schedule.start_time }}, {{ data.schedule.class_type.name }}</span>
+                                            <span>{{ data.schedule.start_time }}, {{ data.schedule.description }}</span>
                                             <div class="class_status full">
                                                 Full (28)
                                             </div>
                                         </div>
                                         <div class="class_text">
-                                            {{ data.schedule.instructor_schedules[0].user_id }} (50 mins)
+                                            {{ data.schedule.instructor_schedules[0].user.first_name }} (50 mins)
                                         </div>
                                         <div class="class_text alternate">
                                             <span>Signed-in: 3</span>
@@ -144,6 +144,10 @@
                                                         <div class="type_title">{{ data.name }}</div>
                                                     </div>
                                                     <div class="type">
+                                                        <img src="/icons/guest-icon.svg" />
+                                                        <div class="type_title">Guest</div>
+                                                    </div>
+                                                    <div class="type">
                                                         <img src="/icons/pending-payment-icon.svg" />
                                                         <div class="type_title">Pending Payment</div>
                                                     </div>
@@ -155,7 +159,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <label class="booker_label">Lorem Ipsum</label>
+                                    <label class="booker_label">{{ (schedule != '') ? schedule.schedule.description : 'Please Select a Class' }}</label>
                                     <div class="controls">
                                         <button id="zoom_in">Zoom in</button>
                                         <button id="zoom_out" class="margin">Zoom out</button>
@@ -230,6 +234,9 @@
             <prompt-booker v-if="$store.state.promptBookerStatus" :message="$refs.plan.message" />
         </transition>
         <transition name="fade">
+            <prompt-booker-action v-if="$store.state.promptBookerActionStatus" :message="actionMessage" />
+        </transition>
+        <transition name="fade">
             <prompt-sign-out v-if="$store.state.promptSignOutStatus" />
         </transition>
         <transition name="fade">
@@ -253,6 +260,7 @@
     import SeatPlan from '../../components/SeatPlan'
     import Prompt from '../../components/modals/Prompt'
     import PromptBooker from '../../components/modals/PromptBooker'
+    import PromptBookerAction from '../../components/modals/PromptBookerAction'
     import PromptSignOut from '../../components/modals/PromptSignOut'
     import PromptSwitchSeat from '../../components/modals/PromptSwitchSeat'
     import CustomerPackage from '../../components/modals/CustomerPackage'
@@ -264,6 +272,7 @@
             SeatPlan,
             Prompt,
             PromptBooker,
+            PromptBookerAction,
             PromptSignOut,
             PromptSwitchSeat,
             CustomerPackage,
@@ -272,6 +281,7 @@
         },
         data () {
             return {
+                actionMessage: '',
                 packageMethod: 'create',
                 loaded: false,
                 id: 0,
@@ -302,7 +312,8 @@
                 customHeight: 0,
                 message: '',
                 selectStudio: true,
-                findCustomer: true
+                findCustomer: true,
+                schedule: ''
             }
         },
         computed: {
@@ -320,31 +331,38 @@
                     let formData = new FormData()
                     formData.append('seat_id', me.$store.state.seatID)
                     formData.append('booking_id', me.$store.state.bookingID)
+                    me.loader(true)
                     me.$axios.post('api/bookings/switch-seat', formData).then(res => {
                         if (res.data) {
                             setTimeout( () => {
-                                me.notify('Successfully changed seat', true)
-                                me.$refs.plan.hasCancel = false
-                                me.$store.state.seatID = 0
-                                me.$store.state.disableBookerUI = false
-                                me.getSeats()
-                            }, 10)
+                                me.actionMessage = 'Successfully changed seat.'
+                                me.$store.state.promptBookerActionStatus = true
+                                document.body.classList.add('no_scroll')
+                            }, 500)
                         }
                     }).catch(err => {
                         me.$store.state.errorList = err.response.data.errors
                         me.$store.state.errorStatus = true
+                    }).then(() => {
+                        setTimeout( () => {
+                            me.getSeats()
+                            me.$refs.plan.hasCancel = false
+                            me.$store.state.seatID = 0
+                            me.$store.state.disableBookerUI = false
+                        }, 500)
                     })
                 }
             },
             removeAssign () {
                 const me = this
                 if (me.$store.state.compID != 0) {
+                    me.loader(true)
                     me.$axios.delete(`api/comp/${me.$store.state.compID}`).then(res => {
                         if (res.data) {
                             setTimeout( () => {
-                                me.$refs.plan.hasCancel = false
                                 me.getSeats()
-                            }, 10)
+                                me.$refs.plan.hasCancel = false
+                            }, 500)
                         }
                     })
                 }
@@ -354,6 +372,7 @@
                 if (me.$store.state.seatID != 0) {
                     let formData = new FormData()
                     formData.append('_method', 'PATCH')
+                    me.loader(true)
                     me.$axios.get(`api/seats/${me.$store.state.seatID}`).then(res => {
                         if (res.data) {
                             if (res.data.seat.status == 'open') {
@@ -363,21 +382,25 @@
                             }
                             me.$axios.post(`api/seats/update-status/${me.$store.state.seatID}`, formData).then(res => {
                                 if (res.data) {
-                                    if (res.data.seat.status == 'open') {
-                                        me.notify('Seat has been Open')
-                                    } else {
-                                        me.notify('Seat has been Blocked')
-                                    }
+                                    setTimeout( () => {
+                                        if (res.data.seat.status == 'open') {
+                                            me.actionMessage = 'Seat has been Open.'
+                                        } else {
+                                            me.actionMessage = 'Seat has been Blocked.'
+                                        }
+                                        me.$store.state.promptBookerActionStatus = true
+                                        document.body.classList.add('no_scroll')
+                                    }, 500)
                                 }
                             }).catch(err => {
                                 me.$store.state.errorList = err.response.data.errors
                                 me.$store.state.errorStatus = true
                             }).then(() => {
                                 setTimeout( () => {
+                                    me.getSeats()
                                     me.$refs.plan.hasCancel = false
                                     me.$store.state.seatID = 0
-                                    me.getSeats()
-                                }, 10)
+                                }, 500)
                             })
                         }
                     }).catch(err => {
@@ -442,6 +465,7 @@
                         offset: -250
                     })
                 }
+                me.schedule = data
                 me.$store.state.scheduleID = data.id
             },
             toggleOverlays (e) {
@@ -565,6 +589,13 @@
                     instance.getTransform().y = planHeight
                     instance.getTransform().scale = 0.55
                     document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${planWidth}, ${planHeight})`
+                })
+                document.getElementById('reload').addEventListener('click', function(e) {
+                    if (me.$store.state.scheduleID != 0) {
+                        setTimeout( () => {
+                            me.getSeats()
+                        }, 10)
+                    }
                 })
             },
             panZoomBeforeWheel (e) {

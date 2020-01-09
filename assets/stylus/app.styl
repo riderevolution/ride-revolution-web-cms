@@ -3905,6 +3905,13 @@ input::placeholder
                                 .seat_number
                                     color: rgba(132, 143, 159, 0.4)
                                     transition: .3s ease-in-out
+                            &.sign_in_guest
+                                background-color: #EDEDED
+                                border: 1.5px solid $gray_alternate
+                                transition: .3s ease-in-out
+                                .seat_number
+                                    color: rgba(132, 143, 159, 0.4)
+                                    transition: .3s ease-in-out
                             &.sign_in
                                 background-color: #EDEDED
                                 border: 1.5px solid $gray_alternate
@@ -3936,6 +3943,10 @@ input::placeholder
                             .seat_info,
                             .seat_info_blocked,
                             .seat_info_pending
+                                display: flex
+                                flex-flow: row wrap
+                                align-items: center
+                                justify-content: flex-start
                                 position: absolute
                                 bottom: 0
                                 left: 0

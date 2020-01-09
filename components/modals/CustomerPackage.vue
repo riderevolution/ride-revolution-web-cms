@@ -96,14 +96,13 @@
                         formData.append('class_package_id', me.$store.state.classPackageID)
                         me.loader(true)
                         me.$axios.post('api/bookings/change-package', formData).then(res => {
-                            setTimeout( () => {
-                                if (res.data) {
-                                    me.notify('Successfully changed package')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
-                                }
-                            }, 500)
+                            if (res.data) {
+                                setTimeout( () => {
+                                    me.$parent.actionMessage = 'Successfully changed package.'
+                                    me.$store.state.promptBookerActionStatus = true
+                                    document.body.classList.add('no_scroll')
+                                }, 500)
+                            }
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
@@ -113,9 +112,7 @@
                                 me.$parent.getSeats()
                                 me.$store.state.bookingID = 0
                                 me.$store.state.classPackageID = 0
-                                me.loader(false)
                             }, 500)
-                            document.body.classList.remove('no_scroll')
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
@@ -130,20 +127,20 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('is_guest', 0)
                         formData.append('scheduled_date_id', me.$store.state.scheduleID)
                         formData.append('seat_id', me.$store.state.seatID)
                         formData.append('user_id', me.$store.state.customerID)
                         formData.append('class_package_id', me.class_package_id)
                         me.loader(true)
                         me.$axios.post('api/bookings', formData).then(res => {
-                            setTimeout( () => {
-                                if (res.data) {
-                                    me.notify('Seat has been Reserved')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
-                                }
-                            }, 500)
+                            if (res.data) {
+                                setTimeout( () => {
+                                    me.$parent.actionMessage = 'Seat has been successfully reserved.'
+                                    me.$store.state.promptBookerActionStatus = true
+                                    document.body.classList.add('no_scroll')
+                                }, 500)
+                            }
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
@@ -154,9 +151,7 @@
                                 me.$store.state.bookingID = 0
                                 me.$store.state.classPackageID = 0
                                 me.$store.state.seatID = 0
-                                me.loader(false)
                             }, 500)
-                            document.body.classList.remove('no_scroll')
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
