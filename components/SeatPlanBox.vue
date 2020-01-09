@@ -62,6 +62,9 @@
             }
         },
         methods: {
+            checkPending () {
+                const me = this
+            },
             toggleSwitchSeat (seat_id) {
                 const me = this
                 me.$store.state.seatID = seat_id
@@ -167,10 +170,6 @@
                     me.$store.state.promptSignOutStatus = true
                     document.body.classList.add('no_scroll')
                 }
-            },
-            checkPending () {
-                const me = this
-                alert(3)
             }
         },
     }

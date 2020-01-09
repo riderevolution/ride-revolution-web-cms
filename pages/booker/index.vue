@@ -251,6 +251,9 @@
         <transition name="fade">
             <customer-package v-if="$store.state.customerPackageStatus" :studioID="studioID" :type="packageMethod" />
         </transition>
+        <transition name="fade">
+            <customer-pending-quick-sale :value="transaction" v-if="$store.state.customerPendingQuickSaleStatus" />
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
@@ -266,6 +269,7 @@
     import CustomerPackage from '../../components/modals/CustomerPackage'
     import Assign from '../../components/modals/Assign'
     import RemoveAssign from '../../components/modals/RemoveAssign'
+    import CustomerPendingQuickSale from '../../components/modals/CustomerPendingQuickSale'
     export default {
         components: {
             Foot,
@@ -277,10 +281,12 @@
             PromptSwitchSeat,
             CustomerPackage,
             Assign,
-            RemoveAssign
+            RemoveAssign,
+            CustomerPendingQuickSale
         },
         data () {
             return {
+                transaction: [],
                 actionMessage: '',
                 packageMethod: 'create',
                 loaded: false,
