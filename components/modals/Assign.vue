@@ -208,9 +208,9 @@
                             setTimeout( () => {
                                 me.$store.state.assignStatus = false
                                 document.body.classList.remove('no_scroll')
+                                me.$parent.getSeats()
+                                me.$parent.$refs.plan.assignType = 0
                                 me.loader(false)
-                                me.$parent.$refs.plan.fetchSeats(me.$store.state.scheduleID, me.$parent.studioID)
-                                document.querySelector('.plan_wrapper').style.transform = `matrix(0.55, 0, 0, 0.55, ${me.$parent.customWidth}, ${me.$parent.customHeight})`
                             }, 500)
                         })
                     } else {

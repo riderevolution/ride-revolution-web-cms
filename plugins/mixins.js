@@ -22,14 +22,16 @@ Vue.mixin({
             }
             return count
         },
-        notify (action) {
+        notify (action, isTimeout = true) {
             this.$store.state.notificationMessage = action
             setTimeout( () => {
                 this.$store.state.isNotify = true
             }, 500)
-            setTimeout( () => {
-                this.$store.state.isNotify = false
-            }, 2000)
+            if (isTimeout) {
+                setTimeout( () => {
+                    this.$store.state.isNotify = false
+                }, 2000)
+            }
         },
         toJSON (data) {
             if (data) {

@@ -233,13 +233,16 @@
             <prompt-sign-out v-if="$store.state.promptSignOutStatus" />
         </transition>
         <transition name="fade">
+            <prompt-switch-seat v-if="$store.state.promptSwitchSeatStatus" />
+        </transition>
+        <transition name="fade">
             <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
         </transition>
         <transition name="fade">
             <remove-assign v-if="$store.state.removeAssignStatus" />
         </transition>
         <transition name="fade">
-            <customer-package v-if="$store.state.customerPackageStatus" :studioID="studioID" />
+            <customer-package v-if="$store.state.customerPackageStatus" :studioID="studioID" :type="packageMethod" />
         </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
@@ -251,6 +254,7 @@
     import Prompt from '../../components/modals/Prompt'
     import PromptBooker from '../../components/modals/PromptBooker'
     import PromptSignOut from '../../components/modals/PromptSignOut'
+    import PromptSwitchSeat from '../../components/modals/PromptSwitchSeat'
     import CustomerPackage from '../../components/modals/CustomerPackage'
     import Assign from '../../components/modals/Assign'
     import RemoveAssign from '../../components/modals/RemoveAssign'
@@ -261,12 +265,14 @@
             Prompt,
             PromptBooker,
             PromptSignOut,
+            PromptSwitchSeat,
             CustomerPackage,
             Assign,
             RemoveAssign
         },
         data () {
             return {
+                packageMethod: 'create',
                 loaded: false,
                 id: 0,
                 type: 0,
@@ -308,6 +314,28 @@
             }
         },
         methods: {
+            changeSeat () {
+                const me = this
+                if (me.$store.state.seatID != 0) {
+                    let formData = new FormData()
+                    formData.append('seat_id', me.$store.state.seatID)
+                    formData.append('booking_id', me.$store.state.bookingID)
+                    me.$axios.post('api/bookings/switch-seat', formData).then(res => {
+                        if (res.data) {
+                            setTimeout( () => {
+                                me.notify('Successfully changed seat', true)
+                                me.$refs.plan.hasCancel = false
+                                me.$store.state.seatID = 0
+                                me.$store.state.disableBookerUI = false
+                                me.getSeats()
+                            }, 10)
+                        }
+                    }).catch(err => {
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
+                    })
+                }
+            },
             removeAssign () {
                 const me = this
                 if (me.$store.state.compID != 0) {
@@ -347,8 +375,9 @@
                             }).then(() => {
                                 setTimeout( () => {
                                     me.$refs.plan.hasCancel = false
+                                    me.$store.state.seatID = 0
                                     me.getSeats()
-                                }, 500)
+                                }, 10)
                             })
                         }
                     }).catch(err => {
