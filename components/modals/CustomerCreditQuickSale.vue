@@ -437,8 +437,8 @@
                                 setTimeout( () => {
                                     if (res.data) {
                                         me.$store.state.successfulStatus = true
-                                        if (me.$route.params.slug == 'transactions') {
-                                            document.getElementById('transactions').click()
+                                        if (me.$route.params.slug == 'packages') {
+                                            document.getElementById('packages').click()
                                         }
                                     } else {
                                         me.$store.state.errorList.push('Sorry, Something went wrong')

@@ -31,6 +31,7 @@
             </section>
             <section id="content">
                 <customer-content :value="customer" :type="$route.params.slug" />
+                <button type="button" class="hidden" id="packages" @click="fetchData()"></button>
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />
