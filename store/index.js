@@ -22,6 +22,7 @@ const createStore = () => {
             successfulStatus: false,
             successfulLaterStatus: false,
             promptPromoStatus: false,
+            promptCancelStatus: false,
             promptSwitchSeatStatus: false,
             promptSignOutStatus: false,
             promptBookerStatus: false,

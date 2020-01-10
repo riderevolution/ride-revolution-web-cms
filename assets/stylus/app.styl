@@ -1862,6 +1862,7 @@ input::placeholder
         user-select: none
         left: 0
         &.alt
+            z-index: 1
             background-color: $green
             &::before
                 border-bottom: 7px solid $green
@@ -4163,12 +4164,20 @@ input::placeholder
                             .seat_position
                                 flex: 0 0 calc(10% - 30px)
             .seat_legends
+                position: relative
                 display: flex
                 flex-flow: row wrap
                 align-items: center
                 justify-content: center
                 padding: 20px 0
                 border-top: 1px solid $border
+                .action_cancel_btn
+                    position: absolute
+                    top: 50%
+                    right: calc(0% + 20px)
+                    padding: 10px 20px
+                    width: auto
+                    transform: translateY(-50%)
                 .legend_title
                     display: flex
                     flex-flow: row wrap

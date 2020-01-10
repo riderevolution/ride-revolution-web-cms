@@ -25,6 +25,9 @@
                 const me = this
                 me.$store.state.promptBookerStatus = false
                 document.body.classList.remove('no_scroll')
+                me.$scrollTo('.validation_errors', {
+                    offset: -250
+                })
                 setTimeout( () => {
                     me.$parent.$refs.plan.message = ''
                 }, 10)

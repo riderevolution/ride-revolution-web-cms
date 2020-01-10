@@ -188,6 +188,7 @@
                                 <div class="legend_title margin green"><span></span> Signed In</div>
                                 <div class="legend_title margin white"><span></span> Available</div>
                                 <div class="legend_title margin gradient"><span></span> Blocked/Comp</div>
+                                <div class="action_cancel_btn" @click="$store.state.disableBookerUI = false" v-if="$store.state.disableBookerUI">Cancel Switch</div>
                             </div>
                         </div>
                         <div :class="`booker_footer ${($store.state.disableBookerUI) ? 'disable_booker' : ''}`">
@@ -243,6 +244,9 @@
             <prompt-switch-seat v-if="$store.state.promptSwitchSeatStatus" />
         </transition>
         <transition name="fade">
+            <prompt-cancel v-if="$store.state.promptCancelStatus" />
+        </transition>
+        <transition name="fade">
             <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
         </transition>
         <transition name="fade">
@@ -266,6 +270,7 @@
     import PromptBookerAction from '../../components/modals/PromptBookerAction'
     import PromptSignOut from '../../components/modals/PromptSignOut'
     import PromptSwitchSeat from '../../components/modals/PromptSwitchSeat'
+    import PromptCancel from '../../components/modals/PromptCancel'
     import CustomerPackage from '../../components/modals/CustomerPackage'
     import Assign from '../../components/modals/Assign'
     import RemoveAssign from '../../components/modals/RemoveAssign'
@@ -279,6 +284,7 @@
             PromptBookerAction,
             PromptSignOut,
             PromptSwitchSeat,
+            PromptCancel,
             CustomerPackage,
             Assign,
             RemoveAssign,
@@ -467,6 +473,7 @@
                     me.selectStudio = false
                     me.$store.state.promptStatus = true
                     me.message = 'Please select a studio first.'
+                    document.body.classList.add('no_scroll')
                     me.$scrollTo('.validation_errors', {
                         offset: -250
                     })
@@ -798,8 +805,10 @@
             },
             fetchData (value) {
                 const me = this
+                let formData = new FormData()
+                formData.append('forBooker', 1)
                 me.loader(true)
-                me.$axios.get(`api/customers?enabled=${value}`).then(res => {
+                me.$axios.post('api/customers/search', formData).then(res => {
                     if (res.data) {
                         if (me.$store.state.customer !== null) {
                             me.customer = me.$store.state.customer
@@ -807,7 +816,7 @@
                                 me.$refs.plan.hasCustomer = true
                             }, 10)
                         }
-                        me.customers = res.data.customers.data
+                        me.customers = res.data.customers
                         me.customerLength = me.customers.length
                     }
                 }).catch(err => {

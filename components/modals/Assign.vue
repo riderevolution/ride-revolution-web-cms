@@ -288,6 +288,7 @@
                 formData.append('q', value)
                 formData.append('forBooker', 1)
                 formData.append('enabled', 1)
+                formData.append('scheduled_date_id', me.$store.state.scheduleID)
                 me.$axios.post('api/customers/search', formData).then(res => {
                     if (res.data) {
                         me.customers = res.data.customers
@@ -300,9 +301,12 @@
             },
             fetchData (value) {
                 const me = this
-                me.$axios.get(`api/customers?enabled=${value}`).then(res => {
+                let formData = new FormData()
+                formData.append('forBooker', 1)
+                formData.append('scheduled_date_id', me.$store.state.scheduleID)
+                me.$axios.post('api/customers/search', formData).then(res => {
                     if (res.data) {
-                        me.customers = res.data.customers.data
+                        me.customers = res.data.customers
                         me.customerLength = me.customers.length
                     }
                 }).catch(err => {
