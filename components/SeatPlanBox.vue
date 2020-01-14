@@ -7,7 +7,7 @@
 
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$store.state.disableBookerUI && seat.bookings.length > 0 && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id) && seat.status != 'signed-in'">&#x25CF;&#x25CF;&#x25CF;</div>
 
-            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$store.state.disableBookerUI && seat.bookings.length > 0 && seat.bookings[0].original_booker_id == $parent.$parent.$parent.customer.id && seat.status != 'signed-in'">&#x25CF;&#x25CF;&#x25CF;</div>
+            <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$store.state.disableBookerUI && seat.bookings.length > 0 && seat.bookings[0].original_booker_id == $parent.$parent.$parent.customer.id && (seat.status != 'signed-in' && seat.status != 'no-show')">&#x25CF;&#x25CF;&#x25CF;</div>
 
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$store.state.disableBookerUI && !$parent.hasCustomer && seat.bookings.length > 0 && (seat.status != 'signed-in' && seat.status != 'no-show')">&#x25CF;&#x25CF;&#x25CF;</div>
 
@@ -20,7 +20,6 @@
                 <li><a href="javascript:void(0)" @click="cancelSeat(seat.bookings[0].id)" class="seat_item cancel" v-if="seat.past == 0 && !$store.state.disableBookerUI && (seat.bookings.length > 0 && seat.status == 'reserved') && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id || seat.bookings[0].original_booker_id == $parent.$parent.$parent.customer.id)">{{ (seat.bookings[0].user != null) ? 'Cancel Seat' : 'Cancel Guest' }}</a></li>
 
                 <li><a href="javascript:void(0)" class="seat_item cancel" v-if="seat.past == 0 && !$store.state.disableBookerUI && seat.bookings.length > 0 && seat.status == 'reserved' && !$parent.hasCustomer">{{ (seat.bookings[0].user != null) ? 'Cancel Seat' : 'Cancel Guest' }}</a></li>
-
 
                 <li><a href="javascript:void(0)" class="seat_item cancel" v-if="(seat.bookings.length > 0 && (seat.bookings[0].user != null || seat.bookings[0].user == null)) && seat.past == 1 && seat.status != 'no-show'" @click="noShow('booking', seat.bookings[0].id)">No Show</a></li>
                 <li><a href="javascript:void(0)" class="seat_item cancel" v-if="(seat.comp.length > 0 && (seat.comp[0].user != null || seat.comp[0].user == null)) && seat.past == 1 && seat.status != 'no-show'" @click="noShow('comp', seat.comp[0].id)">No Show</a></li>
