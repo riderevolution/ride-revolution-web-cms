@@ -22,7 +22,7 @@
                             </div>
                             <div class="box margin">
                                 <div class="overlay">
-                                    <p>{{ (data.class_package.class_count_unlimited == 1) ? 'Unlimited' : (parseInt(data.count) == data.class_package.class_count) ? data.count : parseInt(data.class_package.class_count) - parseInt(data.count) }}</p>
+                                    <p>{{ (data.class_package.class_count_unlimited == 1) ? 'Unlimited' : (parseInt(data.count) == data.class_package.class_count) ? parseInt(data.class_package.class_count) : parseInt(data.count) }}</p>
                                     <label>Available</label>
                                 </div>
                             </div>
@@ -96,8 +96,8 @@
                                     <td>{{ (item.product_variant) ? item.product_variant.product.category.name : 'N/A' }}</td>
                                     <td>{{ item.quantity }}</td>
                                     <td class="price">
-                                        <p :class="`${(data.promo_code_used !== null) ? 'prev_price' : ''}`" >PHP {{ totalCount(data.originalTotal) }}</p>
-                                        <p v-if="data.promo_code_used !== null">PHP {{ totalCount(data.total) }}</p>
+                                        <p :class="`${(data.promo_code_used !== null) ? 'prev_price' : ''}`" >PHP {{ totalCount(item.total) }}</p>
+                                        <p v-if="data.promo_code_used !== null">PHP {{ totalCount(item.originalTotal) }}</p>
                                     </td>
                                 </tr>
                             </tbody>

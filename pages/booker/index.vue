@@ -264,6 +264,9 @@
             <customer-package v-if="$store.state.customerPackageStatus" :studioID="studioID" :type="packageMethod" />
         </transition>
         <transition name="fade">
+            <pending-transactions v-if="$store.state.pendingTransactionsStatus" />
+        </transition>
+        <transition name="fade">
             <customer-pending-quick-sale :value="transaction" v-if="$store.state.customerPendingQuickSaleStatus" />
         </transition>
         <foot v-if="$store.state.isAuth" />
@@ -283,6 +286,7 @@
     import CustomerPackage from '../../components/modals/CustomerPackage'
     import Assign from '../../components/modals/Assign'
     import RemoveAssign from '../../components/modals/RemoveAssign'
+    import PendingTransactions from '../../components/modals/PendingTransactions'
     import CustomerPendingQuickSale from '../../components/modals/CustomerPendingQuickSale'
     export default {
         components: {
@@ -298,6 +302,7 @@
             CustomerPackage,
             Assign,
             RemoveAssign,
+            PendingTransactions,
             CustomerPendingQuickSale
         },
         data () {

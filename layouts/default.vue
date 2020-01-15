@@ -86,6 +86,7 @@
                 me.$store.state.scheduleID = 0
                 me.$store.state.seatID = 0
                 me.$store.state.waitlistID = 0
+                me.$store.state.pendingCustomerID = 0
             }
         },
         data () {
@@ -127,14 +128,7 @@
         },
         head () {
             return {
-                title: 'Ride Revolution | Admin Panel',
-                script: [
-                    { src: 'https://code.jquery.com/jquery-3.2.1.slim.min.js' },
-                    { src: 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-lite.js' }
-                ],
-                link: [
-                    { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-lite.css' }
-                ]
+                title: 'Ride Revolution | Admin Panel'
             }
         }
     }

@@ -354,11 +354,12 @@
                                     if (me.$route.params.slug == 'transactions') {
                                         document.getElementById('transactions').click()
                                     }
+
                                 } else {
                                     me.$store.state.errorList.push('Sorry, Something went wrong')
                                     me.$store.state.errorStatus = true
                                 }
-                            }, 200)
+                            }, 500)
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
@@ -368,7 +369,11 @@
                                 if (!me.$store.state.errorStatus) {
                                     me.$store.state.customerPendingQuickSaleStatus = false
                                 }
-                            }, 200)
+                                if (me.$store.state.pendingCustomerID != 0) {
+                                    me.$parent.getSeats()
+                                    me.$store.state.pendingCustomerID = 0
+                                }
+                            }, 500)
                         })
                     } else {
                         setTimeout( () => {

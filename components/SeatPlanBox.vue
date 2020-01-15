@@ -29,7 +29,7 @@
             <div class="seat_available" @click="toggleSwitchSeat(seat.id)" v-if="$store.state.disableBookerUI && seat.bookings.length <= 0"></div>
             <div class="seat_available" @click="signIn('open', seat)" v-if="$store.state.assignWaitlistBookerUI && $store.state.disableBookerUI && seat.bookings.length <= 0"></div>
             <div class="seat_number" @click="signIn(seat.status, seat)">{{ seat.number }}</div>
-            <div class="seat_pending" @click.self="checkPending()" v-if="!$store.state.disableBookerUI && seat.userPendingPayments > 0 && seat.status != 'no-show'"></div>
+            <div class="seat_pending" @click.self="checkPending((seat.bookings.length > 0) ? seat.bookings[0].user_id : null)" v-if="!$store.state.disableBookerUI && seat.userPendingPayments > 0 && seat.status != 'no-show'"></div>
             <div class="seat_action" @click.self="toggleAction(seat.status, (seat.bookings.length > 0) ? seat.bookings[0].id : null)"></div>
             <div class="seat_info" v-if="seat.comp.length > 0 || seat.bookings.length > 0">
                 <div class="info_image" v-if="seat.comp.length > 0 && seat.comp[0].user_id != null">
@@ -100,8 +100,12 @@
                 me.$store.state.promptCancelStatus = true
                 document.body.classList.add('no_scroll')
             },
-            checkPending () {
+            checkPending (user_id) {
                 const me = this
+                me.$store.state.customerID = user_id
+                me.$store.state.pendingCustomerID = user_id
+                me.$store.state.pendingTransactionsStatus = true
+                document.body.classList.add('no_scroll')
             },
             toggleSwitchSeat (seat_id) {
                 const me = this
@@ -160,6 +164,7 @@
                     }
                 } else {
                     me.$parent.message = 'Sorry, this class is over.'
+                    me.$parent.$parent.$parent.findCustomer = false
                     me.$store.state.promptBookerStatus = true
                     document.body.classList.add('no_scroll')
                 }

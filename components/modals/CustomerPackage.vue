@@ -126,51 +126,47 @@
             },
             submissionCreateSuccess () {
                 const me = this
-                me.$validator.validateAll().then(valid => {
-                    if (valid) {
-                        let formData = new FormData(document.getElementById('default_form'))
-                        formData.append('is_guest', 0)
-                        formData.append('scheduled_date_id', me.$store.state.scheduleID)
-                        formData.append('seat_id', me.$store.state.seatID)
-                        formData.append('user_id', me.$store.state.customerID)
-                        formData.append('class_package_id', me.class_package_id)
-                        me.loader(true)
-                        me.$axios.post('api/bookings', formData).then(res => {
-                            if (res.data) {
-                                setTimeout( () => {
-                                    me.$parent.actionMessage = 'Seat has been successfully reserved.'
-                                    me.$store.state.promptBookerActionStatus = true
-                                    document.body.classList.add('no_scroll')
-                                }, 500)
-                            }
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            me.$store.state.customerPackageStatus = false
+                if (me.class_package_id != 0) {
+                    let formData = new FormData(document.getElementById('default_form'))
+                    formData.append('is_guest', 0)
+                    formData.append('scheduled_date_id', me.$store.state.scheduleID)
+                    formData.append('seat_id', me.$store.state.seatID)
+                    formData.append('user_id', me.$store.state.customerID)
+                    formData.append('class_package_id', me.class_package_id)
+                    me.loader(true)
+                    me.$axios.post('api/bookings', formData).then(res => {
+                        if (res.data) {
                             setTimeout( () => {
-                                me.$axios.delete(`api/waitlists/${me.$store.state.waitlistID}`).then(res => {
-                                    if (res.data) {
-                                        setTimeout( () => {
-                                            me.$parent.fetchWaitlist(me.$store.state.waitlistID)
-                                        }, 500)
-                                    }
-                                })
-                                me.$parent.getSeats()
-                                me.$store.state.bookingID = 0
-                                me.$store.state.classPackageID = 0
-                                me.$store.state.seatID = 0
-                                me.$store.state.disableBookerUI = false
-                                me.$store.state.assignWaitlistBookerUI = false
+                                me.$parent.actionMessage = 'Seat has been successfully reserved.'
+                                me.$store.state.promptBookerActionStatus = true
+                                document.body.classList.add('no_scroll')
                             }, 500)
-                        })
-                    } else {
-                        me.$scrollTo('.validation_errors', {
-                            container: '.default_modal',
-                            offset: -250
-                        })
-                    }
-                })
+                        }
+                    }).catch(err => {
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
+                    }).then(() => {
+                        me.$store.state.customerPackageStatus = false
+                        setTimeout( () => {
+                            me.$axios.delete(`api/waitlists/${me.$store.state.waitlistID}`).then(res => {
+                                if (res.data) {
+                                    setTimeout( () => {
+                                        me.$parent.fetchWaitlist(me.$store.state.waitlistID)
+                                    }, 500)
+                                }
+                            })
+                            me.$parent.getSeats()
+                            me.$store.state.bookingID = 0
+                            me.$store.state.classPackageID = 0
+                            me.$store.state.seatID = 0
+                            me.$store.state.disableBookerUI = false
+                            me.$store.state.assignWaitlistBookerUI = false
+                        }, 500)
+                    })
+                } else {
+                    me.$store.state.errorList = ['Please select a Package']
+                    me.$store.state.errorStatus = true
+                }
             }
         },
         async mounted () {

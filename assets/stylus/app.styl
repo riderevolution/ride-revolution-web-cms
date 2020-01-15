@@ -1652,6 +1652,8 @@ input::placeholder
                     .id
                         color: $green
                         transition: .3s ease-in-out
+                        &.alternate
+                            color: $red
             label
                 flex: 1 0 auto
                 display: flex
@@ -1666,6 +1668,8 @@ input::placeholder
                     sf_pro_regular(15px)
                     color: $border_alt2
                     transition: .3s ease-in-out
+                    &.alternate
+                        sf_pro_semibold(18px)
     label
         flex: 0 auto
         margin-left: 10px

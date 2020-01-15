@@ -18,7 +18,9 @@
             toggleClose () {
                 const me = this
                 me.$store.state.errorStatus = false
-                document.body.classList.remove('no_scroll')
+                if (!me.$store.state.pendingTransactionsStatus || !me.$store.state.customerPackageStatus) {
+                    document.body.classList.remove('no_scroll')
+                }
             }
         }
     }

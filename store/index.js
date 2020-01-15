@@ -3,8 +3,10 @@ import Vuex from 'vuex'
 const createStore = () => {
     return new Vuex.Store({
         state: () => ({
+            pendingTransactionsStatus: false,
             assignWaitlistBookerUI: false,
             disableBookerUI: false,
+            pendingCustomerID: 0,
             waitlistID: 0,
             classPackageID: 0,
             compID: 0,
