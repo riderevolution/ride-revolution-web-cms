@@ -1,6 +1,6 @@
 <template>
     <div :class="`seat_boxes ${position} ${layout}`" v-if="data.length > 0">
-        <div :class="`seat_position ${(seat.status == 'open' && $store.state.disableBookerUI) ? 'available' : ''} ${(seat.bookings.length > 0 && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id)) ? 'highlight' : ''} ${(seat.status == 'open') ? '' : (seat.status == 'comp' ? (seat.comp.length > 0 ? 'comp' : '') : (seat.status == 'reserved') ? (!$store.state.disableBookerUI && seat.bookings.length > 0 && seat.bookings[0].user != null ? 'sign_in' : 'sign_in_guest') : (seat.status == 'blocked' ? 'comp blocked' : (!$store.state.disableBookerUI && seat.status == 'signed-in' ? 'sign_out' : (seat.status == 'no-show' ? 'no_show' : ''))))}`" v-for="(seat, lkey) in data">
+        <div :class="`seat_position ${(seat.status == 'open' && $store.state.disableBookerUI) ? 'available' : ''} ${(seat.bookings.length > 0 && (seat.bookings[0].user != null && seat.bookings[0].user.id == $parent.$parent.$parent.customer.id)) ? 'highlight' : ''} ${(seat.status == 'open') ? '' : (seat.status == 'comp' ? (seat.comp.length > 0 ? 'comp' : '') : (seat.status == 'reserved') ? (seat.bookings.length > 0 && seat.bookings[0].user != null ? 'sign_in' : 'sign_in_guest') : (seat.status == 'blocked' ? 'comp blocked' : (!$store.state.disableBookerUI && seat.status == 'signed-in' ? 'sign_out' : (seat.status == 'no-show' ? 'no_show' : ''))))}`" v-for="(seat, lkey) in data">
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$store.state.disableBookerUI && !$parent.hasCustomer && seat.status == 'open'">&#x25CF;&#x25CF;&#x25CF;</div>
 
             <div :id="`seat_menu_${seat.number}`" class="seat_menu" @click.self="toggleMenu($event)" v-if="!$store.state.disableBookerUI && !$parent.hasCustomer && (seat.status == 'comp' || seat.status == 'blocked')">&#x25CF;&#x25CF;&#x25CF;</div>
@@ -27,7 +27,8 @@
             </ul>
 
             <div class="seat_available" @click="toggleSwitchSeat(seat.id)" v-if="$store.state.disableBookerUI && seat.bookings.length <= 0"></div>
-            <div class="seat_number" @click="signIn(seat.status, seat.id)">{{ seat.number }}</div>
+            <div class="seat_available" @click="signIn('open', seat)" v-if="$store.state.assignWaitlistBookerUI && $store.state.disableBookerUI && seat.bookings.length <= 0"></div>
+            <div class="seat_number" @click="signIn(seat.status, seat)">{{ seat.number }}</div>
             <div class="seat_pending" @click.self="checkPending()" v-if="!$store.state.disableBookerUI && seat.userPendingPayments > 0 && seat.status != 'no-show'"></div>
             <div class="seat_action" @click.self="toggleAction(seat.status, (seat.bookings.length > 0) ? seat.bookings[0].id : null)"></div>
             <div class="seat_info" v-if="seat.comp.length > 0 || seat.bookings.length > 0">
@@ -124,9 +125,9 @@
                 me.$parent.$parent.$parent.packageMethod = 'update'
                 document.body.classList.add('no_scroll')
             },
-            signIn (status, id) {
+            signIn (status, seat) {
                 const me = this
-                if (status == 'open') {
+                if (status == 'open' && seat.past == 0) {
                     if (me.$store.state.customerID != 0) {
                         let formData = new FormData()
                         formData.append('scheduled_date_id', me.$store.state.scheduleID)
@@ -157,8 +158,13 @@
                         me.$store.state.promptBookerStatus = true
                         document.body.classList.add('no_scroll')
                     }
+                } else {
+                    me.$parent.message = 'Sorry, this class is over.'
+                    me.$parent.$parent.$parent.findCustomer = false
+                    me.$store.state.promptBookerStatus = true
+                    document.body.classList.add('no_scroll')
                 }
-                me.$store.state.seatID = id
+                me.$store.state.seatID = seat.id
             },
             seatStatus (data, status, type) {
                 const me = this

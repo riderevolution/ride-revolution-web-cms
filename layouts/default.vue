@@ -78,12 +78,14 @@
         watch:{
             $route (to, from){
                 const me = this
+                me.$store.state.assignWaitlistBookerUI = false
                 me.$store.state.disableBookerUI = false
                 me.$store.state.classPackageID = 0
                 me.$store.state.compID = 0
                 me.$store.state.bookingID = 0
                 me.$store.state.scheduleID = 0
                 me.$store.state.seatID = 0
+                me.$store.state.waitlistID = 0
             }
         },
         data () {

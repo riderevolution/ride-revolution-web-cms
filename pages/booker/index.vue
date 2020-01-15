@@ -188,7 +188,7 @@
                                 <div class="legend_title margin green"><span></span> Signed In</div>
                                 <div class="legend_title margin white"><span></span> Available</div>
                                 <div class="legend_title margin gradient"><span></span> Blocked/Comp</div>
-                                <div class="action_cancel_btn" @click="$store.state.disableBookerUI = false" v-if="$store.state.disableBookerUI">Cancel Switch</div>
+                                <div class="action_cancel_btn" @click="toggleDisabled()" v-if="$store.state.disableBookerUI">Cancel</div>
                             </div>
                         </div>
                         <div :class="`booker_footer ${($store.state.disableBookerUI) ? 'disable_booker' : ''}`">
@@ -201,7 +201,7 @@
                             <div class="booker_waitlist">
                                 <div class="footer_header">
                                     <h2 class="footer_title">Waitlist ({{ waitlistCount }})</h2>
-                                    <a href="javascript:void(0)" :class="`action_success_btn ${($store.state.customerID == 0) ? 'disabled' : ''}`" @click="addToWaitlist()">Add to Waitlist</a>
+                                    <a href="javascript:void(0)" :class="`action_success_btn ${($store.state.customerID == 0 || (waitlists.length > 0 && waitlists[0].past == 1)) ? 'disabled' : ''}`" @click="addToWaitlist()">Add to Waitlist</a>
                                 </div>
                                 <table class="cms_waitlist">
                                     <thead>
@@ -216,14 +216,14 @@
                                             <td>{{ waitlist.user.last_name }}</td>
                                             <td>{{ waitlist.user.first_name }}</td>
                                             <td class="action">
-                                                <a href="javascript:void(0)">Assign Seat</a>
-                                                <a href="javascript:void(0)" class="margin cancel" @click="removeToWaitlist(waitlist.id)">Remove</a>
+                                                <a href="javascript:void(0)" @click="assignWaitlist(waitlist)" :class="`${(waitlist.past == 1) ? 'disabled' : ''}`">Assign Seat</a>
+                                                <a href="javascript:void(0)" :class="`margin ${(waitlist.past == 1) ? 'disabled' : 'cancel'}`" @click="removeToWaitlist(waitlist.id)">Remove</a>
                                             </td>
                                         </tr>
                                     </tbody>
                                     <tbody class="no_results" v-else>
                                         <tr>
-                                            <td colspan="3">No Result(s) Found.</td>
+                                            <td colspan="3">The Waitlist is empty.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -350,6 +350,22 @@
             }
         },
         methods: {
+            toggleDisabled () {
+                const me = this
+                me.$store.state.disableBookerUI = false
+                me.$store.state.assignWaitlistBookerUI = false
+            },
+            assignWaitlist (data) {
+                const me = this
+                me.$store.state.customerID = data.user_id
+                me.$store.state.waitlistID = data.id
+                me.$store.state.disableBookerUI = true
+                me.$store.state.assignWaitlistBookerUI = true
+                me.customer = data.user
+                setTimeout( () => {
+                    me.$refs.plan.hasCustomer = true
+                }, 10)
+            },
             removeToWaitlist (id) {
                 const me = this
                 me.waitlistID = id
@@ -494,23 +510,6 @@
                 setTimeout( () => {
                     me.$refs.plan.hasCustomer = false
                 }, 10)
-            },
-            submissionSuccess () {
-                const me = this
-                // me.$axios.post('api/customers', formData).then(res => {
-                //     if (res.data) {
-                //         me.notify('Content has been Added')
-                //     }
-                // }).catch(err => {
-                //     me.$store.state.errorList = err.response.data.errors
-                //     me.$store.state.errorStatus = true
-                // }).then(() => {
-                //     setTimeout( () => {
-                //         $refs.plan.hasCancel = false
-                //         me.$store.state.promptStatus = false
-                //         document.body.classList.remove('no_scroll')
-                //     }, 500)
-                // })
             },
             getBookings (data, sunique, unique) {
                 const me = this
