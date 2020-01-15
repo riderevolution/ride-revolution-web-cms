@@ -21,6 +21,7 @@ const createStore = () => {
             quickSaleStatus: false,
             successfulStatus: false,
             successfulLaterStatus: false,
+            promptWaitlistStatus: false,
             promptPromoStatus: false,
             promptCancelStatus: false,
             promptSwitchSeatStatus: false,

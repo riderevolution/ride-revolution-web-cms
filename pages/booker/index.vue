@@ -200,8 +200,8 @@
                             </div>
                             <div class="booker_waitlist">
                                 <div class="footer_header">
-                                    <h2 class="footer_title">Waitlist (3)</h2>
-                                    <a href="javascript:void(0)" class="action_success_btn">Add to Waitlist</a>
+                                    <h2 class="footer_title">Waitlist ({{ waitlistCount }})</h2>
+                                    <a href="javascript:void(0)" :class="`action_success_btn ${($store.state.customerID == 0) ? 'disabled' : ''}`" @click="addToWaitlist()">Add to Waitlist</a>
                                 </div>
                                 <table class="cms_waitlist">
                                     <thead>
@@ -211,14 +211,19 @@
                                             <th class="action">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Villeta</td>
-                                            <td>Sheena</td>
+                                    <tbody v-if="waitlists.length > 0">
+                                        <tr v-for="(waitlist, key) in waitlists" :key="key">
+                                            <td>{{ waitlist.user.last_name }}</td>
+                                            <td>{{ waitlist.user.first_name }}</td>
                                             <td class="action">
-                                                <a href="#">Assign Seat</a>
-                                                <a href="#" class="margin">Remove</a>
+                                                <a href="javascript:void(0)">Assign Seat</a>
+                                                <a href="javascript:void(0)" class="margin cancel" @click="removeToWaitlist(waitlist.id)">Remove</a>
                                             </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody class="no_results" v-else>
+                                        <tr>
+                                            <td colspan="3">No Result(s) Found.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -247,6 +252,9 @@
             <prompt-cancel v-if="$store.state.promptCancelStatus" />
         </transition>
         <transition name="fade">
+            <prompt-waitlist v-if="$store.state.promptWaitlistStatus" :value="waitlistID" />
+        </transition>
+        <transition name="fade">
             <assign v-if="$store.state.assignStatus" :type="$refs.plan.assignType" />
         </transition>
         <transition name="fade">
@@ -271,6 +279,7 @@
     import PromptSignOut from '../../components/modals/PromptSignOut'
     import PromptSwitchSeat from '../../components/modals/PromptSwitchSeat'
     import PromptCancel from '../../components/modals/PromptCancel'
+    import PromptWaitlist from '../../components/modals/PromptWaitlist'
     import CustomerPackage from '../../components/modals/CustomerPackage'
     import Assign from '../../components/modals/Assign'
     import RemoveAssign from '../../components/modals/RemoveAssign'
@@ -285,6 +294,7 @@
             PromptSignOut,
             PromptSwitchSeat,
             PromptCancel,
+            PromptWaitlist,
             CustomerPackage,
             Assign,
             RemoveAssign,
@@ -292,6 +302,7 @@
         },
         data () {
             return {
+                waitlistID: 0,
                 transaction: [],
                 actionMessage: '',
                 packageMethod: 'create',
@@ -325,7 +336,9 @@
                 message: '',
                 selectStudio: true,
                 findCustomer: true,
-                schedule: ''
+                schedule: '',
+                waitlists: [],
+                waitlistCount: 0
             }
         },
         computed: {
@@ -337,6 +350,58 @@
             }
         },
         methods: {
+            removeToWaitlist (id) {
+                const me = this
+                me.waitlistID = id
+                me.$store.state.promptWaitlistStatus = true
+                document.body.classList.add('no_scroll')
+            },
+            addToWaitlist () {
+                const me = this
+                if (me.$store.state.customerID != 0) {
+                    let formData = new FormData()
+                    formData.append('scheduled_date_id', me.$store.state.scheduleID)
+                    formData.append('user_id', me.$store.state.customerID)
+                    me.$axios.post('api/extras/check-if-user-is-booked-already', formData).then(res => {
+                        if (res.data.result == 0) {
+                            me.loader(true)
+                            me.$axios.post('api/waitlists', formData).then(res => {
+                                if (res.data) {
+                                    setTimeout( () => {
+                                        me.actionMessage = 'Successfully added to waitlist.'
+                                        me.$store.state.promptBookerActionStatus = true
+                                        document.body.classList.add('no_scroll')
+                                    }, 500)
+                                }
+                            }).catch(err => {
+                                me.$store.state.errorList = err.response.data.errors
+                                me.$store.state.errorStatus = true
+                            }).then(() => {
+                                setTimeout( () => {
+                                    me.fetchWaitlist(me.$store.state.scheduleID)
+                                    me.loader(false)
+                                }, 500)
+                            })
+                        } else {
+                            setTimeout( () => {
+                                me.$refs.plan.message = 'The customer has already been scheduled.'
+                            }, 10)
+                            me.$store.state.promptBookerStatus = true
+                            document.body.classList.add('no_scroll')
+                        }
+                    }).catch(err => {
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
+                    })
+                } else {
+                    me.findCustomer = false
+                    setTimeout( () => {
+                        me.$refs.plan.message = 'Please select a customer first.'
+                    }, 10)
+                    me.$store.state.promptBookerStatus = true
+                    document.body.classList.add('no_scroll')
+                }
+            },
             changeSeat () {
                 const me = this
                 if (me.$store.state.seatID != 0) {
@@ -480,6 +545,25 @@
                 }
                 me.schedule = data
                 me.$store.state.scheduleID = data.id
+                me.fetchWaitlist(data.id)
+
+            },
+            fetchWaitlist (schedule_id) {
+                const me = this
+                let ctr = 0
+                me.$axios.get(`api/waitlists?scheduled_date_id=${schedule_id}`).then(res => {
+                    if (res.data) {
+                        me.waitlists = res.data.waitlists
+                        me.waitlists.forEach((element, index) => {
+                            ctr++
+                        })
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    me.waitlistCount = ctr
+                })
             },
             toggleOverlays (e) {
                 const me = this
@@ -827,7 +911,6 @@
                         me.studios = me.$store.state.user.staff_details.studio_access
                         me.notePad = me.$store.state.user.notepad
                     }, 200)
-                    me.rowCount = document.getElementsByTagName('th').length
                     me.loaded = true
                 })
                 me.$axios.get('api/extras/customer-types').then(res => {

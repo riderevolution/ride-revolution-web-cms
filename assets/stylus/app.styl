@@ -324,6 +324,13 @@ table
     cursor: pointer
     user-select: none
     transition: .3s ease-in-out
+    &.disabled
+        cursor: not-allowed
+        pointer-events: none
+        color: $black
+        background-color: $border_alt
+        border: 1px solid #ccc
+        transition: .3s ease-in-out
     &.confirm
         width: 130px
     &.margin
@@ -4277,6 +4284,13 @@ input::placeholder
                         height: 100%
                         max-height: 200px
                         overflow-y: auto
+                        &.no_results
+                            tr
+                                td
+                                    flex: 0 0 100%
+                                    text-align: center
+                                    color: $black
+                                    transition: .3s ease-in-out
                         tr
                             display: flex
                             align-items: center
@@ -4297,6 +4311,10 @@ input::placeholder
                                         border-radius: 3px
                                         background-color: transparent
                                         transition: .3s ease-in-out
+                                        &.cancel
+                                            color: $red
+                                            border: 1px solid $red
+                                            transition: .3s ease-in-out
                                         &.margin
                                             margin-left: 20px
                                         &:hover
@@ -4304,11 +4322,21 @@ input::placeholder
                                             border: 1px solid $green
                                             background-color: $green
                                             transition: .3s ease-in-out
+                                            &.cancel
+                                                color: $white
+                                                border: 1px solid $red
+                                                background-color: $red
+                                                transition: .3s ease-in-out
                                         &:focus
                                             color: $white
                                             border: 1px solid $green_alt
-                                            background-color: $green_akt
+                                            background-color: $green_alt
                                             transition: .3s ease-in-out
+                                            &.cancel
+                                                color: $white
+                                                border: 1px solid $light_red
+                                                background-color: $light_red
+                                                transition: .3s ease-in-out
                             &:last-child
                                 border-bottom: 1px solid transparent
 .no_contents
