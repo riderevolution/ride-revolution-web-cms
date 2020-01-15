@@ -160,7 +160,6 @@
                     }
                 } else {
                     me.$parent.message = 'Sorry, this class is over.'
-                    me.$parent.$parent.$parent.findCustomer = false
                     me.$store.state.promptBookerStatus = true
                     document.body.classList.add('no_scroll')
                 }
