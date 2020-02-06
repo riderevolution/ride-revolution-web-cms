@@ -126,6 +126,14 @@
                     </div>
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
+                            <h2 class="form_title">Image Upload</h2>
+                        </div>
+                        <div class="form_main_group">
+                            <image-handler-container ref="handler" :multiple="true" />
+                        </div>
+                    </div>
+                    <div class="form_wrapper">
+                        <div class="form_header_wrapper">
                             <h2 class="form_title">Personal Address</h2>
                         </div>
                         <div class="form_main_group">
@@ -249,9 +257,11 @@
 
 <script>
     import Foot from '../../components/Foot'
+    import ImageHandlerContainer from '../../components/ImageHandlerContainer'
     export default {
         components: {
-            Foot
+            Foot,
+            ImageHandlerContainer
         },
         data () {
             return {
@@ -272,6 +282,10 @@
                         num: 0,
                         num2: 0
                     }
+                },
+                dimensions: {
+                    imageWidth: 685,
+                    imageHeight: 475
                 }
             }
         },
