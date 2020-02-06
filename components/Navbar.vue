@@ -4,8 +4,8 @@
             <nuxt-link to="/" class="logo">
                 <img src="/logo.png" />
                 <div class="logo_title">
-                    Ride <br/>
-                    Revolution
+                    CMS <br/>
+                    Template
                 </div>
             </nuxt-link>
             <ul class="nav_list">
@@ -38,95 +38,59 @@
                         image: '/icons/navbar/dashboard-unselected.png'
                     },
                     {
-                        title: 'Booker',
-                        link: '/booker',
+                        title: 'Form',
+                        link: '/form',
                         hasLink: true,
-                        class: 'booker',
-                        image: '/icons/navbar/booker-unselected.png'
+                        class: 'admin nav_parent_alt',
+                        image: '/icons/navbar/admin-unselected.png'
                     },
                     {
-                        title: 'Scheduler',
-                        link: '/scheduler',
+                        title: 'Column',
+                        link: '/column',
                         hasLink: true,
-                        class: 'scheduler nav_parent_alt',
-                        image: '/icons/navbar/scheduler-unselected.png'
+                        class: 'admin',
+                        image: '/icons/navbar/admin-unselected.png'
                     },
                     {
-                        title: 'Customers',
-                        link: '/customers',
+                        title: 'Button',
+                        link: '/button',
                         hasLink: true,
-                        class: 'customers nav_parent_alt',
-                        image: '/icons/navbar/customers-unselected.png'
+                        class: 'admin',
+                        image: '/icons/navbar/admin-unselected.png'
                     },
                     {
-                        title: 'Instructors',
-                        link: '/instructors',
+                        title: 'Modal',
+                        link: '/modal',
                         hasLink: true,
-                        class: 'instructors nav_parent_alt',
-                        image: '/icons/navbar/instructors-unselected.png'
+                        class: 'admin',
+                        image: '/icons/navbar/admin-unselected.png'
                     },
                     {
-                        title: 'Retail',
-                        link: '/retail',
-                        hasLink: false,
-                        class: 'supplies',
-                        image: '/icons/navbar/supplies-unselected.png',
-                        subItems: [
-                            {
-                                title: 'Suppliers',
-                                link: '/retail/suppliers'
-                            },
-                            {
-                                title: 'Inventory',
-                                link: '/retail/inventory'
-                            },
-                            {
-                                title: 'Purchase Order',
-                                link: '/retail/purchase-order'
-                            },
-                            {
-                                title: 'Products',
-                                link: '/retail/products'
-                            },
-                            {
-                                title: 'Product Categories',
-                                link: '/retail/product-categories'
-                            },
-                            {
-                                title: 'Promotions',
-                                link: '/retail/promotions'
-                            },
-                            {
-                                title: 'Physical Gift Cards',
-                                link: '/retail/physical-gift-cards'
-                            }
-                        ]
-                    },
-                    {
-                        title: 'Reporting',
-                        link: '/reporting',
-                        hasLink: true,
-                        class: 'reporting',
-                        image: '/icons/navbar/reporting-unselected.png'
-                    },
-                    {
-                        title: 'Admin',
-                        link: '/admin',
+                        title: 'Table',
+                        link: '/table',
                         hasLink: false,
                         class: 'admin',
                         image: '/icons/navbar/admin-unselected.png',
                         subItems: [
                             {
-                                title: 'Users and Roles',
-                                link: '/admin/users-and-roles'
+                                title: 'Default',
+                                link: '/table/default'
                             },
                             {
-                                title: 'Classes and Packages',
-                                link: '/admin/classes-and-packages'
+                                title: 'Default With Search',
+                                link: '/table/default-with-search'
                             },
                             {
-                                title: 'Configuration',
-                                link: '/admin/configuration'
+                                title: 'Default With Filter',
+                                link: '/table/default-with-filter'
+                            },
+                            {
+                                title: 'Accordion',
+                                link: '/table/accordion'
+                            },
+                            {
+                                title: 'Two Column',
+                                link: '/table/two-column'
                             },
                         ]
                     }

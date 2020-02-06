@@ -3,7 +3,7 @@
         <div class="background" @click="toggleClose()"></div>
         <form id="default_form" class="overlay" @submit.prevent="submissionSuccess()" enctype="multipart/form-data">
             <div class="modal_wrapper">
-                <h2 class="form_title">Import Gift Cards</h2>
+                <h2 class="form_title">Import</h2>
                 <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group">
                     <div class="form_photo alternate">
@@ -27,12 +27,6 @@
 
 <script>
     export default {
-        props: {
-            status: {
-                type: Number,
-                default: 1
-            }
-        },
         data () {
             return {
                 fileTitle: 'Upload Excel File'
@@ -53,39 +47,6 @@
             },
             submissionSuccess () {
                 const me = this
-                me.$validator.validateAll().then(valid => {
-                    if (valid) {
-                        let formData = new FormData(document.getElementById('default_form'))
-                        me.loader(true)
-                        me.$axios.post('api/inventory/gift-cards/import', formData).then(res => {
-                            setTimeout( () => {
-                                if (res.data) {
-                                    me.notify('Imported')
-                                } else {
-                                    me.$store.state.errorList.push('Sorry, Something went wrong')
-                                    me.$store.state.errorStatus = true
-                                }
-                            }, 200)
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
-                                me.loader(false)
-                                if (!me.$store.state.errorStatus) {
-                                    me.$parent.fetchData(me.status, 3)
-                                    me.$store.state.importStatus = false
-                                }
-                            }, 200)
-                            document.body.classList.remove('no_scroll')
-                        })
-                    } else {
-                        me.$scrollTo('.validation_errors', {
-                            container: '.default_modal',
-                            offset: -250
-                        })
-                    }
-                })
             }
         }
     }

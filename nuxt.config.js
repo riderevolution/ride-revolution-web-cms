@@ -24,7 +24,7 @@ export default {
   loading: {
       color: '#ffa069',
       throttle: 0,
-      height: '4px'
+      height: '2px'
   },
 
   /*
@@ -46,7 +46,6 @@ export default {
       { src: '~/plugins/vue-click-outside' },
       { src: '~/plugins/vue-cookie' },
       { src: '~/plugins/vee-validate' },
-      { src: '~/plugins/vue-panzoom' },
       { src: '~/plugins/mixins'}
   ],
 

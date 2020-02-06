@@ -79,36 +79,36 @@ Vue.mixin({
                 console.log(err)
             })
         },
-        validateToken () {
-            return new Promise((resolve, reject) => {
-                let token = this.$cookies.get('token')
-                if (token != null || token != undefined) {
-                    this.$axios.get('api/user', {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }).then(res => {
-                        if (res.data != 0) {
-                            this.$store.state.isAuth = true
-                            this.$store.state.token = token
-                            this.$store.state.user = res.data.user
-                        } else {
-                            this.logout()
-                        }
-                    }).catch(err => {
-                        console.log(err)
-                        this.logout()
-                    }).then(() =>{
-                        resolve('ok')
-                    })
-                } else {
-                    this.logout()
-                }
-            })
-        },
+        // validateToken () {
+        //     return new Promise((resolve, reject) => {
+        //         let token = this.$cookies.get('token')
+        //         if (token != null || token != undefined) {
+        //             this.$axios.get('api/user', {
+        //                 headers: {
+        //                     Authorization: `Bearer ${token}`
+        //                 }
+        //             }).then(res => {
+        //                 if (res.data != 0) {
+        //                     this.$store.state.isAuth = true
+        //                     this.$store.state.token = token
+        //                     this.$store.state.user = res.data.user
+        //                 } else {
+        //                     this.logout()
+        //                 }
+        //             }).catch(err => {
+        //                 console.log(err)
+        //                 this.logout()
+        //             }).then(() =>{
+        //                 resolve('ok')
+        //             })
+        //         } else {
+        //             this.logout()
+        //         }
+        //     })
+        // },
         async fetchData (apiRoute) {
             const me = this
-            await me.validateToken()
+            // await me.validateToken()
             let api = await me.$axios.get(apiRoute)
             return api
         }

@@ -15,6 +15,7 @@ $black_alternate = #777
 $black_alternate2 = #5f6466
 $gray = #91939B
 $gray_alternate = #ABADB9
+$yellow = #FFC917
 $border = #DEDEDE
 $border_alt = #EDEEF0
 $border_alt2 = #9C9EAA
@@ -324,6 +325,8 @@ table
     cursor: pointer
     user-select: none
     transition: .3s ease-in-out
+    &.margin
+        margin-left: 20px
     &.disabled
         cursor: not-allowed
         pointer-events: none
@@ -331,10 +334,6 @@ table
         background-color: $border_alt
         border: 1px solid #ccc
         transition: .3s ease-in-out
-    &.confirm
-        width: 130px
-    &.margin
-        margin-left: 20px
     &.alternate
         background-color: $green
         border: 1px solid $green
@@ -375,10 +374,6 @@ table
     cursor: pointer
     user-select: none
     transition: .3s ease-in-out
-    &.margin
-        margin-left: 20px
-    &.confirm
-        width: 130px
     &:hover,
     &:focus
         color: $light_red
@@ -430,28 +425,7 @@ table
     cursor: pointer
     user-select: none
     transition: .3s ease-in-out
-    &.white
-        sf_pro_medium(14px)
-        width: auto
-        padding: 10px 12px
-        color: $white
-        background-color: transparent
-        border: 1px solid $white
-        transition: .3s ease-in-out
-        &:hover
-            border: 1px solid $white
-            background-color: $white
-            color: $orange
-            transition: .3s ease-in-out
-        &:focus
-            border: 1px solid $white
-            background-color: $white
-            color: $red
-            transition: .3s ease-in-out
-    &.margin
-        margin-left: 20px
     &.alternate
-        margin-left: 20px
         background-color: $blue
         border: 1px solid $blue
         color: $white
@@ -481,54 +455,6 @@ table
         background-color: $border_alt
         border: 1px solid #ccc
         transition: .3s ease-in-out
-.action_highlight
-    sf_pro_regular(15px)
-    color: $green
-    background-color: $light_green
-    padding: 10px 15px
-    span
-        sf_pro_regular(12px)
-.action_calendar_btn
-    display: inline-block
-    sf_pro_regular(14px)
-    color: $black
-    background-color: #F2F2F2
-    border: 1px solid rgba(171, 173, 185, 0.25)
-    padding: 10px 15px
-    text-decoration: none
-    outline: none
-    border-radius: 3px
-    transition: .3s ease-in-out
-    &.margin
-        margin-left: 5px
-    &:hover
-        background-color: rgba(171, 173, 185, 0.5)
-        transition: .3s ease-in-out
-.action_user_btn
-    display: inline-block
-    width: auto
-    sf_pro_medium(16px)
-    text-decoration: none
-    outline: none
-    color: $white
-    padding: 12px 20px
-    background-color: $black_alternate2
-    border: 1px solid $black_alternate2
-    border-radius: 3px
-    position: relative
-    text-align: center
-    cursor: pointer
-    user-select: none
-    transition: .3s ease-in-out
-    &.margin
-        margin-left: 20px
-    &:hover,
-    &:focus
-        color: $black_alternate2
-        background-color: $white
-        border: 1px solid $white
-        transition: .3s ease-in-out
-
 /**
  * Close Icon **/
 .close_wrapper
@@ -626,6 +552,9 @@ table
                 color: $black
                 padding: 40px
                 border-bottom: 1px solid $border
+                span
+                    sf_pro_regular(15px)
+                    color: $border_alt2
             .form_close
                 position: absolute
                 width: 20px
@@ -655,273 +584,6 @@ table
                 .form_footer_wrapper
                     margin-top: 40px
                     margin-bottom: 0
-            /**
-             * Modal Tab **/
-            .modal_tab_wrapper
-                display: flex
-                flex-flow: row wrap
-                align-items: flex-start
-                &.alternate
-                    padding: 30px
-                    justify-content: space-between
-                    .header_side
-                        flex: 1 0 100%
-                        margin-bottom: 40px
-                        .header_title
-                            position: relative
-                            sf_pro_bold(24px)
-                            color: $black
-                        .header_subtitle
-                            margin-top: 5px
-                            sf_pro_regular(16px)
-                            color: $border_alt2
-                            text-transform: uppercase
-                            .margin
-                                margin-left: 15px
-                    .left_side
-                        flex: 0 0 48%
-                        background-color: $white
-                        .left_title
-                            sf_pro_bold(20px)
-                            color: $black
-                            margin-bottom: 15px
-                        .form_flex_radio
-                            .form_radio
-                                margin-bottom: 15px
-                        .form_main_group
-                            margin-top: 30px
-                    .right_side
-                        flex: 0 0 48%
-                        padding: 0
-                        .breakdown_wrapper
-                            border-top: 2px dashed $border
-                            border-left: 2px dashed $border
-                            border-right: 2px dashed $border
-                            padding: 20px 20px 80px
-                            height: 100%
-                            min-height: 300px
-                            max-height: 400px
-                            overflow-y: auto
-                            overflow-x: hidden
-                            .breakdown_table
-                                thead
-                                    th
-                                        sf_pro_regular(16px)
-                                        color: $border_alt2
-                                        text-align: left
-                                        font-weight: normal
-                                        padding-bottom: 10px
-                                tbody
-                                    td
-                                        position: relative
-                                        color: $black
-                                        padding: 5px 0
-                                        &.item_name
-                                            sf_pro_semibold(16px)
-                                        &.item_price
-                                            position: relative
-                                            sf_pro_regular(16px)
-                                            .prev_price
-                                                position: absolute
-                                                top: 0
-                                                sf_pro_medium(13px)
-                                                color: $red
-                                                text-decoration: line-through
-                                            p
-                                                margin: 0
-                                        .form_flex_input
-                                            margin-right: 20px
-                                            .default_text
-                                                padding: 10px 15px
-                                .no_results
-                                    background-color: $white
-                                    sf_pro_regular(16px)
-                                    color: $black
-                                    padding: 20px 35px
-                                    text-align: center
-                        .breakdown_total
-                            display: flex
-                            flex-flow: row wrap
-                            align-items: flex-end
-                            justify-content: space-between
-                            background-color: $white
-                            box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.09)
-                            padding: 20px
-                            &.alternate
-                                .total_title
-                                    sf_pro_regular(20px)
-                                    color: $black
-                                .total_price
-                                    sf_pro_bold(25px)
-                                    color: $red
-                            .promo
-                                display: flex
-                                flex-flow: row wrap
-                                align-items: flex-end
-                                flex: 0 0 50%
-                                .form_group
-                                    flex: 1 0 30%
-                                    margin-bottom: 0
-                                    input
-                                        padding: 12px 15px
-                                .action_btn
-                                    width: auto
-                                    padding: 12px 17px
-                            .total_wrapper
-                                display: flex
-                                flex-flow: row wrap
-                                align-items: center
-                                flex: 0 0 auto
-                                padding-bottom: 5px
-                                .total_title
-                                    sf_pro_regular(20px)
-                                    color: $black
-                                    padding-right: 10px
-                                .total_price
-                                    sf_pro_bold(25px)
-                                    color: $red
-                    .footer_side
-                        flex: 1 0 100%
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        justify-content: space-between
-                        margin-top: 20px
-                        .form_group_disclaimer
-                            .form_disclaimer
-                                margin-bottom: 0
-                        .button_group
-                            button
-                                padding: 14px
-                .left_side
-                    position: relative
-                    flex: 0 0 25%
-                    background-color: #F8F8FB
-                    border-radius: 5px 0 0 5px
-                    .overlay
-                        position: absolute
-                        top: 0
-                        left: 0
-                        right: 0
-                        margin: 15px
-                        padding: 20px
-                        background-color: $white
-                        box-shadow: 10px 10px 40px rgba(0, 0, 0, 0.09)
-                        border-radius: 5px
-                        .total_title
-                            position: relative
-                            sf_pro_bold(24px)
-                            color: $black
-                        .total_price
-                            sf_pro_regular(20px)
-                            color: $red
-                            margin-top: 10px
-                    .modal_tab
-                        margin: 150px 0
-                        height: 100%
-                        max-height: 450px
-                        overflow-x: hidden
-                        overflow-y: auto
-                        .modal_tab_title
-                            position: relative
-                            padding: 30px 60px
-                            sf_pro_semibold(18px)
-                            color: $black
-                            background-color: transparent
-                            transition: .3s ease-in-out
-                            &::before
-                                content: url('/icons/custom-select-icon.svg')
-                                position: absolute
-                                top: 50%
-                                right: calc(0% + 65px)
-                                z-index: 1
-                                transform: translateY(-50%) rotate(-90deg)
-                                transition: .3s ease-in-out
-                            &:hover,
-                            &.active
-                                background-color: $white
-                                color: $green
-                                transition: .3s ease-in-out
-                                &::before
-                                    right: calc(0% + 50px)
-                                    transition: .3s ease-in-out
-                .right_side
-                    flex: 0 0 75%
-                    padding: 30px
-                    .modal_tab_content_header
-                        margin-bottom: 10px
-                        .tab_content_flex
-                            display: flex
-                            flex-flow: row wrap
-                            justify-content: space-between
-                            &.alternate
-                                padding: 30px 0 40px
-                            .form_flex
-                                flex: 1 0 auto
-                                justify-content: flex-start
-                                .action_btn
-                                    width: auto
-                            button
-                                padding: 14px
-                        .total_items
-                            sf_pro_semibold(16px)
-                            color: $black
-                            span
-                                sf_pro_regular(16px)
-                                color: $border_alt2
-                    .modal_tab_content
-                        padding: 0 20px 0 0
-                        height: 100%
-                        max-height: 400px
-                        overflow-x: hidden
-                        overflow-y: auto
-                        .no_results
-                            sf_pro_regular(16px)
-                            color: $black
-                            padding: 20px 35px
-                            text-align: center
-                        #default_form,
-                        #custom_gift_form
-                            .modal_wrapper
-                                .modal_main_group
-                                    .form_main_group
-                                        padding: 20px 30px
-                                        margin: 0 30px
-                                        border-bottom: 2px dashed $border
-                                        .form_group_disclaimer
-                                            .form_disclaimer
-                                                margin-bottom: 0
-                                        &.no_border
-                                            border-bottom: none
-                                    .form_footer_wrapper
-                                        margin: 40px 30px 0
-                        .modal_tab_content_wrapper
-                            display: flex
-                            flex-flow: row wrap
-                            align-items: center
-                            padding: 15px 0
-                            border-bottom: 2px dashed $border
-                            &.no_qty
-                                padding: 30px 0
-                            .form_check
-                                flex: 1 0 40%
-                            .total_price
-                                flex: 0 0 auto
-                                sf_pro_regular(15px)
-                                color: $black
-                            .form_group
-                                flex: 0 0 15%
-                                display: flex
-                                flex-flow: row wrap
-                                align-items: center
-                                margin-bottom: 0
-                                label
-                                    sf_pro_semibold(15px)
-                                    margin-bottom: 0
-                                    margin-left: 10px
-                                    margin-right: 10px
-                                .form_flex_input
-                                    flex: 1 0 33.33%
     /**
      * Modal Confirmation **/
     .confirmation_wrapper
@@ -1088,11 +750,7 @@ input::placeholder
         border: 1px solid $black
         transition: .3s ease-in-out
 
-#custom_gift_form
-    margin: 20px auto 0
-
-#default_form,
-#custom_gift_form
+#default_form
     width: 100%
     max-width: 50%
     margin: 0 auto
@@ -1140,7 +798,7 @@ input::placeholder
                     .customer_selection
                         position: absolute
                         top: 105%
-                        z-index: 2
+                        z-index: 1
                         background-color: #fff
                         width: 100%
                         padding: 10px 3px 10px 0
@@ -1153,7 +811,6 @@ input::placeholder
                                 overflow-y: auto
                                 .customer_wrapper
                                     margin-right: 5px
-                                    padding: 10px 0
                         .customer_selection_list
                             .customer_wrapper
                                 display: flex
@@ -1174,6 +831,15 @@ input::placeholder
                                     border-radius: 50%
                                     padding: 8px
                                     color: $white
+                                    width: 35px
+                                    height: 35px
+                                    .overlay
+                                        position: absolute
+                                        top: 50%
+                                        left: 0
+                                        right: 0
+                                        text-align: center
+                                        transform: translateY(-50%)
                                 .customer_name
                                     sf_pro_medium(16px)
                                     color: $black
@@ -1202,12 +868,22 @@ input::placeholder
                         height: 50px
                         border-radius: 90%
                     .customer_default_image
+                        position: relative
                         sf_pro_bold(17px)
                         text-transform: uppercase
                         background-image: linear-gradient(137deg, $red, $orange)
                         border-radius: 50%
                         padding: 15px
                         color: #fff
+                        width: 50px
+                        height: 50px
+                        .overlay
+                            position: absolute
+                            top: 50%
+                            left: 0
+                            right: 0
+                            text-align: center
+                            transform: translateY(-50%)
                     .customer_details
                         padding-left: 10px
                         .customer_name
@@ -1330,7 +1006,108 @@ input::placeholder
                                     .table_action_edit,
                                     .table_action_cancel
                                         padding: 10px 20px
-
+        .form_overview
+            padding: 40px 50px 50px
+            .wrapper
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                justify-content: space-between
+                margin-bottom: 25px
+                &:last-child
+                    margin-bottom: 0
+                label
+                    sf_pro_regular(18px)
+                    color: $border_alt2
+                p
+                    sf_pro_regular(15px)
+                    color: $black
+        .form_overview_instructor
+            display: flex
+            flex-flow: row wrap
+            align-items: center
+            padding: 20px
+            .sequence
+                position: absolute
+                bottom: 0
+                right: 0
+                width: 30px
+                height: 30px
+                background-color: $yellow
+                border-radius: 50%
+                sf_pro_bold(19px)
+                span
+                    position: absolute
+                    top: 50%
+                    left: 0
+                    right: 0
+                    margin: 0 auto
+                    text-align: center
+                    color: $white
+                    transform: translateY(-50%)
+            .left
+                flex: 0 0 calc(20% + 25px)
+                padding: 20px 15px
+                border: 1px solid $border
+                border-radius: 5px
+                text-align: center
+                margin-right: 30px
+                .image
+                    position: relative
+                    .sequence
+                        right: calc(0% + 15px)
+                    .instructor_image
+                        margin: 0 auto
+                        background-color: $black
+                        width: 100px
+                        height: 100px
+                        border-radius: 50%
+                        border: 5px solid $yellow
+                h2
+                    sf_pro_regular(22px)
+                    color: $black
+                    margin: 15px 0 5px
+                p
+                    sf_pro_regular(15px)
+                    color: $gray_alternate
+            .right
+                flex: 1 0 50%
+                display: flex
+                flex-flow: row wrap
+                align-items: center
+                .wrapper
+                    flex: 0 0 50%
+                    display: flex
+                    flex-flow: row wrap
+                    align-items: center
+                    margin-bottom: 40px
+                    &:nth-child(3),
+                    &:nth-child(4)
+                        margin-bottom: 0
+                    .image
+                        position: relative
+                        .sequence
+                            width: 23px
+                            height: 23px
+                            bottom: calc(0% - 5px)
+                            right: calc(0% - 5px)
+                            background-color: $green
+                            sf_pro_bold(14px)
+                        .instructor_image
+                            background-color: $black
+                            width: 50px
+                            height: 50px
+                            border-radius: 50%
+                    .info
+                        flex: 1 0 50%
+                        margin-left: 20px
+                        h2
+                            sf_pro_regular(18px)
+                            color: $black
+                            margin-bottom: 5px
+                        p
+                            sf_pro_regular(15px)
+                            color: $gray_alternate
     .form_footer_wrapper
         margin-bottom: 60px
         .form_check
@@ -1345,6 +1122,10 @@ input::placeholder
     flex-flow: row wrap
     align-items: center
     justify-content: flex-start
+    height: 100%
+    max-height: 300px
+    overflow-y: auto
+    overflow-x: hidden
     label
         flex: 0 0 100%
         user-select: none
@@ -1358,7 +1139,7 @@ input::placeholder
             color: $green
     .flex_button
         flex: 0 0 calc(33.33% - 40px)
-        margin: 0 20px
+        margin: 0 20px 20px
         cursor: pointer
         text-align: center
         sf_pro_medium(18px)
@@ -1401,8 +1182,33 @@ input::placeholder
         max-height: 500px
         overflow-y: auto
         overflow-x: hidden
+        &.select_all
+            margin-bottom: 0px
     &.select_all
+        position: relative
         margin-bottom: 20px
+        .validation_errors
+            position: absolute
+            top: calc(100% - 15px)
+            background-color: $red
+            color: $white
+            sf_pro_medium(14px)
+            z-index: 1
+            padding: 5px 10px
+            border-radius: 5px
+            user-select: none
+            left: 0
+            &::before
+                content: ""
+                position: absolute
+                bottom: calc(100% - 1px)
+                width: 0
+                height: 0
+                border-left: 7px solid transparent
+                border-right: 7px solid transparent
+                border-bottom: 7px solid $red
+                left: 17px
+                z-index: 1
     .flex_label
         flex: 0 0 100%
         sf_pro_semibold(18px)
@@ -1430,6 +1236,9 @@ input::placeholder
         margin-bottom: 30px
     .form_group
         flex: 0 0 48.33%
+        &.new_alt
+            .validation_errors
+                top: calc(100% + 5px) !important
         &.full
             flex: 1 0 48.33%
         &.check
@@ -1470,7 +1279,7 @@ input::placeholder
         position: absolute
         top: 35%
         right: calc(0px + 15px)
-        z-index: 1
+        z-index: 0
         width: 0
         height: 0
         border-left: 6px solid transparent
@@ -1482,7 +1291,7 @@ input::placeholder
         position: absolute
         top: 65%
         right: calc(0px + 15px)
-        z-index: 1
+        z-index: 0
         width: 0
         height: 0
         border-left: 6px solid transparent
@@ -1496,7 +1305,7 @@ input::placeholder
         background-color: $red
         color: $white
         sf_pro_medium(14px)
-        z-index: 2
+        z-index: 1
         padding: 5px 10px
         border-radius: 5px
         user-select: none
@@ -1520,6 +1329,8 @@ input::placeholder
     &.toggler
         flex: 0 0 auto
         justify-content: flex-end
+        &.active
+            pointer-events: none
         label
             sf_pro_regular(18px)
             margin-bottom: 0
@@ -1576,13 +1387,13 @@ input::placeholder
     .action_check
         -webkit-appearance: none
         outline: none
-        flex: 0 0 21px
-        width: 21px
-        height: 21px
+        width: 22px
+        height: 22px
+        padding-left: 22px
         background-image: url('/icons/uncheck-icon.svg')
         background-position: center
         background-repeat: no-repeat
-        background-size: cover
+        background-size: contain
         transition: .3s ease-in-out
         &:checked
             background-image: url('/icons/check-icon.svg')
@@ -1636,6 +1447,28 @@ input::placeholder
     &.select_all
         .form_radio
             margin-bottom: 20px
+        .validation_errors
+            position: absolute
+            top: calc(100% - 20px)
+            background-color: $red
+            color: $white
+            sf_pro_medium(14px)
+            z-index: 1
+            padding: 5px 10px
+            border-radius: 5px
+            user-select: none
+            left: 0
+            &::before
+                content: ""
+                position: absolute
+                bottom: calc(100% - 1px)
+                width: 0
+                height: 0
+                border-left: 7px solid transparent
+                border-right: 7px solid transparent
+                border-bottom: 7px solid $red
+                left: 17px
+                z-index: 1
     &.alternate
         .form_radio
             flex: 0 0 100%
@@ -1867,7 +1700,7 @@ input::placeholder
         background-color: $red
         color: $white
         sf_pro_medium(14px)
-        z-index: 2
+        z-index: 1
         padding: 5px 10px
         border-radius: 5px
         user-select: none
@@ -1928,6 +1761,30 @@ input::placeholder
                 transform: translateY(-50%)
                 svg
                     margin-right: 10px
+    .tooltip
+        position: absolute
+        top: calc(0% - 55px)
+        background-color: $red
+        color: $white
+        sf_pro_medium(14px)
+        z-index: 1
+        padding: 5px 10px
+        border-radius: 5px
+        user-select: none
+        left: 0
+        text-align: center
+        &::before
+            content: ""
+            position: absolute
+            top: calc(100%)
+            width: 0
+            height: 0
+            border-left: 7px solid transparent
+            border-right: 7px solid transparent
+            border-top: 7px solid $red
+            left: 50%
+            transform: translateX(-50%)
+            z-index: 1
     .validation_errors
         position: absolute
         top: calc(100% + 5px)
@@ -2053,7 +1910,7 @@ input::placeholder
                 background-image: url('/icons/uncheck-icon.svg')
                 background-position: center
                 background-repeat: no-repeat
-                background-size: cover
+                background-size: contain
                 transition: .3s ease-in-out
                 &:checked
                     background-image: url('/icons/check-icon.svg')
@@ -2079,9 +1936,6 @@ input::placeholder
     .action_cancel_btn,
     .action_success_btn
         width: 180px
-
-.note-tooltip
-    sf_pro_regular(14px)
 
 .form_image_group
     margin-bottom: 20px
@@ -2184,6 +2038,19 @@ input::placeholder
             .form_group
                 &:last-child
                     margin-bottom: 0
+
+.actions
+    display: flex
+    flex-flow: row wrap
+    align-items: center
+    justify-content: flex-end
+    margin-bottom: 40px
+    .total
+        sf_pro_medium(22px)
+        color: $black
+        padding: 0 25px 0 40px
+    .cms_table_toggler
+        margin-bottom: 0
 
 .cms_table_toggler
     display: flex
@@ -2475,6 +2342,7 @@ input::placeholder
             th
                 background-color: $green
                 position: sticky
+                z-index: 1
                 top: calc(0% + 80px)
                 color: $white
                 transition: .3s ease-in-out
@@ -2508,6 +2376,47 @@ input::placeholder
                 sf_pro_regular(16px)
                 color: $black
                 padding: 20px 30px
+                .id
+                    color: $border_alt2
+                    sf_pro_regular(15px)
+                .table_select
+                    position: relative
+                    .table_select_label
+                        position: relative
+                        &::before
+                            content: ''
+                            position: absolute
+                            top: 50%
+                            right: 0
+                            border-left: 6px solid transparent
+                            border-right: 6px solid transparent
+                            border-top: 8px solid $green
+                            transform: translateY(-50%)
+                            cursor: pointer
+                    .overlay
+                        position: absolute
+                        top: calc(100% + 30px)
+                        left: 0
+                        z-index: 3
+                        width: 170px
+                        background-color: $white
+                        padding: 20px 20px 10px
+                        border-radius: 3px
+                        box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.16)
+                        opacity: 0
+                        visibility: hidden
+                        transition: .3s ease-in-out
+                        ul
+                            list-style: none
+                            margin: 0
+                            padding: 0
+                            li
+                                margin-bottom: 10px
+                        &.active
+                            top: calc(100% + 10px)
+                            opacity: 1
+                            visibility: visible
+                            transition: .3s ease-in-out
                 span
                     sf_pro_bold(16px)
                     &.green
@@ -2547,14 +2456,13 @@ input::placeholder
                                 .upload_image
                                     stroke: $white
                                     transition: .3s ease-in-out
-                &.thumb
-                    padding: 20px 0 20px 30px
+                .thumb
                     display: flex
                     flex-flow: row wrap
                     align-items: center
                     img
-                        width: 32px
-                        height: 32px
+                        width: 35px
+                        height: 35px
                         border-radius: 50%
                     .table_image_default
                         position: relative
@@ -2564,6 +2472,15 @@ input::placeholder
                         border-radius: 50%
                         padding: 8px
                         color: $white
+                        width: 35px
+                        height: 35px
+                        .overlay
+                            position: absolute
+                            top: 50%
+                            left: 0
+                            right: 0
+                            text-align: center
+                            transform: translateY(-50%)
                     .table_data_link
                         margin-left: 15px
                 .table_data_link
@@ -2572,9 +2489,14 @@ input::placeholder
                     text-decoration: none
                     &.alternate
                         text-transform: uppercase
-                &.table_actions
+                .table_color_code
+                    width: 25px
+                    height: 25px
+                    border-radius: 50%
+                .table_actions
                     &.full
-                        a
+                        a,
+                        .link
                             flex: 0 0 100%
                     display: flex
                     flex-flow: row wrap
@@ -2585,7 +2507,8 @@ input::placeholder
                             color: $green
                         &.red
                             color: $red
-                    a
+                    a,
+                    .link
                         flex: 0 0 47%
                         text-align: center
                         text-decoration: none
@@ -2627,320 +2550,6 @@ input::placeholder
     .no_results
         text-align: center
 
-/**
- * Table Calendar **/
-.calendar_wrapper
-    margin-bottom: 30px
-    background-color: $white
-    .calendar_actions
-        padding: 20px
-        display: flex
-        flex-flow: row wrap
-        align-items: center
-        justify-content: space-between
-        .action_flex
-            &.disabled_gear
-                .gear_action
-                    .gear_overlay
-                        .gear_list_wrapper
-                            .gear_list
-                                .gear_item
-                                    pointer-events: none
-                                    background-color: $border_alt
-                                    color: $border_alt2
-            .gear_action
-                position: relative
-                width: 38.568px
-                height: 32.924px
-                .calendar_gear
-                    position: absolute
-                    top: 0
-                    left: 0
-                    z-index: 1
-                    fill: $light_green
-                    transition: .3s ease-in-out
-                    .gear_2
-                        fill: transparent
-                        stroke: $green
-                        stroke-miterlimit: 10
-                        stroke-width: 2
-                    &:hover
-                        fill: $green
-                        transition: .3s ease-in-out
-                        .gear_2
-                            fill: $green
-                            stroke: $white
-                            transition: .3s ease-in-out
-                .gear_overlay
-                    position: absolute
-                    background-color: $white
-                    border-radius: 5px
-                    width: 160px
-                    padding: 10px 0
-                    top: calc(100% - 25px)
-                    right: 0
-                    opacity: 0
-                    z-index: 1
-                    visibility: hidden
-                    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
-                    transition: .3s ease-in-out
-                    &.alternate
-                        left: unset
-                        right: 0
-                    .gear_list_wrapper
-                        list-style: none
-                        padding: 0
-                        .gear_list
-                            .gear_item
-                                display: block
-                                sf_pro_regular(15px)
-                                color: $black
-                                text-decoration: none
-                                padding: 10px 20px
-                                background-color: transparent
-                                transition: .3s ease-in-out
-                                &:hover
-                                    color: $green
-                                    background-color: $light_green
-                                    transition: .3s ease-in-out
-                    &.active
-                        top: calc(100% + 15px)
-                        opacity: 1
-                        visibility: visible
-                        transition: .3s ease-in-out
-    .calendar_header
-        position: relative
-        display: flex
-        flex-flow: row wrap
-        align-items: center
-        justify-content: center
-        margin-bottom: 60px
-        .calendar_title
-            sf_pro_bold(30px)
-            color: $black
-            margin: 0 20px
-        .calendar_prev
-            position: absolute
-            top: 50%
-            left: calc(50% - 200px)
-            transform: translate(-50%, -50%) rotate(180deg)
-        .calendar_next
-            position: absolute
-            top: 50%
-            right: calc(50% - 200px)
-            transform: translate(-50%, -50%)
-        .calendar_next,
-        .calendar_prev
-            width: 28px
-            height: 28px
-            svg
-                .arrow_1
-                    fill: $white
-                    stroke: $border
-                    transition: .3s ease-in-out
-                .arrow_2,
-                .arrow_4
-                    fill: none
-                .arrow_2
-                    stroke: $green
-                    stroke-width: 1.5px
-                .arrow_3
-                    stroke: none
-                &:hover
-                    .arrow_1
-                        fill: $border
-                        transition: .3s ease-in-out
-    .cms_table_calendar_wrapper
-        padding: 0 70px 20px 20px
-        .cms_table_calendar
-            table-layout: fixed
-            thead
-                tr
-                    th
-                        sf_pro_regular(16px)
-                        color: $border_alt2
-                        font-weight: normal
-                        padding: 10px 0
-            tbody
-                tr
-                    &.highlighted
-                        .day_wrapper
-                            background-color: $light_green
-                            transition: .3s ease-in-out
-                    .day_wrapper
-                        position: relative
-                        border: 1px solid $border
-                        background-color: $white
-                        vertical-align: top
-                        transition: .3s ease-in-out
-                        &.disabled_menu
-                            .header_wrapper
-                                .header_menu
-                                    .menu_overlay
-                                        .menu_list_wrapper
-                                            .menu_list
-                                                .menu_item
-                                                    &.clear,
-                                                    &.duplicate
-                                                        pointer-events: none
-                                                        background-color: $border_alt
-                                                        color: $border_alt2
-                        &.disabled_day
-                            background-color: $border_alt
-                            .header_wrapper
-                                .header_day
-                                    color: $border_alt2
-                        &.disabled_gear
-                            .gear_overlay
-                                .gear_list_wrapper
-                                    .gear_list
-                                        .gear_item
-                                            pointer-events: none
-                                            background-color: $border_alt
-                                            color: $border_alt2
-                        .header_wrapper
-                            display: flex
-                            flex-flow: row wrap
-                            align-items: center
-                            justify-content: space-between
-                            padding: 10px
-                            .header_day
-                                position: relative
-                                sf_pro_semibold(16px)
-                                color: $black
-                                &.active
-                                    color: $green
-                                    &::before
-                                        content: ''
-                                        position: absolute
-                                        top: calc(100% - 2px)
-                                        height: 2px
-                                        width: 100%
-                                        background-color: $green
-                            .header_menu
-                                position: relative
-                                .menu_circles
-                                    sf_pro_regular(8px)
-                                    color: $green
-                                .menu_overlay
-                                    position: absolute
-                                    background-color: $white
-                                    border-radius: 5px
-                                    width: 160px
-                                    padding: 10px 0
-                                    top: calc(100% - 10px)
-                                    left: 0
-                                    right: unset
-                                    opacity: 0
-                                    z-index: 1
-                                    visibility: hidden
-                                    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
-                                    transition: .3s ease-in-out
-                                    &.alternate
-                                        left: unset
-                                        right: 0
-                                    .menu_list_wrapper
-                                        list-style: none
-                                        padding: 0
-                                        .menu_list
-                                            .menu_item
-                                                display: block
-                                                sf_pro_regular(15px)
-                                                color: $black
-                                                text-decoration: none
-                                                padding: 10px 20px
-                                                background-color: transparent
-                                                transition: .3s ease-in-out
-                                                &:hover
-                                                    color: $green
-                                                    background-color: $light_green
-                                                    transition: .3s ease-in-out
-                                    &.active
-                                        top: calc(100% + 20px)
-                                        opacity: 1
-                                        visibility: visible
-                                        transition: .3s ease-in-out
-                        .classes
-                            .class_wrapper
-                                display: block
-                                background-color: $blue
-                                padding: 10px
-                                margin-bottom: 3px
-                                text-decoration: none
-                                &.private
-                                    .class_text
-                                        display: flex
-                                        align-items: center
-                                        span
-                                            margin-left: 5px
-                                &.draft
-                                    background-color: $black
-                                &.completed
-                                    background-color: $border
-                                    .class_text
-                                        color: $black
-                                .class_text
-                                    color: $white
-                                    sf_pro_regular(14px)
-                                    &.margin
-                                        margin-bottom: 5px
-                        .calendar_gear
-                            position: absolute
-                            top: calc(0% - 1px)
-                            left: calc(100% + 10px)
-                            z-index: 1
-                            fill: $light_green
-                            transition: .3s ease-in-out
-                            .gear_2
-                                fill: transparent
-                                stroke: $green
-                                stroke-miterlimit: 10
-                                stroke-width: 2
-                            &:hover,
-                            &.active
-                                fill: $green
-                                transition: .3s ease-in-out
-                                .gear_2
-                                    fill: $green
-                                    stroke: $white
-                                    transition: .3s ease-in-out
-                        .gear_overlay
-                            position: absolute
-                            background-color: $white
-                            border-radius: 5px
-                            width: 160px
-                            padding: 10px 0
-                            top: calc(0% + 10px)
-                            right: calc(0% - 50px)
-                            opacity: 0
-                            z-index: 3
-                            visibility: hidden
-                            box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
-                            transition: .3s ease-in-out
-                            &.alternate
-                                left: unset
-                                right: 0
-                            .gear_list_wrapper
-                                list-style: none
-                                padding: 0
-                                .gear_list
-                                    .gear_item
-                                        display: block
-                                        sf_pro_regular(15px)
-                                        color: $black
-                                        text-decoration: none
-                                        padding: 10px 20px
-                                        background-color: transparent
-                                        transition: .3s ease-in-out
-                                        &:hover
-                                            color: $green
-                                            background-color: $light_green
-                                            transition: .3s ease-in-out
-                            &.active
-                                top: calc(0% + 40px)
-                                opacity: 1
-                                visibility: visible
-                                transition: .3s ease-in-out
 .cms_table_taxonomy
     border-collapse: collapse
     width: 100%
@@ -2966,7 +2575,7 @@ input::placeholder
                 sf_pro_regular(16px)
                 color: $black
                 padding: 20px
-                &.table_actions
+                .table_actions
                     display: flex
                     flex-flow: row wrap
                     align-items: center
@@ -2977,7 +2586,8 @@ input::placeholder
                     .table_action_text
                         &.red
                             color: $red
-                    a
+                    a,
+                    .link
                         flex: 0 0 47%
                         text-align: center
                         text-decoration: none
@@ -3232,58 +2842,6 @@ input::placeholder
 
 /**
  * Default Column */
-.cms_col_alt_two
-    display: flex
-    flex-flow: row wrap
-    align-items: center
-    justify-content: space-between
-    margin-bottom: 30px
-    .wrapper
-        flex: 0 0 48.66%
-        margin-bottom: 30px
-        background-color: $white
-        box-shadow: 15px 25px 40px transparent
-        text-decoration: none
-        transition: .3s ease-in-out
-        .list_wrapper
-            height: 400px
-            overflow-y: scroll
-        &:hover
-            box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
-            transition: .3s ease-in-out
-.cms_col_three
-    display: flex
-    flex-flow: row wrap
-    align-items: center
-    justify-content: space-between
-    margin-bottom: 30px
-    .wrapper
-        flex: 0 0 31.33%
-        margin-bottom: 30px
-        text-align: center
-        background-color: $white
-        padding: 120px 0
-        box-shadow: 15px 25px 40px transparent
-        text-decoration: none
-        transition: .3s ease-in-out
-        .total_image
-            .back
-                right: 0
-                margin: 0 auto
-        .total_count
-            sf_pro_bold(45px)
-            color: $black
-            margin: 15px 0
-        .total_text
-            sf_pro_light(16px)
-            color: $black
-        .total_title
-            sf_pro_bold(30px)
-            color: $black
-            margin-top: 15px
-        &:hover
-            box-shadow: 15px 25px 40px rgba(0, 0, 0, 0.05)
-            transition: .3s ease-in-out
 .cms_col_four
     display: flex
     flex-flow: row wrap
@@ -3443,28 +3001,6 @@ input::placeholder
                     stroke: $white
                     transition: .3s ease-in-out
 
-.cms_autocomplete
-    position: absolute
-    top: 105%
-    z-index: 2
-    background-color: $white
-    width: 100%
-    padding: 10px 0
-    border-radius: 3px
-    box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.16)
-    &.scrollable
-        height: 300px
-        overflow-y: auto
-    .autocomplete_title
-        padding: 10px 20px
-        sf_pro_medium(15px)
-        color: $black
-        background-color: transparent
-        transition: .3s ease-in-out
-        &:hover
-            color: $green
-            background-color: $light_green
-            transition: .3s ease-in-out
 .cms_summary
     display: block
     background-color: $white
@@ -3605,755 +3141,6 @@ input::placeholder
         &.active
             pointer-events: none
 
-/**
- * Booker **/
-.booker_wrapper
-    display: flex
-    flex-flow: row wrap
-    align-items: flex-start
-    justify-content: space-between
-    margin-bottom: 60px
-    .booker_classes
-        flex: 0 0 25%
-        background-color: $white
-        opacity: 1
-        transition: .3s ease-in-out
-        &.disable_booker
-            opacity: 0.5
-            pointer-events: none
-            transition: .3s ease-in-out
-        .header_wrapper
-            display: flex
-            flex-flow: row wrap
-            align-items: center
-            justify-content: space-between
-            padding: 26px 15px
-            border-bottom: 1px solid $border
-            .booker_header
-                position: relative
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                .booker_title
-                    sf_pro_bold(20px)
-                    color: $black
-                    margin: 0 15px
-                .booker_prev
-                    transform: rotate(180deg)
-                .booker_next,
-                .booker_prev
-                    width: 28px
-                    height: 28px
-                    svg
-                        .arrow_1
-                            fill: $white
-                            stroke: $border
-                            transition: .3s ease-in-out
-                        .arrow_2,
-                        .arrow_4
-                            fill: none
-                        .arrow_2
-                            stroke: $green
-                            stroke-width: 1.5px
-                        .arrow_3
-                            stroke: none
-                        &:hover
-                            .arrow_1
-                                fill: $border
-                                transition: .3s ease-in-out
-        .content_wrapper
-            .class_accordion
-                &.toggled
-                    .accordion_header
-                        &::before
-                            transform: translateY(-50%) rotate(-180deg)
-                            transition: .3s ease-in-out
-                    .accordion_content
-                        opacity: 1
-                        overflow: initial
-                        visibility: visible
-                        transition: .3s ease-in-out
-                .accordion_header
-                    position: relative
-                    padding: 20px
-                    sf_pro_semibold(20px)
-                    color: $black
-                    cursor: pointer
-                    &::before
-                        content: url(/icons/custom-select-icon.svg)
-                        position: absolute
-                        top: 50%
-                        right: calc(0% + 20px)
-                        transform: translateY(-50%) rotate(0deg)
-                        transition: .3s ease-in-out
-                .accordion_content
-                    height: 0
-                    opacity: 0
-                    overflow: hidden
-                    visibility: hidden
-                    transition: .3s ease-in-out
-                    .no_class
-                        sf_pro_regular(16px)
-                        color: $black
-                        padding: 20px 35px
-                        text-align: center
-                    .class_content
-                        display: block
-                        padding: 20px
-                        text-decoration: none
-                        box-shadow: 0px 0px 15px transparent
-                        border-left: 2px solid $border
-                        border-bottom: 1px solid $border
-                        transition: .3s ease-in-out
-                        .class_title
-                            display: flex
-                            flex-flow: row wrap
-                            align-items: center
-                            justify-content: space-between
-                            span
-                                sf_pro_medium(16px)
-                                color: $black
-                                transition: .3s ease-in-out
-                            .class_status
-                                sf_pro_regular(14px)
-                                color: $black
-                                padding: 5px 15px
-                                border: 1px solid $border
-                                border-radius: 20px
-                                &.full
-                                    color: $red
-                                    border: 1px solid $red
-                        .class_text
-                            sf_pro_regular(15px)
-                            color: $border_alt2
-                            margin-top: 5px
-                            transition: .3s ease-in-out
-                            &.alternate
-                                display: flex
-                                flex-flow: row wrap
-                                align-items: center
-                                justify-content: space-between
-                        &:last-child
-                            border-bottom: 1px solid transparent
-                        &:hover,
-                        &:focus,
-                        &.active
-                            border-left: 2px solid $green
-                            box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.1)
-                            transition: .3s ease-in-out
-                            .class_title
-                                span
-                                    color: $green
-                                    transition: .3s ease-in-out
-                            .class_text
-                                color: $black
-                                transition: .3s ease-in-out
-
-    .booker_content
-        flex: 0 0 calc(75% - 20px)
-        .booker_seats
-            display: block
-            position: relative
-            width: 100%
-            overflow: hidden
-            margin-bottom: 20px
-            background-color: $white
-            .seat_controls
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                border-bottom: 1px solid $border
-                button
-                    position: relative
-                    padding: 0
-                    width: 40px
-                    height: 40px
-                    background-color: transparent
-                    border: none
-                    box-shadow: none
-                    outline: none
-                    font-size: 0
-                    &.margin
-                        margin-left: 5px
-                    &::before,
-                    &::after
-                        content: ''
-                        position: absolute
-                        background-position: center center
-                        background-repeat: no-repeat
-                        background-size: contain
-                        width: 100%
-                        height: 100%
-                        top: 50%
-                        left: 50%
-                        transform: translate(-50%, -50%)
-                        opacity: 1
-                        visibility: visible
-                        transition: .3s ease-in-out
-                    &::after
-                        opacity: 0
-                        visibility: hidden
-                        transition: .3s ease-in-out
-                    &#zoom_in
-                        &::before
-                            background-image: url('/icons/zoom-in.svg')
-                        &::after
-                            background-image: url('/icons/zoom-in-selected.svg')
-                    &#zoom_out
-                        &::before
-                            background-image: url('/icons/zoom-out.svg')
-                        &::after
-                            background-image: url('/icons/zoom-out-selected.svg')
-                    &#reset
-                        &::before
-                            background-image: url('/icons/full-screen.svg')
-                        &::after
-                            background-image: url('/icons/full-screen-selected.svg')
-                    &#reload
-                        &::before
-                            background-image: url('/icons/reload.svg')
-                        &::after
-                            background-image: url('/icons/reload-selected.svg')
-                    &:hover
-                        &::before
-                            opacity: 0
-                            visibility: hidden
-                            transition: .3s ease-in-out
-                        &::after
-                            opacity: 1
-                            visibility: visible
-                            transition: .3s ease-in-out
-                .left_side
-                    padding: 20px
-                    flex: 1 0 50%
-                    display: flex
-                    flex-flow: row wrap
-                    align-items: center
-                    justify-content: space-between
-                    border-right: 1px solid $border
-                    .class_options
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        flex: 0 0 auto
-                        .default_select
-                            width: auto
-                            opacity: 1
-                            transition: .3s ease-in-out
-                            &.disable_booker
-                                opacity: 0.5
-                                pointer-events: none
-                                transition: .3s ease-in-out
-                        .class_info
-                            position: relative
-                            margin-left: 10px
-                            label
-                                display: block
-                                sf_pro_regular(15px)
-                                color: $gray_alternate
-                                margin-bottom: 15px
-                            .overlay
-                                position: absolute
-                                top: calc(100% + 30px)
-                                left: 0
-                                z-index: 3
-                                width: 400px
-                                background-color: $white
-                                padding: 20px 20px 10px 20px
-                                border-radius: 3px
-                                box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.16)
-                                opacity: 0
-                                visibility: hidden
-                                transition: .3s ease-in-out
-                                .type_content
-                                    display: flex
-                                    flex-flow: row wrap
-                                    align-items: center
-                                    justify-content: space-between
-                                    .type
-                                        flex: 0 0 48%
-                                        display: flex
-                                        flex-flow: row wrap
-                                        align-items: center
-                                        margin-bottom: 10px
-                                        img
-                                            width: 20px
-                                        .type_title
-                                            sf_pro_regular(15px)
-                                            color: $black
-                                            padding-left: 10px
-                                &.active
-                                    top: calc(100% + 10px)
-                                    opacity: 1
-                                    visibility: visible
-                                    transition: .3s ease-in-out
-                    .booker_label
-                        sf_pro_regular(18px)
-                        color: $gray_alternate
-                        text-align: center
-                        flex: 0 0 50%
-                    .controls
-                        flex: 0 0 auto
-                .right_side
-                    padding: 20px
-                    flex: 0 0 auto
-                    text-align: center
-                    opacity: 1
-                    transition: .3s ease-in-out
-                    &.disable_booker
-                        opacity: 0.5
-                        pointer-events: none
-                        transition: .3s ease-in-out
-            .vue-pan-zoom-item,
-            .vue-pan-zoom-scene
-                height: 450px
-                outline: none
-                overflow: hidden
-            .vue-pan-zoom-scene
-                .plan_wrapper
-                    margin: 30px
-                    height: inherit
-                    position: relative
-                    .no_results
-                        text-align: center
-                        sf_pro_medium(50px)
-                        color: $gray_alternate
-                        text-align: center
-                        padding-top: 100px
-                    .seat_boxes
-                        position: absolute
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        .seat_position
-                            position: relative
-                            border-radius: 4px
-                            text-align: center
-                            cursor: pointer
-                            margin: 15px
-                            padding: 45px 20px
-                            background-color: $white
-                            border: 1.5px solid $black
-                            transition: .3s ease-in-out
-                            &.available
-                                border: 1.5px solid $blue
-                                transition: .3s ease-in-out
-                                .seat_number
-                                    color: $blue
-                                    transition: .3s ease-in-out
-                            &.comp
-                                background-color: rgba(240, 241, 242, 0.3)
-                                background-image: url('/icons/blocked-seat.svg')
-                                background-repeat: no-repeat
-                                background-position: center
-                                background-size: cover
-                                border: 1.5px solid $gray_alternate
-                                .seat_number
-                                    color: $gray_alternate
-                            &.sign_out
-                                background-color: $light_green
-                                border: 1.5px solid transparent
-                                transition: .3s ease-in-out
-                                &.highlight
-                                    border: 1.5px solid $green
-                                    box-shadow: 0px 0px 40px rgba(51, 176, 157, 0.75)
-                                    transition: .3s ease-in-out
-                                    .seat_number
-                                        color: $green
-                                        transition: .3s ease-in-out
-                                .seat_action
-                                    background-image: url('/icons/sign-out.svg')
-                                    opacity: 1
-                                    visibility: visible
-                                    transition: .3s ease-in-out
-                                .seat_number
-                                    color: rgba(132, 143, 159, 0.4)
-                                    transition: .3s ease-in-out
-                            &.sign_in_guest,
-                            &.no_show
-                                background-color: #EDEDED
-                                border: 1.5px solid $gray_alternate
-                                transition: .3s ease-in-out
-                                .seat_number
-                                    color: rgba(132, 143, 159, 0.4)
-                                    transition: .3s ease-in-out
-                            &.sign_in
-                                background-color: #EDEDED
-                                border: 1.5px solid $gray_alternate
-                                transition: .3s ease-in-out
-                                &.highlight
-                                    border: 1.5px solid $green
-                                    box-shadow: 0px 0px 40px rgba(51, 176, 157, 0.75)
-                                    transition: .3s ease-in-out
-                                    .seat_number
-                                        color: $green
-                                        transition: .3s ease-in-out
-                                .seat_action
-                                    background-image: url('/icons/sign-in.svg')
-                                    opacity: 1
-                                    visibility: visible
-                                    transition: .3s ease-in-out
-                                .seat_number
-                                    color: rgba(132, 143, 159, 0.4)
-                            &.blocked
-                                .seat_info_blocked
-                                    opacity: 1
-                                    visibility: visible
-                                    transition: .3s ease-in-out
-                            .seat_info_blocked
-                                opacity: 0
-                                visibility: hidden
-                                transition: .3s ease-in-out
-                            .seat_info,
-                            .seat_info_blocked,
-                            .seat_info_pending
-                                display: flex
-                                flex-flow: row wrap
-                                align-items: center
-                                justify-content: flex-start
-                                position: absolute
-                                bottom: 0
-                                left: 0
-                                padding: 0 5px 5px 5px
-                                text-align: left
-                                .info_image
-                                    display: flex
-                                    flex-flow: row wrap
-                                    align-items: center
-                                    justify-content: flex-start
-                                    margin-right: 5px
-                                    img
-                                        width: auto
-                                        height: 20px
-                                    &:last-child
-                                        margin-right: 0px
-                                h2
-                                    sf_pro_regular(13px)
-                                    color: $black
-                            .seat_available
-                                position: absolute
-                                top: 0
-                                left: 0
-                                width: 100%
-                                height: 100%
-                                z-index: 8
-                                cursor: pointer
-                            .seat_number
-                                position: absolute
-                                top: 0
-                                left: 0
-                                right: 0
-                                text-align: center
-                                sf_pro_bold(30px)
-                                color: $black
-                                padding: 26px 25px
-                            .seat_menu
-                                position: absolute
-                                top: 0
-                                left: calc(0% + 5px)
-                                z-index: 2
-                                font-size: 14px
-                                cursor: pointer
-                            .seat_overlay_menu
-                                position: absolute
-                                background-color: $white
-                                border-radius: 5px
-                                width: 160px
-                                top: calc(0% + 30px)
-                                left: 0
-                                right: unset
-                                opacity: 0
-                                z-index: 3
-                                visibility: hidden
-                                list-style: none
-                                padding: 0
-                                text-align: left
-                                box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
-                                transition: .3s ease-in-out
-                                .seat_item
-                                    display: block
-                                    sf_pro_regular(15px)
-                                    color: $black
-                                    text-decoration: none
-                                    padding: 10px 20px
-                                    background-color: transparent
-                                    transition: .3s ease-in-out
-                                    &.cancel
-                                        &:hover
-                                            color: $red
-                                            background-color: $light_red
-                                            transition: .3s ease-in-out
-                                    &:hover
-                                        color: $green
-                                        background-color: $light_green
-                                        transition: .3s ease-in-out
-                                &.active
-                                    top: calc(0% + 15px)
-                                    opacity: 1
-                                    visibility: visible
-                                    transition: .3s ease-in-out
-                            .seat_pending
-                                position: absolute
-                                z-index: 2
-                                top: 0
-                                right: 20px
-                                width: 28px
-                                height: 28px
-                                background-image: url('/icons/pending-payment-icon.svg')
-                                background-position: calc(50% - 1px) calc(0% + 3px)
-                                background-repeat: no-repeat
-                                background-size: 80%
-                                opacity: 1
-                                cursor: pointer
-                                transition: 0.3s ease-in-out
-                            .seat_action
-                                position: absolute
-                                z-index: 2
-                                top: calc(0% - 8px)
-                                right: calc(0% - 20px)
-                                width: 40px
-                                height: 38px
-                                background-position: 50% calc(0% + -14px)
-                                background-repeat: no-repeat
-                                background-size: 190%
-                                opacity: 0
-                                cursor: pointer
-                                visibility: hidden
-                                transition: .3s ease-in-out
-                                &:hover
-                                    opacity: 0.5
-                                    transition: .3s ease-in-out
-                        &.layout_1
-                            &.bottom
-                                bottom: calc(0% + 170px)
-                            &.bottom_alt
-                                bottom: calc(0% + 50px)
-                                left: calc(0% - 65px)
-                            &.bottom_alt_2
-                                bottom: calc(0% - 70px)
-                        &.layout_2
-                            &.bottom
-                                bottom: calc(0% + 170px)
-                            &.bottom_alt
-                                bottom: calc(0% + 50px)
-                                left: calc(0% - 65px)
-                        &.layout_3
-                            &.bottom
-                                bottom: calc(75%)
-                            &.bottom_alt
-                                bottom: calc(75% - 115px)
-                                left: calc(0% - 65px)
-                            &.bottom_alt_2
-                                bottom: calc(75% - 230px)
-                                justify-content: center
-                        &.left
-                            align-items: flex-start
-                            top: calc(0% - 180px)
-                            left: calc(0% - 60px)
-                            .seat_position
-                                flex: 0 0 calc(50% - 52.5px)
-                                &:nth-child(2)
-                                    top: calc(0px + 60px)
-                                &:last-child
-                                    top: calc(0px + 60px)
-                        &.right
-                            align-items: flex-start
-                            top: calc(0% - 180px)
-                            right: calc(0% - 45px)
-                            .seat_position
-                                flex: 0 0 calc(50% - 52.5px)
-                                &:first-child
-                                    top: calc(0px + 60px)
-                                &:nth-child(3)
-                                    top: calc(0px + 60px)
-                        &.bottom,
-                        &.bottom_alt,
-                        &.bottom_alt_2
-                            width: 100%
-                            .seat_position
-                                flex: 0 0 calc(10% - 30px)
-            .seat_legends
-                position: relative
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                justify-content: center
-                padding: 20px 0
-                border-top: 1px solid $border
-                .action_cancel_btn
-                    position: absolute
-                    top: 50%
-                    right: calc(0% + 20px)
-                    padding: 10px 20px
-                    width: auto
-                    transform: translateY(-50%)
-                .legend_title
-                    display: flex
-                    flex-flow: row wrap
-                    align-items: center
-                    justify-content: space-between
-                    sf_pro_regular(16px)
-                    color: $black
-                    span
-                        margin-right: 5px
-                        display: inline-block
-                        width: 17px
-                        height: 17px
-                        border-radius: 50%
-                        background-color: $black
-                        border: 1px solid $black
-                    &.gray
-                        span
-                            background-color: $border
-                            border: 1px solid $border
-                    &.green
-                        span
-                            background-color: $light_green
-                            border: 1px solid $light_green
-                    &.white
-                        span
-                            background-color: $white
-                            border: 1px solid $black
-                    &.gradient
-                        span
-                            background-color: transparent
-                            border: 1px solid $border
-                            background-image: url('/icons/blocked-seat-legend.svg')
-                            background-position: center
-                            background-repeat: no-repeat
-                            background-size: cover
-                    &.margin
-                        margin-left: 20px
-        .booker_footer
-            display: flex
-            flex-flow: row wrap
-            align-items: flex-start
-            justify-content: space-between
-            opacity: 1
-            transition: .3s ease-in-out
-            &.disable_booker
-                opacity: 0.5
-                pointer-events: none
-                transition: .3s ease-in-out
-            .footer_header
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                justify-content: space-between
-                margin: 10px 10px 0 10px
-                .action_success_btn
-                    width: auto
-                    padding: 10px 17px
-            .footer_title
-                sf_pro_semibold(16px)
-                color: $black
-                padding: 10px 15px
-            .booker_notepad
-                flex: 0 0 25%
-                background-color: $white
-                .notepad_text
-                    border-top: 1px solid $border
-                    textarea
-                        sf_pro_regular(16px)
-                        color: $black
-                        width: 100% !important
-                        border: none
-                        outline: none
-                        padding: 15px
-                        max-height: 500px
-                        overflow-y: auto
-            .booker_waitlist
-                flex: 0 0 calc(75% - 20px)
-                background-color: $white
-                .footer_title
-                    padding: 10px 15px 10px 20px
-                    background-image: url('/icons/waitlist-icon.svg')
-                    background-position: left center
-                    background-repeat: no-repeat
-                .cms_waitlist
-                    thead
-                        border-bottom: 1px solid $border
-                        tr
-                            display: flex
-                            align-items: center
-                            th
-                                font-weight: normal
-                                text-align: left
-                                padding: 10px 20px
-                                sf_pro_regular(14px)
-                                color: $border_alt2
-                                flex: 0 0 30%
-                                &.action
-                                    flex: 1 0 20%
-                    tbody
-                        display: block
-                        height: 100%
-                        max-height: 200px
-                        overflow-y: auto
-                        &.no_results
-                            tr
-                                td
-                                    flex: 0 0 100%
-                                    text-align: center
-                                    color: $gray_alternate
-                                    neutra_text(22px)
-                                    padding: 45px 20px
-                                    transition: .3s ease-in-out
-                        tr
-                            display: flex
-                            align-items: center
-                            border-bottom: 1px solid $border
-                            td
-                                padding: 15px 20px
-                                sf_pro_medium(16px)
-                                color: $blue
-                                flex: 0 0 30%
-                                &.action
-                                    flex: 1 0 20%
-                                    a
-                                        text-decoration: none
-                                        sf_pro_medium(16px)
-                                        color: $green
-                                        padding: 5px 10px
-                                        border: 1px solid $green
-                                        border-radius: 3px
-                                        background-color: transparent
-                                        transition: .3s ease-in-out
-                                        &.disabled
-                                            cursor: not-allowed
-                                            pointer-events: none
-                                            color: $black
-                                            background-color: $border_alt
-                                            border: 1px solid #ccc
-                                            transition: .3s ease-in-out
-                                        &.cancel
-                                            color: $red
-                                            border: 1px solid $red
-                                            transition: .3s ease-in-out
-                                        &.margin
-                                            margin-left: 20px
-                                        &:hover
-                                            color: $white
-                                            border: 1px solid $green
-                                            background-color: $green
-                                            transition: .3s ease-in-out
-                                            &.cancel
-                                                color: $white
-                                                border: 1px solid $red
-                                                background-color: $red
-                                                transition: .3s ease-in-out
-                                        &:focus
-                                            color: $white
-                                            border: 1px solid $green_alt
-                                            background-color: $green_alt
-                                            transition: .3s ease-in-out
-                                            &.cancel
-                                                color: $white
-                                                border: 1px solid $light_red
-                                                background-color: $light_red
-                                                transition: .3s ease-in-out
-                            &:last-child
-                                border-bottom: 1px solid transparent
 .no_contents
     sf_pro_regular(30px)
     color: $border_alt2
@@ -4905,7 +3692,19 @@ input::placeholder
     &.user
         &.alt
             #content
-                margin-bottom: 80px
+                max-width: 90%
+        &.alt_2
+            #content
+                margin-bottom: 30px
+                #default_form
+                    max-width: 65%
+        &.alt_3
+            #content
+                margin-bottom: 175px
+        &.alt_4
+            #content
+                margin-bottom: 30px
+                max-width: 80%
         #top_content
             position: relative
             align-items: flex-start
@@ -4916,262 +3715,12 @@ input::placeholder
                 color: $border_alt2
                 &:hover
                     color: $green
-            .user_info
-                flex: 0 0 80%
-                display: flex
-                flex-flow: row wrap
-                align-items: flex-start
-                img
-                    width: 90px
-                    height: 90px
-                    border-radius: 90%
-                .user_image_default
-                    sf_pro_bold(24px)
-                    text-transform: uppercase
-                    background-image: linear-gradient(137deg, $red, $orange)
-                    border-radius: 50%
-                    padding: 30px
-                    color: #fff
-                .user_details
-                    flex: 1 0 40%
-                    padding-left: 20px
-                    .user_name
-                        sf_pro_bold(26px)
-                        color: $white
-                    .user_contact
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        margin: 10px 0 5px
-                        a
-                            display: block
-                            color: $white
-                            sf_pro_regular(16px)
-                            &.number
-                                text-decoration: none
-                            &.email
-                                color: $blue
-                                margin-left: 20px
-                    .user_summary
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        margin-bottom: 30px
-                        .summary
-                            sf_pro_regular(16px)
-                            color: $border_alt2
-                            margin-left: 20px
-                            &.pending
-                                color: $red
-                            &:first-child
-                                margin-left: 0
-            .user_tabs
-                display: flex
-                flex-flow: row wrap
-                align-items: center
-                justify-content: center
-                position: absolute
-                top: calc(100% - 20px)
-                left: 0
-                right: 0
-                text-align: center
-                z-index: 1
-                .tab_title
-                    position: relative
-                    padding: 20px 40px
-                    sf_pro_medium(18px)
-                    color: $black
-                    background-color: $white
-                    text-decoration: none
-                    z-index: 1
-                    border-left: 1px solid $border
-                    transition: .3s ease-in-out
-                    &:first-child
-                        border-radius: 5px 0 0 5px
-                        border-left: 1px solid transparent
-                    &:last-child
-                        border-radius: 0 5px 5px 0
-                    &::before
-                        content: ''
-                        position: absolute
-                        bottom: 0
-                        left: 0
-                        right: 0
-                        height: 0px
-                        background-color: $green
-                        opacity: 0
-                        transition: .3s ease-in-out
-                    &:hover,
-                    &.nuxt-link-exact-active
-                        background-color: $light_green
-                        color: $green
-                        transition: .3s ease-in-out
-                        &::before
-                            opacity: 1
-                            height: 3px
-                            transition: .3s ease-in-out
         #content
             width: 100%
             max-width: 75%
             margin: 0 auto
             padding: 80px 40px
-            margin-bottom: 175px
-            .cms_table_package
-                background-color: $white
-                border-radius: 5px
-                .no_results
-                    background-color: #f8f8fb
-                    text-align: center
-                    sf_pro_medium(50px)
-                    color: $gray_alternate
-                    text-align: center
-                    padding: 50px 0
-                .table_package
-                    padding: 40px
-                    border-bottom: 2px dashed $border
-                    &:last-child
-                        border-bottom: 2px dashed transparent
-                    .package_title
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        sf_pro_bold(22px)
-                        color: $black
-                        span
-                            sf_pro_medium(12px)
-                            border-radius: 5px
-                            padding: 5px
-                            margin-left: 10px
-                            text-transform: uppercase
-                            &.shared
-                                color: $blue
-                                background-color: $light_blue
-                            &.warning
-                                color: $white
-                                background-color: $red
-                    .package_details
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        justify-content: space-between
-                        margin-top: 30px
-                        label
-                            display: block
-                            sf_pro_regular(16px)
-                            color: $border_alt2
-                            margin-top: 10px
-                            a
-                                padding: 3px 5px
-                                margin-left: 5px
-                                color: $green
-                                background-color: transparent
-                                border-radius: 4px
-                                text-decoration: none
-                                transition: .3s ease-in-out
-                                &:hover
-                                    background-color: $green
-                                    color: $white
-                                    transition: .3s ease-in-out
-                        .package_status
-                            display: flex
-                            flex-flow: row wrap
-                            align-items: center
-                            text-align: center
-                            .box
-                                position: relative
-                                width: 100px
-                                height: 100px
-                                border: 1px solid $border
-                                &.margin
-                                    margin-left: 15px
-                                .overlay
-                                    position: absolute
-                                    top: 50%
-                                    left: 0
-                                    right: 0
-                                    text-align: center
-                                    transform: translateY(-50%)
-                                    p
-                                        sf_pro_medium(18px)
-                                        color: $black
-                                        margin-bottom: 0
-                                    label
-                                        margin-top: 0
-                        .package_date
-                            display: flex
-                            flex-flow: row wrap
-                            align-items: center
-                            text-align: center
-                            .date
-                                &.margin
-                                    margin-left: 60px
-                                p
-                                    sf_pro_medium(18px)
-                                    color: $black
-                                    margin-bottom: 0
-                        .package_action
-                            .package_options
-                                position: relative
-                                &.toggled
-                                    .option_btn
-                                        background-color: $light_green
-                                        border: 1px solid $light_green
-                                        transition: .3s ease-in-out
-                                    .option_selector
-                                        top: calc(100% + 10px)
-                                        opacity: 1
-                                        visibility: visible
-                                        transition: .3s ease-in-out
-                                .option_btn
-                                    display: inline-block
-                                    width: 225px
-                                    sf_pro_medium(16px)
-                                    font-weight: normal
-                                    text-decoration: none
-                                    outline: none
-                                    color: $green
-                                    padding: 17px
-                                    background-color: #F6F6F6
-                                    background-image: url('/icons/custom-select-icon.svg')
-                                    background-position: calc(100% - 15px) center
-                                    background-repeat: no-repeat
-                                    border: 1px solid #F6F6F6
-                                    border-radius: 3px
-                                    position: relative
-                                    text-align: center
-                                    cursor: pointer
-                                    user-select: none
-                                    margin-top: 10px
-                                    transition: 0.3s ease-in-out
-                                    &:hover
-                                        background-color: $light_green
-                                        border: 1px solid $light_green
-                                        transition: .3s ease-in-out
-                                .option_selector
-                                    position: absolute
-                                    top: calc(100% + 30px)
-                                    left: 0
-                                    width: 100%
-                                    background-color: $white
-                                    border-radius: 3px
-                                    padding: 10px 0
-                                    z-index: 1
-                                    opacity: 0
-                                    visibility: hidden
-                                    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.16)
-                                    transition: .3s ease-in-out
-                                    .option_link
-                                        display: block
-                                        sf_pro_regular(15px)
-                                        color: $black
-                                        padding: 15px 20px
-                                        text-decoration: none
-                                        background-color: transparent
-                                        transition: .3s ease-in-out
-                                        &:hover
-                                            background-color: $light_green
-                                            color: $green
-                                            transition: .3s ease-in-out
+            margin-bottom: 80px
 
     #top_content
         display: flex
@@ -5189,212 +3738,6 @@ input::placeholder
                 margin-left: 10px
                 sf_pro_bold(18px)
                 color: $border_alt2
-        &.booker
-            .action_wrapper
-                .actions
-                    flex: 0 0 65%
-                    .customer_filter_flex
-                        &.disable_booker
-                            opacity: 0.5
-                            pointer-events: none
-                            transition: .3s ease-in-out
-                        flex: 1 0 auto
-                        display: flex
-                        flex-flow: row wrap
-                        align-items: center
-                        opacity: 1
-                        transition: .3s ease-in-out
-                        .form_group
-                            position: relative
-                            flex: 0 0 30%
-                            &.customer
-                                flex: 0 0 15%
-                            .customer_selection
-                                position: absolute
-                                top: 105%
-                                z-index: 2
-                                background-color: #fff
-                                width: 100%
-                                padding: 10px 3px 10px 0
-                                border-radius: 3px
-                                box-shadow: 20px 20px 40px rgba(0,0,0,0.16)
-                                &.scrollable
-                                    .customer_selection_list
-                                        height: 350px
-                                        overflow-x: hidden
-                                        overflow-y: auto
-                                        .customer_wrapper
-                                            margin-right: 5px
-                                            padding: 10px 0
-                                .customer_selection_list
-                                    .customer_wrapper
-                                        display: flex
-                                        flex-flow: row wrap
-                                        align-items: center
-                                        background-color: transparent
-                                        padding: 10px 20px
-                                        transition: .3s ease-in-out
-                                        img
-                                            flex: 0 0 35px
-                                            width: 35px
-                                            border-radius: 50%
-                                        .customer_image
-                                            position: relative
-                                            text-transform: uppercase
-                                            background-image: linear-gradient(137deg, $red, $orange)
-                                            sf_pro_regular(16px)
-                                            border-radius: 50%
-                                            padding: 8px
-                                            color: $white
-                                        .customer_name
-                                            sf_pro_medium(16px)
-                                            color: $black
-                                            padding-left: 20px
-                                            transition: .3s ease-in-out
-                                        &:hover
-                                            background-color: $light_green
-                                            transition: .3s ease-in-out
-                                            .customer_name
-                                                color: $green
-                                                transition: .3s ease-in-out
-                                    .no_results
-                                        text-align: center
-                                        sf_pro_medium(16px)
-                                        color: $black
-                                        transition: .3s ease-in-out
-                        .customer_selected
-                            position: relative
-                            flex: 1 0 auto
-                            margin-left: 20px
-                            background-color: $white
-                            border: 2px dashed $border_alt2
-                            border-radius: 3px
-                            text-align: center
-                            height: 100%
-                            min-height: 135px
-                            z-index: 1
-                            transition: .3s ease-in-out
-                            &.selected
-                                border: 2px dashed $green
-                                border-radius: 3px
-                                transition: .3s ease-in-out
-                                .no_results
-                                    transform: translateY(-15px)
-                                    opacity: 0
-                                    visibility: hidden
-                                    transition: .3s ease-in-out
-                                .customer_picked
-                                    transform: translateY(0px)
-                                    opacity: 1
-                                    visibility: visible
-                                    transition: .3s ease-in-out
-                            .customer_picked
-                                text-align: left
-                                position: absolute
-                                top: 0
-                                left: 0
-                                right: 0
-                                bottom: 0
-                                z-index: 1
-                                opacity: 0
-                                visibility: hidden
-                                transition: .3s ease-in-out
-                                transform: translateY(15px)
-                                .customer_header
-                                    display: flex
-                                    flex-flow: row wrap
-                                    align-items: center
-                                    justify-content: flex-start
-                                    padding: 20px 20px 0
-                                    margin-bottom: 20px
-                                    .customer_image
-                                        width: 50px
-                                        height: 50px
-                                        border-radius: 90%
-                                    .customer_default_image
-                                        sf_pro_bold(17px)
-                                        text-transform: uppercase
-                                        background-image: linear-gradient(137deg, $red, $orange)
-                                        border-radius: 50%
-                                        padding: 15px
-                                        color: #fff
-                                    .customer_details
-                                        padding-left: 10px
-                                        .customer_name
-                                            sf_pro_medium(18px)
-                                            color: $green
-                                            padding-bottom: 5px
-                                            display: flex
-                                            flex-flow: row wrap
-                                            align-items: center
-                                            .types
-                                                sf_pro_regular(12px)
-                                                padding-left: 5px
-                                                img
-                                                    width: 17px
-                                                    height: 17px
-                                            .email
-                                                padding-left: 10px
-                                                sf_pro_regular(14px)
-                                                color: $blue
-                                                text-decoration: none
-                                                img
-                                                    width: 23px
-                                                    height: 100%
-                                        .customer_info
-                                            span
-                                                sf_pro_regular(15px)
-                                                color: $gray_alternate
-                                        .close_wrapper
-                                            top: calc(0% + 5px)
-                                            right: calc(0% + 5px)
-                                            transform: translateY(0%)
-                                .customer_footer
-                                    display: flex
-                                    flex-flow: row wrap
-                                    align-items: center
-                                    justify-content: center
-                                    text-align: center
-                                    border-top: 1px solid $border
-                                    a
-                                        flex: 1 0 auto
-                                        padding: 10px
-                                        sf_pro_regular(15px)
-                                        color: $black
-                                        background-color: transparent
-                                        text-decoration: none
-                                        border-right: 1px solid $border
-                                        transition: .3s ease-in-out
-                                        &:last-child
-                                            border-right: 1px solid transparent
-                                        &:hover,
-                                        &:focus
-                                            color: $green
-                                            background-color: $light_green
-                                            transition: .3s ease-in-out
-                            .no_results
-                                position: absolute
-                                top: 50%
-                                left: 0
-                                right: 0
-                                opacity: 1
-                                visibility: visible
-                                z-index: 0
-                                transform: translateY(-50%)
-                                transition: .3s ease-in-out
-                                .customer_label
-                                    opacity: 1
-                                    visibility: visible
-                                    sf_pro_regular(18px)
-                                    color: $border_alt2
-                                    transition: .3s ease-in-out
-                                .customer_text
-                                    opacity: 1
-                                    visibility: visible
-                                    sf_pro_regular(15px)
-                                    color: $black
-                                    margin-top: 10px
-                                    transition: .3s ease-in-out
         &.table
             box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.09)
             padding: 60px 40px 40px
@@ -5480,6 +3823,7 @@ input::placeholder
                     display: flex
                     flex-flow: row wrap
                     align-items: center
+                    margin-bottom: 0
                     .action_btn
                         display: flex
                         flex-flow: row wrap
@@ -5638,7 +3982,7 @@ input::placeholder
 
 .slide-enter-active,
 .slide-leave-active
-    transition: all .3s ease-in-out
+    transition: all .2s ease-in-out
 
 .slide-enter,
 .slide-leave-to
@@ -5687,6 +4031,19 @@ input::placeholder
 	to {
 		opacity: 1
         transform: translateX(0px)
+    }
+}
+
+/**
+ * Slide In Y */
+@keyframes slide_in_y {
+	from {
+		opacity: 0
+        transform: translate(100px, -50%)
+    }
+	to {
+		opacity: 1
+        transform: translate(0, -50%)
     }
 }
 

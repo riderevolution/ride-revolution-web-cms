@@ -5,9 +5,9 @@
                 <h1 class="header_title">Dashboard</h1>
             </section>
             <section id="content" class="main">
-                <nuxt-link to="/branch/greenbelt" class="cms_summary wrapper">
+                <div class="cms_summary wrapper">
                     <div class="summary_header">
-                        <h2 class="header_title">Greenbelt</h2>
+                        <h2 class="header_title">Sample</h2>
                         <h2 class="action_highlight"><span>&#9679;</span> Juan Dela Cruz</h2>
                     </div>
                     <div class="summary_body">
@@ -34,10 +34,10 @@
                             </div>
                         </div>
                     </div>
-                </nuxt-link>
-                <nuxt-link to="/branch/shangri-la-plaza" class="cms_summary wrapper">
+                </div>
+                <div class="cms_summary wrapper">
                     <div class="summary_header">
-                        <h2 class="header_title">Shangri-la Plaza</h2>
+                        <h2 class="header_title">Sample</h2>
                         <h2 class="action_highlight"><span>&#9679;</span> Juan Dela Cruz</h2>
                     </div>
                     <div class="summary_body">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                </nuxt-link>
+                </div>
             </section>
         </div>
         <foot v-if="$store.state.isAuth" />

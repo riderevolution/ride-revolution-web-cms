@@ -18,31 +18,10 @@
             <loading v-if="$store.state.isLoading" />
         </transition>
         <transition name="fade">
-            <error-status v-if="$store.state.errorStatus" />
-        </transition>
-        <transition name="fade">
             <password-sent v-if="$store.state.resetStatus" />
         </transition>
         <transition name="fade">
             <reset-successful v-if="$store.state.resetSuccessfulStatus" />
-        </transition>
-        <transition name="fade">
-            <quick-sale v-if="$store.state.quickSaleStatus" />
-        </transition>
-        <transition name="fade">
-            <customer-credit-quick-sale v-if="$store.state.customerCreditQuickSaleStatus" />
-        </transition>
-        <transition name="fade">
-            <customer-product-quick-sale v-if="$store.state.customerProductQuickSaleStatus" />
-        </transition>
-        <transition name="fade">
-            <successful v-if="$store.state.successfulStatus" />
-        </transition>
-        <transition name="fade">
-            <successful-later v-if="$store.state.successfulLaterStatus" />
-        </transition>
-        <transition name="fade">
-            <studio-changer v-if="$store.state.changeStudioStatus" />
         </transition>
     </div>
 </template>
@@ -51,43 +30,15 @@
     import Navbar from '../components/Navbar'
     import Loading from '../components/Loading'
     import HeaderNav from '../components/HeaderNav'
-    import ErrorStatus from '../components/modals/Error'
     import PasswordSent from '../components/modals/PasswordSent'
     import ResetSuccessful from '../components/modals/ResetSuccessful'
-    import QuickSale from '../components/modals/QuickSale'
-    import CustomerCreditQuickSale from '../components/modals/CustomerCreditQuickSale'
-    import CustomerProductQuickSale from '../components/modals/CustomerProductQuickSale'
-    import Successful from '../components/modals/Successful'
-    import SuccessfulLater from '../components/modals/SuccessfulLater'
-    import StudioChanger from '../components/modals/StudioChanger'
     export default {
         components: {
             Navbar,
             Loading,
             HeaderNav,
-            ErrorStatus,
             PasswordSent,
-            ResetSuccessful,
-            CustomerCreditQuickSale,
-            CustomerProductQuickSale,
-            QuickSale,
-            Successful,
-            SuccessfulLater,
-            StudioChanger
-        },
-        watch:{
-            $route (to, from){
-                const me = this
-                me.$store.state.assignWaitlistBookerUI = false
-                me.$store.state.disableBookerUI = false
-                me.$store.state.classPackageID = 0
-                me.$store.state.compID = 0
-                me.$store.state.bookingID = 0
-                me.$store.state.scheduleID = 0
-                me.$store.state.seatID = 0
-                me.$store.state.waitlistID = 0
-                me.$store.state.pendingCustomerID = 0
-            }
+            ResetSuccessful
         },
         data () {
             return {
@@ -112,10 +63,10 @@
                 }
             },
         },
-        async mounted () {
+        mounted () {
             const me = this
-            if (!me.routes.includes(me.$route.path)) {
-                await me.validateToken()
+            if (!me.$store.state.isAuth) {
+                me.$router.push('/login')
             }
             document.addEventListener('contextmenu', event => event.preventDefault())
             document.body.classList.add('cms')
