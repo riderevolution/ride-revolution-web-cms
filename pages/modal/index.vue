@@ -9,31 +9,31 @@
                     <div class="cms_col">
                         <div class="form_group">
                             <label>Confirm Modal Button</label>
-                            <div class="action_btn" @click="$store.state.confirmStatus = true">Action</div>
+                            <div class="action_btn alternate" @click="$store.state.confirmStatus = true">Action</div>
                         </div>
                     </div>
                     <div class="cms_col">
                         <div class="form_group">
                             <label>Successful Modal Button</label>
-                            <div class="action_btn" @click="$store.state.successfulStatus = true">Action</div>
+                            <div class="action_btn alternate" @click="$store.state.successfulStatus = true">Action</div>
                         </div>
                     </div>
                     <div class="cms_col">
                         <div class="form_group">
                             <label>Form Modal Button</label>
-                            <div class="action_btn" @click="$store.state.formStatus = true">Action</div>
+                            <div class="action_btn alternate" @click="$store.state.formStatus = true">Action</div>
                         </div>
                     </div>
                     <div class="cms_col">
                         <div class="form_group">
                             <label>Error Modal Button</label>
-                            <div class="action_btn" @click="$store.state.errorStatus = true">Action</div>
+                            <div class="action_btn alternate" @click="$store.state.errorStatus = true">Action</div>
                         </div>
                     </div>
                     <div class="cms_col">
                         <div class="form_group">
                             <label>Import Modal Button</label>
-                            <div class="action_btn" @click="$store.state.importStatus = true">Action</div>
+                            <div class="action_btn alternate" @click="$store.state.importStatus = true">Action</div>
                         </div>
                     </div>
                 </div>
