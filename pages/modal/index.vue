@@ -36,6 +36,12 @@
                             <div class="action_btn alternate" @click="$store.state.importStatus = true">Action</div>
                         </div>
                     </div>
+                    <div class="cms_col">
+                        <div class="form_group">
+                            <label>Loader Button</label>
+                            <div class="action_btn alternate" @click="triggerLoader()">Action</div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -73,6 +79,15 @@
             UserForm,
             ErrorPrompt,
             Import
+        },
+        methods: {
+            triggerLoader () {
+                const me = this
+                me.loader(true)
+                setTimeout( () => {
+                    me.loader(false)
+                }, 1500)
+            }
         }
     }
 </script>
