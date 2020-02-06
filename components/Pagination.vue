@@ -29,61 +29,61 @@
         methods: {
             nextPage (current, last) {
                 const me = this
-                if (current != last) {
-                    me.loader(true)
-                    me.$axios.get(`${me.apiRoute}?page=${current + 1}`).then(res => {
-                        if (me.$route.params.slug == 'transactions') {
-                            me.$parent.res = res.data.customer.payments
-                        } else {
-                            me.$parent.res = res.data
-                        }
-                    }).catch(err => {
-                        me.$store.state.errorList = err.response.data.errors
-                        me.$store.state.errorStatus = true
-                    }).then(() => {
-                        setTimeout( () => {
-                            me.loader(false)
-                        }, 500)
-                    })
-                }
+                // if (current != last) {
+                    // me.loader(true)
+                    // me.$axios.get(`${me.apiRoute}?page=${current + 1}`).then(res => {
+                    //     if (me.$route.params.slug == 'transactions') {
+                    //         me.$parent.res = res.data.customer.payments
+                    //     } else {
+                    //         me.$parent.res = res.data
+                    //     }
+                    // }).catch(err => {
+                    //     me.$store.state.errorList = err.response.data.errors
+                    //     me.$store.state.errorStatus = true
+                    // }).then(() => {
+                    //     setTimeout( () => {
+                    //         me.loader(false)
+                    //     }, 500)
+                    // })
+                // }
             },
             currentPage (count) {
                 const me = this
-                me.loader(true)
-                me.$axios.get(`${me.apiRoute}?page=${count}`).then(res => {
-                    if (me.$route.params.slug == 'transactions') {
-                        me.$parent.res = res.data.customer.payments
-                    } else {
-                        me.$parent.res = res.data
-                    }
-                }).catch(err => {
-                    me.$store.state.errorList = err.response.data.errors
-                    me.$store.state.errorStatus = true
-                }).then(() => {
-                    setTimeout( () => {
-                        me.loader(false)
-                    }, 500)
-                })
+                // me.loader(true)
+                // me.$axios.get(`${me.apiRoute}?page=${count}`).then(res => {
+                //     if (me.$route.params.slug == 'transactions') {
+                //         me.$parent.res = res.data.customer.payments
+                //     } else {
+                //         me.$parent.res = res.data
+                //     }
+                // }).catch(err => {
+                //     me.$store.state.errorList = err.response.data.errors
+                //     me.$store.state.errorStatus = true
+                // }).then(() => {
+                //     setTimeout( () => {
+                //         me.loader(false)
+                //     }, 500)
+                // })
             },
             prevPage (current, last) {
                 const me = this
-                if (current != 1) {
-                    me.loader(true)
-                    me.$axios.get(`${me.apiRoute}?page=${current - 1}`).then(res => {
-                        if (me.$route.params.slug == 'transactions') {
-                            me.$parent.res = res.data.customer.payments
-                        } else {
-                            me.$parent.res = res.data
-                        }
-                    }).catch(err => {
-                        me.$store.state.errorList = err.response.data.errors
-                        me.$store.state.errorStatus = true
-                    }).then(() => {
-                        setTimeout( () => {
-                            me.loader(false)
-                        }, 500)
-                    })
-                }
+                // if (current != 1) {
+                    // me.loader(true)
+                    // me.$axios.get(`${me.apiRoute}?page=${current - 1}`).then(res => {
+                    //     if (me.$route.params.slug == 'transactions') {
+                    //         me.$parent.res = res.data.customer.payments
+                    //     } else {
+                    //         me.$parent.res = res.data
+                    //     }
+                    // }).catch(err => {
+                    //     me.$store.state.errorList = err.response.data.errors
+                    //     me.$store.state.errorStatus = true
+                    // }).then(() => {
+                    //     setTimeout( () => {
+                    //         me.loader(false)
+                    //     }, 500)
+                    // })
+                // }
             }
         }
     }
