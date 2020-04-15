@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <div id="admin" class="cms_dashboard">
+        <div id="admin" class="cms_dashboard" v-if="$store.state.isAuth">
             <section id="top_content">
                 <h1 class="header_title">Dashboard</h1>
             </section>
