@@ -12,11 +12,11 @@
             <div class="tags_group">
                 <div class="form_group">
                     <label :for="`image_title${unique}`">Icon Title</label>
-                    <input type="text" name="image_title[]" :id="`image_title${unique}`" autocomplete="off" class="action_form default_text" v-model="dataImage.title">
+                    <input type="text" name="image_title[]" :id="`image_title${unique}`" autocomplete="off" class="default_text" v-model="dataImage.title">
                 </div>
                 <div class="form_group">
                     <label :for="`image_alt${unique}`">Icon Alt</label>
-                    <input type="text" name="image_alt[]" :id="`image_alt${unique}`" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
+                    <input type="text" name="image_alt[]" :id="`image_alt${unique}`" autocomplete="off" class="default_text" v-model="dataImage.alt">
                     <input type="hidden" name="image_id[]" :value="`${(item.id) ? item.id : ''}`">
                 </div>
             </div>

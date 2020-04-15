@@ -107,7 +107,7 @@
                     </div>
                     <div class="form_wrapper">
                         <div class="form_header_wrapper">
-                            <h2 class="form_title">Password</h2>
+                            <h2 class="form_title">Tick Box</h2>
                         </div>
                         <div class="form_main_group">
                             <div class="form_flex">
@@ -206,7 +206,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form_main_group alternate">
+                        <div class="form_main_group alternate no_bm">
                             <div class="form_group">
                                 <div class="form_group_header">Sample Radio Inline</div>
                                 <transition name="slide"><span class="validation_errors" v-if="error">Please choose yes or no</span></transition>

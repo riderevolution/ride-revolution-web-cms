@@ -148,7 +148,26 @@
                         me.isHovered = true
                     }, 100)
                 }
+            },
+            checkHeightViewport () {
+                const me = this
+                let heightToDeduct = document.querySelector('.navbar_container .navbar .logo')
+                if (document.documentElement && document.documentElement.clientHeight) {
+                    document.querySelector('.navbar_container .navbar .nav_list').style.maxHeight = `${document.documentElement.clientHeight - heightToDeduct.scrollHeight}px`
+                }
             }
+        },
+        mounted () {
+            const me = this
+            me.checkHeightViewport()
+        },
+        beforeMount () {
+            window.addEventListener('load', this.checkHeightViewport)
+            window.addEventListener('resize', this.checkHeightViewport)
+        },
+        beforeDestroy () {
+            window.removeEventListener('resize', this.checkHeightViewport)
+            window.removeEventListener('load', this.checkHeightViewport)
         }
     }
 </script>

@@ -23,7 +23,11 @@
         </div>
         <div :class="`header_select ${(isToggled) ? 'active' : ''}`" v-click-outside="closeMe">
             <div class="header_user" @click="showSelect()">
-                <div class="user_picture">D</div>
+                <div class="user_picture">
+                    <div class="overlay">
+                        DB
+                    </div>
+                </div>
                 <div class="user_name">Hello, Designblue!</div>
             </div>
             <div class="user_select">
