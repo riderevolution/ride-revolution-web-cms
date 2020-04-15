@@ -6,7 +6,7 @@
                 <div class="text" v-for="(error, key) in $store.state.errorList" :key="key">{{ error }}</div>
             </div>
             <div class="button_group">
-                <div class="action_success_btn confirm margin" @click="toggleClose()">OK</div>
+                <div class="action_success_btn confirm" @click="toggleClose()">OK</div>
             </div>
         </div>
     </div>
@@ -17,8 +17,12 @@
         methods: {
             toggleClose () {
                 const me = this
-                me.$store.state.errorStatus = false
-                document.body.classList.remove('no_scroll')
+                if (me.$store.state.isErrorOverlay) {
+                    me.$store.state.errorStatus = false
+                } else {
+                    me.$store.state.errorStatus = false
+                    document.body.classList.remove('no_scroll')
+                }
             }
         }
     }

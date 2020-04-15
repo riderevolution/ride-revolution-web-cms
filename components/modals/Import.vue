@@ -6,7 +6,7 @@
                 <h2 class="form_title">Import</h2>
                 <div class="form_close" @click="toggleClose()"></div>
                 <div class="modal_main_group">
-                    <div class="form_photo alternate">
+                    <div class="form_photo alternate no_margin">
                         <input type="file" id="file" name="file" class="action_photo" @change="getFile($event)" v-validate="'required'">
                         <label for="file">
                             <span>{{ fileTitle }}</span>
