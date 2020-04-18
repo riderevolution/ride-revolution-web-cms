@@ -1,8 +1,8 @@
 <template>
 	<div class="form_image_group">
-        <label>Image <strong v-if="dimension.imageWidth != 0">( Max: 2MB; Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
+        <label>Image <span>*</span> <strong v-if="dimension.imageWidth != 0">( Max: 2MB: Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
 		<image-handler v-for="(image, key) in images" :key="key" :unique="key" :item="image" ref="imagePicker" :parent="parent" :tableName="tableName" :dimension="dimension" />
-		<button type="button" class="action_image_add" v-if="multiple" @click="addImage()">Add Image</button>
+		<!-- <button type="button" class="action_image_add" v-if="multiple" @click="addImage()">Add Image</button> -->
 	</div>
 </template>
 
@@ -31,12 +31,13 @@
                 }
             }
 		},
+		inject: ['$validator'],
 		components: {
 			ImageHandler
 		},
 		data () {
 			return {
-				tableName: '',
+				tableName: 'images',
                 files: [],
 				images: [0],
 				showCloser: false
@@ -59,16 +60,18 @@
 				}, 10)
 			}
 		},
-		async mounted () {
-            await setTimeout( () => {
-                if (this.data != '') {
-    				this.images = this.data
+		mounted () {
+			let ctr = 0
+			setInterval( () => {
+				if (ctr < 1 && this.data != '') {
+					this.images = this.data
 					this.data.forEach((item, index) => {
 						this.files.push(null)
 					})
-    			}
-                this.determineIfShowCloser()
-            }, 200)
+					ctr++
+				}
+				this.determineIfShowCloser()
+			}, 500)
 		}
 	}
 </script>

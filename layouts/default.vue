@@ -45,6 +45,12 @@
             ResetSuccessful,
             ErrorPrompt
         },
+        watch:{
+            $route (to, from){
+                const me = this
+                me.$store.state.errorList = []
+            }
+        },
         data () {
             return {
                 routes: [
@@ -70,8 +76,8 @@
         },
         mounted () {
             const me = this
-            if (!me.$store.state.isAuth) {
-                me.$router.push('/login')
+            if (!me.routes.includes(me.$route.path)) {
+                me.validateToken()
             }
             document.addEventListener('contextmenu', event => event.preventDefault())
             document.body.classList.add('cms')
@@ -84,7 +90,19 @@
         },
         head () {
             return {
-                title: 'Ride Revolution | Admin Panel'
+                title: 'Ride Revolution | Admin Panel',
+                script: [
+                    { src: 'https://code.jquery.com/jquery-3.2.1.slim.min.js' },
+                    { src: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.js' },
+                    { src: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/mode/xml/xml.js' },
+                    { src: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/2.36.0/formatting.js' },
+                    { src: 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js' }
+                ],
+                link: [
+                    { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/codemirror.css' },
+                    { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/3.20.0/theme/monokai.css' },
+                    { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css' }
+                ]
             }
         }
     }

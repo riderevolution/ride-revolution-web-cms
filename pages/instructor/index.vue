@@ -16,8 +16,15 @@
                     <div class="filter_wrapper">
                         <form class="filter_flex" id="filter" @submit.prevent="submitFilter()">
                             <div class="form_group">
-                                <label for="q">Find a studio</label>
-                                <input type="text" name="q" autocomplete="off" placeholder="Search for a studio" class="default_text search_alternate">
+                                <label for="q">Find a Instructor</label>
+                                <input type="text" name="q" autocomplete="off" placeholder="Search for a instructor" class="default_text search_alternate">
+                            </div>
+                            <div class="form_group margin">
+                                <label for="studio_id">Studio</label>
+                                <select class="default_select alternate" name="studio_id">
+                                    <option value="0" selected>All Studios</option>
+                                    <option :value="data.id" v-for="(data, key) in studios" :key="key">{{ data.name }}</option>
+                                </select>
                             </div>
                             <button type="submit" name="button" class="action_btn alternate margin">Search</button>
                         </form>
@@ -27,25 +34,34 @@
                     <table class="cms_table">
                         <thead>
                             <tr>
-                                <th>Color</th>
+                                <th>Full Name</th>
                                 <th>Studio</th>
-                                <th>Purchases Email Sender</th>
-                                <th>Reservations Email Sender</th>
+                                <th>Nickname</th>
+                                <th>Email Address</th>
+                                <th>Contact No.</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="res.length > 0">
-                            <tr v-for="(data, key) in res" :key="key">
+                        <tbody v-if="res.instructors.data.length > 0">
+                            <tr v-for="(data, key) in res.instructors.data" :key="key">
                                 <td>
-                                    <div class="table_color_code" :style="`background-color: ${data.color_code}`"></div>
+                                    <div class="thumb">
+                                        <img :src="data.instructor_details.images[0].path_resized" v-if="data.instructor_details.images[0].path != null" />
+                                        <div class="table_image_default" v-else>
+                                            <div class="overlay">
+                                                {{ data.first_name.charAt(0) }}{{ data.last_name.charAt(0) }}
+                                            </div>
+                                        </div>
+                                        <div class="table_data_link">{{ data.first_name }} {{ data.last_name }}</div>
+                                    </div>
                                 </td>
-                                <td>{{ data.name }}</td>
-                                <td>{{ data.purchase_email }}</td>
-                                <td>{{ data.reservations_email }}</td>
+                                <td>{{ data.instructor_details.studio.name }}</td>
+                                <td>{{ data.instructor_details.nickname }}</td>
+                                <td>{{ data.email }}</td>
+                                <td>{{ (data.instructor_details != null) ? data.instructor_details.io_contact_number : '-' }}</td>
                                 <td>
                                     <div class="table_actions">
                                         <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
-                                        <nuxt-link class="table_action_success" :to="`${$route.path}/${data.id}/album`">Add Album</nuxt-link>
                                     </div>
                                 </td>
                             </tr>
@@ -56,6 +72,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <pagination :apiRoute="res.instructors.path" :current="res.instructors.current_page" :last="res.instructors.last_page" />
                 </section>
             </div>
         </transition>
@@ -77,13 +94,26 @@
                 rowCount: 0,
                 totalCount: 0,
                 status: 1,
-                res: []
+                res: [],
+                studios: []
             }
         },
         methods: {
             submitFilter () {
                 const me = this
-                alert('<3')
+                let formData = new FormData(document.getElementById('filter'))
+                formData.append('enabled', me.status)
+                me.loader(true)
+                me.$axios.post(`api/instructors/search`, formData).then(res => {
+                    me.res = res.data
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             },
             toggleOnOff (value) {
                 const me = this
@@ -93,12 +123,16 @@
             fetchData (status) {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/studios?enabled=${status}`).then(res => {
+                me.$axios.get(`api/instructors?enabled=${status}`).then(res => {
                     if (res.data) {
                         setTimeout( () => {
-                            me.res = res.data.studios
+                            me.$axios.get('api/studios?enabled=1').then(res => {
+                                me.studios = res.data.studios
+                            })
+
+                            me.res = res.data
                             me.rowCount = document.getElementsByTagName('th').length
-                            me.totalCount = me.res.length
+                            me.totalCount = me.res.instructors.total
                             me.loaded = true
                         }, 500)
                     }

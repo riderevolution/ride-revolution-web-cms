@@ -38,6 +38,13 @@
                         image: '/icons/navbar/dashboard-unselected.png'
                     },
                     {
+                        title: 'Instructor',
+                        link: '/instructor',
+                        hasLink: true,
+                        class: 'admin',
+                        image: '/icons/navbar/admin-unselected.png'
+                    },
+                    {
                         title: 'Studio',
                         link: '/studio',
                         hasLink: true,
@@ -103,6 +110,19 @@
                                 title: 'Bulk Update',
                                 link: '/table/bulk-update'
                             },
+                        ]
+                    },
+                    {
+                        title: 'Taxonomy',
+                        link: '/taxonomy',
+                        hasLink: false,
+                        class: 'admin nav_parent_alt',
+                        image: '/icons/navbar/admin-unselected.png',
+                        subItems: [
+                            {
+                                title: 'Specialization',
+                                link: '/taxonomy/specialization'
+                            }
                         ]
                     }
                 ],
