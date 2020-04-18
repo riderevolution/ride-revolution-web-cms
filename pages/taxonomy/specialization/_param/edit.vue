@@ -119,11 +119,11 @@
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')
                         me.$axios.post(`api/specializations/${me.$route.params.param}`, formData).then(res => {
-                            setTimeout(() => {
-                                if (res.data) {
-                                    me.notify('Content has been updated')
-                                }
-                            }, 500)
+                            if (res.data) {
+                                setTimeout(() => {
+                                        me.notify('Content has been updated')
+                                }, 500)
+                            }
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true

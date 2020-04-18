@@ -141,7 +141,7 @@
 				} else {
                     let shouldDelete = confirm('This image will be deleted from database as you proceed. Are you sure you want to continue?')
                     if (shouldDelete) {
-                        me.$axios.delete(`api/images/${key}`).then(res => {
+                        me.$axios.delete(`api/extras/images/${key}`).then(res => {
                             if (res.status == 200) {
                                 this.enabled = false
                                 this.$parent.determineIfShowCloser()

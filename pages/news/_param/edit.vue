@@ -3,9 +3,9 @@
         <transition name="fade">
             <div id="admin" class="cms_dashboard" v-if="loaded">
                 <section id="top_content" class="table">
-                    <nuxt-link to="/specialization" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Specialization</span></nuxt-link>
+                    <nuxt-link to="/news" class="action_back_btn"><img src="/icons/back-icon.svg"><span>News</span></nuxt-link>
                     <div class="action_wrapper">
-                        <h1 class="header_title">Add a Specialization</h1>
+                        <h1 class="header_title">Add a News</h1>
                     </div>
                 </section>
                 <section id="content">
@@ -18,10 +18,27 @@
                                 <h2 class="form_title">Information</h2>
                             </div>
                             <div class="form_main_group">
+                                <div class="form_flex">
+                                    <div class="form_group">
+                                        <label for="name">Name <span>*</span></label>
+                                        <input type="text" name="name" placeholder="Enter news name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
+                                    </div>
+                                    <div class="form_group">
+                                        <label for="date_published">Date Published <span>*</span></label>
+                                        <input type="date" name="date_published" :min="$moment().format('YYYY-MM-DD')" v-validate="{required: true}" autocomplete="off" class="default_text date">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ errors.first('date_published') | properFormat }}</span></transition>
+                                    </div>
+                                </div>
                                 <div class="form_group">
-                                    <label for="name">Name <span>*</span></label>
-                                    <input type="text" name="name" placeholder="Enter specialization name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-]*$', max: 30}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
+                                    <label for="summary">Summary <span>*</span></label>
+                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:200'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ errors.first('summary') | properFormat }}</span></transition>
+                                </div>
+                                <div class="form_group">
+                                    <label for="description">Description <span>*</span></label>
+                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:2000'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -30,14 +47,15 @@
                                 <h2 class="form_title">Image Upload</h2>
                             </div>
                             <div class="form_main_group">
-                                <image-handler-container ref="image_handler" :dimension="imageDimensions" />
+                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="res.images" :parent="res.id" />
+                                <image-handler-container ref="image_handler" :dimension="imageDimensions" :multiple="false" :data="res.images" :parent="res.id" />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
                             <div class="form_flex">
                                 <div class="form_check"></div>
                                 <div class="button_group">
-                                    <nuxt-link to="/specialization" class="action_cancel_btn">Cancel</nuxt-link>
+                                    <nuxt-link to="/news" class="action_cancel_btn">Cancel</nuxt-link>
                                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                                 </div>
                             </div>
@@ -53,18 +71,24 @@
 <script>
     import Foot from '../../../components/Foot'
     import ImageHandlerContainer from '../../../components/ImageHandlerContainer'
+    import BannerHandlerContainer from '../../../components/BannerHandlerContainer'
     export default {
         components: {
             Foot,
-            ImageHandlerContainer
+            ImageHandlerContainer,
+            BannerHandlerContainer
         },
         data () {
             return {
                 res: [],
                 loaded: false,
+                bannerDimensions: {
+                    imageWidth: 2562,
+                    imageHeight: 839
+                },
                 imageDimensions: {
-                    imageWidth: 41,
-                    imageHeight: 37
+                    imageWidth: 676,
+                    imageHeight: 371
                 }
             }
         },
@@ -115,23 +139,7 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
-                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
-                        me.$axios.post('api/specializations', formData).then(res => {
-                            if (res.data) {
-                                setTimeout(() => {
-                                    me.notify('Content has been created')
-                                }, 500)
-                            }
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
-                                me.loader(false)
-                                me.$router.push('/taxonomy/specialization')
-                            }, 500)
-                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -141,6 +149,33 @@
             },
             fetchData () {
                 const me = this
+                setTimeout( () => {
+                    $('#description').summernote({
+                        tabsize: 4,
+                        height: 200,
+                        followingToolbar: false,
+                        codemirror: {
+                            lineNumbers: true,
+                            htmlMode: true,
+                            mode: "text/html",
+                            tabMode: 'indent',
+                            lineWrapping: true
+                        }
+                    })
+                    $('#summary').summernote({
+                        tabsize: 4,
+                        height: 150,
+                        followingToolbar: false,
+                        disableResizeEditor: true,
+                        codemirror: {
+                            lineNumbers: true,
+                            htmlMode: true,
+                            mode: "text/html",
+                            tabMode: 'indent',
+                            lineWrapping: true
+                        }
+                    })
+                }, 100)
                 me.loaded = true
             }
         },

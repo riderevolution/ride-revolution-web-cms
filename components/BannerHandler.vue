@@ -3,7 +3,7 @@
         <div class="form_group">
             <input type="file" class="action_image" :id="`banner${unique}`" name="banner[]" ref="file" @change="getFile($event)" v-validate="`${(dataImage.id) ? '' : 'required|'}image|ext:jpeg,jpg,png|size:2000${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`">
             <input type="hidden" name="banner_id[]" v-model="dataImage.id">
-            <label class="action_image_label" :for="`banner{unique}`">Choose File</label>
+            <label class="action_image_label" :for="`banner${unique}`">Choose File</label>
             <div v-if="$parent.showCloser" class="action_image_remove" @click="removeImage($event, unique, item.id, parent)">Remove</div>
             <transition name="slide"><span class="validation_errors" v-if="errors.has('banner[]')">{{ errors.first('banner[]') | properFormat }}</span></transition>
         </div>
