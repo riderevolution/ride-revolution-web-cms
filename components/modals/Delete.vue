@@ -30,16 +30,27 @@
         methods: {
             proceedDelete () {
                 const me = this
-                me.$store.state.deleteStatus = false
                 if (me.$parent.isDelete) {
                     me.$parent.isDelete = false
                 }
+                me.loader(true)
                 me.$axios.delete(`${me.url}/${me.contentID}`).then(res => {
                     if (res.data) {
-                        me.$parent.fetchData(1)
+                        setTimeout( () => {
+                            me.$store.state.deleteStatus = false
+                            me.notify('Content has been deleted')
+                            me.$parent.fetchData(1)
+                        }, 500)
                     }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                        document.body.classList.remove('no_scroll')
+                    }, 500)
                 })
-                document.body.classList.remove('no_scroll')
             },
             toggleClose () {
                 const me = this

@@ -3,9 +3,9 @@
         <transition name="fade">
             <div id="admin" class="cms_dashboard" v-if="loaded">
                 <section id="top_content" class="table">
-                    <nuxt-link :to="`/studio/${$route.params.param}/album`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Album</span></nuxt-link>
+                    <nuxt-link to="/specialization" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Specialization</span></nuxt-link>
                     <div class="action_wrapper">
-                        <h1 class="header_title">Add an Album</h1>
+                        <h1 class="header_title">Add a Specialization</h1>
                     </div>
                 </section>
                 <section id="content">
@@ -15,13 +15,13 @@
                         </div>
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
-                                <h2 class="form_title">Album Overview</h2>
+                                <h2 class="form_title">Information</h2>
                             </div>
                             <div class="form_main_group">
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter album name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 25}">
+                                        <input type="text" name="name" placeholder="Enter album name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 30}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
@@ -35,17 +35,17 @@
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Image Upload</h2>
-                                <button type="button" class="action_btn" @click="addMultiple('image')">Add Image</button>
                             </div>
                             <div class="form_main_group">
-                                <image-handler-container ref="image_handler" :multiple="true" />
+                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" />
+                                <image-handler-container ref="image_handler" :dimension="imageDimensions" :multiple="false" />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
                             <div class="form_flex">
                                 <div class="form_check"></div>
                                 <div class="button_group">
-                                    <nuxt-link :to="`/studio/${$route.params.param}/album`" class="action_cancel_btn">Cancel</nuxt-link>
+                                    <nuxt-link to="/specialization" class="action_cancel_btn">Cancel</nuxt-link>
                                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                                 </div>
                             </div>
@@ -59,17 +59,27 @@
 </template>
 
 <script>
-    import Foot from '../../../../components/Foot'
-    import ImageHandlerContainer from '../../../../components/ImageHandlerContainer'
+    import Foot from '../../components/Foot'
+    import ImageHandlerContainer from '../../components/ImageHandlerContainer'
+    import BannerHandlerContainer from '../../components/BannerHandlerContainer'
     export default {
         components: {
             Foot,
-            ImageHandlerContainer
+            ImageHandlerContainer,
+            BannerHandlerContainer
         },
         data () {
             return {
                 res: [],
-                loaded: false
+                loaded: false,
+                bannerDimensions: {
+                    imageWidth: 2562,
+                    imageHeight: 839
+                },
+                imageDimensions: {
+                    imageWidth: 676,
+                    imageHeight: 371
+                }
             }
         },
         filters: {
@@ -115,20 +125,6 @@
             }
         },
         methods: {
-            /**
-             * [addMultiple add images or variants]
-             * @param {[string]} type [type of method]
-             */
-            addMultiple (type) {
-                const me = this
-                switch (type) {
-                    case 'image':
-                        setTimeout( () => {
-                            me.$refs.image_handler.addImage()
-                        }, 10)
-                        break
-                }
-            },
             submitForm () {
                 const me = this
                 me.$validator.validateAll().then(valid => {

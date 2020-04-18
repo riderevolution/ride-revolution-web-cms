@@ -16,6 +16,10 @@
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Information</h2>
+                                <div class="form_check">
+                                    <input type="checkbox" id="is_new" name="is_new" class="action_check">
+                                    <label for="is_new">New</label>
+                                </div>
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
@@ -46,7 +50,7 @@
                                 <button type="button" class="action_btn" @click="addMultiple('image')">Add Image</button>
                             </div>
                             <div class="form_main_group">
-                                <image-handler-container ref="image_handler" :dimension="imageDimensions" :data="(res.images.length > 0) ? res.images : ''" :multiple="true" />
+                                <image-handler-container ref="image_handler" :dimension="imageDimensions" :data="(res.images) ? res.images : ''" :multiple="true" :parent="res.id" />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">

@@ -52,65 +52,11 @@
                         image: '/icons/navbar/admin-unselected.png'
                     },
                     {
-                        title: 'Form',
-                        link: '/form',
+                        title: 'News',
+                        link: '/news',
                         hasLink: true,
                         class: 'admin',
                         image: '/icons/navbar/admin-unselected.png'
-                    },
-                    {
-                        title: 'Column',
-                        link: '/column',
-                        hasLink: true,
-                        class: 'admin',
-                        image: '/icons/navbar/admin-unselected.png'
-                    },
-                    {
-                        title: 'Button',
-                        link: '/button',
-                        hasLink: true,
-                        class: 'admin',
-                        image: '/icons/navbar/admin-unselected.png'
-                    },
-                    {
-                        title: 'Modal',
-                        link: '/modal',
-                        hasLink: true,
-                        class: 'admin',
-                        image: '/icons/navbar/admin-unselected.png'
-                    },
-                    {
-                        title: 'Table',
-                        link: '/table',
-                        hasLink: false,
-                        class: 'admin nav_parent_alt',
-                        image: '/icons/navbar/admin-unselected.png',
-                        subItems: [
-                            {
-                                title: 'Default',
-                                link: '/table/default'
-                            },
-                            {
-                                title: 'Default With Search',
-                                link: '/table/default-with-search'
-                            },
-                            {
-                                title: 'Default With Filter',
-                                link: '/table/default-with-filter'
-                            },
-                            {
-                                title: 'Accordion',
-                                link: '/table/accordion'
-                            },
-                            {
-                                title: 'Two Column',
-                                link: '/table/two-column'
-                            },
-                            {
-                                title: 'Bulk Update',
-                                link: '/table/bulk-update'
-                            },
-                        ]
                     },
                     {
                         title: 'Taxonomy',

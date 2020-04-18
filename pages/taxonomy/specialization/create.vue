@@ -18,26 +18,19 @@
                                 <h2 class="form_title">Information</h2>
                             </div>
                             <div class="form_main_group">
-                                <div class="form_flex">
-                                    <div class="form_group">
-                                        <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter album name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 30}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
-                                    </div>
-                                    <div class="form_group">
-                                        <label for="sequence">Sequence <span>*</span></label>
-                                        <input type="text" name="sequence" placeholder="Enter sequence" autocomplete="off" class="default_text" v-validate="{required: true, numeric: true, min_value: 1, max_value: 99}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('sequence')">{{ errors.first('sequence') | properFormat }}</span></transition>
-                                    </div>
+                                <div class="form_group">
+                                    <label for="name">Name <span>*</span></label>
+                                    <input type="text" name="name" placeholder="Enter specialization name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-]*$', max: 30}">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                 </div>
                             </div>
                         </div>
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
-                                <h2 class="form_title">Icon Upload</h2>
+                                <h2 class="form_title">Image Upload</h2>
                             </div>
                             <div class="form_main_group">
-                                <icon-handler-container ref="icon_handler" :dimension="iconDimensions" :multiple="true" :parent="res.id" />
+                                <image-handler-container ref="image_handler" :dimension="imageDimensions" />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
@@ -59,19 +52,19 @@
 
 <script>
     import Foot from '../../../components/Foot'
-    import IconHandlerContainer from '../../../components/IconHandlerContainer'
+    import ImageHandlerContainer from '../../../components/ImageHandlerContainer'
     export default {
         components: {
             Foot,
-            IconHandlerContainer
+            ImageHandlerContainer
         },
         data () {
             return {
                 res: [],
                 loaded: false,
-                iconDimensions: {
-                    imageWidth: 50,
-                    imageHeight: 44
+                imageDimensions: {
+                    imageWidth: 41,
+                    imageHeight: 37
                 }
             }
         },
@@ -122,7 +115,23 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        me.$axios.post('api/specializations', formData).then(res => {
+                            setTimeout(() => {
+                                if (res.data) {
+                                    me.notify('Content has been created')
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push('/taxonomy/specialization')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250

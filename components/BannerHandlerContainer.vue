@@ -1,12 +1,12 @@
 <template>
 	<div class="form_image_group">
-        <label>Icon <span>*</span> <strong v-if="dimension.imageWidth != 0">( Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
-		<icon-handler v-for="(image, key) in images" :key="key" :unique="key" :item="image" ref="imagePicker" :parent="parent" :tableName="tableName" :dimension="dimension" />
+        <label>Banner <span>*</span> <strong v-if="dimension.imageWidth != 0">( Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
+		<banner-handler v-for="(image, key) in images" :key="key" :unique="key" :item="image" ref="imagePicker" :parent="parent" :tableName="tableName" :dimension="dimension" />
 	</div>
 </template>
 
 <script>
-	import IconHandler from './IconHandler'
+	import BannerHandler from './BannerHandler'
 	export default {
 		props: {
 			data: {
@@ -28,7 +28,7 @@
 		},
 		inject: ['$validator'],
 		components: {
-			IconHandler
+			BannerHandler
 		},
 		data () {
 			return {

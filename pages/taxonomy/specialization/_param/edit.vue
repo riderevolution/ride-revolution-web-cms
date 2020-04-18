@@ -3,9 +3,9 @@
         <transition name="fade">
             <div id="admin" class="cms_dashboard" v-if="loaded">
                 <section id="top_content" class="table">
-                    <nuxt-link to="/specialization" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Specialization</span></nuxt-link>
+                    <nuxt-link to="/taxonomy/specialization" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Specialization</span></nuxt-link>
                     <div class="action_wrapper">
-                        <h1 class="header_title">Add a Specialization</h1>
+                        <h1 class="header_title">Update {{ res.name }}</h1>
                     </div>
                 </section>
                 <section id="content">
@@ -18,17 +18,10 @@
                                 <h2 class="form_title">Information</h2>
                             </div>
                             <div class="form_main_group">
-                                <div class="form_flex">
-                                    <div class="form_group">
-                                        <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter album name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 30}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
-                                    </div>
-                                    <div class="form_group">
-                                        <label for="sequence">Sequence <span>*</span></label>
-                                        <input type="text" name="sequence" placeholder="Enter sequence" autocomplete="off" class="default_text" v-validate="{required: true, numeric: true, min_value: 1, max_value: 99}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('sequence')">{{ errors.first('sequence') | properFormat }}</span></transition>
-                                    </div>
+                                <div class="form_group">
+                                    <label for="name">Name <span>*</span></label>
+                                    <input type="text" name="name" placeholder="Enter specialization name" v-model="res.name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-]*$', max: 30}">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -37,14 +30,14 @@
                                 <h2 class="form_title">Icon Upload</h2>
                             </div>
                             <div class="form_main_group">
-                                <icon-handler-container ref="icon_handler" :dimension="iconDimensions" :data="res.images" :multiple="true" :parent="res.id" />
+                                <image-handler-container ref="icon_handler" :dimension="imageDimensions" :data="res.images" :parent="res.id" />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
                             <div class="form_flex">
                                 <div class="form_check"></div>
                                 <div class="button_group">
-                                    <nuxt-link to="/specialization" class="action_cancel_btn">Cancel</nuxt-link>
+                                    <nuxt-link to="/taxonomy/specialization" class="action_cancel_btn">Cancel</nuxt-link>
                                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                                 </div>
                             </div>
@@ -59,19 +52,19 @@
 
 <script>
     import Foot from '../../../../components/Foot'
-    import IconHandlerContainer from '../../../../components/IconHandlerContainer'
+    import ImageHandlerContainer from '../../../../components/ImageHandlerContainer'
     export default {
         components: {
             Foot,
-            IconHandlerContainer
+            ImageHandlerContainer
         },
         data () {
             return {
                 res: [],
                 loaded: false,
-                iconDimensions: {
-                    imageWidth: 50,
-                    imageHeight: 44
+                imageDimensions: {
+                    imageWidth: 41,
+                    imageHeight: 37
                 }
             }
         },
@@ -122,7 +115,24 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
+                        me.$axios.post(`api/specializations/${me.$route.params.param}`, formData).then(res => {
+                            setTimeout(() => {
+                                if (res.data) {
+                                    me.notify('Content has been updated')
+                                }
+                            }, 500)
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push('/taxonomy/specialization')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -132,7 +142,22 @@
             },
             fetchData () {
                 const me = this
-                me.loaded = true
+                me.loader(true)
+                me.$axios.get(`api/specializations/${me.$route.params.param}`).then(res => {
+                    if (res.data) {
+                        setTimeout( () => {
+                            me.res = res.data.specialization
+                            me.loaded = true
+                        }, 500)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             }
         },
         mounted () {

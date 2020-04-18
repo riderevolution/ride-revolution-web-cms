@@ -6,7 +6,7 @@
                     <div class="action_wrapper">
                         <h1 class="header_title">Studios</h1>
                         <div class="actions">
-                            <div class="total">Total: {{ totalItems(totalCount) }}</div>
+                            <div class="total">Total: {{ totalItems(totalResults) }}</div>
                             <div class="toggler">
                                 <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                                 <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
@@ -92,7 +92,7 @@
             return {
                 loaded: false,
                 rowCount: 0,
-                totalCount: 0,
+                totalResults: 0,
                 status: 1,
                 res: [],
                 studios: []
@@ -132,7 +132,7 @@
 
                             me.res = res.data
                             me.rowCount = document.getElementsByTagName('th').length
-                            me.totalCount = me.res.instructors.total
+                            me.totalResults = me.res.instructors.total
                             me.loaded = true
                         }, 500)
                     }

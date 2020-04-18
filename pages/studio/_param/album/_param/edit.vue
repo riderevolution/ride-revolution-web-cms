@@ -38,7 +38,7 @@
                                 <button type="button" class="action_btn" @click="addMultiple('image')">Add Image</button>
                             </div>
                             <div class="form_main_group">
-                                <image-handler-container ref="image_handler" :multiple="true" />
+                                <image-handler-container ref="image_handler" :multiple="true" :data="(res.images) ? res.images : ''" :parent="res.id" />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
