@@ -4,7 +4,7 @@
             <section id="top_content">
                 <h1 class="header_title">Modal</h1>
             </section>
-            <section id="content" class="main">
+            <section id="content" class="pad_alt">
                 <div class="cms_col_four">
                     <div class="cms_col">
                         <div class="form_group">
@@ -69,7 +69,7 @@
     import Confirm from '../../components/modals/Confirm'
     import Successful from '../../components/modals/Successful'
     import UserForm from '../../components/modals/UserForm'
-    import ErrorPrompt from '../../components/modals/Error'
+    import ErrorPrompt from '../../components/modals/ErrorPrompt'
     import Import from '../../components/modals/Import'
     export default {
         components: {

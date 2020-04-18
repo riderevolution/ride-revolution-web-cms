@@ -4,7 +4,7 @@
             <section id="top_content">
                 <h1 class="header_title">Column</h1>
             </section>
-            <section id="content">
+            <section id="content" class="pad_alt">
                 <div class="cms_col_four">
                     <div class="cms_col" v-for="(data, key) in res.today" :key="key">
                         <nuxt-link :to="data.link" class="wrapper">

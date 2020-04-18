@@ -4,7 +4,7 @@
             <section id="top_content">
                 <h1 class="header_title">Button</h1>
             </section>
-            <section id="content" class="main">
+            <section id="content" class="pad_alt">
                 <div class="cms_col_four">
                     <div class="cms_col">
                         <div class="form_group">

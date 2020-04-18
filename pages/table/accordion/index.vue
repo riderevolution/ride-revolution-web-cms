@@ -31,9 +31,9 @@
                             <td class="toggler" @click.self="toggleAccordion($event, key)">Admin</td>
                             <td>Marketplace</td>
                             <td>2</td>
-                            <td>
+                            <td width="20%">
                                 <div class="table_actions">
-                                    <div class="table_action_edit link">Edit Role</div>
+                                    <div class="table_action_edit link">Edit</div>
                                     <div class="table_action_cancel link" v-if="status == 1">Deactivate</div>
                                     <div class="table_action_success link" v-if="status == 0">Activate</div>
                                 </div>
@@ -56,11 +56,11 @@
                                                 <td>{{ child.first_name }}</td>
                                                 <td>{{ child.email }}</td>
                                                 <td>{{ child.last_name }}</td>
-                                                <td>
+                                                <td width="20%">
                                                     <div class="table_actions">
-                                                        <div class="link table_action_edit">Edit Child</div>
-                                                        <div class="link table_action_cancel" v-if="status == 1">Deactivate Child</div>
-                                                        <div class="link table_action_success" v-if="status == 0">Activate Child</div>
+                                                        <div class="link table_action_edit">Edit</div>
+                                                        <div class="link table_action_cancel" v-if="status == 1">Deactivate</div>
+                                                        <div class="link table_action_success" v-if="status == 0">Activate</div>
                                                     </div>
                                                 </td>
                                             </tr>

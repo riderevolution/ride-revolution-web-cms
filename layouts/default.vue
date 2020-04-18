@@ -23,6 +23,9 @@
         <transition name="fade">
             <reset-successful v-if="$store.state.resetSuccessfulStatus" />
         </transition>
+        <transition name="fade">
+            <error-prompt v-if="$store.state.errorStatus" />
+        </transition>
     </div>
 </template>
 
@@ -32,13 +35,15 @@
     import HeaderNav from '../components/HeaderNav'
     import PasswordSent from '../components/modals/PasswordSent'
     import ResetSuccessful from '../components/modals/ResetSuccessful'
+    import ErrorPrompt from '../components/modals/ErrorPrompt'
     export default {
         components: {
             Navbar,
             Loading,
             HeaderNav,
             PasswordSent,
-            ResetSuccessful
+            ResetSuccessful,
+            ErrorPrompt
         },
         data () {
             return {

@@ -38,10 +38,17 @@
                         image: '/icons/navbar/dashboard-unselected.png'
                     },
                     {
+                        title: 'Studio',
+                        link: '/studio',
+                        hasLink: true,
+                        class: 'admin',
+                        image: '/icons/navbar/admin-unselected.png'
+                    },
+                    {
                         title: 'Form',
                         link: '/form',
                         hasLink: true,
-                        class: 'admin nav_parent_alt',
+                        class: 'admin',
                         image: '/icons/navbar/admin-unselected.png'
                     },
                     {
@@ -69,7 +76,7 @@
                         title: 'Table',
                         link: '/table',
                         hasLink: false,
-                        class: 'admin',
+                        class: 'admin nav_parent_alt',
                         image: '/icons/navbar/admin-unselected.png',
                         subItems: [
                             {
@@ -92,6 +99,10 @@
                                 title: 'Two Column',
                                 link: '/table/two-column'
                             },
+                            {
+                                title: 'Bulk Update',
+                                link: '/table/bulk-update'
+                            },
                         ]
                     }
                 ],
@@ -108,7 +119,7 @@
                     elements.forEach((element, index) => {
                         setTimeout( () => {
                             const length = element.querySelectorAll('.sub_nav_list').length
-                            const height = 59
+                            const height = 46
                             const currentHeight = height * length
                             element.style.height = `${currentHeight}px`
                         }, 300)

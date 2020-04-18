@@ -8,7 +8,6 @@
                 <div class="cms_summary wrapper">
                     <div class="summary_header">
                         <h2 class="header_title">Sample</h2>
-                        <h2 class="action_highlight"><span>&#9679;</span> Juan Dela Cruz</h2>
                     </div>
                     <div class="summary_body">
                         <div class="column">
@@ -38,7 +37,6 @@
                 <div class="cms_summary wrapper">
                     <div class="summary_header">
                         <h2 class="header_title">Sample</h2>
-                        <h2 class="action_highlight"><span>&#9679;</span> Juan Dela Cruz</h2>
                     </div>
                     <div class="summary_body">
                         <div class="column">

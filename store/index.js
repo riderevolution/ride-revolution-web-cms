@@ -8,6 +8,7 @@ const createStore = () => {
             formStatus: false,
             successfulStatus: false,
             confirmStatus: false,
+            isErrorOnModal: false,
             errorStatus: false,
             errorList: ['Sample Error'],
             isAuth: false,

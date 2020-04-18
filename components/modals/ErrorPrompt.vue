@@ -17,8 +17,9 @@
         methods: {
             toggleClose () {
                 const me = this
-                if (me.$store.state.isErrorOverlay) {
+                if (me.$store.state.isErrorOnModal) {
                     me.$store.state.errorStatus = false
+                    me.$store.state.isErrorOnModal = false
                 } else {
                     me.$store.state.errorStatus = false
                     document.body.classList.remove('no_scroll')
