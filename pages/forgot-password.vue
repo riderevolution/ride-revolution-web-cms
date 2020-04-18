@@ -4,8 +4,8 @@
             <div class="logo">
                 <img src="/logo.png" width="65px" />
                 <div class="logo_title">
-                    CMS <br/>
-                    Template
+                    Ride <br/>
+                    Revolution
                 </div>
             </div>
             <form id="forgot_form" class="forgot_form" @submit.prevent="submissionSuccess()">
@@ -38,7 +38,30 @@
         methods: {
             submissionSuccess () {
                 const me = this
+                me.$validator.validateAll().then(res => {
+                    if (res) {
+                        me.loader(true)
+                        me.$axios.post('api/forgot-password', me.form).then(res => {
+                            if (res.data) {
+                                me.$store.state.resetStatus = true
+                            } else {
+                                me.$store.state.errorList.push('Sorry, Something went wrong')
+                                me.$store.state.errorStatus = true
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            me.loader(false)
+                        })
+                    }
+                })
             }
-        }
+        },
+        mounted () {
+            if (this.$cookies.get('token') != null && this.$cookies.get('token') !== undefined) {
+                this.$router.push('/')
+            }
+        },
     }
 </script>

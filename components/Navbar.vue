@@ -4,8 +4,8 @@
             <nuxt-link to="/" class="logo">
                 <img src="/logo.png" />
                 <div class="logo_title">
-                    CMS <br/>
-                    Template
+                    Ride <br/>
+                    Revolution
                 </div>
             </nuxt-link>
             <ul class="nav_list">

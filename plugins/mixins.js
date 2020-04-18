@@ -66,6 +66,7 @@ Vue.mixin({
             }
         },
         logout () {
+            this.loader(true)
             let token = this.$cookies.get('token')
             this.$axios.post('api/logout', {}, {
                 headers: {
@@ -74,6 +75,7 @@ Vue.mixin({
             }).then(res => {
                 this.$cookies.remove('token')
                 this.$store.state.isAuth = false
+                this.loader(false)
                 this.$router.push('/login')
             }).catch(err => {
                 console.log(err)

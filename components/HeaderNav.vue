@@ -38,11 +38,6 @@
             },
             closeMe () {
                 this.isToggled = false
-            },
-            logout () {
-                const me = this
-                me.$store.state.isAuth = false
-                me.$router.push('/login')
             }
         }
     }

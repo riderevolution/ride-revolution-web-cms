@@ -4,8 +4,8 @@
             <div class="logo">
                 <img src="/logo.png" width="65px" />
                 <div class="logo_title">
-                    CMS <br/>
-                    Template
+                    Ride <br/>
+                    Revolution
                 </div>
             </div>
             <form id="login_form" class="login_form" @submit.prevent="submitLogin()">

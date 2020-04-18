@@ -1,70 +1,72 @@
 <template>
     <div class="content">
-        <div id="admin" class="cms_dashboard" v-if="$store.state.isAuth">
-            <section id="top_content">
-                <h1 class="header_title">Dashboard</h1>
-            </section>
-            <section id="content" class="main">
-                <div class="cms_summary wrapper">
-                    <div class="summary_header">
-                        <h2 class="header_title">Sample</h2>
-                    </div>
-                    <div class="summary_body">
-                        <div class="column">
-                            <div class="total_label">Today</div>
-                            <div class="total" v-for="(data, key) in res.today">
-                                <div class="total_image">
-                                    <img class="front" :src="data.imgSrc" />
-                                    <img class="back" :src="data.imgSrc" />
-                                </div>
-                                <div class="total_label">{{ data.label }}</div>
-                                <div class="total_count">{{ data.count }}</div>
-                            </div>
+        <transition name="fade">
+            <div id="admin" class="cms_dashboard" v-if="$store.state.isAuth">
+                <section id="top_content">
+                    <h1 class="header_title">Dashboard</h1>
+                </section>
+                <section id="content" class="main">
+                    <div class="cms_summary wrapper">
+                        <div class="summary_header">
+                            <h2 class="header_title">Sample</h2>
                         </div>
-                        <div class="column">
-                            <div class="total_label">Month Running (May 1 - Today)</div>
-                            <div class="total" v-for="(data, key) in res.month">
-                                <div class="total_image">
-                                    <img class="front" :src="data.imgSrc" />
-                                    <img class="back" :src="data.imgSrc" />
+                        <div class="summary_body">
+                            <div class="column">
+                                <div class="total_label">Today</div>
+                                <div class="total" v-for="(data, key) in res.today">
+                                    <div class="total_image">
+                                        <img class="front" :src="data.imgSrc" />
+                                        <img class="back" :src="data.imgSrc" />
+                                    </div>
+                                    <div class="total_label">{{ data.label }}</div>
+                                    <div class="total_count">{{ data.count }}</div>
                                 </div>
-                                <div class="total_label">{{ data.label }}</div>
-                                <div class="total_count">{{ data.count }}</div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="cms_summary wrapper">
-                    <div class="summary_header">
-                        <h2 class="header_title">Sample</h2>
-                    </div>
-                    <div class="summary_body">
-                        <div class="column">
-                            <div class="total_label">Today</div>
-                            <div class="total" v-for="(data, key) in res.today">
-                                <div class="total_image">
-                                    <img class="front" :src="data.imgSrc" />
-                                    <img class="back" :src="data.imgSrc" />
+                            <div class="column">
+                                <div class="total_label">Month Running (May 1 - Today)</div>
+                                <div class="total" v-for="(data, key) in res.month">
+                                    <div class="total_image">
+                                        <img class="front" :src="data.imgSrc" />
+                                        <img class="back" :src="data.imgSrc" />
+                                    </div>
+                                    <div class="total_label">{{ data.label }}</div>
+                                    <div class="total_count">{{ data.count }}</div>
                                 </div>
-                                <div class="total_label">{{ data.label }}</div>
-                                <div class="total_count">{{ data.count }}</div>
-                            </div>
-                        </div>
-                        <div class="column">
-                            <div class="total_label">Month Running (May 1 - Today)</div>
-                            <div class="total" v-for="(data, key) in res.month">
-                                <div class="total_image">
-                                    <img class="front" :src="data.imgSrc" />
-                                    <img class="back" :src="data.imgSrc" />
-                                </div>
-                                <div class="total_label">{{ data.label }}</div>
-                                <div class="total_count">{{ data.count }}</div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </div>
+                    <div class="cms_summary wrapper">
+                        <div class="summary_header">
+                            <h2 class="header_title">Sample</h2>
+                        </div>
+                        <div class="summary_body">
+                            <div class="column">
+                                <div class="total_label">Today</div>
+                                <div class="total" v-for="(data, key) in res.today">
+                                    <div class="total_image">
+                                        <img class="front" :src="data.imgSrc" />
+                                        <img class="back" :src="data.imgSrc" />
+                                    </div>
+                                    <div class="total_label">{{ data.label }}</div>
+                                    <div class="total_count">{{ data.count }}</div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="total_label">Month Running (May 1 - Today)</div>
+                                <div class="total" v-for="(data, key) in res.month">
+                                    <div class="total_image">
+                                        <img class="front" :src="data.imgSrc" />
+                                        <img class="back" :src="data.imgSrc" />
+                                    </div>
+                                    <div class="total_label">{{ data.label }}</div>
+                                    <div class="total_count">{{ data.count }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
 </template>
@@ -124,6 +126,15 @@
                     ]
                 }
             }
+        },
+        mounted () {
+            const me = this
+            me.loader(true)
+            setTimeout( () => {
+                if (!me.$nuxt.$loading.show) {
+                    me.loader(false)
+                }
+            }, 500)
         }
     }
 </script>
