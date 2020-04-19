@@ -99,6 +99,36 @@ table
             .note-editable
                 sf_pro_regular(14px)
 
+.error_page
+    &.alternate
+        height: 50vh
+        .container
+            .header_title
+                sf_pro_bold(30px)
+    height: 100vh
+    position: relative
+    animation: slide_up 1s
+    .container
+        position: absolute
+        top: 50%
+        left: 0
+        right: 0
+        text-align: center
+        transform: translateY(-50%)
+        .logo
+            filter: grayscale(1)
+            opacity: 0.5
+            img
+                width: 80px
+                height: auto
+        .header_title
+            sf_pro_bold(30px)
+            margin: 20px 0
+        .header_subtitle
+            sf_pro_light(20px)
+        .action_btn
+            margin-top: 40px
+
 /**
  * Default Loader **/
 .loader_wrapper
@@ -2449,7 +2479,7 @@ input::placeholder
                 background-color: $green
                 position: sticky
                 z-index: 1
-                top: calc(0% + 70px)
+                top: calc(0% + 55px)
                 color: $white
                 transition: .3s ease-in-out
         tr
@@ -3526,9 +3556,14 @@ input::placeholder
                     .nav_list
                         .item_wrapper
                             .nav_item
+                                sf_pro_regular(14px)
                                 padding: 15px 20px 15px 50px
                                 color: $black
                                 transition: .3s ease-in-out .2s
+                                span
+                                    opacity: 1
+                                    visibility: visible
+                                    transition: .3s ease-in-out .2s
                                 &.nav_parent
                                     &::before
                                         opacity: 1
@@ -3579,11 +3614,10 @@ input::placeholder
                 overflow-y: auto
                 .item_wrapper
                     .nav_item
-                        sf_pro_regular(14px)
-                        color: transparent
+                        sf_pro_regular(0)
                         display: block
                         position: relative
-                        padding: 15px 20px
+                        padding: 18px 20px
                         border-left: 2px solid transparent
                         background-color: transparent
                         text-decoration: none
@@ -3592,7 +3626,11 @@ input::placeholder
                         background-position: calc(0% + 13px) calc(50%)
                         background-repeat: no-repeat
                         background-size: 20px
-                        transition: .3s ease-in-out .1s
+                        transition: .3s ease-in-out
+                        span
+                            opacity: 0
+                            visibility: hidden
+                            transition: .3s ease-in-out
                         & ~ .sub_wrapper
                             display: block
                             height: 0px
@@ -3623,10 +3661,10 @@ input::placeholder
                                 top: 50%
                                 width: 0
                                 height: 0
-                                border-left: 7px solid transparent
-                                border-right: 7px solid transparent
-                                border-top: 7px solid $green
-                                right: 25px
+                                border-left: 6px solid transparent
+                                border-right: 6px solid transparent
+                                border-top: 6px solid $green
+                                right: 15px
                                 z-index: 1
                                 transform: translateY(-50%) rotate(0deg)
                                 opacity: 0
@@ -3635,7 +3673,7 @@ input::placeholder
                             &.nuxt-link-active
                                 background-color: $light_green
                                 border-left: 2px solid $green
-                                transition: .3s ease-in-out .1s
+                                transition: .3s ease-in-out
                                 &.dashboard
                                     background-image: url('/icons/navbar/dashboard-selected.png')
                                 &.booker
@@ -3656,7 +3694,7 @@ input::placeholder
                             &.nuxt-link-active
                                 background-color: $light_green
                                 border-left: 2px solid $green
-                                transition: .3s ease-in-out .1s
+                                transition: .3s ease-in-out
                                 &.dashboard
                                     background-image: url('/icons/navbar/dashboard-selected.png')
                                 &.booker
@@ -3678,7 +3716,7 @@ input::placeholder
                         &:focus
                             background-color: $light_green
                             border-left: 2px solid $green
-                            transition: .3s ease-in-out .1s
+                            transition: .3s ease-in-out
                             &.dashboard
                                 background-image: url('/icons/navbar/dashboard-selected.png')
                             &.booker
@@ -3788,7 +3826,7 @@ input::placeholder
         flex-flow: row wrap
         align-items: center
         justify-content: space-between
-        padding: 15px 40px 15px 110px
+        padding: 15px 40px 15px 80px
         background-color: $white
         transition: .3s ease-in-out
         opacity: 1

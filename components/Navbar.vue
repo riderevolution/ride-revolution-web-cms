@@ -38,25 +38,36 @@
                         image: '/icons/navbar/dashboard-unselected.png'
                     },
                     {
-                        title: 'Instructor',
-                        link: '/instructor',
+                        title: 'Pages',
+                        link: '/pages',
                         hasLink: true,
                         class: 'admin',
-                        image: '/icons/navbar/admin-unselected.png'
+                        image: '/icons/navbar/dashboard-unselected.png'
                     },
                     {
-                        title: 'Studio',
-                        link: '/studio',
-                        hasLink: true,
-                        class: 'admin',
-                        image: '/icons/navbar/admin-unselected.png'
-                    },
-                    {
-                        title: 'News',
-                        link: '/news',
-                        hasLink: true,
-                        class: 'admin',
-                        image: '/icons/navbar/admin-unselected.png'
+                        title: 'Content Type',
+                        link: '/content-type',
+                        hasLink: false,
+                        class: 'admin nav_parent_alt',
+                        image: '/icons/navbar/admin-unselected.png',
+                        subItems: [
+                            {
+                                title: 'Instructor',
+                                link: '/content-type/instructor'
+                            },
+                            {
+                                title: 'Studio',
+                                link: '/content-type/studio'
+                            },
+                            {
+                                title: 'News',
+                                link: '/content-type/news'
+                            },
+                            {
+                                title: 'FAQ',
+                                link: '/content-type/faq'
+                            }
+                        ]
                     },
                     {
                         title: 'Taxonomy',
