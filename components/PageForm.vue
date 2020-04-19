@@ -22,6 +22,23 @@
                 </div>
             </div>
         </div>
+        <div class="form_wrapper" v-if="hasTeaser">
+            <div class="form_header_wrapper">
+                <h2 class="form_title">Teaser</h2>
+            </div>
+            <div class="form_main_group">
+                <div class="form_group">
+                    <label for="teaser_title">Teaser Title <span>*</span></label>
+                    <input type="text" name="teaser_title" placeholder="Enter teaser title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ errors.first('teaser_title') | properFormat }}</span></transition>
+                </div>
+                <div class="form_group">
+                    <label for="teaser_description">Teaser Description <span>*</span></label>
+                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'required|max:2000'"></textarea>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ errors.first('teaser_description') | properFormat }}</span></transition>
+                </div>
+            </div>
+        </div>
         <div class="form_wrapper" v-if="hasImage">
             <div class="form_header_wrapper">
                 <h2 class="form_title">Image Upload</h2>
@@ -37,17 +54,17 @@
             <div class="form_main_group">
                 <div class="form_group">
                     <label for="meta_title">Meta Title <span>*</span></label>
-                    <input type="text" name="meta_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
+                    <input type="text" name="meta_title" autocomplete="off" placeholder="Enter your meta title" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
-                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
+                    <input type="text" name="meta_keywords" autocomplete="off" placeholder="Enter your meta keywords" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="meta_description">Meta Description <span>*</span></label>
-                    <textarea name="meta_description" rows="4" id="meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
+                    <textarea name="meta_description" rows="4" id="meta_description" placeholder="Enter your meta description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
                 </div>
             </div>
@@ -75,6 +92,10 @@
                 type: Boolean,
                 default: true
             },
+            hasTeaser: {
+                type: Boolean,
+                default: false
+            },
             slug: {
                 type: String,
                 default: null
@@ -89,7 +110,7 @@
         },
         data () {
             return {
-                loaded: false,
+                res: [],
                 bannerDimensions: {
                     imageWidth: (!this.isHome) ? 2564 : 1280,
                     imageHeight: (!this.isHome) ? 593 : 803
@@ -151,10 +172,31 @@
                         })
                     }
                 })
-            },
-            fetchData () {
-                const me = this
-                me.loaded = true
+            }
+        },
+        mounted () {
+            const me = this
+            if (me.data != null) {
+                me.res = me.data
+            }
+            if (me.hasTeaser) {
+                setTimeout( () => {
+                    $('#teaser_description').summernote({
+                        tabsize: 4,
+                        height: 400,
+                        followingToolbar: false,
+                        codemirror: {
+                            lineNumbers: true,
+                            htmlMode: true,
+                            mode: "text/html",
+                            tabMode: 'indent',
+                            lineWrapping: true
+                        }
+                    })
+                    if (me.data != null) {
+                        $('#teaser_description').summernote('code', me.res.teaser_description)
+                    }
+                }, 100)
             }
         }
     }

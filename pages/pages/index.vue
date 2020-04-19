@@ -95,7 +95,7 @@
                     {
                         label: "Rider's Guide",
                         page_link: 'http://riderev.designbluemanila.ph/riders-guide',
-                        cms_link: '/pages/riders-guide',
+                        cms_link: `/pages/riders-guide?t=${this.randomString()}`,
                         searched: true
                     },
                     {
@@ -107,7 +107,7 @@
                     {
                         label: 'Studios',
                         page_link: 'http://riderev.designbluemanila.ph/studios',
-                        cms_link: '/pages/studios',
+                        cms_link: `/pages/studios?t=${this.randomString()}`,
                         searched: true
                     },
                     {
@@ -119,7 +119,7 @@
                     {
                         label: 'Ride Rewards',
                         page_link: 'http://riderev.designbluemanila.ph/ride-rewards',
-                        cms_link: '/pages/ride-rewards',
+                        cms_link: `/pages/ride-rewards?t=${this.randomString()}`,
                         searched: true
                     },
                     {

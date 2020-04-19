@@ -9,7 +9,7 @@
                     </div>
                 </section>
                 <section id="content">
-                    <page-form :data="res" :slug="`${$route.params.slug}`" :hasImage="($route.query.n) ? false : true" :isHome="($route.query.h) ? true : false" />
+                    <page-form :data="res" :slug="`${$route.params.slug}`" :hasImage="($route.query.n) ? false : true" :hasTeaser="($route.query.t) ? true : false" :isHome="($route.query.h) ? true : false" />
                 </section>
             </div>
         </transition>

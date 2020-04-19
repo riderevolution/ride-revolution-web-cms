@@ -25,9 +25,11 @@
                         </thead>
                         <tbody v-if="res.length > 0">
                             <tr v-for="(data, key) in res" :key="key">
-                                <td>{{ data.email }}</td>
-                                <td>{{ data.contact }}</td>
-                                <td>{{ data.gender }}</td>
+                                <td>{{ data.name }}</td>
+                                <td>{{ $moment().format('MMMM DD, YYYY') }}</td>
+                                <td>
+                                    <div v-line-clamp="1">{{ data.summary }}</div>
+                                </td>
                                 <td width="20%">
                                     <div class="table_actions">
                                         <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
@@ -66,48 +68,7 @@
                 lastRoute: '',
                 rowCount: 0,
                 totalResults: 0,
-                res: [
-                    {
-                        id: 1,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 2,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 3,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 4,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 5,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    }
-                ],
+                res: [],
                 status: 1
             }
         },
@@ -122,9 +83,24 @@
             },
             fetchData () {
                 const me = this
-                me.rowCount = document.getElementsByTagName('th').length
-                me.total_count = me.res.length
-                me.loaded = true
+                me.loader(true)
+                me.$axios.get('api/web/news').then(res => {
+                    if (res.data) {
+                        setTimeout( () => {
+                            me.res = res.data.news
+                            me.totalResults = me.res.length
+                            me.loaded = true
+                        }, 500)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.rowCount = document.getElementsByTagName('th').length
+                        me.loader(false)
+                    }, 500)
+                })
             }
         },
         mounted () {

@@ -5,7 +5,7 @@
                 <section id="top_content" class="table">
                     <nuxt-link to="/content-type/news" class="action_back_btn"><img src="/icons/back-icon.svg"><span>News</span></nuxt-link>
                     <div class="action_wrapper">
-                        <h1 class="header_title">Add a News</h1>
+                        <h1 class="header_title">Update {{ res.news }}</h1>
                     </div>
                 </section>
                 <section id="content">
@@ -21,12 +21,12 @@
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter news name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
+                                        <input type="text" name="name" placeholder="Enter news name" v-model="res.name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="date_published">Date Published <span>*</span></label>
-                                        <input type="date" name="date_published" :min="$moment().format('YYYY-MM-DD')" v-validate="{required: true}" autocomplete="off" class="default_text date">
+                                        <input type="date" name="date_published" :max="$moment().format('YYYY-MM-DD')" v-model="res.date_published" v-validate="{required: true}" autocomplete="off" class="default_text date">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ errors.first('date_published') | properFormat }}</span></transition>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                 <h2 class="form_title">Image Upload</h2>
                             </div>
                             <div class="form_main_group">
-                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="res.images" :parent="res.id" />
+                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="res.banner" :parent="res.id" />
                                 <image-handler-container ref="image_handler" :dimension="imageDimensions" :multiple="false" :data="res.images" :parent="res.id" />
                             </div>
                         </div>
@@ -58,17 +58,17 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="meta_title">Meta Title <span>*</span></label>
-                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
+                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" placeholder="Enter your meta title" v-model="res.meta_title" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
-                                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
+                                    <input type="text" name="meta_keywords" autocomplete="off" placeholder="Enter your meta keywords" v-model="res.meta_keywords" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_description">Meta Description <span>*</span></label>
-                                    <textarea name="meta_description" rows="4" id="meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
+                                    <textarea name="meta_description" rows="4" id="meta_description" placeholder="Enter your meta description" v-model="res.meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
                                 </div>
                             </div>
@@ -161,7 +161,25 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        // me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
+                        me.$axios.post(`api/web/news/${me.$route.params.param}`, formData).then(res => {
+                            if (res.data) {
+                                console.log(res.data);
+                                // setTimeout(() => {
+                                //     me.notify('Content has been created')
+                                // }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                // me.loader(false)
+                                // me.$router.push('/content-type/news')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -171,34 +189,51 @@
             },
             fetchData () {
                 const me = this
-                setTimeout( () => {
-                    $('#description').summernote({
-                        tabsize: 4,
-                        height: 200,
-                        followingToolbar: false,
-                        codemirror: {
-                            lineNumbers: true,
-                            htmlMode: true,
-                            mode: "text/html",
-                            tabMode: 'indent',
-                            lineWrapping: true
-                        }
-                    })
-                    $('#summary').summernote({
-                        tabsize: 4,
-                        height: 150,
-                        followingToolbar: false,
-                        disableResizeEditor: true,
-                        codemirror: {
-                            lineNumbers: true,
-                            htmlMode: true,
-                            mode: "text/html",
-                            tabMode: 'indent',
-                            lineWrapping: true
-                        }
-                    })
-                }, 100)
-                me.loaded = true
+                me.loader(true)
+                me.$axios.get(`api/web/news/${me.$route.params.param}`).then(res => {
+                    if (res.data) {
+                        setTimeout( () => {
+                            me.res = res.data.news
+                            setTimeout( () => {
+                                $('#description').summernote({
+                                    tabsize: 4,
+                                    height: 200,
+                                    followingToolbar: false,
+                                    codemirror: {
+                                        lineNumbers: true,
+                                        htmlMode: true,
+                                        mode: "text/html",
+                                        tabMode: 'indent',
+                                        lineWrapping: true
+                                    }
+                                })
+                                $('#summary').summernote({
+                                    tabsize: 4,
+                                    height: 150,
+                                    followingToolbar: false,
+                                    disableResizeEditor: true,
+                                    codemirror: {
+                                        lineNumbers: true,
+                                        htmlMode: true,
+                                        mode: "text/html",
+                                        tabMode: 'indent',
+                                        lineWrapping: true
+                                    }
+                                })
+                                $('#description').summernote('code', me.res.description)
+                                $('#summary').summernote('code', me.res.summary)
+                            }, 100)
+                            me.loaded = true
+                        }, 500)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             }
         },
         mounted () {
