@@ -34,7 +34,7 @@
                 </div>
                 <div class="form_group">
                     <label for="teaser_description">Teaser Description <span>*</span></label>
-                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'required|max:2000'"></textarea>
+                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'required|max:3000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ errors.first('teaser_description') | properFormat }}</span></transition>
                 </div>
             </div>
@@ -183,7 +183,7 @@
                 setTimeout( () => {
                     $('#teaser_description').summernote({
                         tabsize: 4,
-                        height: 400,
+                        height: 200,
                         followingToolbar: false,
                         codemirror: {
                             lineNumbers: true,

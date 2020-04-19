@@ -5,7 +5,7 @@
                 <section id="top_content" class="table">
                     <nuxt-link to="/content-type/faq" class="action_back_btn"><img src="/icons/back-icon.svg"><span>FAQ</span></nuxt-link>
                     <div class="action_wrapper">
-                        <h1 class="header_title">Add a FAQ</h1>
+                        <h1 class="header_title">Update {{ res.name }}</h1>
                     </div>
                 </section>
                 <section id="content">
@@ -21,19 +21,19 @@
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter faq name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
+                                        <input type="text" name="name" v-model="res.name" placeholder="Enter faq name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="sequence">Sequence <span>*</span></label>
-                                        <input type="text" name="sequence" v-validate="{required: true, numeric: true, min_value: 1}" autocomplete="off" class="default_text">
+                                        <input type="text" name="sequence" placeholder="Enter sequence" v-model="res.sequence" v-validate="{required: true, numeric: true, min_value: 1}" autocomplete="off" class="default_text">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('sequence')">{{ errors.first('sequence') | properFormat }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group">
-                                    <label for="summary">Summary <span>*</span></label>
-                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:200'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ errors.first('summary') | properFormat }}</span></transition>
+                                    <label for="description">Description <span>*</span></label>
+                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:5000'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -62,6 +62,7 @@
         },
         data () {
             return {
+                res: [],
                 loaded: false
             }
         },
@@ -112,7 +113,24 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
+                        me.$axios.post(`api/web/faqs/${me.$route.params.param}`, formData).then(res => {
+                            if (res.data) {
+                                setTimeout(() => {
+                                    me.notify('Content has been updated')
+                                }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push('/content-type/faq')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -122,21 +140,36 @@
             },
             fetchData () {
                 const me = this
-                setTimeout( () => {
-                    $('#description').summernote({
-                        tabsize: 4,
-                        height: 200,
-                        followingToolbar: false,
-                        codemirror: {
-                            lineNumbers: true,
-                            htmlMode: true,
-                            mode: "text/html",
-                            tabMode: 'indent',
-                            lineWrapping: true
-                        }
-                    })
-                }, 100)
-                me.loaded = true
+                me.loader(true)
+                me.$axios.get(`api/web/faqs/${me.$route.params.param}`).then(res => {
+                    if (res.data) {
+                        me.res = res.data.faq
+                        setTimeout( () => {
+                            $('#description').summernote({
+                                tabsize: 4,
+                                height: 200,
+                                followingToolbar: false,
+                                codemirror: {
+                                    lineNumbers: true,
+                                    htmlMode: true,
+                                    mode: "text/html",
+                                    tabMode: 'indent',
+                                    lineWrapping: true
+                                }
+                            })
+                            $('#description').summernote('code', me.res.description)
+                        }, 100)
+                        me.loaded = true
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.rowCount = document.getElementsByTagName('th').length
+                        me.loader(false)
+                    }, 500)
+                })
             }
         },
         mounted () {

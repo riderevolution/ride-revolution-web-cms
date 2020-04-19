@@ -18,16 +18,16 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Date</th>
                                 <th>Sequence</th>
+                                <th>Created</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody v-if="res.length > 0">
                             <tr v-for="(data, key) in res" :key="key">
-                                <td>{{ data.email }}</td>
-                                <td>{{ data.contact }}</td>
-                                <td>{{ data.gender }}</td>
+                                <td>{{ data.name }}</td>
+                                <td>{{ data.sequence }}</td>
+                                <td>{{ $moment(data.created_at).format('MMMM DD, YYYY') }}</td>
                                 <td width="20%">
                                     <div class="table_actions">
                                         <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
@@ -46,7 +46,7 @@
             </div>
         </transition>
         <transition name="fade">
-            <delete v-if="$store.state.deleteStatus" ref="delete" :url="`api/extras/medical-history`" />
+            <delete v-if="$store.state.deleteStatus" ref="delete" :url="`api/web/faqs`" />
         </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
@@ -66,48 +66,7 @@
                 lastRoute: '',
                 rowCount: 0,
                 totalResults: 0,
-                res: [
-                    {
-                        id: 1,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 2,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 3,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 4,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    },
-                    {
-                        id: 5,
-                        first_name: 'Juan',
-                        last_name: 'Dela Cruz',
-                        email: 'sample@gmail.com',
-                        contact: '09559123947',
-                        gender: 'Male'
-                    }
-                ],
+                res: [],
                 status: 1
             }
         },
@@ -122,9 +81,24 @@
             },
             fetchData () {
                 const me = this
-                me.rowCount = document.getElementsByTagName('th').length
-                me.total_count = me.res.length
-                me.loaded = true
+                me.loader(true)
+                me.$axios.get('api/web/faqs').then(res => {
+                    if (res.data) {
+                        setTimeout( () => {
+                            me.res = res.data.faqs
+                            me.totalResults = me.res.length
+                            me.loaded = true
+                        }, 500)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.rowCount = document.getElementsByTagName('th').length
+                        me.loader(false)
+                    }, 500)
+                })
             }
         },
         mounted () {

@@ -38,8 +38,6 @@
                     if (res.data) {
                         setTimeout( () => {
                             me.$store.state.deleteStatus = false
-                            me.notify('Content has been deleted')
-                            me.$parent.fetchData(1)
                         }, 500)
                     }
                 }).catch(err => {
@@ -48,6 +46,8 @@
                 }).then(() => {
                     setTimeout( () => {
                         me.loader(false)
+                        me.$parent.fetchData(1)
+                        me.notify('Content has been deleted')
                         document.body.classList.remove('no_scroll')
                     }, 500)
                 })

@@ -58,6 +58,7 @@
                 showTags: false,
                 enabled: true,
                 dataImage: {
+                    id: 0,
                     title: '',
                     alt: ''
                 }
@@ -130,6 +131,7 @@
             let ctr = 0
             setInterval( () => {
                 if (ctr < 1 && this.item) {
+                    this.dataImage.id = (this.item.id != null) ? this.item.id : 0
                     this.dataImage.title = this.item.title
                     this.dataImage.alt = this.item.alt
                     this.showTags = (this.item != 0) ? true : false

@@ -16,17 +16,19 @@
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Image Upload</h2>
-                            </div>
-                            <div class="form_main_group">
-                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="(res.images) ? res.images : ''" :multiple="true" :parent="res.id" />
-                            </div>
-                        </div>
-                        <div class="form_footer_wrapper">
-                            <div class="form_flex">
                                 <div class="form_check">
                                     <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.is_featured">
                                     <label for="is_featured">Featured</label>
                                 </div>
+                            </div>
+                            <div class="form_main_group">
+                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="(res.banners.length > 0) ? res.banners : ''" :parent="res.id" />
+                                <input type="hidden" name="banner_category[]" value="banner" v-for="(count, key) in imageCount" :key="key">
+                            </div>
+                        </div>
+                        <div class="form_footer_wrapper">
+                            <div class="form_flex">
+                                <div class="form_check"></div>
                                 <div class="button_group">
                                     <nuxt-link to="/content-type/promo" class="action_cancel_btn">Cancel</nuxt-link>
                                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
@@ -56,7 +58,8 @@
                 bannerDimensions: {
                     imageWidth: 2838,
                     imageHeight: 1042
-                }
+                },
+                imageCount: 0
             }
         },
         filters: {
@@ -107,7 +110,24 @@
                 let ctr = 0
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
-
+                        me.loader(true)
+                        let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
+                        me.$axios.post(`api/web/promos/${me.$route.params.param}`, formData).then(res => {
+                            if (res.data) {
+                                setTimeout(() => {
+                                    me.notify('Content has been updated')
+                                }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push('/content-type/promo')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -120,10 +140,11 @@
                 me.loader(true)
                 me.$axios.get(`api/inventory/promos/${me.$route.params.param}`).then(res => {
                     if (res.data) {
+                        me.res = res.data.promo
                         setTimeout( () => {
-                            me.res = res.data.promo
-                            me.loaded = true
-                        }, 500)
+                            me.imageCount = me.$refs.banner_handler.images
+                        }, 100)
+                        me.loaded = true
                     }
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors

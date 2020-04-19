@@ -47,7 +47,8 @@
                                 <h2 class="form_title">Image Upload</h2>
                             </div>
                             <div class="form_main_group">
-                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="res.banner" :parent="res.id" />
+                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="res.banners" :parent="res.id" />
+                                <input type="hidden" name="banner_category[]" value="banner" v-for="(count, key) in imageCount" :key="key">
                                 <image-handler-container ref="image_handler" :dimension="imageDimensions" :multiple="false" :data="res.images" :parent="res.id" />
                             </div>
                         </div>
@@ -110,8 +111,9 @@
                 },
                 imageDimensions: {
                     imageWidth: 676,
-                    imageHeight: 372
-                }
+                    imageHeight: 371
+                },
+                imageCount: 0
             }
         },
         filters: {
@@ -161,23 +163,22 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
-                        // me.loader(true)
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')
                         me.$axios.post(`api/web/news/${me.$route.params.param}`, formData).then(res => {
                             if (res.data) {
-                                console.log(res.data);
-                                // setTimeout(() => {
-                                //     me.notify('Content has been created')
-                                // }, 500)
+                                setTimeout(() => {
+                                    me.notify('Content has been created')
+                                }, 500)
                             }
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
                         }).then(() => {
                             setTimeout( () => {
-                                // me.loader(false)
-                                // me.$router.push('/content-type/news')
+                                me.loader(false)
+                                me.$router.push('/content-type/news')
                             }, 500)
                         })
                     } else {
@@ -195,6 +196,7 @@
                         setTimeout( () => {
                             me.res = res.data.news
                             setTimeout( () => {
+                                me.imageCount = me.$refs.banner_handler.images
                                 $('#description').summernote({
                                     tabsize: 4,
                                     height: 200,

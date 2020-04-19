@@ -28,7 +28,7 @@
                                 <td>{{ data.name }}</td>
                                 <td>{{ $moment().format('MMMM DD, YYYY') }}</td>
                                 <td>
-                                    <div v-line-clamp="1">{{ data.summary }}</div>
+                                    <div v-line-clamp="1" v-html="data.summary"></div>
                                 </td>
                                 <td width="20%">
                                     <div class="table_actions">
@@ -48,7 +48,7 @@
             </div>
         </transition>
         <transition name="fade">
-            <delete v-if="$store.state.deleteStatus" ref="delete" :url="`api/extras/medical-history`" />
+            <delete v-if="$store.state.deleteStatus" ref="delete" :url="`api/web/news`" />
         </transition>
         <foot v-if="$store.state.isAuth" />
     </div>

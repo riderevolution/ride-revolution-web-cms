@@ -162,22 +162,21 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
-                        // me.loader(true)
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         me.$axios.post('api/web/news', formData).then(res => {
                             if (res.data) {
-                                console.log(res.data);
-                                // setTimeout(() => {
-                                //     me.notify('Content has been created')
-                                // }, 500)
+                                setTimeout(() => {
+                                    me.notify('Content has been created')
+                                }, 500)
                             }
                         }).catch(err => {
                             me.$store.state.errorList = err.response.data.errors
                             me.$store.state.errorStatus = true
                         }).then(() => {
                             setTimeout( () => {
-                                // me.loader(false)
-                                // me.$router.push('/content-type/news')
+                                me.loader(false)
+                                me.$router.push('/content-type/news')
                             }, 500)
                         })
                     } else {

@@ -26,14 +26,14 @@
                                     </div>
                                     <div class="form_group">
                                         <label for="sequence">Sequence <span>*</span></label>
-                                        <input type="text" name="sequence" v-validate="{required: true, numeric: true, min_value: 1}" autocomplete="off" class="default_text">
+                                        <input type="text" name="sequence" placeholder="Enter sequence" v-validate="{required: true, numeric: true, min_value: 1}" autocomplete="off" class="default_text">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('sequence')">{{ errors.first('sequence') | properFormat }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group">
-                                    <label for="summary">Summary <span>*</span></label>
-                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:200'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ errors.first('summary') | properFormat }}</span></transition>
+                                    <label for="description">Description <span>*</span></label>
+                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:5000'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +112,23 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        me.$axios.post('api/web/faqs', formData).then(res => {
+                            if (res.data) {
+                                setTimeout(() => {
+                                    me.notify('Content has been created')
+                                }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push('/content-type/faq')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -122,6 +138,7 @@
             },
             fetchData () {
                 const me = this
+                me.loader(true)
                 setTimeout( () => {
                     $('#description').summernote({
                         tabsize: 4,
@@ -135,6 +152,7 @@
                             lineWrapping: true
                         }
                     })
+                    me.loader(false)
                 }, 100)
                 me.loaded = true
             }
