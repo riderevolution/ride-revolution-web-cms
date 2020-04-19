@@ -6,7 +6,7 @@
                     <div class="action_wrapper">
                         <h1 class="header_title">Studios</h1>
                         <div class="actions">
-                            <div class="total">Total: {{ totalItems(totalCount) }}</div>
+                            <div class="total">Total: {{ totalItems(totalResults) }}</div>
                             <div class="toggler">
                                 <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
                                 <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
@@ -44,8 +44,8 @@
                                 <td>{{ data.reservations_email }}</td>
                                 <td>
                                     <div class="table_actions">
-                                        <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
                                         <nuxt-link class="table_action_success" :to="`${$route.path}/${data.id}/album`">Add Album</nuxt-link>
+                                        <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
                                     </div>
                                 </td>
                             </tr>
@@ -75,7 +75,7 @@
             return {
                 loaded: false,
                 rowCount: 0,
-                totalCount: 0,
+                totalResults: 0,
                 status: 1,
                 res: []
             }
@@ -98,7 +98,7 @@
                         setTimeout( () => {
                             me.res = res.data.studios
                             me.rowCount = document.getElementsByTagName('th').length
-                            me.totalCount = me.res.length
+                            me.totalResults = me.res.length
                             me.loaded = true
                         }, 500)
                     }

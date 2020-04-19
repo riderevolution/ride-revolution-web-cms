@@ -17,8 +17,8 @@
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Album Overview</h2>
                                 <div class="form_check">
-                                    <input type="checkbox" id="featured" name="featured" class="action_check">
-                                    <label for="featured">Featured</label>
+                                    <input type="checkbox" id="is_featured" name="is_featured" class="action_check">
+                                    <label for="is_featured">Featured</label>
                                 </div>
                             </div>
                             <div class="form_main_group">
@@ -137,7 +137,24 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('studio_id', me.$route.params.param)
+                        me.$axios.post('api/web/studio-albums', formData).then(res => {
+                            if (res.data) {
+                                setTimeout(() => {
+                                    me.notify('Content has been created')
+                                }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push(`/content-type/studio/${me.$route.params.param}/album`)
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -147,7 +164,11 @@
             },
             fetchData () {
                 const me = this
-                me.loaded = true
+                me.loader(true)
+                setTimeout( () => {
+                    me.loader(false)
+                    me.loaded = true
+                }, 500)
             }
         },
         mounted () {

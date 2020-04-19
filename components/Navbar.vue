@@ -60,6 +60,10 @@
                                 link: '/content-type/studio'
                             },
                             {
+                                title: 'Promo',
+                                link: '/content-type/promo'
+                            },
+                            {
                                 title: 'News',
                                 link: '/content-type/news'
                             },

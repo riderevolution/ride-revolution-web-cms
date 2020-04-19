@@ -26,13 +26,13 @@
                                     </div>
                                     <div class="form_group">
                                         <label for="date_published">Date Published <span>*</span></label>
-                                        <input type="date" name="date_published" :min="$moment().format('YYYY-MM-DD')" v-validate="{required: true}" autocomplete="off" class="default_text date">
+                                        <input type="date" name="date_published" :max="$moment().format('YYYY-MM-DD')" v-validate="{required: true}" autocomplete="off" class="default_text date">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ errors.first('date_published') | properFormat }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group">
                                     <label for="summary">Summary <span>*</span></label>
-                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:200'"></textarea>
+                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:300'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ errors.first('summary') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
@@ -48,6 +48,7 @@
                             </div>
                             <div class="form_main_group">
                                 <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" />
+                                <input type="hidden" name="banner_category[]" value="banner" v-for="(count, key) in imageCount" :key="key">
                                 <image-handler-container ref="image_handler" :dimension="imageDimensions" :multiple="false" />
                             </div>
                         </div>
@@ -57,18 +58,18 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="meta_title">Meta Title </label>
-                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" v-validate="{regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
+                                    <label for="meta_title">Meta Title <span>*</span></label>
+                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="meta_keywords">Meta Keywords </label>
-                                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" v-validate="{regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
+                                    <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
+                                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="meta_description">Meta Description</label>
-                                    <textarea name="meta_description" rows="4" id="meta_description" class="default_text" v-validate="{regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
+                                    <label for="meta_description">Meta Description <span>*</span></label>
+                                    <textarea name="meta_description" rows="4" id="meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
                                 </div>
                             </div>
@@ -109,8 +110,9 @@
                 },
                 imageDimensions: {
                     imageWidth: 676,
-                    imageHeight: 372
-                }
+                    imageHeight: 371
+                },
+                imageCount: 0,
             }
         },
         filters: {
@@ -160,7 +162,24 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        // me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        me.$axios.post('api/web/news', formData).then(res => {
+                            if (res.data) {
+                                console.log(res.data);
+                                // setTimeout(() => {
+                                //     me.notify('Content has been created')
+                                // }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                // me.loader(false)
+                                // me.$router.push('/content-type/news')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -170,7 +189,9 @@
             },
             fetchData () {
                 const me = this
+                me.loader(true)
                 setTimeout( () => {
+                    me.imageCount = me.$refs.banner_handler.images
                     $('#description').summernote({
                         tabsize: 4,
                         height: 200,
@@ -196,6 +217,7 @@
                             lineWrapping: true
                         }
                     })
+                    me.loader(false)
                 }, 100)
                 me.loaded = true
             }

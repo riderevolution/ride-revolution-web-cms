@@ -69,7 +69,7 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description')">{{ errors.first('spotify_description') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="spotify_embed">Spotify Embed <span>*</span> <strong>(The height should be 550px)</strong></label>
+                                    <label for="spotify_embed">Spotify Embed <span>*</span> <strong>(The width should be 100% and height should be 550px)</strong></label>
                                     <textarea name="spotify_embed" rows="3" id="spotify_embed" v-model="res.instructor_details.spotify_embed" class="default_text" placeholder="Paste an iframe link from spotify playlist" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_embed')">{{ errors.first('spotify_embed') | properFormat }}</span></transition>
                                 </div>
@@ -91,18 +91,18 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="meta_title">Meta Title </label>
-                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" v-model="res.instructor_details.meta_title" v-validate="{regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
+                                    <label for="meta_title">Meta Title <span>*</span></label>
+                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" v-model="res.instructor_details.meta_title" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="meta_keywords">Meta Keywords </label>
-                                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" v-model="res.instructor_details.meta_keywords" v-validate="{regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
+                                    <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
+                                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" v-model="res.instructor_details.meta_keywords" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="meta_description">Meta Description</label>
-                                    <textarea name="meta_description" rows="4" id="meta_description" v-model="res.instructor_details.meta_description" class="default_text" v-validate="{regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
+                                    <label for="meta_description">Meta Description <span>*</span></label>
+                                    <textarea name="meta_description" rows="4" id="meta_description" v-model="res.instructor_details.meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
                                 </div>
                             </div>

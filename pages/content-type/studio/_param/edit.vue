@@ -9,7 +9,7 @@
                     </div>
                 </section>
                 <section id="content">
-                    <form id="default_form" @submit.prevent="submitForm()">
+                    <form id="default_form" @submit.prevent="submitForm()" enctype="multipart/form-data">
                         <div class="form_group_disclaimer">
                             <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Fields with asterisks(*) are required.</span></div>
                         </div>
@@ -20,14 +20,14 @@
                             <div class="form_main_group">
                                 <div class="form_flex">
                                     <div class="form_group">
-                                        <label for="email_address">Contact Email Address<span>*</span></label>
-                                        <input type="email" name="email_address" autocomplete="off" v-model="res.email_address" class="default_text" v-validate="{required: true, email: true, regex: '^[a-zA-Z0-9_ |\@|\.]*$', max: 50}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('email_address')">{{ errors.first('email_address') | properFormat }}</span></transition>
+                                        <label for="contact_email_address">Contact Email Address<span>*</span></label>
+                                        <input type="email" name="contact_email_address" autocomplete="off" placeholder="Enter your contact email address" v-model="res.contact_email_address" class="default_text" v-validate="{required: true, email: true, regex: '^[a-zA-Z0-9_ |\@|\.]*$', max: 50}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('contact_email_address')">{{ errors.first('contact_email_address') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
-                                        <label for="phone">Contact Phone Number <span>*</span></label>
-                                        <input type="text" name="phone" autocomplete="off" class="default_text" v-model="res.phone" v-validate="'required|numeric|min:7|max:15'">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('phone')">{{ errors.first('phone') | properFormat }}</span></transition>
+                                        <label for="contact_number">Contact Number <span>*</span></label>
+                                        <input type="text" name="contact_number" autocomplete="off" placeholder="Enter your contact number" class="default_text" v-model="res.contact_number" v-validate="'required|numeric|min:7|max:11'">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('contact_number')">{{ errors.first('contact_number') | properFormat }}</span></transition>
                                     </div>
                                 </div>
                             </div>
@@ -39,17 +39,17 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
-                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:2000'"></textarea>
+                                    <textarea name="description" rows="4" id="description" class="default_text" placeholder="Enter your description" v-validate="'required|max:2000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="opening_hours">Opening Hours <span>*</span></label>
-                                    <textarea name="opening_hours" rows="2" id="opening_hours" class="default_text" v-validate="'required|max:100'"></textarea>
+                                    <textarea name="opening_hours" rows="2" id="opening_hours" class="default_text" placeholder="Enter your opening hours" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('opening_hours')">{{ errors.first('opening_hours') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="google_embed">Google Embed <span>*</span></label>
-                                    <textarea name="google_embed" rows="3" id="google_embed" class="default_text" placeholder="Paste an iframe link from google maps" v-validate="'required'"></textarea>
+                                    <label for="google_embed">Google Embed <span>*</span> <strong>(The width should be 100% and height should be 500px)</strong></label>
+                                    <textarea name="google_embed" rows="3" id="google_embed" class="default_text" v-model="res.google_embed" placeholder="Paste an iframe link from google maps" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('google_embed')">{{ errors.first('google_embed') | properFormat }}</span></transition>
                                 </div>
                             </div>
@@ -57,10 +57,9 @@
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Image Upload</h2>
-                                <button type="button" class="action_btn" @click="addMultiple('image')">Add Image</button>
                             </div>
                             <div class="form_main_group">
-                                <image-handler-container ref="image_handler" :dimension="imageDimensions" :data="(res.images.length > 0) ? res.images : ''" :multiple="true" />
+                                <image-handler-container ref="image_handler" :dimension="imageDimensions" :data="(res.images[0].path != null) ? res.images : ''" :multiple="false" :parent="res.id" />
                             </div>
                         </div>
                         <div class="form_wrapper">
@@ -69,18 +68,18 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="meta_title">Meta Title </label>
-                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" v-validate="{regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
+                                    <label for="meta_title">Meta Title <span>*</span></label>
+                                    <input type="text" name="meta_title" autocomplete="off" class="default_text" placeholder="Enter your meta title" v-model="res.meta_title" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="meta_keywords">Meta Keywords </label>
-                                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" v-validate="{regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
+                                    <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
+                                    <input type="text" name="meta_keywords" autocomplete="off" class="default_text" placeholder="Enter your meta keywords" v-model="res.meta_keywords" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="meta_description">Meta Description</label>
-                                    <textarea name="meta_description" rows="4" id="meta_description" class="default_text" v-validate="{regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
+                                    <label for="meta_description">Meta Description <span>*</span></label>
+                                    <textarea name="meta_description" rows="4" id="meta_description" class="default_text" placeholder="Enter your meta description" v-model="res.meta_description" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
                                 </div>
                             </div>
@@ -115,8 +114,8 @@
                 loaded: false,
                 res: [],
                 imageDimensions: {
-                    imageWidth: 315,
-                    imageHeight: 281
+                    imageWidth: 648,
+                    imageHeight: 579
                 }
             }
         },
@@ -167,7 +166,24 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('_method', 'PATCH')
+                        me.$axios.post(`api/web/studios/${me.$route.params.param}`, formData).then(res => {
+                            if (res.data) {
+                                setTimeout(() => {
+                                    me.notify('Content has been updated')
+                                }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push('/content-type/studio')
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
 							offset: -250
@@ -180,6 +196,7 @@
                 me.loader(true)
                 me.$axios.get(`api/studios/${me.$route.params.param}`).then(res => {
                     if (res.data) {
+                        me.res = res.data.studio
                         setTimeout( () => {
                             $('#description').summernote({
                                 tabsize: 4,
@@ -209,7 +226,6 @@
                             $('#description').summernote('code', me.res.description)
                             $('#opening_hours').summernote('code', me.res.opening_hours)
                         }, 100)
-                        me.res = res.data.studio
                         me.loaded = true
                     }
                 }).catch(err => {

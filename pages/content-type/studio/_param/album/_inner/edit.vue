@@ -5,7 +5,7 @@
                 <section id="top_content" class="table">
                     <nuxt-link :to="`/content-type/studio/${$route.params.param}/album`" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Album</span></nuxt-link>
                     <div class="action_wrapper">
-                        <h1 class="header_title">Add an Album</h1>
+                        <h1 class="header_title">Update {{ res.name }}</h1>
                     </div>
                 </section>
                 <section id="content">
@@ -17,8 +17,8 @@
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Album Overview</h2>
                                 <div class="form_check">
-                                    <input type="checkbox" id="featured" name="featured" class="action_check">
-                                    <label for="featured">Featured</label>
+                                    <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.is_featured">
+                                    <label for="is_featured">Featured</label>
                                 </div>
                             </div>
                             <div class="form_main_group">
@@ -42,7 +42,7 @@
                                 <button type="button" class="action_btn" @click="addMultiple('image')">Add Image</button>
                             </div>
                             <div class="form_main_group">
-                                <image-handler-container ref="image_handler" :multiple="true" :data="(res.images) ? res.images : ''" :parent="res.id" />
+                                <image-handler-container ref="image_handler" :multiple="true" :data="res.images" :parent="res.id" />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
@@ -137,7 +137,25 @@
                 const me = this
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
+                        me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('studio_id', me.$route.params.param)
+                        formData.append('_method', 'PATCH')
+                        me.$axios.post(`api/web/studio-albums/${me.$route.params.inner}`, formData).then(res => {
+                            if (res.data) {
+                                setTimeout(() => {
+                                    me.notify('Content has been updated')
+                                }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                                me.$router.push(`/content-type/studio/${me.$route.params.param}/album`)
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -147,7 +165,22 @@
             },
             fetchData () {
                 const me = this
-                me.loaded = true
+                me.loader(true)
+                me.$axios.get(`api/web/studio-albums/${me.$route.params.inner}`).then(res => {
+                    if (res.data) {
+                        setTimeout( () => {
+                            me.res = res.data.studioAlbum
+                            me.loaded = true
+                        }, 500)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             }
         },
         mounted () {

@@ -1,6 +1,6 @@
 <template>
 	<div class="form_image_group">
-        <label>Banner <span>*</span> <strong v-if="dimension.imageWidth != 0">( Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
+        <label>Banner <span>*</span> <strong v-if="dimension.imageWidth != 0">( Max: 2MB: Dimension: {{ dimension.imageWidth }} x {{ dimension.imageHeight }} )</strong></label>
 		<banner-handler v-for="(image, key) in images" :key="key" :unique="key" :item="image" ref="imagePicker" :parent="parent" :tableName="tableName" :dimension="dimension" />
 	</div>
 </template>
