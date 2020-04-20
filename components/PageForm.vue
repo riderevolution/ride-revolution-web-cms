@@ -73,7 +73,7 @@
             <div class="form_flex">
                 <div class="form_check"></div>
                 <div class="button_group">
-                    <nuxt-link to="/content-type/news" class="action_cancel_btn">Cancel</nuxt-link>
+                    <nuxt-link to="/pages" class="action_cancel_btn">Cancel</nuxt-link>
                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
                 </div>
             </div>

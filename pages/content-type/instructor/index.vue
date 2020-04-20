@@ -19,13 +19,6 @@
                                 <label for="q">Find a Instructor</label>
                                 <input type="text" name="q" autocomplete="off" placeholder="Search for a instructor" class="default_text search_alternate">
                             </div>
-                            <div class="form_group margin">
-                                <label for="studio_id">Studio</label>
-                                <select class="default_select alternate" name="studio_id">
-                                    <option value="0" selected>All Studios</option>
-                                    <option :value="data.id" v-for="(data, key) in studios" :key="key">{{ data.name }}</option>
-                                </select>
-                            </div>
                             <button type="submit" name="button" class="action_btn alternate margin">Search</button>
                         </form>
                     </div>
@@ -94,8 +87,7 @@
                 rowCount: 0,
                 totalResults: 0,
                 status: 1,
-                res: [],
-                studios: []
+                res: []
             }
         },
         methods: {
@@ -132,9 +124,6 @@
                 me.$axios.get(`api/instructors?enabled=${status}`).then(res => {
                     if (res.data) {
                         setTimeout( () => {
-                            me.$axios.get('api/studios?enabled=1').then(res => {
-                                me.studios = res.data.studios
-                            })
                             me.res = res.data
                             me.totalResults = me.res.instructors.total
                             me.loaded = true

@@ -22,6 +22,11 @@
                     <input type="text" name="image_alt[]" :id="`image_alt_${unique}`" v-validate="{required: true, regex: '^[a-zA-Z|\_|\-]*$', max: 20}" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_alt[]`)">{{ errors.first(`image_alt[]`) | properFormat }}</span></transition>
                 </div>
+                <div class="form_group" v-if="$parent.multiple">
+                    <label :for="`image_sequence${unique}`">Image Sequence <span>*</span></label>
+                    <input type="text" name="image_sequence[]" :id="`image_sequence_${unique}`" v-validate="{required: true, numeric: true, min_value: 1, max_value: 99}" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_sequence[]`)">{{ errors.first(`image_sequence[]`) | properFormat }}</span></transition>
+                </div>
             </div>
         </div>
     </div>

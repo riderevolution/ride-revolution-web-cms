@@ -111,7 +111,7 @@
                             <div class="form_flex">
                                 <div class="form_check">
                                     <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.instructor_details.is_featured">
-                                    <label for="is_featured">Featured</label>
+                                    <label for="is_featured">Rider's Guide</label>
                                 </div>
                                 <div class="button_group">
                                     <nuxt-link to="/content-type/instructor" class="action_cancel_btn">Cancel</nuxt-link>

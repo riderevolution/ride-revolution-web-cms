@@ -18,7 +18,7 @@
                                 <h2 class="form_title">Album Overview</h2>
                                 <div class="form_check">
                                     <input type="checkbox" id="is_featured" name="is_featured" class="action_check">
-                                    <label for="is_featured">Featured</label>
+                                    <label for="is_featured">Amenities</label>
                                 </div>
                             </div>
                             <div class="form_main_group">
