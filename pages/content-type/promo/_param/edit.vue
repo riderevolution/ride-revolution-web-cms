@@ -15,11 +15,23 @@
                         </div>
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
-                                <h2 class="form_title">Image Upload</h2>
+                                <h2 class="form_title">Information</h2>
                                 <div class="form_check">
                                     <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.is_featured">
                                     <label for="is_featured">Home Page</label>
                                 </div>
+                            </div>
+                            <div class="form_main_group">
+                                <div class="form_group">
+                                    <label for="description">Description <span>*</span></label>
+                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:200'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form_wrapper">
+                            <div class="form_header_wrapper">
+                                <h2 class="form_title">Image Upload</h2>
                             </div>
                             <div class="form_main_group">
                                 <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="(res.banners.length > 0) ? res.banners : ''" :parent="res.id" />
@@ -143,6 +155,19 @@
                         me.res = res.data.promo
                         setTimeout( () => {
                             me.imageCount = me.$refs.banner_handler.images
+                            $('#description').summernote({
+                                tabsize: 4,
+                                height: 200,
+                                followingToolbar: false,
+                                codemirror: {
+                                    lineNumbers: true,
+                                    htmlMode: true,
+                                    mode: "text/html",
+                                    tabMode: 'indent',
+                                    lineWrapping: true
+                                }
+                            })
+                            $('#description').summernote('code', me.res.description)
                         }, 100)
                         me.loaded = true
                     }

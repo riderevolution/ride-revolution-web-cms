@@ -24,7 +24,7 @@
                 </div>
                 <div class="form_group" v-if="$parent.multiple">
                     <label :for="`image_sequence${unique}`">Image Sequence <span>*</span></label>
-                    <input type="text" name="image_sequence[]" :id="`image_sequence_${unique}`" v-validate="{required: true, numeric: true, min_value: 1, max_value: 99}" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
+                    <input type="text" name="image_sequence[]" :id="`image_sequence_${unique}`" v-validate="{required: true, numeric: true, min_value: 1, max_value: 99}" autocomplete="off" class="action_form default_text" v-model="dataImage.sequence">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_sequence[]`)">{{ errors.first(`image_sequence[]`) | properFormat }}</span></transition>
                 </div>
             </div>
@@ -67,7 +67,8 @@
                 dataImage: {
                     id: 0,
                     title: '',
-                    alt: ''
+                    alt: '',
+                    sequence: 0
                 }
             }
         },
@@ -163,6 +164,7 @@
                     this.dataImage.id = (this.item.id != null) ? this.item.id : 0
                     this.dataImage.title = this.item.title
                     this.dataImage.alt = this.item.alt
+                    this.dataImage.sequence = this.item.sequence
                     this.showTags = (this.item != 0) ? true : false
                     ctr++
                 }
