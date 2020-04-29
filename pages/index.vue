@@ -59,6 +59,8 @@
             setTimeout( () => {
                 if (!me.$nuxt.$loading.show) {
                     me.loader(false)
+                } else {
+                    me.loader(false)
                 }
             }, 500)
         }

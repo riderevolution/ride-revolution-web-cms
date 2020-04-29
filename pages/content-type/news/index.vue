@@ -27,7 +27,7 @@
                             <tr v-for="(data, key) in res" :key="key">
                                 <td>{{ data.name }}</td>
                                 <td>{{ $moment().format('MMMM DD, YYYY') }}</td>
-                                <td>
+                                <td width="50%">
                                     <div v-line-clamp="1" v-html="data.summary"></div>
                                 </td>
                                 <td width="20%">
