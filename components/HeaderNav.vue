@@ -31,11 +31,11 @@
             return {
                 isToggled: false,
                 user: {
-                    first_name: '',
-                    last_name: '',
+                    first_name: 'asd',
+                    last_name: 'asd',
                     staff_details: {
                         role: {
-                            display_name: ''
+                            display_name: 'asd'
                         }
                     }
                 }

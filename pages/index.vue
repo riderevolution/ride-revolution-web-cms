@@ -37,18 +37,6 @@
                     {
                         label: 'Inquiries',
                         imgSrc: '/icons/system-emails-icon.svg'
-                    },
-                    {
-                        label: 'Inquiries',
-                        imgSrc: '/icons/system-emails-icon.svg'
-                    },
-                    {
-                        label: 'Inquiries',
-                        imgSrc: '/icons/system-emails-icon.svg'
-                    },
-                    {
-                        label: 'Inquiries',
-                        imgSrc: '/icons/system-emails-icon.svg'
                     }
                 ]
             }

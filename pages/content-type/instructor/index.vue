@@ -142,10 +142,10 @@
         },
         mounted () {
             const me = this
-            me.fetchData(1)
             setTimeout( () => {
+                me.fetchData(1)
                 window.scrollTo({ top: 0, behavior: 'smooth' })
-            }, 300)
+            }, 500)
         }
     }
 </script>

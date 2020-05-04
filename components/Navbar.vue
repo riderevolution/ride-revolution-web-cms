@@ -64,6 +64,10 @@
                                 link: '/content-type/promo'
                             },
                             {
+                                title: 'Promo Announcement',
+                                link: '/content-type/promo-announcement'
+                            },
+                            {
                                 title: 'News',
                                 link: '/content-type/news'
                             },

@@ -170,6 +170,7 @@
                             if (res.data) {
                                 setTimeout(() => {
                                     me.notify('Content has been created')
+                                    me.$router.push('/content-type/news')
                                 }, 500)
                             }
                         }).catch(err => {
@@ -178,7 +179,6 @@
                         }).then(() => {
                             setTimeout( () => {
                                 me.loader(false)
-                                me.$router.push('/content-type/news')
                             }, 500)
                         })
                     } else {

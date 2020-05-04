@@ -3,7 +3,7 @@
         <transition name="fade">
             <div id="admin" class="cms_dashboard" v-if="loaded">
                 <section id="top_content" class="table">
-                    <nuxt-link to="/content-type/promo" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Promo</span></nuxt-link>
+                    <nuxt-link to="/content-type/promo-announcement" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Promo Announcement</span></nuxt-link>
                     <div class="action_wrapper">
                         <h1 class="header_title">Update {{ res.name }}</h1>
                     </div>
@@ -23,7 +23,12 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="description">Description <span>*</span></label>
+                                    <label for="name">Name <span>*</span></label>
+                                    <input type="text" name="name" placeholder="Enter news name" autocomplete="off" v-model="res.name" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
+                                </div>
+                                <div class="form_group">
+                                    <label for="description">Description <b>(Max Length: 200)</b><span>*</span></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:200'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
@@ -34,7 +39,7 @@
                                 <h2 class="form_title">Image Upload</h2>
                             </div>
                             <div class="form_main_group">
-                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="(res.banners.length > 0) ? res.banners : ''" :parent="res.id" />
+                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="res.banners" :parent="res.id" />
                                 <input type="hidden" name="banner_category[]" value="banner" v-for="(count, key) in imageCount" :key="key">
                             </div>
                         </div>
@@ -125,11 +130,11 @@
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')
-                        me.$axios.post(`api/web/promos/${me.$route.params.param}`, formData).then(res => {
+                        me.$axios.post(`api/promo-announcements/${me.$route.params.param}`, formData).then(res => {
                             if (res.data) {
                                 setTimeout(() => {
                                     me.notify('Content has been updated')
-                                    me.$router.push('/content-type/promo')
+                                    me.$router.push('/content-type/promo-announcement')
                                 }, 500)
                             }
                         }).catch(err => {
@@ -150,9 +155,9 @@
             fetchData () {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/inventory/promos/${me.$route.params.param}`).then(res => {
+                me.$axios.get(`api/promo-announcements/${me.$route.params.param}`).then(res => {
                     if (res.data) {
-                        me.res = res.data.promo
+                        me.res = res.data.promoAnnouncement
                         setTimeout( () => {
                             me.imageCount = me.$refs.banner_handler.images
                             $('#description').summernote({
