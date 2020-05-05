@@ -8,29 +8,15 @@
                 <h2 class="form_title">Information</h2>
             </div>
             <div class="form_main_group">
-                <div class="form_flex" v-if="$route.params.slug != 'home'">
-                    <div class="form_group">
-                        <label for="title">Title <span>*</span></label>
-                        <input type="text" name="title" placeholder="Enter page title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
-                        <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
-                    </div>
-                    <div class="form_group">
-                        <label for="subtitle">Subtitle <span>*</span></label>
-                        <input type="text" name="subtitle" placeholder="Enter page subtitle" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 100}">
-                        <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
-                    </div>
+                <div class="form_group">
+                    <label for="title">Title <span>*</span></label>
+                    <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', max: 50}">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
                 </div>
-                <div v-else>
-                    <div class="form_group">
-                        <label for="title">Title <span>*</span></label>
-                        <input type="text" name="title" placeholder="Enter page title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
-                        <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
-                    </div>
-                    <div class="form_group">
-                        <label for="subtitle">Subtitle <span>*</span></label>
-                        <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'required|max:5000'"></textarea>
-                        <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
-                    </div>
+                <div class="form_group" v-if="hasImage">
+                    <label for="subtitle">Subtitle</label>
+                    <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'max:5000'"></textarea>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
                 </div>
             </div>
         </div>
@@ -41,7 +27,7 @@
             <div class="form_main_group">
                 <div class="form_group">
                     <label for="teaser_title">Teaser Title <span>*</span></label>
-                    <input type="text" name="teaser_title" placeholder="Enter teaser title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
+                    <input type="text" name="teaser_title" placeholder="Enter teaser title" v-model="data.teaser_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&]*$', max: 50}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ errors.first('teaser_title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
@@ -56,7 +42,8 @@
                 <h2 class="form_title">Image Upload</h2>
             </div>
             <div class="form_main_group">
-                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" />
+                <banner-handler-container ref="banner_handler" :data="(data.banners[0].path != null) ? data.banners : ''" :parent="data.id" :dimension="bannerDimensions" />
+                <input type="hidden" name="banner_category[]" value="banner" v-for="(count, key) in imageCount" :key="key">
             </div>
         </div>
         <div class="form_wrapper">
@@ -66,17 +53,17 @@
             <div class="form_main_group">
                 <div class="form_group">
                     <label for="meta_title">Meta Title <span>*</span></label>
-                    <input type="text" name="meta_title" autocomplete="off" placeholder="Enter your meta title" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
+                    <input type="text" name="meta_title" autocomplete="off" placeholder="Enter your meta title" v-model="data.meta_title" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 20, max: 70}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
-                    <input type="text" name="meta_keywords" autocomplete="off" placeholder="Enter your meta keywords" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
+                    <input type="text" name="meta_keywords" autocomplete="off" placeholder="Enter your meta keywords" v-model="data.meta_keywords" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\,]*$', min: 50, max: 150}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="meta_description">Meta Description <span>*</span></label>
-                    <textarea name="meta_description" rows="4" id="meta_description" placeholder="Enter your meta description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
+                    <textarea name="meta_description" rows="4" id="meta_description" placeholder="Enter your meta description" v-model="data.meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\,|\.]*$', min: 150, max: 380}"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
                 </div>
             </div>
@@ -122,10 +109,11 @@
         },
         data () {
             return {
-                res: [],
+                res: null,
+                imageCount: 0,
                 bannerDimensions: {
-                    imageWidth: (!this.isHome) ? 2564 : 1280,
-                    imageHeight: (!this.isHome) ? 593 : 803
+                    imageWidth: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 2560 : 2564) : 1280 ,
+                    imageHeight: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 478 : 593) : 803
                 }
             }
         },
@@ -178,6 +166,24 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
+                        formData.append('type', me.data.type)
+                        formData.append('_method', 'PATCH')
+                        me.loader(true)
+                        me.$axios.post(`api/page-settings/${me.$route.params.slug}`, formData).then(res => {
+                            if (res.data) {
+                                setTimeout(() => {
+                                    me.notify('Page has been updated')
+                                    me.$router.push('/pages')
+                                }, 500)
+                            }
+                        }).catch(err => {
+                            me.$store.state.errorList = err.response.data.errors
+                            me.$store.state.errorStatus = true
+                        }).then(() => {
+                            setTimeout( () => {
+                                me.loader(false)
+                            }, 500)
+                        })
                     } else {
                         me.$scrollTo('.validation_errors', {
                             offset: -250
@@ -188,15 +194,18 @@
         },
         mounted () {
             const me = this
-            if (me.data != null) {
-                me.res = me.data
-            }
             if (me.hasTeaser) {
                 setTimeout( () => {
                     $('#teaser_description').summernote({
                         tabsize: 4,
                         height: 200,
                         followingToolbar: false,
+                        toolbar: [
+                            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                            [ 'color', [ 'color' ] ],
+                            [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                        ],
                         codemirror: {
                             lineNumbers: true,
                             htmlMode: true,
@@ -206,29 +215,38 @@
                         }
                     })
                     if (me.data != null) {
-                        $('#teaser_description').summernote('code', me.res.teaser_description)
+                        $('#teaser_description').summernote('code', me.data.teaser_description)
                     }
                 }, 100)
             }
-            if (me.$route.params.slug == 'home') {
-                setTimeout( () => {
-                    $('#subtitle').summernote({
-                        tabsize: 4,
-                        height: 200,
-                        followingToolbar: false,
-                        codemirror: {
-                            lineNumbers: true,
-                            htmlMode: true,
-                            mode: "text/html",
-                            tabMode: 'indent',
-                            lineWrapping: true
-                        }
-                    })
-                    if (me.data != null) {
-                        $('#subtitle').summernote('code', me.res.subtitle)
+            setTimeout( () => {
+                $('#subtitle').summernote({
+                    tabsize: 4,
+                    height: 200,
+                    followingToolbar: false,
+                    toolbar: [
+                        [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                        [ 'color', [ 'color' ] ],
+                        [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                        [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                    ],
+                    codemirror: {
+                        lineNumbers: true,
+                        htmlMode: true,
+                        mode: "text/html",
+                        tabMode: 'indent',
+                        lineWrapping: true
                     }
-                }, 100)
-            }
+                })
+                if (me.data != null) {
+                    $('#subtitle').summernote('code', me.data.subtitle)
+                }
+            }, 100)
+            setTimeout( () => {
+                if (me.hasImage) {
+                    me.imageCount = me.$refs.banner_handler.images
+                }
+            }, 10)
         }
     }
 </script>

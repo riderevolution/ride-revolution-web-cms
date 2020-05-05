@@ -34,7 +34,22 @@
         methods: {
             fetchData () {
                 const me = this
-                me.loaded = true
+                me.loader(true)
+                me.$axios.get(`api/page-settings/${me.$route.params.slug}`).then(res => {
+                    if (res.data) {
+                        setTimeout( () => {
+                            me.res = res.data.pageSettings
+                            me.loaded = true
+                        }, 500)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                }).then(() => {
+                    setTimeout( () => {
+                        me.loader(false)
+                    }, 500)
+                })
             }
         },
         mounted () {

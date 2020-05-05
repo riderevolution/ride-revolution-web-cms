@@ -225,6 +225,7 @@
                             if (res.data) {
                                 setTimeout(() => {
                                     me.notify('Content has been updated')
+                                    me.$router.push('/content-type/instructor')
                                 }, 500)
                             }
                         }).catch(err => {
@@ -233,7 +234,6 @@
                         }).then(() => {
                             setTimeout( () => {
                                 me.loader(false)
-                                me.$router.push('/content-type/instructor')
                             }, 500)
                         })
                     } else {
