@@ -8,15 +8,27 @@
                 <h2 class="form_title">Information</h2>
             </div>
             <div class="form_main_group">
-                <div class="form_flex">
+                <div class="form_flex" v-if="$route.params.slug != 'home'">
                     <div class="form_group">
                         <label for="title">Title <span>*</span></label>
-                        <input type="text" name="title" placeholder="Enter page title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
+                        <input type="text" name="title" placeholder="Enter page title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
                     </div>
                     <div class="form_group">
                         <label for="subtitle">Subtitle <span>*</span></label>
                         <input type="text" name="subtitle" placeholder="Enter page subtitle" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 100}">
+                        <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
+                    </div>
+                </div>
+                <div v-else>
+                    <div class="form_group">
+                        <label for="title">Title <span>*</span></label>
+                        <input type="text" name="title" placeholder="Enter page title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
+                        <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
+                    </div>
+                    <div class="form_group">
+                        <label for="subtitle">Subtitle <span>*</span></label>
+                        <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'required|max:5000'"></textarea>
                         <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
                     </div>
                 </div>
@@ -29,12 +41,12 @@
             <div class="form_main_group">
                 <div class="form_group">
                     <label for="teaser_title">Teaser Title <span>*</span></label>
-                    <input type="text" name="teaser_title" placeholder="Enter teaser title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
+                    <input type="text" name="teaser_title" placeholder="Enter teaser title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ errors.first('teaser_title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="teaser_description">Teaser Description <span>*</span></label>
-                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'required|max:3000'"></textarea>
+                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'required|max:5000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ errors.first('teaser_description') | properFormat }}</span></transition>
                 </div>
             </div>
@@ -195,6 +207,25 @@
                     })
                     if (me.data != null) {
                         $('#teaser_description').summernote('code', me.res.teaser_description)
+                    }
+                }, 100)
+            }
+            if (me.$route.params.slug == 'home') {
+                setTimeout( () => {
+                    $('#subtitle').summernote({
+                        tabsize: 4,
+                        height: 200,
+                        followingToolbar: false,
+                        codemirror: {
+                            lineNumbers: true,
+                            htmlMode: true,
+                            mode: "text/html",
+                            tabMode: 'indent',
+                            lineWrapping: true
+                        }
+                    })
+                    if (me.data != null) {
+                        $('#subtitle').summernote('code', me.res.subtitle)
                     }
                 }, 100)
             }

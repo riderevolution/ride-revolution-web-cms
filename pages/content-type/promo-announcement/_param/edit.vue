@@ -24,12 +24,12 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="name">Name <span>*</span></label>
-                                    <input type="text" name="name" placeholder="Enter news name" autocomplete="off" v-model="res.name" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
+                                    <input type="text" name="name" placeholder="Enter announcement name" autocomplete="off" v-model="res.name" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\,|\!|\&]*$', max: 50}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="description">Description <b>(Max Length: 200)</b><span>*</span></label>
-                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:200'"></textarea>
+                                    <label for="description">Description <b>(Max Length: 500)</b><span>*</span></label>
+                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
                             </div>
@@ -164,6 +164,7 @@
                                 tabsize: 4,
                                 height: 200,
                                 followingToolbar: false,
+                                disableResizeEditor: true,
                                 codemirror: {
                                     lineNumbers: true,
                                     htmlMode: true,
