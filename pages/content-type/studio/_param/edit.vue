@@ -202,6 +202,12 @@
                                 tabsize: 4,
                                 height: 200,
                                 followingToolbar: false,
+                                toolbar: [
+                                    [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                                    [ 'color', [ 'color' ] ],
+                                    [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                    [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                                ],
                                 codemirror: {
                                     lineNumbers: true,
                                     htmlMode: true,
@@ -212,9 +218,15 @@
                             })
                             $('#opening_hours').summernote({
                                 tabsize: 4,
-                                height: 100,
+                                height: 200,
                                 followingToolbar: false,
                                 disableResizeEditor: true,
+                                toolbar: [
+                                    [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                                    [ 'color', [ 'color' ] ],
+                                    [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                    [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                                ],
                                 codemirror: {
                                     lineNumbers: true,
                                     htmlMode: true,
