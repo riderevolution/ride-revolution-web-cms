@@ -13,12 +13,12 @@
             <div class="tags_group">
                 <div class="form_group">
                     <label :for="`icon_title${unique}`">Icon Title <span>*</span></label>
-                    <input type="text" name="icon_title[]" :id="`icon_title${unique}`" v-validate="{required: true, regex: '^[a-zA-Z|\_|\-]*$', max: 20}" autocomplete="off" class="action_form default_text" v-model="dataImage.title">
+                    <input type="text" name="icon_title[]" :id="`icon_title${unique}`" v-validate="{required: true, regex: '^[a-zA-Z\-_ |\_]*$', max: 20}" autocomplete="off" class="action_form default_text" v-model="dataImage.title">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('icon_title[]')">{{ errors.first('icon_title[]') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label :for="`icon_alt${unique}`">Icon Alt <span>*</span></label>
-                    <input type="text" name="icon_alt[]" :id="`icon_alt${unique}`" v-validate="{required: true, regex: '^[a-zA-Z|\_|\-]*$', max: 20}" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
+                    <input type="text" name="icon_alt[]" :id="`icon_alt${unique}`" v-validate="{required: true, regex: '^[a-zA-Z\_\-]*$', max: 20}" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('icon_alt[]')">{{ errors.first('icon_alt[]') | properFormat }}</span></transition>
                 </div>
             </div>

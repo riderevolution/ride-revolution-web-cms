@@ -20,7 +20,8 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Sequence</th>
-                                <th>Featured</th>
+                                <th>Amenities</th>
+                                <th>Homepage</th>
                                 <th>Created</th>
                                 <th>Action</th>
                             </tr>
@@ -30,6 +31,7 @@
                                 <td>{{ data.name }}</td>
                                 <td>{{ data.sequence }}</td>
                                 <td>{{ (data.is_featured) ? 'Yes' : 'No' }}</td>
+                                <td>{{ (data.is_homepage) ? 'Yes' : 'No' }}</td>
                                 <td>{{ $moment(data.created_at).format('MMMM DD, YYYY') }}</td>
                                 <td width="20%">
                                     <div class="table_actions">

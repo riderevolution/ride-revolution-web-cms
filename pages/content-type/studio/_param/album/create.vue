@@ -16,10 +16,6 @@
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Album Overview</h2>
-                                <div class="form_check">
-                                    <input type="checkbox" id="is_featured" name="is_featured" class="action_check">
-                                    <label for="is_featured">Amenities</label>
-                                </div>
                             </div>
                             <div class="form_main_group">
                                 <div class="form_flex">
@@ -46,6 +42,14 @@
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
+                            <div class="form_check">
+                                <input type="checkbox" id="is_featured" name="is_featured" class="action_check">
+                                <label for="is_featured">Amenities</label>
+                            </div>
+                            <div class="form_check">
+                                <input type="checkbox" id="is_homepage" name="is_homepage" class="action_check">
+                                <label for="is_homepage">Homepage</label>
+                            </div>
                             <div class="form_flex">
                                 <div class="form_check"></div>
                                 <div class="button_group">
