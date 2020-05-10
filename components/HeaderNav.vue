@@ -51,7 +51,16 @@
         },
         mounted () {
             const me = this
-            me.user = me.$store.state.user
+            let token = me.$cookies.get('token')
+            me.$axios.get('api/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }).then(res => {
+                if (res.data) {
+                    me.user = res.data.user
+                }
+            })
         }
     }
 </script>
