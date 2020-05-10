@@ -28,10 +28,10 @@
                         <thead>
                             <tr>
                                 <th>Full Name</th>
-                                <th>Studio</th>
                                 <th>Nickname</th>
                                 <th>Email Address</th>
                                 <th>Contact No.</th>
+                                <th>Riders' Guide</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -48,10 +48,10 @@
                                         <div class="table_data_link">{{ data.first_name }} {{ data.last_name }}</div>
                                     </div>
                                 </td>
-                                <td>{{ data.instructor_details.studio.name }}</td>
                                 <td>{{ data.instructor_details.nickname }}</td>
                                 <td>{{ data.email }}</td>
                                 <td>{{ (data.instructor_details != null) ? data.instructor_details.io_contact_number : '-' }}</td>
+                                <td>{{ (data.instructor_details.is_featured == 1) ? 'Yes' : 'No' }}</td>
                                 <td>
                                     <div class="table_actions">
                                         <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>

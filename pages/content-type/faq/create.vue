@@ -21,7 +21,7 @@
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter faq name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 30}">
+                                        <input type="text" name="name" placeholder="Enter faq name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'_ |\?|\,|\!|\&]*$', max: 100}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">

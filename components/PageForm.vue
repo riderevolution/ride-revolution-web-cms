@@ -10,7 +10,7 @@
             <div class="form_main_group">
                 <div class="form_group">
                     <label for="title">Title <span>*</span></label>
-                    <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', max: 50}">
+                    <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', max: 100}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group" v-if="hasImage">
@@ -27,7 +27,7 @@
             <div class="form_main_group">
                 <div class="form_group">
                     <label for="teaser_title">Teaser Title <span>*</span></label>
-                    <input type="text" name="teaser_title" placeholder="Enter teaser title" v-model="data.teaser_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&]*$', max: 50}">
+                    <input type="text" name="teaser_title" placeholder="Enter teaser title" v-model="data.teaser_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\.|\!|\&]*$', max: 100}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ errors.first('teaser_title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">

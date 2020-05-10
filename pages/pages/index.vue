@@ -107,13 +107,13 @@
                     {
                         label: 'Studios',
                         page_link: 'http://riderev.designbluemanila.ph/studios',
-                        cms_link: `/pages/studios?t=${this.randomString()}`,
+                        cms_link: '/pages/studios',
                         searched: true
                     },
                     {
                         label: 'About',
                         page_link: 'http://riderev.designbluemanila.ph/about',
-                        cms_link: '/pages/about',
+                        cms_link: `/pages/about?t=${this.randomString()}`,
                         searched: true
                     },
                     {
