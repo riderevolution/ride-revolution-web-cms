@@ -27,11 +27,6 @@
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:3000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
-                                <!-- <div class="form_group">
-                                    <label for="quote">Quote <span>*</span></label>
-                                    <textarea name="quote" rows="2" id="quote" class="default_text" v-validate="'required|max:200'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('quote')">{{ errors.first('quote') | properFormat }}</span></transition>
-                                </div> -->
                                 <div class="form_group">
                                     <label for="instagram">Instagram <span>*</span></label>
                                     <input type="text" name="instagram" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram" placeholder="Enter instagram link" v-validate="{required: true, url: {require_protocol: true }}">
@@ -64,7 +59,7 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="spotify_description">Spotify Description <span>*</span></label>
-                                    <textarea name="spotify_description" rows="2" id="spotify_description" class="default_text" v-validate="'required|max:200'"></textarea>
+                                    <textarea name="spotify_description" rows="2" id="spotify_description" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description')">{{ errors.first('spotify_description') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
@@ -116,6 +111,7 @@
                                 <label for="recommended">Ride Rev Recommendations</label>
                             </div>
                             <div class="form_flex">
+                                <div class="form_check"></div>
                                 <div class="button_group">
                                     <nuxt-link to="/content-type/instructor" class="action_cancel_btn">Cancel</nuxt-link>
                                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
@@ -145,7 +141,7 @@
                 specializations: [],
                 loaded: false,
                 imageDimensions: {
-                    imageWidth: 469,
+                    imageWidth: 600,
                     imageHeight: 922
                 },
                 imageCount: 0,
@@ -213,16 +209,16 @@
                 const me = this
                 let ctr = 0
                 me.$validator.validateAll().then(valid => {
-                    me.specializations.forEach((data, index) => {
-                        if (data.checked) {
-                            ctr++
-                        }
-                    })
-                    me.noSpecialization = (ctr > 0) ? false : true
-                    if (valid && !me.noSpecialization) {
+                    // me.specializations.forEach((data, index) => {
+                    //     if (data.checked) {
+                    //         ctr++
+                    //     }
+                    // })
+                    // me.noSpecialization = (ctr > 0) ? false : true
+                    if (valid) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
-                        formData.append('specializations', JSON.stringify(me.specializations))
+                        // formData.append('specializations', JSON.stringify(me.specializations))
                         formData.append('_method', 'PATCH')
                         me.$axios.post(`api/web/instructors/${me.$route.params.param}`, formData).then(res => {
                             if (res.data) {
@@ -252,26 +248,19 @@
                 me.$axios.get(`api/instructors/${me.$route.params.param}`).then(res => {
                     if (res.data) {
                         me.res = res.data.user
-                        me.tempSpecializations = me.res.user_specializations
+                        // me.tempSpecializations = me.res.user_specializations
                         setTimeout( () => {
                             me.imageCount = me.$refs.image_handler.images
                             $('#description').summernote({
                                 tabsize: 4,
                                 height: 200,
                                 followingToolbar: false,
-                                codemirror: {
-                                    lineNumbers: true,
-                                    htmlMode: true,
-                                    mode: "text/html",
-                                    tabMode: 'indent',
-                                    lineWrapping: true
-                                }
-                            })
-                            $('#quote').summernote({
-                                tabsize: 4,
-                                height: 100,
-                                followingToolbar: false,
-                                disableResizeEditor: true,
+                                toolbar: [
+                                    [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                                    [ 'color', [ 'color' ] ],
+                                    [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                    [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                                ],
                                 codemirror: {
                                     lineNumbers: true,
                                     htmlMode: true,
@@ -282,9 +271,15 @@
                             })
                             $('#spotify_description').summernote({
                                 tabsize: 4,
-                                height: 100,
+                                height: 150,
                                 followingToolbar: false,
                                 disableResizeEditor: true,
+                                toolbar: [
+                                    [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                                    [ 'color', [ 'color' ] ],
+                                    [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                    [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                                ],
                                 codemirror: {
                                     lineNumbers: true,
                                     htmlMode: true,
@@ -294,24 +289,23 @@
                                 }
                             })
                             $('#description').summernote('code', me.res.instructor_details.description)
-                            $('#quote').summernote('code', me.res.instructor_details.quote)
                             $('#spotify_description').summernote('code', me.res.instructor_details.spotify_description)
                         }, 100)
-                        me.$axios.get('api/specializations').then(res => {
-                            if (res.data) {
-                                res.data.specializations.forEach((specialization, index) => {
-                                    specialization.checked = false
-                                    if (me.tempSpecializations.length > 0) {
-                                        me.tempSpecializations.forEach((temp, index) => {
-                                            if (temp.specialization_id == specialization.id) {
-                                                specialization.checked = true
-                                            }
-                                        })
-                                    }
-                                    me.specializations.push(specialization)
-                                })
-                            }
-                        })
+                        // me.$axios.get('api/specializations').then(res => {
+                        //     if (res.data) {
+                        //         res.data.specializations.forEach((specialization, index) => {
+                        //             specialization.checked = false
+                        //             if (me.tempSpecializations.length > 0) {
+                        //                 me.tempSpecializations.forEach((temp, index) => {
+                        //                     if (temp.specialization_id == specialization.id) {
+                        //                         specialization.checked = true
+                        //                     }
+                        //                 })
+                        //             }
+                        //             me.specializations.push(specialization)
+                        //         })
+                        //     }
+                        // })
                         me.loaded = true
                     }
                 }).catch(err => {
