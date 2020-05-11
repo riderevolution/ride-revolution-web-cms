@@ -24,23 +24,22 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
-                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:2000'"></textarea>
+                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:3000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
-                                <div class="form_group">
+                                <!-- <div class="form_group">
                                     <label for="quote">Quote <span>*</span></label>
                                     <textarea name="quote" rows="2" id="quote" class="default_text" v-validate="'required|max:200'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('quote')">{{ errors.first('quote') | properFormat }}</span></transition>
-                                </div>
+                                </div> -->
                                 <div class="form_group">
                                     <label for="instagram">Instagram <span>*</span></label>
                                     <input type="text" name="instagram" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram" placeholder="Enter instagram link" v-validate="{required: true, url: {require_protocol: true }}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram')">{{ errors.first('instagram') | properFormat }}</span></transition>
                                 </div>
-
                             </div>
                         </div>
-                        <div class="form_wrapper">
+                        <!-- <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Specialization</h2>
                             </div>
@@ -57,7 +56,7 @@
                                     <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>The sequence is based on each checked option.</span></div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Spotify</h2>
@@ -108,11 +107,15 @@
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
+                            <div class="form_check">
+                                <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.instructor_details.is_featured">
+                                <label for="is_featured">Rider's Guide</label>
+                            </div>
+                            <div class="form_check">
+                                <input type="checkbox" id="recommended" name="recommended" class="action_check" :checked="res.instructor_details.recommended">
+                                <label for="recommended">Ride Rev Recommendations</label>
+                            </div>
                             <div class="form_flex">
-                                <div class="form_check">
-                                    <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.instructor_details.is_featured">
-                                    <label for="is_featured">Rider's Guide</label>
-                                </div>
                                 <div class="button_group">
                                     <nuxt-link to="/content-type/instructor" class="action_cancel_btn">Cancel</nuxt-link>
                                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
