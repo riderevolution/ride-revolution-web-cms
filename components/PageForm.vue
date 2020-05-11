@@ -13,7 +13,7 @@
                     <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', max: 100}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
                 </div>
-                <div class="form_group" v-if="hasImage">
+                <div class="form_group">
                     <label for="subtitle">Subtitle</label>
                     <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'max:5000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
