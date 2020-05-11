@@ -17,11 +17,23 @@
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Information</h2>
                                 <div class="form_check">
-                                    <input type="checkbox" id="is_new" name="is_new" class="action_check" :checked="res.instructor_details.is_new">
+                                    <input type="checkbox" id="is_new" name="is_new" class="action_check" :checked="res.instructor_details.is_new == 1">
                                     <label for="is_new">New</label>
                                 </div>
                             </div>
                             <div class="form_main_group">
+                                <div class="form_flex">
+                                    <div class="form_group">
+                                        <label for="first_name">First Name <span>*</span></label>
+                                        <input type="text" name="first_name" autocomplete="off" class="default_text" v-model="res.first_name" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 100}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('first_name')">{{ errors.first('first_name') | properFormat }}</span></transition>
+                                    </div>
+                                    <div class="form_group">
+                                        <label for="last_name">Last Name <span>*</span></label>
+                                        <input type="text" name="last_name" autocomplete="off" class="default_text" v-model="res.last_name" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 100}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('last_name')">{{ errors.first('last_name') | properFormat }}</span></transition>
+                                    </div>
+                                </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:3000'"></textarea>
@@ -103,11 +115,11 @@
                         </div>
                         <div class="form_footer_wrapper">
                             <div class="form_check">
-                                <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.instructor_details.is_featured">
+                                <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.instructor_details.is_featured == 1">
                                 <label for="is_featured">Rider's Guide</label>
                             </div>
                             <div class="form_check">
-                                <input type="checkbox" id="recommended" name="recommended" class="action_check" :checked="res.instructor_details.recommended">
+                                <input type="checkbox" id="recommended" name="recommended" class="action_check" :checked="res.instructor_details.recommended == 1">
                                 <label for="recommended">Ride Rev Recommendations</label>
                             </div>
                             <div class="form_flex">
