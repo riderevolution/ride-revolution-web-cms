@@ -155,13 +155,13 @@
                     {
                         label: 'Privacy Policy',
                         page_link: 'http://riderev.designbluemanila.ph/privacy-policy',
-                        cms_link: `/pages/privacy-policy?n=${this.randomString()}&t=${this.randomString()}`,
+                        cms_link: `/pages/privacy-policy?n=${this.randomString()}`,
                         searched: true
                     },
                     {
                         label: 'Terms & Conditions',
                         page_link: 'http://riderev.designbluemanila.ph/terms-and-conditions',
-                        cms_link: `/pages/terms-and-conditions?n=${this.randomString()}&t=${this.randomString()}`,
+                        cms_link: `/pages/terms-and-conditions?n=${this.randomString()}`,
                         searched: true
                     },
                 ]
