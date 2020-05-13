@@ -25,14 +25,19 @@
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="first_name">First Name <span>*</span></label>
-                                        <input type="text" name="first_name" autocomplete="off" class="default_text" v-model="res.first_name" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 100}">
+                                        <input type="text" name="first_name" autocomplete="off" class="default_text" v-model="res.first_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', max: 100}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('first_name')">{{ errors.first('first_name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="last_name">Last Name <span>*</span></label>
-                                        <input type="text" name="last_name" autocomplete="off" class="default_text" v-model="res.last_name" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', max: 100}">
+                                        <input type="text" name="last_name" autocomplete="off" class="default_text" v-model="res.last_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', max: 100}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('last_name')">{{ errors.first('last_name') | properFormat }}</span></transition>
                                     </div>
+                                </div>
+                                <div class="form_group">
+                                    <label for="position">Position</label>
+                                    <input type="text" name="position" autocomplete="off" class="default_text" v-model="res.position" v-validate="{regex: '^[a-zA-Z0-9\-_ ]*$', max: 100}">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('position')">{{ errors.first('position') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
