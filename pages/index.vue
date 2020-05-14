@@ -51,7 +51,6 @@
                 me.$axios.get('api/inquiries').then(res => {
                     if (res.data) {
                         setTimeout( () => {
-                            console.log(me.res);
                             me.res[0].count = res.data.inquiries.length
                             me.loaded = true
                         }, 500)
@@ -68,9 +67,14 @@
         },
         mounted () {
             const me = this
-            setTimeout( () => {
-                me.fetchData()
-            }, 500)
+            let token = me.$cookies.get('token')
+            if (token == null && token == undefined) {
+                me.validateToken()
+            } else {
+                setTimeout( () => {
+                    me.fetchData()
+                }, 500)
+            }
         }
     }
 </script>
