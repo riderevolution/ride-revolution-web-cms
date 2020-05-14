@@ -1,30 +1,28 @@
 <template>
-    <transition name="fade">
-        <div class="content" v-if="loaded">
-            <transition name="fade">
-                <div id="admin" class="cms_dashboard" v-if="$store.state.isAuth">
-                    <section id="top_content">
-                        <h1 class="header_title">Dashboard</h1>
-                    </section>
-                    <section id="content" class="pad_alt">
-                        <div class="cms_col_four">
-                            <div class="cms_col" v-for="(data, key) in res" :key="key">
-                                <nuxt-link :to="data.link" class="wrapper">
-                                    <div class="total_image">
-                                        <img class="front" :src="data.imgSrc" />
-                                        <img class="back" :src="data.imgSrc" />
-                                    </div>
-                                    <div class="total_count">{{ data.count }}</div>
-                                    <div class="total_text">{{ data.label }}</div>
-                                </nuxt-link>
-                            </div>
+    <div class="content">
+        <transition name="fade">
+            <div id="admin" class="cms_dashboard" v-if="$store.state.isAuth">
+                <section id="top_content">
+                    <h1 class="header_title">Dashboard</h1>
+                </section>
+                <section id="content" class="pad_alt">
+                    <div class="cms_col_four">
+                        <div class="cms_col" v-for="(data, key) in res" :key="key">
+                            <nuxt-link :to="data.link" class="wrapper">
+                                <div class="total_image">
+                                    <img class="front" :src="data.imgSrc" />
+                                    <img class="back" :src="data.imgSrc" />
+                                </div>
+                                <div class="total_count">{{ data.count }}</div>
+                                <div class="total_text">{{ data.label }}</div>
+                            </nuxt-link>
                         </div>
-                    </section>
-                </div>
-            </transition>
-            <foot v-if="$store.state.isAuth" />
-        </div>
-    </transition>
+                    </div>
+                </section>
+            </div>
+        </transition>
+        <foot v-if="$store.state.isAuth" />
+    </div>
 </template>
 
 <script>
