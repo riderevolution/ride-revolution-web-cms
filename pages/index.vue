@@ -1,28 +1,28 @@
 <template>
-    <div class="content">
-        <transition name="fade">
-            <div id="admin" class="cms_dashboard" v-if="$store.state.isAuth">
-                <section id="top_content">
-                    <h1 class="header_title">Dashboard</h1>
-                </section>
-                <section id="content" class="pad_alt">
-                    <div class="cms_col_four">
-                        <div class="cms_col" v-for="(data, key) in res" :key="key">
-                            <nuxt-link :to="data.link" class="wrapper">
-                                <div class="total_image">
-                                    <img class="front" :src="data.imgSrc" />
-                                    <img class="back" :src="data.imgSrc" />
-                                </div>
-                                <div class="total_count">{{ data.count }}</div>
-                                <div class="total_text">{{ data.label }}</div>
-                            </nuxt-link>
+    <transition name="fade">
+        <div class="content" v-if="$store.state.isAuth">
+                <div id="admin" class="cms_dashboard">
+                    <section id="top_content">
+                        <h1 class="header_title">Dashboard</h1>
+                    </section>
+                    <section id="content" class="pad_alt">
+                        <div class="cms_col_four">
+                            <div class="cms_col" v-for="(data, key) in res" :key="key">
+                                <nuxt-link :to="data.link" class="wrapper">
+                                    <div class="total_image">
+                                        <img class="front" :src="data.imgSrc" />
+                                        <img class="back" :src="data.imgSrc" />
+                                    </div>
+                                    <div class="total_count">{{ data.count }}</div>
+                                    <div class="total_text">{{ data.label }}</div>
+                                </nuxt-link>
+                            </div>
                         </div>
-                    </div>
-                </section>
-            </div>
-        </transition>
-        <foot v-if="$store.state.isAuth" />
-    </div>
+                    </section>
+                </div>
+            <foot v-if="$store.state.isAuth" />
+        </div>
+    </transition>
 </template>
 
 <script>
@@ -40,8 +40,7 @@
                         link: '/content-type/inquiry',
                         count: 0
                     }
-                ],
-                loaded: false
+                ]
             }
         },
         methods: {
@@ -52,7 +51,6 @@
                     if (res.data) {
                         setTimeout( () => {
                             me.res[0].count = res.data.inquiries.length
-                            me.loaded = true
                         }, 500)
                     }
                 }).catch(err => {
@@ -68,13 +66,12 @@
         mounted () {
             const me = this
             let token = me.$cookies.get('token')
-            if (token == null && token == undefined) {
-                me.validateToken()
-            } else {
+            if (token != null || token != undefined) {
                 setTimeout( () => {
                     me.fetchData()
                 }, 500)
             }
+            me.validateToken()
         }
     }
 </script>
