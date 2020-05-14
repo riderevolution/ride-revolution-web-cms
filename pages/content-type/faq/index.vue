@@ -66,8 +66,7 @@
                 lastRoute: '',
                 rowCount: 0,
                 totalResults: 0,
-                res: [],
-                status: 1
+                res: []
             }
         },
         methods: {

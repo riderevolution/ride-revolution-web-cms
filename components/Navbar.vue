@@ -74,6 +74,14 @@
                             {
                                 title: 'FAQ',
                                 link: '/content-type/faq'
+                            },
+                            {
+                                title: 'Inquiry',
+                                link: '/content-type/inquiry'
+                            },
+                            {
+                                title: 'Pro Tip',
+                                link: '/content-type/pro-tip'
                             }
                         ]
                     },
