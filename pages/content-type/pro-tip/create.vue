@@ -20,7 +20,7 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="label">Text <span>*</span></label>
-                                    <textarea name="label" rows="2" id="label" class="default_text" v-validate="'required|max:100'"></textarea>
+                                    <textarea name="label" rows="2" id="label" class="default_text" v-validate="'required|max:150'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('label')">{{ errors.first('label') | properFormat }}</span></transition>
                                 </div>
                             </div>
@@ -128,26 +128,9 @@
                 const me = this
                 me.loader(true)
                 setTimeout( () => {
-                    $('#label').summernote({
-                        tabsize: 4,
-                        height: 100,
-                        followingToolbar: false,
-                        disableResizeEditor: true,
-                        toolbar: [
-                            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
-                            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
-                        ],
-                        codemirror: {
-                            lineNumbers: true,
-                            htmlMode: true,
-                            mode: "text/html",
-                            tabMode: 'indent',
-                            lineWrapping: true
-                        }
-                    })
                     me.loader(false)
-                }, 100)
-                me.loaded = true
+                    me.loaded = true
+                }, 500)
             }
         },
         mounted () {
