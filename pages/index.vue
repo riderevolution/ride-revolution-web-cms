@@ -44,34 +44,34 @@
             }
         },
         methods: {
-            fetchData () {
-                const me = this
-                me.loader(true)
-                me.$axios.get('api/inquiries').then(res => {
-                    if (res.data) {
-                        setTimeout( () => {
-                            me.res[0].count = res.data.inquiries.length
-                        }, 500)
-                    }
-                }).catch(err => {
-                    me.$store.state.errorList = err.response.data.errors
-                    me.$store.state.errorStatus = true
-                }).then(() => {
-                    setTimeout( () => {
-                        me.loader(false)
-                    }, 500)
-                })
-            }
+            // fetchData () {
+            //     const me = this
+            //     me.loader(true)
+            //     me.$axios.get('api/inquiries').then(res => {
+            //         if (res.data) {
+            //             setTimeout( () => {
+            //                 me.res[0].count = res.data.inquiries.length
+            //             }, 500)
+            //         }
+            //     }).catch(err => {
+            //         me.$store.state.errorList = err.response.data.errors
+            //         me.$store.state.errorStatus = true
+            //     }).then(() => {
+            //         setTimeout( () => {
+            //             me.loader(false)
+            //         }, 500)
+            //     })
+            // }
         },
         mounted () {
             const me = this
-            let token = me.$cookies.get('token')
-            if (token != null || token != undefined) {
-                setTimeout( () => {
-                    me.fetchData()
-                }, 500)
-            }
-            me.validateToken()
+            // let token = me.$cookies.get('token')
+            // if (token != null || token != undefined) {
+            //     setTimeout( () => {
+            //         me.fetchData()
+            //     }, 500)
+            // }
+            // me.validateToken()
         }
     }
 </script>
