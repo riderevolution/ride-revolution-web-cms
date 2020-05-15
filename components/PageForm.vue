@@ -9,13 +9,13 @@
             </div>
             <div class="form_main_group">
                 <div class="form_group">
-                    <label for="title">Title <span>*</span></label>
-                    <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', max: 100}">
+                    <label for="title">Title<span>*</span></label>
+                    <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', min: 20, max: 100}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
-                    <label for="subtitle">Subtitle</label>
-                    <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'max:5000'"></textarea>
+                    <label for="subtitle">Subtitle <b>(Character limit: 500)</b></label>
+                    <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'min:100|max:500'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
                 </div>
             </div>
@@ -27,12 +27,12 @@
             <div class="form_main_group">
                 <div class="form_group">
                     <label for="teaser_title">Teaser Title <span>*</span></label>
-                    <input type="text" name="teaser_title" placeholder="Enter teaser title" v-model="data.teaser_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\.|\!|\&]*$', max: 100}">
+                    <input type="text" name="teaser_title" placeholder="Enter teaser title" v-model="data.teaser_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\.|\!|\&]*$', min: 20, max: 100}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ errors.first('teaser_title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
-                    <label for="teaser_description">Teaser Description <span>*</span></label>
-                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'required|max:5000'"></textarea>
+                    <label for="teaser_description">Teaser Description <span>*</span> <b>(Character limit: 500)</b></label>
+                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'min:100|max:500'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ errors.first('teaser_description') | properFormat }}</span></transition>
                 </div>
             </div>

@@ -38,12 +38,12 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="description">Description <span>*</span></label>
+                                    <label for="description">Description <span>*</span> <b>(Character limit: 2000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" placeholder="Enter your description" v-validate="'required|max:2000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="opening_hours">Opening Hours <span>*</span></label>
+                                    <label for="opening_hours">Opening Hours <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="opening_hours" rows="2" id="opening_hours" class="default_text" placeholder="Enter your opening hours" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('opening_hours')">{{ errors.first('opening_hours') | properFormat }}</span></transition>
                                 </div>

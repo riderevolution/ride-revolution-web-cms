@@ -24,11 +24,11 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="name">Name <span>*</span></label>
-                                    <input type="text" name="name" placeholder="Enter announcement name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\,|\!|\&]*$', max: 50}">
+                                    <input type="text" name="name" placeholder="Enter announcement name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\,|\!|\&]*$', min: 20, max: 100}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="description">Description <b>(Max Length: 500)</b><span>*</span></label>
+                                    <label for="description">Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
@@ -161,6 +161,12 @@
                         height: 200,
                         followingToolbar: false,
                         disableResizeEditor: true,
+                        toolbar: [
+                            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                            [ 'color', [ 'color' ] ],
+                            [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                        ],
                         codemirror: {
                             lineNumbers: true,
                             htmlMode: true,

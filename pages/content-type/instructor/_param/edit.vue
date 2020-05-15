@@ -25,22 +25,22 @@
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="first_name">First Name <span>*</span></label>
-                                        <input type="text" name="first_name" autocomplete="off" class="default_text" v-model="res.first_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', max: 100}">
+                                        <input type="text" name="first_name" autocomplete="off" class="default_text" v-model="res.first_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 2, max: 100}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('first_name')">{{ errors.first('first_name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="last_name">Last Name <span>*</span></label>
-                                        <input type="text" name="last_name" autocomplete="off" class="default_text" v-model="res.last_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', max: 100}">
+                                        <input type="text" name="last_name" autocomplete="off" class="default_text" v-model="res.last_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 2, max: 100}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('last_name')">{{ errors.first('last_name') | properFormat }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group">
                                     <label for="position">Position</label>
-                                    <input type="text" name="position" autocomplete="off" class="default_text" v-model="res.position" v-validate="{regex: '^[a-zA-Z0-9\-_ ]*$', max: 100}">
+                                    <input type="text" name="position" autocomplete="off" class="default_text" v-model="res.position" v-validate="{regex: '^[a-zA-Z0-9\-_ ]*$', min: 1, max: 100}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('position')">{{ errors.first('position') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="description">Description <span>*</span></label>
+                                    <label for="description">Description <span>*</span> <b>(Character limit: 3000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:3000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="spotify_description">Spotify Description <span>*</span></label>
+                                    <label for="spotify_description">Spotify Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="spotify_description" rows="2" id="spotify_description" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description')">{{ errors.first('spotify_description') | properFormat }}</span></transition>
                                 </div>

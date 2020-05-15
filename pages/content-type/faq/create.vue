@@ -21,7 +21,7 @@
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter faq name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'_ |\?|\,|\!|\&]*$', max: 100}">
+                                        <input type="text" name="name" placeholder="Enter faq name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'_ |\?|\,|\!|\&]*$', min: 20 , max: 100}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
@@ -31,7 +31,7 @@
                                     </div>
                                 </div>
                                 <div class="form_group">
-                                    <label for="description">Description <span>*</span></label>
+                                    <label for="description">Description <span>*</span> <b>(Character limit: 5000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:5000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
@@ -144,6 +144,12 @@
                         tabsize: 4,
                         height: 200,
                         followingToolbar: false,
+                        toolbar: [
+                            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                            [ 'color', [ 'color' ] ],
+                            [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                        ],
                         codemirror: {
                             lineNumbers: true,
                             htmlMode: true,

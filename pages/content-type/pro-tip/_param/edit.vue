@@ -19,7 +19,7 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="label">Text <span>*</span></label>
+                                    <label for="label">Text <span>*</span> <b>(Character limit: 150)</b></label>
                                     <textarea name="label" rows="2" id="label" class="default_text" v-model="res.label" v-validate="'required|max:150'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('label')">{{ errors.first('label') | properFormat }}</span></transition>
                                 </div>

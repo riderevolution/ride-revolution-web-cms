@@ -21,7 +21,7 @@
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="name">Name <span>*</span></label>
-                                        <input type="text" name="name" placeholder="Enter news name" v-model="res.name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', max: 50}">
+                                        <input type="text" name="name" placeholder="Enter news name" v-model="res.name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', min: 20, max: 100}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
@@ -31,12 +31,12 @@
                                     </div>
                                 </div>
                                 <div class="form_group">
-                                    <label for="summary">Summary <span>*</span></label>
-                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:300'"></textarea>
+                                    <label for="summary">Summary <span>*</span> <b>(Character limit: 200)</b></label>
+                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:200'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ errors.first('summary') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="description">Description <span>*</span></label>
+                                    <label for="description">Description <span>*</span> <b>(Character limit: 5000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:5000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
@@ -214,6 +214,12 @@
                                     height: 150,
                                     followingToolbar: false,
                                     disableResizeEditor: true,
+                                    toolbar: [
+                                        [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                                        [ 'color', [ 'color' ] ],
+                                        [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                        [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                                    ],
                                     codemirror: {
                                         lineNumbers: true,
                                         htmlMode: true,
