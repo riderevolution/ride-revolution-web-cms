@@ -29,8 +29,8 @@
                             <tr>
                                 <th>Color</th>
                                 <th>Studio</th>
-                                <th>Purchases Email Sender</th>
-                                <th>Reservations Email Sender</th>
+                                <th>Email</th>
+                                <th>Contact Number</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -40,8 +40,8 @@
                                     <div class="table_color_code" :style="`background-color: ${data.color_code}`"></div>
                                 </td>
                                 <td>{{ data.name }}</td>
-                                <td>{{ data.purchase_email }}</td>
-                                <td>{{ data.reservations_email }}</td>
+                                <td>{{ data.contact_email_address }}</td>
+                                <td>{{ data.contact_number }}</td>
                                 <td>
                                     <div class="table_actions">
                                         <nuxt-link class="table_action_success" :to="`${$route.path}/${data.id}/album`">Add Album</nuxt-link>
