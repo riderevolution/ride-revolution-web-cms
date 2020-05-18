@@ -76,7 +76,7 @@ Vue.mixin({
                 this.$cookies.remove('token')
                 this.$store.state.isAuth = false
                 this.loader(false)
-                this.$router.push('/login')
+                location.href = '/login'
             }).catch(err => {
                 console.log(err)
             })
