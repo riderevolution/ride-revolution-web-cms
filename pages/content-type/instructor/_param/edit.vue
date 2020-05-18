@@ -247,24 +247,25 @@
                     // })
                     // me.noSpecialization = (ctr > 0) ? false : true
                     if (valid) {
-                        me.loader(true)
+                        // me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         // formData.append('specializations', JSON.stringify(me.specializations))
                         formData.append('_method', 'PATCH')
                         me.$axios.post(`api/web/instructors/${me.$route.params.param}`, formData).then(res => {
-                            if (res.data) {
-                                setTimeout(() => {
-                                    me.notify('Content has been updated')
-                                    me.$router.push('/content-type/instructor')
-                                }, 500)
-                            }
-                        }).catch(err => {
-                            me.$store.state.errorList = err.response.data.errors
-                            me.$store.state.errorStatus = true
-                        }).then(() => {
-                            setTimeout( () => {
-                                me.loader(false)
-                            }, 500)
+                            console.log(res.data);
+                        //     if (res.data) {
+                        //         setTimeout(() => {
+                        //             me.notify('Content has been updated')
+                        //             me.$router.push('/content-type/instructor')
+                        //         }, 500)
+                        //     }
+                        // }).catch(err => {
+                        //     me.$store.state.errorList = err.response.data.errors
+                        //     me.$store.state.errorStatus = true
+                        // }).then(() => {
+                        //     setTimeout( () => {
+                        //         me.loader(false)
+                        //     }, 500)
                         })
                     } else {
                         me.$scrollTo('.validation_errors', {
@@ -281,7 +282,6 @@
                         me.res = res.data.user
                         // me.tempSpecializations = me.res.user_specializations
                         setTimeout( () => {
-                            me.imageCount = me.$refs.image_handler.images
                             $('#description').summernote({
                                 tabsize: 4,
                                 height: 200,
@@ -344,6 +344,7 @@
                     me.$store.state.errorStatus = true
                 }).then(() => {
                     setTimeout( () => {
+                        me.imageCount = me.$refs.image_handler.images
                         me.loader(false)
                     }, 500)
                 })
