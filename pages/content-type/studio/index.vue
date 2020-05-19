@@ -13,15 +13,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="filter_wrapper">
-                        <form class="filter_flex" id="filter" @submit.prevent="submitFilter()">
-                            <div class="form_group">
-                                <label for="q">Find a studio</label>
-                                <input type="text" name="q" autocomplete="off" placeholder="Search for a studio" class="default_text search_alternate">
-                            </div>
-                            <button type="submit" name="button" class="action_btn alternate margin">Search</button>
-                        </form>
-                    </div>
                 </section>
                 <section id="content">
                     <table class="cms_table">
