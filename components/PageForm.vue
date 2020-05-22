@@ -14,8 +14,8 @@
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
-                    <label for="subtitle">Subtitle <b>(Character limit: 500)</b></label>
-                    <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'min:100|max:500'"></textarea>
+                    <label for="subtitle">Subtitle <b>(Character limit: 1000)</b></label>
+                    <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'min:10|max:1000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
                 </div>
             </div>
@@ -31,8 +31,8 @@
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ errors.first('teaser_title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
-                    <label for="teaser_description">Teaser Description <span>*</span> <b>(Character limit: 500)</b></label>
-                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'min:100|max:500'"></textarea>
+                    <label for="teaser_description">Teaser Description <span>*</span> <b>(Character limit: 1000)</b></label>
+                    <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'min:10|max:1000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ errors.first('teaser_description') | properFormat }}</span></transition>
                 </div>
             </div>
