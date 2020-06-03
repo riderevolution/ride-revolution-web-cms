@@ -16,6 +16,10 @@
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
                                 <h2 class="form_title">Information</h2>
+                                <div class="form_check">
+                                    <input type="checkbox" id="featured" name="featured" class="action_check" :checked="res.featured">
+                                    <label for="featured">Featured</label>
+                                </div>
                             </div>
                             <div class="form_main_group">
                                 <div class="form_flex">
