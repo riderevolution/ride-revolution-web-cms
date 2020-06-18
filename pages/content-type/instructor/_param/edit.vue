@@ -51,11 +51,16 @@
                                 <h2 class="form_title">Instagram</h2>
                             </div>
                             <div class="form_main_group">
+                                <div class="form_group">
+                                    <label for="instagram">Instagram Link <span>*</span></label>
+                                    <input type="text" name="instagram" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram" placeholder="Enter instagram link" v-validate="{required: true, url: {require_protocol: true }}">
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram')">{{ errors.first('instagram') | properFormat }}</span></transition>
+                                </div>
                                 <div class="form_flex">
                                     <div class="form_group">
-                                        <label for="instagram">Instagram Link <span>*</span></label>
-                                        <input type="text" name="instagram" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram" placeholder="Enter instagram link" v-validate="{required: true, url: {require_protocol: true }}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram')">{{ errors.first('instagram') | properFormat }}</span></transition>
+                                        <label for="instagram_hashtag">Instagram Hashtag <span>*</span></label>
+                                        <input type="text" name="instagram_hashtag" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram_hashtag" placeholder="#ridewithsample" v-validate="{required: true, regex: '^[a-zA-Z0-9|\#]*$', min: 2}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram_hashtag')">{{ errors.first('instagram_hashtag') | properFormat }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="instagram_name">Instagram Name <span>*</span></label>
