@@ -19,9 +19,9 @@
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group" v-if="$route.params.slug == 'home'">
-                    <label for="title">Video Link<span>*</span></label>
-                    <input type="text" name="title" placeholder="Enter page video link"autocomplete="off" class="default_text">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
+                    <label for="video_link">Video Link<span>*</span></label>
+                    <input type="text" name="video_link" placeholder="Enter page video link"autocomplete="off" class="default_text" v-validate="{required: true, url: {require_protocol: true }}">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('video_link')">{{ errors.first('video_link') | properFormat }}</span></transition>
                 </div>
             </div>
         </div>
