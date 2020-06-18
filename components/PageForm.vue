@@ -18,6 +18,11 @@
                     <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'min:10|max:1000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
                 </div>
+                <div class="form_group" v-if="$route.params.slug == 'home'">
+                    <label for="title">Video Link<span>*</span></label>
+                    <input type="text" name="title" placeholder="Enter page video link"autocomplete="off" class="default_text">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
+                </div>
             </div>
         </div>
         <div class="form_wrapper" v-if="hasTeaser">
