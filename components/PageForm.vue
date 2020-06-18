@@ -20,7 +20,7 @@
                 </div>
                 <div class="form_group" v-if="$route.params.slug == 'home'">
                     <label for="video_link">Video Link<span>*</span></label>
-                    <input type="text" name="video_link" placeholder="Enter page video link"autocomplete="off" class="default_text" v-validate="{required: true, url: {require_protocol: true }}">
+                    <input type="text" name="video_link" placeholder="Enter video link" v-model="data.video_link" autocomplete="off" class="default_text" v-validate="{required: true, url: {require_protocol: true }}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('video_link')">{{ errors.first('video_link') | properFormat }}</span></transition>
                 </div>
             </div>
