@@ -34,10 +34,17 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('last_name')">{{ errors.first('last_name') | properFormat }}</span></transition>
                                     </div>
                                 </div>
-                                <div class="form_group">
-                                    <label for="position">Position</label>
-                                    <input type="text" name="position" autocomplete="off" class="default_text" v-model="res.position" v-validate="{regex: '^[a-zA-Z0-9\-_ ]*$', min: 1, max: 100}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('position')">{{ errors.first('position') | properFormat }}</span></transition>
+                                <div class="form_flex">
+                                    <div class="form_group">
+                                        <label for="position">Position</label>
+                                        <input type="text" name="position" autocomplete="off" class="default_text" v-model="res.position" v-validate="{regex: '^[a-zA-Z0-9\-_ ]*$', min: 1, max: 100}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('position')">{{ errors.first('position') | properFormat }}</span></transition>
+                                    </div>
+                                    <div class="form_group">
+                                        <label for="nickname">Nickname <span>*</span></label>
+                                        <input type="text" name="nickname" autocomplete="off" class="default_text" v-model="res.instructor_details.nickname" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 2, max: 100}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('nickname')">{{ errors.first('nickname') | properFormat }}</span></transition>
+                                    </div>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 3000)</b></label>
