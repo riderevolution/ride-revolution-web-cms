@@ -74,6 +74,7 @@
         data () {
             return {
                 loaded: false,
+                filter: false,
                 rowCount: 0,
                 totalResults: 0,
                 status: 1,
@@ -89,6 +90,7 @@
             },
             submitFilter () {
                 const me = this
+                me.filter = true
                 let formData = new FormData(document.getElementById('filter'))
                 formData.append('enabled', me.status)
                 me.loader(true)

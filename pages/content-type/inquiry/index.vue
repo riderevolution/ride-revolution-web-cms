@@ -22,8 +22,8 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="res.length > 0">
-                            <tr v-for="(data, key) in res" :key="key">
+                        <tbody v-if="res.inquiries.data.length > 0">
+                            <tr v-for="(data, key) in res.inquiries.data" :key="key">
                                 <td>{{ data.ticket_number }}</td>
                                 <td>{{ data.first_name }} {{ data.last_name }}</td>
                                 <td>{{ data.email }}</td>
@@ -41,6 +41,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <pagination :apiRoute="res.inquiries.path" :current="res.inquiries.current_page" :last="res.inquiries.last_page" />
                 </section>
             </div>
         </transition>
@@ -50,9 +51,11 @@
 
 <script>
     import Foot from '../../../components/Foot'
+    import Pagination from '../../../components/Pagination'
     export default {
         components: {
-            Foot
+            Foot,
+            Pagination
         },
         data () {
             return {
@@ -70,8 +73,8 @@
                 me.$axios.get('api/inquiries').then(res => {
                     if (res.data) {
                         setTimeout( () => {
-                            me.res = res.data.inquiries
-                            me.totalResults = me.res.length
+                            me.res = res.data
+                            me.totalResults = me.res.inquiries.total
                             me.loaded = true
                         }, 500)
                     }

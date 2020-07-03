@@ -23,8 +23,8 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody v-if="res.length > 0">
-                            <tr v-for="(data, key) in res" :key="key">
+                        <tbody v-if="res.faqs.data.length > 0">
+                            <tr v-for="(data, key) in res.faqs.data" :key="key">
                                 <td>{{ data.name }}</td>
                                 <td>{{ data.sequence }}</td>
                                 <td>{{ $moment(data.created_at).format('MMMM DD, YYYY') }}</td>
@@ -42,6 +42,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    <pagination :apiRoute="res.faqs.path" :current="res.faqs.current_page" :last="res.faqs.last_page" />
                 </section>
             </div>
         </transition>
@@ -54,10 +55,12 @@
 
 <script>
     import Foot from '../../../components/Foot'
+    import Pagination from '../../../components/Pagination'
     import Delete from '../../../components/modals/Delete'
     export default {
         components: {
             Foot,
+            Pagination,
             Delete
         },
         data () {
@@ -84,8 +87,8 @@
                 me.$axios.get('api/web/faqs').then(res => {
                     if (res.data) {
                         setTimeout( () => {
-                            me.res = res.data.faqs
-                            me.totalResults = me.res.length
+                            me.res = res.data
+                            me.totalResults = me.res.faqs.total
                             me.loaded = true
                         }, 500)
                     }
