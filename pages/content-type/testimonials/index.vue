@@ -4,7 +4,7 @@
             <div id="admin" class="cms_dashboard" v-if="loaded">
                 <section id="top_content" class="table">
                     <div class="action_wrapper">
-                        <h1 class="header_title">FAQs</h1>
+                        <h1 class="header_title">Testimonials</h1>
                         <div class="actions">
                             <div class="total">Total: {{ totalItems(totalResults) }}</div>
                             <div class="action_buttons">
