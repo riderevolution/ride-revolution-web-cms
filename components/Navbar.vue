@@ -76,6 +76,10 @@
                                 link: '/content-type/faq'
                             },
                             {
+                                title: 'Testimonials',
+                                link: '/content-type/testimonials'
+                            },
+                            {
                                 title: 'Inquiry',
                                 link: '/content-type/inquiry'
                             },

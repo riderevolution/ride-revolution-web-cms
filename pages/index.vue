@@ -50,7 +50,7 @@
                 me.$axios.get('api/inquiries').then(res => {
                     if (res.data) {
                         setTimeout( () => {
-                            me.res[0].count = res.data.inquiries.length
+                            me.res[0].count = res.data.inquiries.data.length
                         }, 500)
                     }
                 }).catch(err => {
