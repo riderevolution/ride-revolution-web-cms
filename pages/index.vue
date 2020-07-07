@@ -39,6 +39,12 @@
                         imgSrc: '/icons/system-emails-icon.svg',
                         link: '/content-type/inquiry',
                         count: 0
+                    },
+                    {
+                        label: 'Feedbacks',
+                        imgSrc: '/icons/system-emails-icon.svg',
+                        link: '/content-type/feedback',
+                        count: 0
                     }
                 ]
             }
@@ -47,10 +53,11 @@
             fetchData () {
                 const me = this
                 me.loader(true)
-                me.$axios.get('api/inquiries').then(res => {
+                me.$axios.get('api/panel-dashboard').then(res => {
                     if (res.data) {
                         setTimeout( () => {
-                            me.res[0].count = res.data.inquiries.data.length
+                            me.res[0].count = res.data.inquiries
+                            me.res[1].count = res.data.feedbacks
                         }, 500)
                     }
                 }).catch(err => {

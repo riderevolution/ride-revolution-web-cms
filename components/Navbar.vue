@@ -84,6 +84,10 @@
                                 link: '/content-type/inquiry'
                             },
                             {
+                                title: 'Feedback',
+                                link: '/content-type/feedback'
+                            },
+                            {
                                 title: 'Pro Tip',
                                 link: '/content-type/pro-tip'
                             }
