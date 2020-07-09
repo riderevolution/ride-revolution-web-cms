@@ -68,8 +68,8 @@
                 res: [],
                 loaded: false,
                 bannerDimensions: {
-                    imageWidth: 2838,
-                    imageHeight: 1042
+                    imageWidth: 2560,
+                    imageHeight: 950
                 },
                 imageCount: 0
             }
