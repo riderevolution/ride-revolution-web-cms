@@ -73,7 +73,7 @@ Vue.mixin({
                     Authorization: `Bearer ${token}`
                 }
             }).then(res => {
-                this.$cookies.remove('token')
+                this.$cookies.remove('70hokccms3hhhn5')
                 this.$store.state.isAuth = false
                 this.loader(false)
                 location.href = '/login'
