@@ -51,7 +51,7 @@
         },
         mounted () {
             const me = this
-            let token = me.$cookies.get('token')
+            let token = me.$cookies.get('70hokccms3hhhn5')
             me.$axios.get('api/user', {
                 headers: {
                     Authorization: `Bearer ${token}`

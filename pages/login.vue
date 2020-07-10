@@ -47,7 +47,7 @@
                         me.loader(true)
                         me.$axios.post('api/login?web_cms=1', me.form).then(res => {
                             if (res.data) {
-                                me.$cookies.set('token', res.data.token)
+                                me.$cookies.set('70hokccms3hhhn5', res.data.token)
                                 me.$store.state.isAuth = true
                                 me.$store.state.token = res.data.token
                                 me.validateToken()
@@ -68,7 +68,7 @@
         },
         mounted () {
             const me = this
-            if (me.$cookies.get('token') != null && me.$cookies.get('token') !== undefined) {
+            if (me.$cookies.get('70hokccms3hhhn5') != null && me.$cookies.get('70hokccms3hhhn5') !== undefined) {
                 me.$router.push('/')
             }
         }

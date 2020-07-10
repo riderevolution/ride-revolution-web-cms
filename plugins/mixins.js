@@ -67,7 +67,7 @@ Vue.mixin({
         },
         logout () {
             this.loader(true)
-            let token = this.$cookies.get('token')
+            let token = this.$cookies.get('70hokccms3hhhn5')
             this.$axios.post('api/logout', {}, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -83,7 +83,7 @@ Vue.mixin({
         },
         validateToken () {
             return new Promise((resolve, reject) => {
-                let token = this.$cookies.get('token')
+                let token = this.$cookies.get('70hokccms3hhhn5')
                 if (token != null || token != undefined) {
                     this.$axios.get('api/user', {
                         headers: {
