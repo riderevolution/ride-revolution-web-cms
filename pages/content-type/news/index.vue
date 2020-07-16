@@ -26,7 +26,7 @@
                         <tbody v-if="res.news.data.length > 0">
                             <tr v-for="(data, key) in res.news.data" :key="key">
                                 <td>{{ data.name }}</td>
-                                <td>{{ $moment().format('MMMM DD, YYYY') }}</td>
+                                <td>{{ $moment(data.date_published).format('MMMM DD, YYYY') }}</td>
                                 <td width="50%">
                                     <div v-line-clamp="1" v-html="data.summary"></div>
                                 </td>
@@ -34,6 +34,7 @@
                                     <div class="table_actions">
                                         <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
                                         <div class="link table_action_cancel" @click="toggleDelete(data.id)">Delete</div>
+                                        <div :class="`link table_action_success ${(data.advisory) ? 'disabled' : ''}`" @click="toggleAdvisory(data.id)">{{ (data.advisory) ? 'Added as Advisory' : 'Set as Advisory' }}</div>
                                     </div>
                                 </td>
                             </tr>
@@ -75,6 +76,23 @@
             }
         },
         methods: {
+            toggleAdvisory (id) {
+                const me = this
+                me.loader(true)
+                let formData = new FormData()
+                formData.append('id', id)
+                me.$axios.post('api/web/news/toggle-advisory', formData).then(res => {
+                    if (res.data) {
+                        setTimeout(() => {
+                            me.notify('Content has been set to advisory')
+                            me.fetchData()
+                        }, 500)
+                    }
+                }).catch(err => {
+                    me.$store.state.errorList = err.response.data.errors
+                    me.$store.state.errorStatus = true
+                })
+            },
             toggleDelete (id) {
                 const me = this
                 me.$store.state.deleteStatus = true
