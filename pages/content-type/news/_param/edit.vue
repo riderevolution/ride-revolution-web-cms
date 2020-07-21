@@ -203,11 +203,13 @@
                                 me.imageCount = me.$refs.banner_handler.images
                                 $('#description').summernote({
                                     tabsize: 4,
-                                    height: 200,
+                                    height: 400,
                                     followingToolbar: false,
                                     toolbar: [
                                         [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                                         [ 'color', [ 'color' ] ],
+                                        [ 'insert', [ 'picture' ] ],
+                                        [ 'table', ['table'] ],
                                         [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
                                         [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
                                     ],
