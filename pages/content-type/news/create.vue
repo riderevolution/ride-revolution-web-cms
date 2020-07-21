@@ -40,8 +40,8 @@
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ errors.first('summary') | properFormat }}</span></transition>
                                 </div>
                                 <div class="form_group">
-                                    <label for="description">Description <span>*</span> <b>(Character limit: 5000)</b></label>
-                                    <textarea name="description" row="8" id="description" class="default_text" v-validate="'required|max:5000'"></textarea>
+                                    <label for="description">Description <span>*</span></label>
+                                    <textarea name="description" row="8" id="description" class="default_text" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
                             </div>
