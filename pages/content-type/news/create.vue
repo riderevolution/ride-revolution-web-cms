@@ -202,6 +202,8 @@
                         toolbar: [
                             [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                             [ 'color', [ 'color' ] ],
+                            [ 'insert', [ 'picture' ] ],
+                            [ 'table', ['table'] ],
                             [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
                             [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
                         ],
