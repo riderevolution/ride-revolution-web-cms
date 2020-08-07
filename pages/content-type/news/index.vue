@@ -19,7 +19,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Date</th>
-                                <th>Summary</th>
+                                <th>Featured</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -27,10 +27,10 @@
                             <tr v-for="(data, key) in res.news.data" :key="key">
                                 <td>{{ data.name }}</td>
                                 <td>{{ $moment(data.date_published).format('MMMM DD, YYYY') }}</td>
-                                <td width="50%">
-                                    <div v-line-clamp="1" v-html="data.summary"></div>
+                                <td>
+                                    {{ (data.featured) ? 'Yes' : 'No' }}
                                 </td>
-                                <td width="20%">
+                                <td width="25%">
                                     <div class="table_actions">
                                         <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
                                         <div class="link table_action_cancel" @click="toggleDelete(data.id)">Delete</div>
