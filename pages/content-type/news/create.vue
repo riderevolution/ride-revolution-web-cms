@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="form_group">
                                         <label for="date_published">Date Published <span>*</span></label>
-                                        <input type="date" name="date_published" :max="$moment().format('YYYY-MM-DD')" v-validate="{required: true}" autocomplete="off" class="default_text date">
+                                        <v-ctk v-model="form.date_published" :only-date="true" :format="'YYYY-MM-DD'" :formatted="'YYYY-MM-DD'" :no-label="true" :color="'#33b09d'" :id="'date_published'" :name="'date_published'" :max-date="$moment().format('YYYY-MM-DD')" :label="'Select birth date'" v-validate="'required'"></v-ctk>
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ errors.first('date_published') | properFormat }}</span></transition>
                                     </div>
                                 </div>
@@ -115,6 +115,9 @@
                 imageDimensions: {
                     imageWidth: 676,
                     imageHeight: 371
+                },
+                form: {
+                    date_published: ''
                 },
                 imageCount: 0,
             }
