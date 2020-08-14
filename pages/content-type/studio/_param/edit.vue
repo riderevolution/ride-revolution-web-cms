@@ -206,6 +206,7 @@
                                     [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                                     [ 'color', [ 'color' ] ],
                                     [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                    [ 'insert', ['link'] ],
                                     [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
                                 ],
                                 codemirror: {
@@ -225,6 +226,7 @@
                                     [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                                     [ 'color', [ 'color' ] ],
                                     [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                    [ 'insert', ['link'] ],
                                     [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
                                 ],
                                 codemirror: {

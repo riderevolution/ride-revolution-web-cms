@@ -212,7 +212,7 @@
                                     toolbar: [
                                         [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                                         [ 'color', [ 'color' ] ],
-                                        [ 'insert', [ 'picture' ] ],
+                                        [ 'insert', [ 'picture', 'link' ] ],
                                         [ 'table', ['table'] ],
                                         [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
                                         [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
@@ -234,6 +234,7 @@
                                         [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                                         [ 'color', [ 'color' ] ],
                                         [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                                        [ 'insert', ['link'] ],
                                         [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
                                     ],
                                     codemirror: {
