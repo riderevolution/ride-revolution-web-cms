@@ -14,9 +14,9 @@
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group">
-                    <label for="description">Description <b>(Character limit: 10,000)</b></label>
-                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'min:10|max:10000'" v-model="form.subtitle"></textarea>
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
+                    <label for="subtitle">Subtitle <b>(Character limit: 10,000)</b></label>
+                    <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'min:10|max:10000'"></textarea>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
                 </div>
                 <div class="form_group" v-if="$route.params.slug == 'home'">
                     <label for="video_link">Video Link<span>*</span></label>
@@ -120,7 +120,7 @@
                     subtitle: ''
                 },
                 bannerDimensions: {
-                    imageWidth: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 2560 : 2564) : 1280 ,
+                    imageWidth: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 2560 : 2564) : 1280,
                     imageHeight: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 478 : 593) : 803
                 }
             }
@@ -174,7 +174,6 @@
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         let formData = new FormData(document.getElementById('default_form'))
-                        formData.append('subtitle', me.form.subtitle)
                         formData.append('type', me.data.type)
                         formData.append('_method', 'PATCH')
                         me.loader(true)
@@ -213,6 +212,7 @@
                             [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                             [ 'color', [ 'color' ] ],
                             [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                            [ 'insert', ['link'] ],
                             [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
                         ],
                         codemirror: {
@@ -229,7 +229,7 @@
                 }, 100)
             }
             setTimeout( () => {
-                $('#description').summernote({
+                $('#subtitle').summernote({
                     tabsize: 4,
                     height: 200,
                     followingToolbar: false,
@@ -237,6 +237,7 @@
                         [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
                         [ 'color', [ 'color' ] ],
                         [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                        [ 'insert', ['link'] ],
                         [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
                     ],
                     codemirror: {
@@ -248,7 +249,7 @@
                     }
                 })
                 if (me.data != null) {
-                    $('#description').summernote('code', me.data.subtitle)
+                    $('#subtitle').summernote('code', me.data.subtitle)
                 }
             }, 100)
             setTimeout( () => {
