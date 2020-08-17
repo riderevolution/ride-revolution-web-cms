@@ -32,6 +32,24 @@
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
                                 </div>
+                                <div class="form_group">
+                                    <div class="form_check">
+                                        <input type="checkbox" id="has_link" name="has_link" class="action_check" @change="has_link ^= true">
+                                        <label for="has_link">Has Link</label>
+                                    </div>
+                                </div>
+                                <div class="form_flex" v-if="has_link">
+                                    <div class="form_group">
+                                        <label for="link_label">Link label <span>*</span></label>
+                                        <input type="text" name="link_label" key="link_label" placeholder="Enter link label" autocomplete="off" class="default_text" v-validate="{required: true}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link_label')">{{ errors.first('link_label') | properFormat }}</span></transition>
+                                    </div>
+                                    <div class="form_group">
+                                        <label for="link">Link <span>*</span></label>
+                                        <input type="text" name="link" key="link" placeholder="Enter link" autocomplete="off" class="default_text" v-validate="{required: true}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link')">{{ errors.first('link') | properFormat }}</span></transition>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form_wrapper">
@@ -71,6 +89,7 @@
         data () {
             return {
                 res: [],
+                has_link: false,
                 loaded: false,
                 bannerDimensions: {
                     imageWidth: 2560,

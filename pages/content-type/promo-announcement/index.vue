@@ -18,7 +18,6 @@
                         <thead>
                             <tr>
                                 <th>Promo Name</th>
-                                <th>Description</th>
                                 <th>Featured</th>
                                 <th>Created At</th>
                                 <th>Action</th>
@@ -27,9 +26,6 @@
                         <tbody v-if="res.promoAnnouncements.data.length > 0">
                             <tr v-for="(data, key) in res.promoAnnouncements.data" :key="key">
                                 <td>{{ data.name }}</td>
-                                <td width="30%">
-                                    <div v-line-clamp="1" v-html="data.description"></div>
-                                </td>
                                 <td>{{ (data.is_featured) ? 'Yes' : 'No' }}</td>
                                 <td>{{ formatDate(data.created_at) }}</td>
                                 <td>

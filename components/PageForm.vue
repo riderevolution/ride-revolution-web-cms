@@ -120,8 +120,8 @@
                     subtitle: ''
                 },
                 bannerDimensions: {
-                    imageWidth: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 2560 : 2564) : 1280,
-                    imageHeight: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 478 : 593) : 803
+                    imageWidth: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 2560 : 2564) : 2560,
+                    imageHeight: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 478 : 593) : 1606
                 }
             }
         },

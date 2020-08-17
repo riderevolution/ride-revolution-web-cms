@@ -76,91 +76,91 @@
                 res: [
                     {
                         label: 'Home',
-                        page_link: 'http://riderev.designbluemanila.ph',
+                        page_link: 'https://riderevolution.ph',
                         cms_link: `/pages/home?h=${this.randomString()}`,
                         searched: true
                     },
                     {
                         label: 'Buy Rides',
-                        page_link: 'http://riderev.designbluemanila.ph/buy-rides',
+                        page_link: 'https://riderevolution.ph/buy-rides',
                         cms_link: '/pages/buy-rides',
                         searched: true
                     },
                     {
                         label: 'Book a Bike',
-                        page_link: 'http://riderev.designbluemanila.ph/book-a-bike',
+                        page_link: 'https://riderevolution.ph/book-a-bike',
                         cms_link: '/pages/book-a-bike',
                         searched: true
                     },
                     {
                         label: "Rider's Guide",
-                        page_link: 'http://riderev.designbluemanila.ph/riders-guide',
+                        page_link: 'https://riderevolution.ph/riders-guide',
                         cms_link: `/pages/riders-guide?t=${this.randomString()}`,
                         searched: true
                     },
                     {
                         label: 'Instructors',
-                        page_link: 'http://riderev.designbluemanila.ph/instructors',
+                        page_link: 'https://riderevolution.ph/instructors',
                         cms_link: `/pages/instructors?n=${this.randomString()}`,
                         searched: true
                     },
                     {
                         label: 'Studios',
-                        page_link: 'http://riderev.designbluemanila.ph/studios',
+                        page_link: 'https://riderevolution.ph/studios',
                         cms_link: '/pages/studios',
                         searched: true
                     },
                     {
                         label: 'About',
-                        page_link: 'http://riderev.designbluemanila.ph/about',
+                        page_link: 'https://riderevolution.ph/about',
                         cms_link: `/pages/about?t=${this.randomString()}`,
                         searched: true
                     },
                     {
                         label: 'Ride Rewards',
-                        page_link: 'http://riderev.designbluemanila.ph/ride-rewards',
+                        page_link: 'https://riderevolution.ph/ride-rewards',
                         cms_link: `/pages/ride-rewards?t=${this.randomString()}`,
                         searched: true
                     },
                     {
                         label: 'Promos',
-                        page_link: 'http://riderev.designbluemanila.ph/Promos',
+                        page_link: 'https://riderevolution.ph/Promos',
                         cms_link: '/pages/Promos',
                         searched: true
                     },
                     {
                         label: 'News',
-                        page_link: 'http://riderev.designbluemanila.ph/news',
+                        page_link: 'https://riderevolution.ph/news',
                         cms_link: '/pages/news',
                         searched: true
                     },
                     {
                         label: 'FAQs',
-                        page_link: 'http://riderev.designbluemanila.ph/faqs',
+                        page_link: 'https://riderevolution.ph/faqs',
                         cms_link: '/pages/faqs',
                         searched: true
                     },
                     {
                         label: 'Refer a Friend',
-                        page_link: 'http://riderev.designbluemanila.ph/refer-a-friend',
+                        page_link: 'https://riderevolution.ph/refer-a-friend',
                         cms_link: '/pages/refer-a-friend',
                         searched: true
                     },
                     {
                         label: 'Contact Us',
-                        page_link: 'http://riderev.designbluemanila.ph/contact-us',
+                        page_link: 'https://riderevolution.ph/contact-us',
                         cms_link: '/pages/contact-us',
                         searched: true
                     },
                     {
                         label: 'Privacy Policy',
-                        page_link: 'http://riderev.designbluemanila.ph/privacy-policy',
+                        page_link: 'https://riderevolution.ph/privacy-policy',
                         cms_link: `/pages/privacy-policy?n=${this.randomString()}`,
                         searched: true
                     },
                     {
                         label: 'Terms & Conditions',
-                        page_link: 'http://riderev.designbluemanila.ph/terms-and-conditions',
+                        page_link: 'https://riderevolution.ph/terms-and-conditions',
                         cms_link: `/pages/terms-and-conditions?n=${this.randomString()}`,
                         searched: true
                     },

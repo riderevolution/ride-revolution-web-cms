@@ -18,7 +18,7 @@
                                 <h2 class="form_title">Information</h2>
                                 <div class="form_check">
                                     <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.is_featured">
-                                    <label for="is_featured">Home Page</label>
+                                    <label for="is_featured">Home &amp; Buy Rides Page</label>
                                 </div>
                             </div>
                             <div class="form_main_group">
@@ -31,6 +31,24 @@
                                     <label for="description">Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
+                                </div>
+                                <div class="form_group">
+                                    <div class="form_check">
+                                        <input type="checkbox" id="has_link" name="has_link" class="action_check" :checked="has_link" @change="has_link ^= true">
+                                        <label for="has_link">Has Link</label>
+                                    </div>
+                                </div>
+                                <div class="form_flex" v-if="has_link">
+                                    <div class="form_group">
+                                        <label for="link_label">Link label <span>*</span></label>
+                                        <input type="text" name="link_label" key="link_label" placeholder="Enter link label" v-model="res.link_label" autocomplete="off" class="default_text" v-validate="{required: true}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link_label')">{{ errors.first('link_label') | properFormat }}</span></transition>
+                                    </div>
+                                    <div class="form_group">
+                                        <label for="link">Link <span>*</span></label>
+                                        <input type="text" name="link" key="link" placeholder="Enter link" v-model="res.link" autocomplete="off" class="default_text" v-validate="{required: true}">
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link')">{{ errors.first('link') | properFormat }}</span></transition>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -72,6 +90,7 @@
             return {
                 res: [],
                 loaded: false,
+                has_link: false,
                 bannerDimensions: {
                     imageWidth: 2560,
                     imageHeight: 950
@@ -158,6 +177,9 @@
                 me.$axios.get(`api/promo-announcements/${me.$route.params.param}`).then(res => {
                     if (res.data) {
                         me.res = res.data.promoAnnouncement
+                        if (me.res.has_link) {
+                            me.has_link = true
+                        }
                         setTimeout( () => {
                             me.imageCount = me.$refs.banner_handler.images
                             $('#description').summernote({
