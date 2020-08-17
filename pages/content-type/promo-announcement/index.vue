@@ -7,10 +7,14 @@
                         <h1 class="header_title">Promo Announcements</h1>
                         <div class="actions">
                             <div class="total">Total: {{ totalItems(totalResults) }}</div>
-                            <div class="action_buttons">
-                                <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Announcement</nuxt-link>
+                            <div class="toggler">
+                                <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
+                                <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
                             </div>
                         </div>
+                    </div>
+                    <div class="action_buttons">
+                        <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a Announcement</nuxt-link>
                     </div>
                 </section>
                 <section id="content">
@@ -66,6 +70,7 @@
         data () {
             return {
                 loaded: false,
+                status: 1,
                 rowCount: 0,
                 totalResults: 0,
                 res: [],
@@ -73,6 +78,11 @@
             }
         },
         methods: {
+            toggleOnOff (status) {
+                const me = this
+                me.status = status
+                me.fetchData()
+            },
             formatDate (value) {
                 if (value) {
                     return this.$moment(value).format('MMM DD, YYYY')
@@ -89,7 +99,7 @@
             fetchData () {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/promo-announcements`).then(res => {
+                me.$axios.get(`api/promo-announcements?enabled=${me.status}`).then(res => {
                     if (res.data) {
                         setTimeout( () => {
                             me.res = res.data

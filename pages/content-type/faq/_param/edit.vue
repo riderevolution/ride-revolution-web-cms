@@ -39,7 +39,10 @@
                         </div>
                         <div class="form_footer_wrapper">
                             <div class="form_flex">
-                                <div class="form_check"></div>
+                                <div class="form_check">
+                                    <input type="checkbox" id="enabled" name="enabled" class="action_check" :checked="res.enabled == 1">
+                                    <label for="enabled">Activate</label>
+                                </div>
                                 <div class="button_group">
                                     <nuxt-link to="/content-type/faq" class="action_cancel_btn">Cancel</nuxt-link>
                                     <button type="submit" name="submit" class="action_btn alternate margin">Save</button>
