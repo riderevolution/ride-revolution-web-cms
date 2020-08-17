@@ -67,7 +67,7 @@ export default {
     credentials: false
   },
   env: {
-    baseUrl: process.env.BASE_URL || 'https://beta.riderevolution.ph'
+    baseUrl: process.env.BASE_URL || 'https://panel.riderevolution.ph'
   },
   /*
   ** Build configuration
