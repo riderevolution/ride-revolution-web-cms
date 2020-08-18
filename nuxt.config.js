@@ -89,5 +89,8 @@ export default {
       }
       next()
     }
-  ]
+  ],
+  server: {
+    port: process.env.PORT
+  }
 }
