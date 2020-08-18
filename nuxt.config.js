@@ -49,7 +49,9 @@ export default {
       { src: '~/plugins/vee-validate' },
       { src: '~/plugins/mixins'}
   ],
-
+  buildModules: [
+    '@nuxtjs/dotenv'
+  ],
   /*
   ** Nuxt.js modules
   */
@@ -62,12 +64,11 @@ export default {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    baseURL: (process.env.NODE_ENV == "development") ? 'http://api.riderevolution.test' : 'https://api.riderevolution.ph',
-    // baseURL: (process.env.NODE_ENV == "development") ? 'https://dd5fadbcd366.ngrok.io' : 'https://api.riderevolution.ph',
+    baseURL: process.env.API_URL,
     credentials: false
   },
   env: {
-    baseUrl: process.env.BASE_URL || 'https://panel.riderevolution.ph'
+    baseUrl: process.env.BASE_URL
   },
   /*
   ** Build configuration
