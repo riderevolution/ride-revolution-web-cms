@@ -19,6 +19,7 @@
                         <thead>
                             <tr>
                                 <th>Label</th>
+                                <th>Page</th>
                                 <th>Created</th>
                                 <th>Action</th>
                             </tr>
@@ -28,6 +29,7 @@
                                 <td>
                                     <div v-html="data.label" v-line-clamp="1"></div>
                                 </td>
+                                <td>{{ replacer(data.page).charAt(0).toUpperCase()}}{{ replacer(data.page).slice(1) }}</td>
                                 <td>{{ $moment(data.created_at).format('MMM DD, YYYY') }}</td>
                                 <td width="20%">
                                     <div class="table_actions">
