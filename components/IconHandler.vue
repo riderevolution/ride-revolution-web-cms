@@ -4,7 +4,7 @@
             <input type="file" class="action_image" :id="`icon${unique}`" :data-vv-name="`image_form_${unique}.icon[]`" name="icon[]" ref="file" @change="getFile($event)" v-validate="`${(dataImage.id) ? '' : 'required|'}|size:20000|image|ext:jpeg,jpg,png,svg|${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`" :required="item.path == null">
             <input type="hidden" name="icon_id[]" v-model="item.id">
             <label class="action_image_label default_text" :for="`icon${unique}`">Choose File</label>
-            <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.icon[]`)">{{ errors.first(`image_form_${unique}.icon[]`) | properFormat }}</span></transition>
+            <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.icon[]`)">{{ properFormat(errors.first(`image_form_${unique}.icon[]`)) }}</span></transition>
         </div>
         <div class="form_tags_group" v-if="showTags">
             <div class="preview_group">
@@ -14,12 +14,12 @@
                 <div class="form_group">
                     <label :for="`icon_title${unique}`">Icon Title <span>*</span></label>
                     <input type="text" name="icon_title[]" :id="`icon_title${unique}`" :data-vv-name="`image_form_${unique}.icon_title[]`" v-validate="{required: true, regex: '^[a-zA-Z\-_ |\_]*$', max: 20}" autocomplete="off" class="action_form default_text" v-model="dataImage.title">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.icon_title[]`)">{{ errors.first(`image_form_${unique}.icon_title[]`) | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.icon_title[]`)">{{ properFormat(errors.first(`image_form_${unique}.icon_title[]`)) }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label :for="`icon_alt${unique}`">Icon Alt <span>*</span></label>
                     <input type="text" name="icon_alt[]" :id="`icon_alt${unique}`" :data-vv-name="`image_form_${unique}.icon_alt[]`" v-validate="{required: true, regex: '^[a-zA-Z\_\-]*$', max: 20}" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.icon_alt[]`)">{{ errors.first(`image_form_${unique}.icon_alt[]`) | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.icon_alt[]`)">{{ properFormat(errors.first(`image_form_${unique}.icon_alt[]`)) }}</span></transition>
                 </div>
             </div>
         </div>
@@ -61,61 +61,6 @@
                     id: 0,
                     title: '',
                     alt: ''
-                }
-            }
-        },
-        filters: {
-            properFormat (value) {
-                let newValue = value.split('The ')[1].split(' field')[0].split('.')
-                if (newValue.length > 1) {
-                    newValue = newValue[1].split('[]')
-                    if (newValue.length > 1) {
-                        let nextValue = newValue[0].split('_')
-                        if (nextValue.length > 1) {
-                            newValue = nextValue[0].charAt(0).toUpperCase() + nextValue[0].slice(1) + ' ' + nextValue[1].charAt(0).toUpperCase() + nextValue[1].slice(1)
-                        } else {
-                            newValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                        }
-                    }
-                } else {
-                    newValue = value.split('The ')[1].split(' field')[0].split('[]')
-                    if (newValue.length > 1) {
-                        let nextValue = newValue[0].split('_')
-                        if (nextValue.length > 1) {
-                            newValue = nextValue[0].charAt(0).toUpperCase() + nextValue[0].slice(1) + ' ' + nextValue[1].charAt(0).toUpperCase() + nextValue[1].slice(1)
-                        } else {
-                            newValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                        }
-                    } else {
-                        newValue = value.split('The ')[1].split(' field')[0].split('_')
-                        if (newValue.length > 1) {
-                            let firstValue = ''
-                            let lastValue = ''
-                            if (newValue[0] != 'co' && newValue[0] != 'pa' && newValue[0] != 'ec' && newValue[0] != 'ba') {
-                                firstValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                            }
-                            for (let i = 1; i < newValue.length; i++) {
-                                if (newValue[i] != 'id') {
-                                    lastValue += ' ' + newValue[i].charAt(0).toUpperCase() + newValue[i].slice(1)
-                                }
-                            }
-                            newValue = firstValue + ' ' + lastValue
-                        } else {
-                            newValue = value.split('The ')[1].split(' field')[0].charAt(0).toUpperCase() + value.split('The ')[1].split(' field')[0].slice(1)
-                        }
-                    }
-                }
-                let message = value.split('The ')[1].split(' field')
-                if (message.length > 1) {
-                    message = message[1]
-                    return `The ${newValue} field${message}`
-                } else {
-                    if (message[0].split('file').length > 1) {
-                        message = message[0].split('file')[1]
-                        return `The ${newValue} field${message}`
-                    } else {
-                        return `The ${newValue}`
-                    }
                 }
             }
         },

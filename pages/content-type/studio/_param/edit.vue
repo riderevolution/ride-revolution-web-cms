@@ -22,12 +22,12 @@
                                     <div class="form_group">
                                         <label for="contact_email_address">Contact Email Address<span>*</span></label>
                                         <input type="email" name="contact_email_address" autocomplete="off" placeholder="Enter your contact email address" v-model="res.contact_email_address" class="default_text" v-validate="{required: true, email: true, regex: '^[a-zA-Z0-9_ |\@|\.]*$', max: 50}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('contact_email_address')">{{ errors.first('contact_email_address') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('contact_email_address')">{{ properFormat(errors.first('contact_email_address')) }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="contact_number">Contact Number <span>*</span></label>
                                         <input type="text" name="contact_number" autocomplete="off" placeholder="Enter your contact number" class="default_text" v-model="res.contact_number" v-validate="'required|numeric|min:7|max:11'">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('contact_number')">{{ errors.first('contact_number') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('contact_number')">{{ properFormat(errors.first('contact_number')) }}</span></transition>
                                     </div>
                                 </div>
                             </div>
@@ -40,17 +40,17 @@
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 2000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" placeholder="Enter your description" v-validate="'required|max:2000'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="opening_hours">Opening Hours <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="opening_hours" rows="2" id="opening_hours" class="default_text" placeholder="Enter your opening hours" v-validate="'required|max:500'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('opening_hours')">{{ errors.first('opening_hours') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('opening_hours')">{{ properFormat(errors.first('opening_hours')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="google_embed">Google Embed <span>*</span> <strong>(The width should be 100% and height should be 500px)</strong></label>
                                     <textarea name="google_embed" rows="3" id="google_embed" class="default_text" v-model="res.google_embed" placeholder="Paste an iframe link from google maps" v-validate="'required'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('google_embed')">{{ errors.first('google_embed') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('google_embed')">{{ properFormat(errors.first('google_embed')) }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -70,17 +70,17 @@
                                 <div class="form_group">
                                     <label for="meta_title">Meta Title <span>*</span></label>
                                     <input type="text" name="meta_title" autocomplete="off" class="default_text" placeholder="Enter your meta title" v-model="res.meta_title" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ properFormat(errors.first('meta_title')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
                                     <input type="text" name="meta_keywords" autocomplete="off" class="default_text" placeholder="Enter your meta keywords" v-model="res.meta_keywords" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ properFormat(errors.first('meta_keywords')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_description">Meta Description <span>*</span></label>
                                     <textarea name="meta_description" rows="4" id="meta_description" class="default_text" placeholder="Enter your meta description" v-model="res.meta_description" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ properFormat(errors.first('meta_description')) }}</span></transition>
                                 </div>
                             </div>
                         </div>

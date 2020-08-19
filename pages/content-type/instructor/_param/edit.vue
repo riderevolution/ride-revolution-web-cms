@@ -26,30 +26,30 @@
                                     <div class="form_group">
                                         <label for="first_name">First Name <span>*</span></label>
                                         <input type="text" name="first_name" autocomplete="off" class="default_text" v-model="res.first_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 2, max: 100}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('first_name')">{{ errors.first('first_name') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('first_name')">{{ properFormat(errors.first('first_name')) }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="last_name">Last Name <span>*</span></label>
                                         <input type="text" name="last_name" autocomplete="off" class="default_text" v-model="res.last_name" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 2, max: 100}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('last_name')">{{ errors.first('last_name') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('last_name')">{{ properFormat(errors.first('last_name')) }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="position">Position</label>
                                         <input type="text" name="position" autocomplete="off" class="default_text" v-model="res.position" v-validate="{regex: '^[a-zA-Z0-9\-_ ]*$', min: 1, max: 100}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('position')">{{ errors.first('position') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('position')">{{ properFormat(errors.first('position')) }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="nickname">Nickname <span>*</span></label>
                                         <input type="text" name="nickname" autocomplete="off" class="default_text" v-model="res.instructor_details.nickname" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 2, max: 100}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('nickname')">{{ errors.first('nickname') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('nickname')">{{ properFormat(errors.first('nickname')) }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 3000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:3000'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -61,18 +61,18 @@
                                 <div class="form_group">
                                     <label for="instagram">Instagram Link <span>*</span></label>
                                     <input type="text" name="instagram" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram" placeholder="Enter instagram link" v-validate="{required: true, url: {require_protocol: true }}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram')">{{ errors.first('instagram') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram')">{{ properFormat(errors.first('instagram')) }}</span></transition>
                                 </div>
                                 <div class="form_flex">
                                     <div class="form_group">
                                         <label for="instagram_hashtag">Instagram Hashtag <span>*</span></label>
                                         <input type="text" name="instagram_hashtag" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram_hashtag" placeholder="#ridewithsample" v-validate="{required: true, regex: '^[a-zA-Z0-9|\#]*$', min: 2}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram_hashtag')">{{ errors.first('instagram_hashtag') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram_hashtag')">{{ properFormat(errors.first('instagram_hashtag')) }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="instagram_name">Instagram Name <span>*</span></label>
                                         <input type="text" name="instagram_name" autocomplete="off" class="default_text" v-model="res.instructor_details.instagram_name" placeholder="@example" v-validate="{required: true}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram_name')">{{ errors.first('instagram_name') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('instagram_name')">{{ properFormat(errors.first('instagram_name')) }}</span></transition>
                                     </div>
                                 </div>
                             </div>
@@ -103,12 +103,12 @@
                                 <div class="form_group">
                                     <label for="spotify_description">Spotify Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="spotify_description" rows="2" id="spotify_description" class="default_text" v-validate="'required|max:500'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description')">{{ errors.first('spotify_description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description')">{{ properFormat(errors.first('spotify_description')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="spotify_embed">Spotify Embed <span>*</span> <strong>(The width should be 100% and height should be 550px)</strong></label>
                                     <textarea name="spotify_embed" rows="3" id="spotify_embed" v-model="res.instructor_details.spotify_embed" class="default_text" placeholder="Paste an iframe link from spotify playlist" v-validate="'required'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_embed')">{{ errors.first('spotify_embed') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_embed')">{{ properFormat(errors.first('spotify_embed')) }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -130,17 +130,17 @@
                                 <div class="form_group">
                                     <label for="meta_title">Meta Title <span>*</span></label>
                                     <input type="text" name="meta_title" autocomplete="off" class="default_text"  placeholder="Enter your meta title" v-model="res.instructor_details.meta_title" v-validate="{required: true, regex: '^[a-zA-Z0-9_ ]*$', min: 20, max: 70}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ properFormat(errors.first('meta_title')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
                                     <input type="text" name="meta_keywords" autocomplete="off" class="default_text"  placeholder="Enter your meta keywords" v-model="res.instructor_details.meta_keywords" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,]*$', min: 50, max: 150}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ properFormat(errors.first('meta_keywords')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_description">Meta Description <span>*</span></label>
                                     <textarea name="meta_description" rows="4" id="meta_description"  placeholder="Enter your meta description" v-model="res.instructor_details.meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\,|\.]*$', min: 150, max: 380}"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ properFormat(errors.first('meta_description')) }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -189,48 +189,6 @@
                 },
                 imageCount: 0,
                 noSpecialization: false
-            }
-        },
-        filters: {
-            properFormat (value) {
-                let newValue = value.split('The ')[1].split(' field')[0].split('[]')
-                if (newValue.length > 1) {
-                    let nextValue = newValue[0].split('_')
-                    if (nextValue.length > 1) {
-                        newValue = nextValue[0].charAt(0).toUpperCase() + nextValue[0].slice(1) + ' ' + nextValue[1].charAt(0).toUpperCase() + nextValue[1].slice(1)
-                    } else {
-                        newValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                    }
-                } else {
-                    newValue = value.split('The ')[1].split(' field')[0].split('_')
-                    if (newValue.length > 1) {
-                        let firstValue = ''
-                        let lastValue = ''
-                        if (newValue[0] != 'co' && newValue[0] != 'pa' && newValue[0] != 'ec' && newValue[0] != 'ba') {
-                            firstValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                        }
-                        for (let i = 1; i < newValue.length; i++) {
-                            if (newValue[i] != 'id') {
-                                lastValue += ' ' + newValue[i].charAt(0).toUpperCase() + newValue[i].slice(1)
-                            }
-                        }
-                        newValue = firstValue + ' ' + lastValue
-                    } else {
-                        newValue = value.split('The ')[1].split(' field')[0].charAt(0).toUpperCase() + value.split('The ')[1].split(' field')[0].slice(1)
-                    }
-                }
-                let message = value.split('The ')[1].split(' field')
-                if (message.length > 1) {
-                    message = message[1]
-                    return `The ${newValue} field${message}`
-                } else {
-					if (message[0].split('file').length > 1) {
-                        message = message[0].split('file')[1]
-                        return `The ${newValue} field${message}`
-                    } else {
-                        return `The ${newValue}`
-                    }
-                }
             }
         },
         methods: {

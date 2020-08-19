@@ -26,23 +26,23 @@
                                     <div class="form_group">
                                         <label for="name">Name <span>*</span></label>
                                         <input type="text" name="name" placeholder="Enter news name" v-model="res.name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\’|\,|\!|\&|\:|\#|\.]*$', min: 5, max: 100}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ properFormat(errors.first('name')) }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="date_published">Date Published <span>*</span></label>
                                         <v-ctk v-model="form.date_published" :only-date="true" :format="'YYYY-MM-DD'" :formatted="'YYYY-MM-DD'" :no-label="true" :color="'#33b09d'" :id="'date_published'" :name="'date_published'" :max-date="$moment().format('YYYY-MM-DD')" :label="'Select birth date'" v-validate="'required'"></v-ctk>
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ errors.first('date_published') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ properFormat(errors.first('date_published')) }}</span></transition>
                                     </div>
                                 </div>
                                 <div class="form_group">
                                     <label for="summary">Summary <span>*</span> <b>(Character limit: 300)</b></label>
                                     <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:300'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ errors.first('summary') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ properFormat(errors.first('summary')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -64,17 +64,17 @@
                                 <div class="form_group">
                                     <label for="meta_title">Meta Title <span>*</span></label>
                                     <input type="text" name="meta_title" autocomplete="off" class="default_text" placeholder="Enter your meta title" v-model="res.meta_title" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\’|\,|\!|\&|\:|\#|\.]*$', min: 20, max: 70}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ properFormat(errors.first('meta_title')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
                                     <input type="text" name="meta_keywords" autocomplete="off" placeholder="Enter your meta keywords" v-model="res.meta_keywords" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\,]*$', min: 50, max: 150}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ properFormat(errors.first('meta_keywords')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="meta_description">Meta Description <span>*</span></label>
                                     <textarea name="meta_description" rows="4" id="meta_description" placeholder="Enter your meta description" v-model="res.meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\’|\,|\!|\&|\:|\#|\.]*$', min: 150, max: 380}"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ properFormat(errors.first('meta_description')) }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -121,48 +121,6 @@
                     date_published: ''
                 },
                 imageCount: 0
-            }
-        },
-        filters: {
-            properFormat (value) {
-                let newValue = value.split('The ')[1].split(' field')[0].split('[]')
-                if (newValue.length > 1) {
-                    let nextValue = newValue[0].split('_')
-                    if (nextValue.length > 1) {
-                        newValue = nextValue[0].charAt(0).toUpperCase() + nextValue[0].slice(1) + ' ' + nextValue[1].charAt(0).toUpperCase() + nextValue[1].slice(1)
-                    } else {
-                        newValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                    }
-                } else {
-                    newValue = value.split('The ')[1].split(' field')[0].split('_')
-                    if (newValue.length > 1) {
-                        let firstValue = ''
-                        let lastValue = ''
-                        if (newValue[0] != 'co' && newValue[0] != 'pa' && newValue[0] != 'ec' && newValue[0] != 'ba') {
-                            firstValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                        }
-                        for (let i = 1; i < newValue.length; i++) {
-                            if (newValue[i] != 'id') {
-                                lastValue += ' ' + newValue[i].charAt(0).toUpperCase() + newValue[i].slice(1)
-                            }
-                        }
-                        newValue = firstValue + ' ' + lastValue
-                    } else {
-                        newValue = value.split('The ')[1].split(' field')[0].charAt(0).toUpperCase() + value.split('The ')[1].split(' field')[0].slice(1)
-                    }
-                }
-                let message = value.split('The ')[1].split(' field')
-                if (message.length > 1) {
-                    message = message[1]
-                    return `The ${newValue} field${message}`
-                } else {
-					if (message[0].split('file').length > 1) {
-                        message = message[0].split('file')[1]
-                        return `The ${newValue} field${message}`
-                    } else {
-                        return `The ${newValue}`
-                    }
-                }
             }
         },
         methods: {

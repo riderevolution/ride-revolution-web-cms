@@ -12,12 +12,12 @@
                 <div class="form_group">
                     <label for="email">Email Address</label>
                     <input type="email" name="email" autocomplete="off" class="default_text" v-model="form.email" v-validate="'required|email'">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('email')">{{ errors.first('email') }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('email')">{{ properFormat(errors.first('email')) }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="password">Password</label>
                     <input type="password" name="password" autocomplete="off" class="default_text" v-model="form.password" v-validate="'required'">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('password')">{{ errors.first('password') }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('password')">{{ properFormat(errors.first('password')) }}</span></transition>
                     <nuxt-link to="/forgot-password" class="action_forgot_text">Forgot your password?</nuxt-link>
                 </div>
                 <div class="button_group">

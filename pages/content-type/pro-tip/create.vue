@@ -19,9 +19,16 @@
                             </div>
                             <div class="form_main_group">
                                 <div class="form_group">
-                                    <label for="label">Text <span>*</span> <b>(Character limit: 150)</b></label>
-                                    <textarea name="label" rows="2" id="label" class="default_text" v-validate="'required|max:150'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('label')">{{ errors.first('label') | properFormat }}</span></transition>
+                                    <label for="page">Page <span>*</span></label>
+                                    <select class="default_select" name="page">
+                                        <option :value="data.value" v-for="(data, key) in pages" :key="key">{{ data.name }}</option>
+                                    </select>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('page')">{{ properFormat(errors.first('page')) }}</span></transition>
+                                </div>
+                                <div class="form_group">
+                                    <label for="label">Text <span>*</span> <b>(Character limit: 200)</b></label>
+                                    <textarea name="label" rows="2" id="label" class="default_text" v-validate="'required|max:200'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('label')">{{ properFormat(errors.first('label')) }}</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -50,49 +57,21 @@
         },
         data () {
             return {
-                loaded: false
-            }
-        },
-        filters: {
-            properFormat (value) {
-                let newValue = value.split('The ')[1].split(' field')[0].split('[]')
-                if (newValue.length > 1) {
-                    let nextValue = newValue[0].split('_')
-                    if (nextValue.length > 1) {
-                        newValue = nextValue[0].charAt(0).toUpperCase() + nextValue[0].slice(1) + ' ' + nextValue[1].charAt(0).toUpperCase() + nextValue[1].slice(1)
-                    } else {
-                        newValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
+                loaded: false,
+                pages: [
+                    {
+                        name: 'Review',
+                        value: 'review'
+                    },
+                    {
+                        name: 'Buy Rides',
+                        value: 'buy-rides'
+                    },
+                    {
+                        name: 'Book a Bike',
+                        value: 'book-a-bike'
                     }
-                } else {
-                    newValue = value.split('The ')[1].split(' field')[0].split('_')
-                    if (newValue.length > 1) {
-                        let firstValue = ''
-                        let lastValue = ''
-                        if (newValue[0] != 'co' && newValue[0] != 'pa' && newValue[0] != 'ec' && newValue[0] != 'ba') {
-                            firstValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                        }
-                        for (let i = 1; i < newValue.length; i++) {
-                            if (newValue[i] != 'id') {
-                                lastValue += ' ' + newValue[i].charAt(0).toUpperCase() + newValue[i].slice(1)
-                            }
-                        }
-                        newValue = firstValue + ' ' + lastValue
-                    } else {
-                        newValue = value.split('The ')[1].split(' field')[0].charAt(0).toUpperCase() + value.split('The ')[1].split(' field')[0].slice(1)
-                    }
-                }
-                let message = value.split('The ')[1].split(' field')
-                if (message.length > 1) {
-                    message = message[1]
-                    return `The ${newValue} field${message}`
-                } else {
-					if (message[0].split('file').length > 1) {
-                        message = message[0].split('file')[1]
-                        return `The ${newValue} field${message}`
-                    } else {
-                        return `The ${newValue}`
-                    }
-                }
+                ]
             }
         },
         methods: {
@@ -128,9 +107,28 @@
                 const me = this
                 me.loader(true)
                 setTimeout( () => {
+                    $('#label').summernote({
+                        tabsize: 4,
+                        height: 150,
+                        followingToolbar: false,
+                        disableResizeEditor: true,
+                        toolbar: [
+                            [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                            [ 'color', [ 'color' ] ],
+                            [ 'para', [ 'paragraph' ] ],
+                            [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview' ] ]
+                        ],
+                        codemirror: {
+                            lineNumbers: true,
+                            htmlMode: true,
+                            mode: "text/html",
+                            tabMode: 'indent',
+                            lineWrapping: true
+                        }
+                    })
                     me.loader(false)
-                    me.loaded = true
-                }, 500)
+                }, 100)
+                me.loaded = true
             }
         },
         mounted () {

@@ -11,17 +11,17 @@
                 <div class="form_group">
                     <label for="title">Title<span>*</span></label>
                     <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', min: 2, max: 100}">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ errors.first('title') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ properFormat(errors.first('title')) }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="subtitle">Subtitle <b>(Character limit: 10,000)</b></label>
                     <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'min:10|max:10000'"></textarea>
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ errors.first('subtitle') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ properFormat(errors.first('subtitle')) }}</span></transition>
                 </div>
                 <div class="form_group" v-if="$route.params.slug == 'home'">
                     <label for="video_link">Video Link<span>*</span></label>
                     <input type="text" name="video_link" placeholder="Enter video link" v-model="data.video_link" autocomplete="off" class="default_text" v-validate="{required: true, url: {require_protocol: true }}">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('video_link')">{{ errors.first('video_link') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('video_link')">{{ properFormat(errors.first('video_link')) }}</span></transition>
                 </div>
             </div>
         </div>
@@ -33,12 +33,12 @@
                 <div class="form_group">
                     <label for="teaser_title">Teaser Title <span>*</span></label>
                     <input type="text" name="teaser_title" placeholder="Enter teaser title" v-model="data.teaser_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\.|\!|\&]*$', min: 2, max: 100}">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ errors.first('teaser_title') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ properFormat(errors.first('teaser_title')) }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="teaser_description">Teaser Description <span>*</span> <b>(Character limit: 1000)</b></label>
                     <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'min:10|max:1000'"></textarea>
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ errors.first('teaser_description') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ properFormat(errors.first('teaser_description')) }}</span></transition>
                 </div>
             </div>
         </div>
@@ -59,17 +59,17 @@
                 <div class="form_group">
                     <label for="meta_title">Meta Title <span>*</span></label>
                     <input type="text" name="meta_title" autocomplete="off" placeholder="Enter your meta title" v-model="data.meta_title" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ ]*$', min: 20, max: 70}">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ errors.first('meta_title') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_title')">{{ properFormat(errors.first('meta_title')) }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="meta_keywords">Meta Keywords <span>*</span> <strong>(Use comma(,) to separate the keywords)</strong></label>
                     <input type="text" name="meta_keywords" autocomplete="off" placeholder="Enter your meta keywords" v-model="data.meta_keywords" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\,]*$', min: 50, max: 150}">
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ errors.first('meta_keywords') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_keywords')">{{ properFormat(errors.first('meta_keywords')) }}</span></transition>
                 </div>
                 <div class="form_group">
                     <label for="meta_description">Meta Description <span>*</span></label>
                     <textarea name="meta_description" rows="4" id="meta_description" placeholder="Enter your meta description" v-model="data.meta_description" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\,|\.]*$', min: 150, max: 380}"></textarea>
-                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ errors.first('meta_description') | properFormat }}</span></transition>
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has('meta_description')">{{ properFormat(errors.first('meta_description')) }}</span></transition>
                 </div>
             </div>
         </div>
@@ -126,48 +126,6 @@
             }
         },
         inject: ['$validator'],
-        filters: {
-            properFormat (value) {
-                let newValue = value.split('The ')[1].split(' field')[0].split('[]')
-                if (newValue.length > 1) {
-                    let nextValue = newValue[0].split('_')
-                    if (nextValue.length > 1) {
-                        newValue = nextValue[0].charAt(0).toUpperCase() + nextValue[0].slice(1) + ' ' + nextValue[1].charAt(0).toUpperCase() + nextValue[1].slice(1)
-                    } else {
-                        newValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                    }
-                } else {
-                    newValue = value.split('The ')[1].split(' field')[0].split('_')
-                    if (newValue.length > 1) {
-                        let firstValue = ''
-                        let lastValue = ''
-                        if (newValue[0] != 'co' && newValue[0] != 'pa' && newValue[0] != 'ec' && newValue[0] != 'ba') {
-                            firstValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                        }
-                        for (let i = 1; i < newValue.length; i++) {
-                            if (newValue[i] != 'id') {
-                                lastValue += ' ' + newValue[i].charAt(0).toUpperCase() + newValue[i].slice(1)
-                            }
-                        }
-                        newValue = firstValue + ' ' + lastValue
-                    } else {
-                        newValue = value.split('The ')[1].split(' field')[0].charAt(0).toUpperCase() + value.split('The ')[1].split(' field')[0].slice(1)
-                    }
-                }
-                let message = value.split('The ')[1].split(' field')
-                if (message.length > 1) {
-                    message = message[1]
-                    return `The ${newValue} field${message}`
-                } else {
-					if (message[0].split('file').length > 1) {
-                        message = message[0].split('file')[1]
-                        return `The ${newValue} field${message}`
-                    } else {
-                        return `The ${newValue}`
-                    }
-                }
-            }
-        },
         methods: {
             submitForm () {
                 const me = this

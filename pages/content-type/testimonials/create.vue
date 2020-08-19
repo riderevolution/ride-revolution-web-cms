@@ -21,12 +21,12 @@
                                 <div class="form_group">
                                     <label for="name">Name <span>*</span></label>
                                     <input type="text" name="name" placeholder="Enter testimonial name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', min: 2, max: 100}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ properFormat(errors.first('name')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="body">Body <span>*</span> <b>(Character limit: 5000)</b></label>
                                     <textarea name="body" rows="2" id="body" class="default_text" v-validate="'required|max:5000'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('body')">{{ errors.first('body') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('body')">{{ properFormat(errors.first('body')) }}</span></transition>
                                 </div>
                             </div>
                         </div>

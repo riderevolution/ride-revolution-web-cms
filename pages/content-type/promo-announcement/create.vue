@@ -25,12 +25,12 @@
                                 <div class="form_group">
                                     <label for="name">Name <span>*</span></label>
                                     <input type="text" name="name" placeholder="Enter announcement name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\,|\!|\&]*$', min: 5, max: 100}">
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ errors.first('name') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ properFormat(errors.first('name')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:500'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ errors.first('description') | properFormat }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <div class="form_check">
@@ -42,12 +42,12 @@
                                     <div class="form_group">
                                         <label for="link_label">Link label <span>*</span></label>
                                         <input type="text" name="link_label" key="link_label" placeholder="Enter link label" autocomplete="off" class="default_text" v-validate="{required: true}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link_label')">{{ errors.first('link_label') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link_label')">{{ properFormat(errors.first('link_label')) }}</span></transition>
                                     </div>
                                     <div class="form_group">
                                         <label for="link">Link <span>*</span></label>
                                         <input type="text" name="link" key="link" placeholder="Enter link" autocomplete="off" class="default_text" v-validate="{required: true}">
-                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link')">{{ errors.first('link') | properFormat }}</span></transition>
+                                        <transition name="slide"><span class="validation_errors" v-if="errors.has('link')">{{ properFormat(errors.first('link')) }}</span></transition>
                                     </div>
                                 </div>
                             </div>
@@ -99,48 +99,6 @@
                     imageHeight: 950
                 },
                 imageCount: 0
-            }
-        },
-        filters: {
-            properFormat (value) {
-                let newValue = value.split('The ')[1].split(' field')[0].split('[]')
-                if (newValue.length > 1) {
-                    let nextValue = newValue[0].split('_')
-                    if (nextValue.length > 1) {
-                        newValue = nextValue[0].charAt(0).toUpperCase() + nextValue[0].slice(1) + ' ' + nextValue[1].charAt(0).toUpperCase() + nextValue[1].slice(1)
-                    } else {
-                        newValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                    }
-                } else {
-                    newValue = value.split('The ')[1].split(' field')[0].split('_')
-                    if (newValue.length > 1) {
-                        let firstValue = ''
-                        let lastValue = ''
-                        if (newValue[0] != 'co' && newValue[0] != 'pa' && newValue[0] != 'ec' && newValue[0] != 'ba') {
-                            firstValue = newValue[0].charAt(0).toUpperCase() + newValue[0].slice(1)
-                        }
-                        for (let i = 1; i < newValue.length; i++) {
-                            if (newValue[i] != 'id') {
-                                lastValue += ' ' + newValue[i].charAt(0).toUpperCase() + newValue[i].slice(1)
-                            }
-                        }
-                        newValue = firstValue + ' ' + lastValue
-                    } else {
-                        newValue = value.split('The ')[1].split(' field')[0].charAt(0).toUpperCase() + value.split('The ')[1].split(' field')[0].slice(1)
-                    }
-                }
-                let message = value.split('The ')[1].split(' field')
-                if (message.length > 1) {
-                    message = message[1]
-                    return `The ${newValue} field${message}`
-                } else {
-					if (message[0].split('file').length > 1) {
-                        message = message[0].split('file')[1]
-                        return `The ${newValue} field${message}`
-                    } else {
-                        return `The ${newValue}`
-                    }
-                }
             }
         },
         methods: {
