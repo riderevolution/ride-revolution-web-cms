@@ -3,7 +3,7 @@
         <transition name="fade">
             <div id="admin" class="cms_dashboard" v-if="loaded">
                 <section id="top_content" class="table">
-                    <nuxt-link to="/content-type/faq" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Pro Tip</span></nuxt-link>
+                    <nuxt-link to="/content-type/pro-tip" class="action_back_btn"><img src="/icons/back-icon.svg"><span>Pro Tip</span></nuxt-link>
                     <div class="action_wrapper">
                         <h1 class="header_title">Add a Pro Tip</h1>
                     </div>
