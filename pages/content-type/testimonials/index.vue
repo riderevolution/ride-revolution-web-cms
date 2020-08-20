@@ -18,7 +18,6 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Body</th>
                                 <th>Created</th>
                                 <th>Action</th>
                             </tr>
@@ -26,9 +25,6 @@
                         <tbody v-if="res.testimonials.data.length > 0">
                             <tr v-for="(data, key) in res.testimonials.data" :key="key">
                                 <td>{{ data.name }}</td>
-                                <td>
-                                    <div v-html="data.body" v-line-clamp="1"></div>
-                                </td>
                                 <td>{{ $moment(data.created_at).format('MMMM DD, YYYY') }}</td>
                                 <td width="20%">
                                     <div class="table_actions">
