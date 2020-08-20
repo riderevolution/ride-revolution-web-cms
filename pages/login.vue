@@ -33,8 +33,8 @@
         data () {
             return {
                 form: {
-                    email: 'superadmin@admin.com',
-                    password: '@F1r33x1t',
+                    email: '',
+                    password: '',
                     type: 0
                 }
             }
