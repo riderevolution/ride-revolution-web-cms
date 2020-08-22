@@ -146,6 +146,10 @@
                         </div>
                         <div class="form_footer_wrapper">
                             <div class="form_check">
+                                <input type="checkbox" id="show_on_web" name="show_on_web" class="action_check" :checked="res.show_on_web == 1">
+                                <label for="show_on_web">Show on Web</label>
+                            </div>
+                            <div class="form_check">
                                 <input type="checkbox" id="is_featured" name="is_featured" class="action_check" :checked="res.instructor_details.is_featured == 1">
                                 <label for="is_featured">Rider's Guide</label>
                             </div>
