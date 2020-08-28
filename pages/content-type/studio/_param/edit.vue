@@ -26,7 +26,7 @@
                                     </div>
                                     <div class="form_group">
                                         <label for="contact_number">Contact Number <span>*</span></label>
-                                        <input type="text" name="contact_number" autocomplete="off" placeholder="Enter your contact number" class="default_text" v-model="res.contact_number" v-validate="'required|numeric|min:7|max:11'">
+                                        <input type="text" name="contact_number" autocomplete="off" placeholder="Enter your contact number" class="default_text" v-model="res.contact_number" v-validate="{required: true, regex: '^[0-9\-_ ]*$', min: 7, max: 11}">
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('contact_number')">{{ properFormat(errors.first('contact_number')) }}</span></transition>
                                     </div>
                                 </div>
