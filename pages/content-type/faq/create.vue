@@ -32,8 +32,9 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 5000)</b></label>
-                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:5000'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !length">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="length">The Description field may not be greater than 5000 characters</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -65,6 +66,7 @@
         },
         data () {
             return {
+                length: false,
                 loaded: false
             }
         },
@@ -74,10 +76,13 @@
 
                 if ($($("#description").summernote("code")).text().length <= 5000) {
                     me.$validator.errors.remove('description')
+                    me.length = false
+                } else {
+                    me.length = true
                 }
 
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    if (valid && !length) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         me.$axios.post('api/web/faqs', formData).then(res => {

@@ -36,8 +36,9 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="summary">Summary <span>*</span> <b>(Character limit: 300)</b></label>
-                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required|max:300'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('summary')">{{ properFormat(errors.first('summary')) }}</span></transition>
+                                    <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('summary') && !length">{{ properFormat(errors.first('summary')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="length">The Summary field may not be greater than 300 characters</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span></label>
@@ -111,6 +112,7 @@
         data () {
             return {
                 res: [],
+                length: false,
                 loaded: false,
                 bannerDimensions: {
                     imageWidth: 2562,
@@ -132,10 +134,13 @@
 
                 if ($($("#summary").summernote("code")).text().length <= 300) {
                     me.$validator.errors.remove('summary')
+                    me.length = false
+                } else {
+                    me.length = true
                 }
-
+                
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    if (valid && !length) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')

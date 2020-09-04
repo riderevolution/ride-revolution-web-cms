@@ -39,13 +39,15 @@
                             <div class="form_main_group">
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 2000)</b></label>
-                                    <textarea name="description" rows="4" id="description" class="default_text" placeholder="Enter your description" v-validate="'required|max:2000'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <textarea name="description" rows="4" id="description" class="default_text" placeholder="Enter your description" v-validate="'required'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !desc_length">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="desc_length">The Description field may not be greater than 2000 characters</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="opening_hours">Opening Hours <span>*</span> <b>(Character limit: 500)</b></label>
-                                    <textarea name="opening_hours" rows="2" id="opening_hours" class="default_text" placeholder="Enter your opening hours" v-validate="'required|max:500'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('opening_hours')">{{ properFormat(errors.first('opening_hours')) }}</span></transition>
+                                    <textarea name="opening_hours" rows="2" id="opening_hours" class="default_text" placeholder="Enter your opening hours" v-validate="'required'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('opening_hours') && !open_length">{{ properFormat(errors.first('opening_hours')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="open_length">The Opening Hours field may not be greater than 500 characters</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="google_embed">Google Embed <span>*</span> <strong>(The width should be 100% and height should be 500px)</strong></label>
@@ -112,6 +114,8 @@
         data () {
             return {
                 loaded: false,
+                desc_length: false,
+                open_length: false,
                 res: [],
                 imageDimensions: {
                     imageWidth: 648,
@@ -125,14 +129,20 @@
 
                 if ($($("#description").summernote("code")).text().length <= 2000) {
                     me.$validator.errors.remove('description')
+                    me.desc_length = false
+                } else {
+                    me.desc_length = true
                 }
 
                 if ($($("#opening_hours").summernote("code")).text().length <= 500) {
                     me.$validator.errors.remove('opening_hours')
+                    me.open_length = false
+                } else {
+                    me.open_length = true
                 }
 
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    if (valid && (!desc_length && !open_length)) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')

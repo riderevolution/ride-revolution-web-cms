@@ -28,8 +28,9 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="label">Text <span>*</span> <b>(Character limit: 200)</b></label>
-                                    <textarea name="label" rows="2" id="label" class="default_text" v-validate="'required|max:200'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('label')">{{ properFormat(errors.first('label')) }}</span></transition>
+                                    <textarea name="label" rows="2" id="label" class="default_text" v-validate="'required'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('label') && !length">{{ properFormat(errors.first('label')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="length">The Label field may not be greater than 200 characters</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -59,6 +60,7 @@
         data () {
             return {
                 loaded: false,
+                length: false,
                 pages: [
                     {
                         name: 'Review',
@@ -82,10 +84,13 @@
 
                 if ($($("#label").summernote("code")).text().length <= 200) {
                     me.$validator.errors.remove('label')
+                    me.length = false
+                } else {
+                    me.length = true
                 }
 
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    if (valid && !length) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')

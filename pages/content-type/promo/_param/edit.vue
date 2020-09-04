@@ -25,7 +25,8 @@
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:500'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !length">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="length">The Description field may not be greater than 500 characters</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -67,6 +68,7 @@
             return {
                 res: [],
                 loaded: false,
+                length: false,
                 bannerDimensions: {
                     imageWidth: 2560,
                     imageHeight: 950
@@ -81,10 +83,13 @@
 
                 if ($($("#description").summernote("code")).text().length <= 500) {
                     me.$validator.errors.remove('description')
+                    me.length = false
+                } else {
+                    me.length = true
                 }
 
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    if (valid && !length) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')
