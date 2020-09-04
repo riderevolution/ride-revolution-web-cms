@@ -25,8 +25,9 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="body">Body <span>*</span> <b>(Character limit: 500)</b></label>
-                                    <textarea name="body" rows="2" id="body" class="default_text" v-validate="'required|max:500'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('body')">{{ properFormat(errors.first('body')) }}</span></transition>
+                                    <textarea name="body" rows="2" id="body" class="default_text" v-validate="'required'"></textarea>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('body') && !length">{{ properFormat(errors.first('body')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="length">The Body field may not be greater than 500 characters</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -65,6 +66,7 @@
         },
         data () {
             return {
+                length: false,
                 loaded: false,
                 imageDimensions: {
                     imageWidth: 90,
@@ -80,6 +82,9 @@
 
                 if ($($("#body").summernote("code")).text().length <= 500) {
                     me.$validator.errors.remove('body')
+                    me.length = false
+                } else {
+                    me.length = true
                 }
 
                 me.$validator.validateAll().then(valid => {
