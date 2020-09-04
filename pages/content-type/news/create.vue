@@ -129,7 +129,7 @@
             submitForm () {
                 const me = this
 
-                if ($('#summary').summernote('code').length <= 300) {
+                if ($($("#summary").summernote("code")).text().length <= 300) {
                     me.$validator.errors.remove('summary')
                 }
 

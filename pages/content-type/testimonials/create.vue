@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="body">Body <span>*</span> <b>(Character limit: 500)</b></label>
-                                    <textarea name="body" rows="2" id="body" class="default_text" v-validate="'required|max:500'" @input="test()"></textarea>
+                                    <textarea name="body" rows="2" id="body" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('body')">{{ properFormat(errors.first('body')) }}</span></transition>
                                 </div>
                             </div>
@@ -70,6 +70,7 @@
                     imageWidth: 90,
                     imageHeight: 90
                 },
+                test: '',
                 imageCount: 0,
             }
         },
@@ -77,7 +78,7 @@
             submitForm () {
                 const me = this
 
-                if ($('#body').summernote('code').length <= 500) {
+                if ($($("#body").summernote("code")).text().length <= 500) {
                     me.$validator.errors.remove('body')
                 }
 

@@ -123,11 +123,11 @@
             submitForm () {
                 const me = this
 
-                if ($('#description').summernote('code').length <= 2000) {
+                if ($($("#description").summernote("code")).text().length <= 2000) {
                     me.$validator.errors.remove('description')
                 }
 
-                if ($('#opening_hours').summernote('code').length <= 500) {
+                if ($($("#opening_hours").summernote("code")).text().length <= 500) {
                     me.$validator.errors.remove('opening_hours')
                 }
 

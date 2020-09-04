@@ -79,7 +79,7 @@
                 const me = this
                 let ctr = 0
 
-                if ($('#description').summernote('code').length <= 500) {
+                if ($($("#description").summernote("code")).text().length <= 500) {
                     me.$validator.errors.remove('description')
                 }
 
