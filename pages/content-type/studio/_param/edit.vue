@@ -122,6 +122,15 @@
         methods: {
             submitForm () {
                 const me = this
+
+                if ($('#description').summernote('code').length <= 2000) {
+                    me.$validator.errors.remove('description')
+                }
+
+                if ($('#opening_hours').summernote('code').length <= 500) {
+                    me.$validator.errors.remove('opening_hours')
+                }
+
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         me.loader(true)

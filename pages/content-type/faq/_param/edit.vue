@@ -72,6 +72,11 @@
         methods: {
             submitForm () {
                 const me = this
+
+                if ($('#description').summernote('code').length <= 5000) {
+                    me.$validator.errors.remove('description')
+                }
+
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         me.loader(true)

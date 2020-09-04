@@ -49,6 +49,19 @@
             $route (to, from){
                 const me = this
                 me.$store.state.errorList = []
+                let to_destroy = [
+                    '#body',
+                    '#description',
+                    '#summary',
+                    '#opening_hours',
+                    '#label',
+                    '#spotify_description'
+                ]
+                to_destroy.forEach((item, index) => {
+                    if ($(`${item}`).length > 0) {
+                        $(`${item}`).summernote('destroy')
+                    }
+                })
             }
         },
         data () {

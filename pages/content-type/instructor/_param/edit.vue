@@ -213,6 +213,15 @@
             submitForm () {
                 const me = this
                 let ctr = 0
+
+                if ($('#description').summernote('code').length <= 3000) {
+                    me.$validator.errors.remove('description')
+                }
+
+                if ($('#spotify_description').summernote('code').length <= 3000) {
+                    me.$validator.errors.remove('spotify_description')
+                }
+
                 me.$validator.validateAll().then(valid => {
                     // me.specializations.forEach((data, index) => {
                     //     if (data.checked) {

@@ -78,6 +78,11 @@
             submitForm () {
                 const me = this
                 let ctr = 0
+
+                if ($('#description').summernote('code').length <= 500) {
+                    me.$validator.errors.remove('description')
+                }
+
                 me.$validator.validateAll().then(valid => {
                     if (valid) {
                         me.loader(true)
