@@ -31,7 +31,7 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="label">Message <span>*</span></label>
-                                    <textarea name="message" rows="4" id="message" class="default_text disabled" v-model="res.message"></textarea>
+                                    <textarea name="message" rows="10" id="message" class="default_text disabled" v-model="res.message"></textarea>
                                 </div>
                             </div>
                         </div>

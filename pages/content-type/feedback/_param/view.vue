@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="form_group">
                                     <label for="label">Comment <span>*</span></label>
-                                    <textarea name="comment" rows="4" id="comment" class="default_text disabled" v-model="res.comment"></textarea>
+                                    <textarea name="comment" rows="10" id="comment" class="default_text disabled" v-model="res.comment"></textarea>
                                 </div>
                             </div>
                         </div>
