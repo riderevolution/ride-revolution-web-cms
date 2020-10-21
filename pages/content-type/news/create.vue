@@ -34,7 +34,7 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ properFormat(errors.first('date_published')) }}</span></transition>
                                     </div>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group summary">
                                     <label for="summary">Summary <span>*</span> <b>(Character limit: 300)</b></label>
                                     <textarea name="summary" row="2" id="summary" class="default_text" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('summary') && !length">{{ properFormat(errors.first('summary')) }}</span></transition>
