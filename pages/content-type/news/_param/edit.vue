@@ -34,7 +34,7 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('date_published')">{{ properFormat(errors.first('date_published')) }}</span></transition>
                                     </div>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group summary">
                                     <label for="summary">Summary <span>*</span> <b>(Character limit: 300)</b></label>
                                     <textarea name="summary" rows="2" id="summary" class="default_text" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('summary') && !length">{{ properFormat(errors.first('summary')) }}</span></transition>
@@ -132,13 +132,6 @@
             submitForm () {
                 const me = this
 
-                if ($($("#summary").summernote("code")).text().length <= 300) {
-                    me.$validator.errors.remove('summary')
-                    me.length = false
-                } else {
-                    me.length = true
-                }
-
                 me.$validator.validateAll().then(valid => {
                     if (valid && !me.length) {
                         me.loader(true)
@@ -214,7 +207,19 @@
                                         mode: "text/html",
                                         tabMode: 'indent',
                                         lineWrapping: true
-                                    }
+                                    },
+                                    callbacks: {
+                            		    onKeydown: function(e) {
+                            				let limit = 300, target = $(".summary .note-editable").text(), total_count = target.length
+
+                            				if(total_count >= limit){
+                                                me.length = true
+                                            } else {
+                                                me.$validator.errors.remove('summary')
+                                                me.length = false
+                                            }
+                            		    }
+                            		}
                                 })
                                 $('#description').summernote('code', me.res.description)
                                 $('#summary').summernote('code', me.res.summary)

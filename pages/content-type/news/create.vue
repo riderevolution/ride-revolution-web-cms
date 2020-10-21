@@ -131,13 +131,6 @@
             submitForm () {
                 const me = this
 
-                if ($($("#summary").summernote("code")).text().length <= 300) {
-                    me.$validator.errors.remove('summary')
-                    me.length = false
-                } else {
-                    me.length = true
-                }
-
                 me.$validator.validateAll().then(valid => {
                     if (valid && !me.length) {
                         me.loader(true)
@@ -207,6 +200,18 @@
                             mode: "text/html",
                             tabMode: 'indent',
                             lineWrapping: true
+                        },
+                        callbacks: {
+                            onKeydown: function(e) {
+                                let limit = 300, target = $(".summary .note-editable").text(), total_count = target.length
+
+                                if(total_count >= limit){
+                                    me.length = true
+                                } else {
+                                    me.$validator.errors.remove('summary')
+                                    me.length = false
+                                }
+                            }
                         }
                     })
                     me.loader(false)
