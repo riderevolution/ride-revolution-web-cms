@@ -26,7 +26,7 @@
                                     </select>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('page')">{{ properFormat(errors.first('page')) }}</span></transition>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group label">
                                     <label for="label">Text <span>*</span> <b>(Character limit: 200)</b></label>
                                     <textarea name="label" rows="2" id="label" class="default_text" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('label') && !length">{{ properFormat(errors.first('label')) }}</span></transition>
@@ -82,13 +82,6 @@
             submitForm () {
                 const me = this
 
-                if ($($("#label").summernote("code")).text().length <= 200) {
-                    me.$validator.errors.remove('label')
-                    me.length = false
-                } else {
-                    me.length = true
-                }
-
                 me.$validator.validateAll().then(valid => {
                     if (valid && !me.length) {
                         me.loader(true)
@@ -140,6 +133,18 @@
                                     mode: "text/html",
                                     tabMode: 'indent',
                                     lineWrapping: true
+                                },
+                                callbacks: {
+                                    onChange: function(e) {
+                                        let limit = 200, target = $(".label .note-editable").text(), total_count = target.length
+
+                                        if(total_count >= limit){
+                                            me.length = true
+                                        } else {
+                                            me.$validator.errors.remove('label')
+                                            me.length = false
+                                        }
+                                    }
                                 }
                             })
                             $('#label').summernote('code', me.res.label)

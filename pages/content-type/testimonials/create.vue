@@ -23,7 +23,7 @@
                                     <input type="text" name="name" placeholder="Enter testimonial name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9_ |\-|\'|\,|\!|\&]*$', min: 2, max: 100}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ properFormat(errors.first('name')) }}</span></transition>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group body">
                                     <label for="body">Body <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="body" rows="2" id="body" class="default_text" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('body') && !length">{{ properFormat(errors.first('body')) }}</span></transition>
@@ -80,13 +80,6 @@
             submitForm () {
                 const me = this
 
-                if ($($("#body").summernote("code")).text().length <= 500) {
-                    me.$validator.errors.remove('body')
-                    me.length = false
-                } else {
-                    me.length = true
-                }
-
                 me.$validator.validateAll().then(valid => {
                     if (valid && !me.length) {
                         me.loader(true)
@@ -135,6 +128,18 @@
                             mode: "text/html",
                             tabMode: 'indent',
                             lineWrapping: true
+                        },
+                        callbacks: {
+                            onChange: function(e) {
+                                let limit = 500, target = $(".body .note-editable").text(), total_count = target.length
+
+                                if(total_count >= limit){
+                                    me.length = true
+                                } else {
+                                    me.$validator.errors.remove('body')
+                                    me.length = false
+                                }
+                            }
                         }
                     })
                     me.loader(false)

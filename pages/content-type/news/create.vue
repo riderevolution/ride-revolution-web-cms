@@ -202,7 +202,7 @@
                             lineWrapping: true
                         },
                         callbacks: {
-                            onKeydown: function(e) {
+                            onChange: function(e) {
                                 let limit = 300, target = $(".summary .note-editable").text(), total_count = target.length
 
                                 if(total_count >= limit){

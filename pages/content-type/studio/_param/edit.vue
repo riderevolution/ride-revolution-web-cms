@@ -37,13 +37,13 @@
                                 <h2 class="form_title">Information</h2>
                             </div>
                             <div class="form_main_group">
-                                <div class="form_group">
+                                <div class="form_group description">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 2000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" placeholder="Enter your description" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !desc_length">{{ properFormat(errors.first('description')) }}</span></transition>
                                     <transition name="slide"><span class="validation_errors" v-if="desc_length">The Description field may not be greater than 2000 characters</span></transition>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group opening_hours">
                                     <label for="opening_hours">Opening Hours <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="opening_hours" rows="2" id="opening_hours" class="default_text" placeholder="Enter your opening hours" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('opening_hours') && !open_length">{{ properFormat(errors.first('opening_hours')) }}</span></transition>
@@ -127,20 +127,6 @@
             submitForm () {
                 const me = this
 
-                if ($($("#description").summernote("code")).text().length <= 2000) {
-                    me.$validator.errors.remove('description')
-                    me.desc_length = false
-                } else {
-                    me.desc_length = true
-                }
-
-                if ($($("#opening_hours").summernote("code")).text().length <= 500) {
-                    me.$validator.errors.remove('opening_hours')
-                    me.open_length = false
-                } else {
-                    me.open_length = true
-                }
-
                 me.$validator.validateAll().then(valid => {
                     if (valid && (!me.desc_length && !me.open_length)) {
                         me.loader(true)
@@ -192,6 +178,18 @@
                                     mode: "text/html",
                                     tabMode: 'indent',
                                     lineWrapping: true
+                                },
+                                callbacks: {
+                                    onChange: function(e) {
+                                        let limit = 2000, target = $(".description .note-editable").text(), total_count = target.length
+
+                                        if(total_count >= limit){
+                                            me.desc_length = true
+                                        } else {
+                                            me.$validator.errors.remove('description')
+                                            me.desc_length = false
+                                        }
+                                    }
                                 }
                             })
                             $('#opening_hours').summernote({
@@ -212,6 +210,18 @@
                                     mode: "text/html",
                                     tabMode: 'indent',
                                     lineWrapping: true
+                                },
+                                callbacks: {
+                                    onChange: function(e) {
+                                        let limit = 500, target = $(".opening_hours .note-editable").text(), total_count = target.length
+
+                                        if(total_count >= limit){
+                                            me.open_length = true
+                                        } else {
+                                            me.$validator.errors.remove('opening_hours')
+                                            me.open_length = false
+                                        }
+                                    }
                                 }
                             })
                             $('#description').summernote('code', me.res.description)

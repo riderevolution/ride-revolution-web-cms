@@ -13,7 +13,7 @@
                     <input type="text" name="title" placeholder="Enter page title" v-model="data.title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\!|\&|\.]*$', min: 2, max: 100}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('title')">{{ properFormat(errors.first('title')) }}</span></transition>
                 </div>
-                <div class="form_group">
+                <div class="form_group subtitle">
                     <label for="subtitle">Subtitle <b>(Character limit: 10,000)</b></label>
                     <textarea name="subtitle" rows="4" id="subtitle" class="default_text" v-validate="'min:10|max:10000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('subtitle')">{{ properFormat(errors.first('subtitle')) }}</span></transition>
@@ -35,7 +35,7 @@
                     <input type="text" name="teaser_title" placeholder="Enter teaser title" v-model="data.teaser_title" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-\'\?_ |\,|\.|\!|\&]*$', min: 2, max: 100}">
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_title')">{{ properFormat(errors.first('teaser_title')) }}</span></transition>
                 </div>
-                <div class="form_group">
+                <div class="form_group teaser_description">
                     <label for="teaser_description">Teaser Description <span>*</span> <b>(Character limit: 1000)</b></label>
                     <textarea name="teaser_description" rows="4" id="teaser_description" class="default_text" v-validate="'min:10|max:1000'"></textarea>
                     <transition name="slide"><span class="validation_errors" v-if="errors.has('teaser_description')">{{ properFormat(errors.first('teaser_description')) }}</span></transition>
@@ -116,6 +116,8 @@
             return {
                 res: null,
                 imageCount: 0,
+                teaser_length: false,
+                subtitle_length: false,
                 form: {
                     subtitle: ''
                 },
@@ -130,7 +132,7 @@
             submitForm () {
                 const me = this
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    if (valid && (!me.teaser_length && !me.subtitle_length)) {
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('type', me.data.type)
                         formData.append('_method', 'PATCH')
@@ -179,6 +181,18 @@
                             mode: "text/html",
                             tabMode: 'indent',
                             lineWrapping: true
+                        },
+                        callbacks: {
+                            onChange: function(e) {
+                                let limit = 1000, target = $(".teaser_description .note-editable").text(), total_count = target.length
+
+                                if(total_count >= limit){
+                                    me.teaser_length = true
+                                } else {
+                                    me.$validator.errors.remove('teaser_description')
+                                    me.teaser_length = false
+                                }
+                            }
                         }
                     })
                     if (me.data != null) {
@@ -204,6 +218,18 @@
                         mode: "text/html",
                         tabMode: 'indent',
                         lineWrapping: true
+                    },
+                    callbacks: {
+                        onChange: function(e) {
+                            let limit = 10000, target = $(".subtitle .note-editable").text(), total_count = target.length
+
+                            if(total_count >= limit){
+                                me.subtitle_length = true
+                            } else {
+                                me.$validator.errors.remove('subtitle')
+                                me.subtitle_length = false
+                            }
+                        }
                     }
                 })
                 if (me.data != null) {

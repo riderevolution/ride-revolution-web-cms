@@ -46,7 +46,7 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('nickname')">{{ properFormat(errors.first('nickname')) }}</span></transition>
                                     </div>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group description">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 3000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:3000'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !desc_length">{{ properFormat(errors.first('description')) }}</span></transition>
@@ -101,7 +101,7 @@
                                 <h2 class="form_title">Spotify</h2>
                             </div>
                             <div class="form_main_group">
-                                <div class="form_group">
+                                <div class="form_group spotify_description">
                                     <label for="spotify_description">Spotify Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="spotify_description" rows="2" id="spotify_description" class="default_text" v-validate="'required|max:500'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description') && !desc_length">{{ properFormat(errors.first('spotify_description')) }}</span></transition>
@@ -218,22 +218,6 @@
                 const me = this
                 let ctr = 0
 
-                if ($($("#description").summernote("code")).text().length <= 3000) {
-                    me.$validator.errors.remove('description')
-                    me.desc_length = false
-                } else {
-                    me.desc_length = true
-
-                }
-
-                if ($($("#spotify_description").summernote("code")).text().length <= 500) {
-                    me.$validator.errors.remove('spotify_description')
-                    me.spotify_length = false
-                } else {
-                    me.spotify_length = true
-
-                }
-
                 me.$validator.validateAll().then(valid => {
                     // me.specializations.forEach((data, index) => {
                     //     if (data.checked) {
@@ -293,6 +277,18 @@
                                     mode: "text/html",
                                     tabMode: 'indent',
                                     lineWrapping: true
+                                },
+                                callbacks: {
+                                    onChange: function(e) {
+                                        let limit = 3000, target = $(".description .note-editable").text(), total_count = target.length
+
+                                        if(total_count >= limit){
+                                            me.desc_length = true
+                                        } else {
+                                            me.$validator.errors.remove('description')
+                                            me.desc_length = false
+                                        }
+                                    }
                                 }
                             })
                             $('#spotify_description').summernote({
@@ -313,6 +309,18 @@
                                     mode: "text/html",
                                     tabMode: 'indent',
                                     lineWrapping: true
+                                },
+                                callbacks: {
+                                    onChange: function(e) {
+                                        let limit = 500, target = $(".spotify_description .note-editable").text(), total_count = target.length
+
+                                        if(total_count >= limit){
+                                            me.spotify_length = true
+                                        } else {
+                                            me.$validator.errors.remove('spotify_description')
+                                            me.spotify_length = false
+                                        }
+                                    }
                                 }
                             })
                             $('#description').summernote('code', me.res.instructor_details.description)

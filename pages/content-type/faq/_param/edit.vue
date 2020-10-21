@@ -30,7 +30,7 @@
                                         <transition name="slide"><span class="validation_errors" v-if="errors.has('sequence')">{{ properFormat(errors.first('sequence')) }}</span></transition>
                                     </div>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group description">
                                     <la<label for="description">Description <span>*</span> <b>(Character limit: 5000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !length">{{ properFormat(errors.first('description')) }}</span></transition>
@@ -74,13 +74,6 @@
         methods: {
             submitForm () {
                 const me = this
-
-                if ($($("#description").summernote("code")).text().length <= 5000) {
-                    me.$validator.errors.remove('description')
-                    me.length = false
-                } else {
-                    me.length = true
-                }
 
                 me.$validator.validateAll().then(valid => {
                     if (valid && !me.length) {
@@ -133,6 +126,18 @@
                                     mode: "text/html",
                                     tabMode: 'indent',
                                     lineWrapping: true
+                                },
+                                callbacks: {
+                                    onChange: function(e) {
+                                        let limit = 5000, target = $(".description .note-editable").text(), total_count = target.length
+
+                                        if(total_count >= limit){
+                                            me.length = true
+                                        } else {
+                                            me.$validator.errors.remove('description')
+                                            me.length = false
+                                        }
+                                    }
                                 }
                             })
                             $('#description').summernote('code', me.res.description)

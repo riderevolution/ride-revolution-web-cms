@@ -27,7 +27,7 @@
                                     <input type="text" name="name" placeholder="Enter announcement name" autocomplete="off" class="default_text" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\'|\,|\!|\&]*$', min: 5, max: 100}">
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('name')">{{ properFormat(errors.first('name')) }}</span></transition>
                                 </div>
-                                <div class="form_group">
+                                <div class="form_group description">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required'"></textarea>
                                     <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !length">{{ properFormat(errors.first('description')) }}</span></transition>
@@ -106,14 +106,6 @@
         methods: {
             submitForm () {
                 const me = this
-                let ctr = 0
-
-                if ($($("#description").summernote("code")).text().length <= 500) {
-                    me.$validator.errors.remove('description')
-                    me.length = false
-                } else {
-                    me.length = true
-                }
 
                 me.$validator.validateAll().then(valid => {
                     if (valid && !me.length) {
@@ -164,6 +156,18 @@
                             mode: "text/html",
                             tabMode: 'indent',
                             lineWrapping: true
+                        },
+                        callbacks: {
+                            onChange: function(e) {
+                                let limit = 500, target = $(".description .note-editable").text(), total_count = target.length
+
+                                if(total_count >= limit){
+                                    me.length = true
+                                } else {
+                                    me.$validator.errors.remove('description')
+                                    me.length = false
+                                }
+                            }
                         }
                     })
                     me.loader(false)
