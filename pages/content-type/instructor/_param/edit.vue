@@ -49,7 +49,8 @@
                                 <div class="form_group">
                                     <label for="description">Description <span>*</span> <b>(Character limit: 3000)</b></label>
                                     <textarea name="description" rows="4" id="description" class="default_text" v-validate="'required|max:3000'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description')">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('description') && !desc_length">{{ properFormat(errors.first('description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="desc_length">The Description field may not be greater than 3000 characters</span></transition>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +104,8 @@
                                 <div class="form_group">
                                     <label for="spotify_description">Spotify Description <span>*</span> <b>(Character limit: 500)</b></label>
                                     <textarea name="spotify_description" rows="2" id="spotify_description" class="default_text" v-validate="'required|max:500'"></textarea>
-                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description')">{{ properFormat(errors.first('spotify_description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="errors.has('spotify_description') && !desc_length">{{ properFormat(errors.first('spotify_description')) }}</span></transition>
+                                    <transition name="slide"><span class="validation_errors" v-if="desc_length">The Spotify Description field may not be greater than 500 characters</span></transition>
                                 </div>
                                 <div class="form_group">
                                     <label for="spotify_embed">Spotify Embed <span>*</span> <strong>(The width should be 100% and height should be 550px)</strong></label>
@@ -187,6 +189,8 @@
                 tempSpecializations: [],
                 specializations: [],
                 loaded: false,
+                desc_length: false,
+                spotify_length: false,
                 imageDimensions: {
                     imageWidth: 600,
                     imageHeight: 922
@@ -216,10 +220,18 @@
 
                 if ($($("#description").summernote("code")).text().length <= 3000) {
                     me.$validator.errors.remove('description')
+                    me.desc_length = false
+                } else {
+                    me.desc_length = true
+
                 }
 
                 if ($($("#spotify_description").summernote("code")).text().length <= 500) {
                     me.$validator.errors.remove('spotify_description')
+                    me.spotify_length = false
+                } else {
+                    me.spotify_length = true
+
                 }
 
                 me.$validator.validateAll().then(valid => {
@@ -229,7 +241,7 @@
                     //     }
                     // })
                     // me.noSpecialization = (ctr > 0) ? false : true
-                    if (valid) {
+                    if (valid && (!me.desc_length && !me.spotify_length)) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         // formData.append('specializations', JSON.stringify(me.specializations))
