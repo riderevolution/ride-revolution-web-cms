@@ -142,7 +142,7 @@
                 }
 
                 me.$validator.validateAll().then(valid => {
-                    if (valid && (!desc_length && !open_length)) {
+                    if (valid && (!me.desc_length && !me.open_length)) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         formData.append('_method', 'PATCH')

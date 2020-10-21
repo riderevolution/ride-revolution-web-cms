@@ -88,7 +88,7 @@
                 }
 
                 me.$validator.validateAll().then(valid => {
-                    if (valid) {
+                    if (valid && !me.length) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         me.$axios.post('api/testimonials', formData).then(res => {

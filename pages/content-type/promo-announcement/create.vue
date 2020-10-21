@@ -116,7 +116,7 @@
                 }
 
                 me.$validator.validateAll().then(valid => {
-                    if (valid && !length) {
+                    if (valid && !me.length) {
                         me.loader(true)
                         let formData = new FormData(document.getElementById('default_form'))
                         me.$axios.post(`api/promo-announcements`, formData).then(res => {
