@@ -118,16 +118,20 @@
                     }
                 })
             },
-            fetchData (id) {
+            fetchData () {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/staff/${id}`).then(res => {
-                    if (res.data) {
-                        setTimeout( () => {
-                            me.res = res.data.user
-                            me.loaded = true
-                        }, 500)
+
+                let token = me.$cookies.get('70hokccms3hhhn5')
+                me.$axios.get('api/user', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
                     }
+                }).then(res => {
+                        me.loaded = true
+                        setTimeout( () => {
+                        me.res = res.data.user
+                    }, 500)
                 }).catch(err => {
                     me.$store.state.errorList = err.response.data.errors
                     me.$store.state.errorStatus = true
@@ -140,7 +144,7 @@
         },
         mounted () {
             const me = this
-            me.fetchData(me.$store.state.user.id)
+            me.fetchData()
         }
     }
 </script>
