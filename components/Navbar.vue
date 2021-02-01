@@ -105,6 +105,13 @@
                                 link: '/taxonomy/specialization'
                             }
                         ]
+                    },
+                    {
+                        title: 'System Emails',
+                        link: '/system-emails',
+                        hasLink: true,
+                        class: 'admin',
+                        image: '/icons/navbar/dashboard-unselected.png'
                     }
                 ],
                 isHovered: true
