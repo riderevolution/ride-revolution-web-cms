@@ -25,6 +25,35 @@
                 </div>
             </div>
         </div>
+        <template v-if="$route.params.slug == 'home'">
+            <div class="form_wrapper">
+                <div class="form_header_wrapper">
+                    <h2 class="form_title">Above The Fold</h2>
+                </div>
+                <div class="form_main_group">
+                    <div class="form_check">
+                        <input type="checkbox" id="show_play_video" name="show_play_video" class="action_check" :checked="data.show_play_video">
+                        <label for="show_play_video">Show Play Video</label>
+                    </div>
+                    <div class="form_check">
+                        <input type="checkbox" id="show_overlay" name="show_overlay" class="action_check" :checked="data.show_overlay">
+                        <label for="show_overlay">Show Overlay</label>
+                    </div>
+                    <div class="form_group">
+                        <label for="banner_text">Banner Text</label>
+                        <input type="text" name="banner_text" placeholder="Enter banner text" v-model="data.banner_text" autocomplete="off" class="default_text">
+                    </div>
+                    <div class="form_group">
+                        <label for="button_text">Button Text</label>
+                        <input type="text" name="button_text" placeholder="Enter button text" v-model="data.button_text" autocomplete="off" class="default_text">
+                    </div>
+                    <div class="form_group">
+                        <label for="button_link">Button Link</label>
+                        <input type="text" name="button_link" placeholder="Enter button link" v-model="data.button_link" autocomplete="off" class="default_text" v-validate="{ url: {require_protocol: true } }">
+                    </div>
+                </div>
+            </div>
+        </template>
         <div class="form_wrapper" v-if="hasTeaser">
             <div class="form_header_wrapper">
                 <h2 class="form_title">Teaser</h2>
