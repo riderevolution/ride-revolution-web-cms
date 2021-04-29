@@ -31,13 +31,17 @@
                     <h2 class="form_title">Above The Fold</h2>
                 </div>
                 <div class="form_main_group">
-                    <div class="form_check">
-                        <input type="checkbox" id="show_play_video" name="show_play_video" class="action_check" :checked="data.show_play_video">
-                        <label for="show_play_video">Show Play Video</label>
+                    <div class="form_group">
+                        <div class="form_check">
+                            <input type="checkbox" id="show_play_video" name="show_play_video" class="action_check" :checked="data.show_play_video">
+                            <label for="show_play_video">Show Play Video</label>
+                        </div>
                     </div>
-                    <div class="form_check">
-                        <input type="checkbox" id="show_overlay" name="show_overlay" class="action_check" :checked="data.show_overlay">
-                        <label for="show_overlay">Show Overlay</label>
+                    <div class="form_group">
+                        <div class="form_check">
+                            <input type="checkbox" id="show_overlay" name="show_overlay" class="action_check" :checked="data.show_overlay">
+                            <label for="show_overlay">Show Overlay</label>
+                        </div>
                     </div>
                     <div class="form_group">
                         <label for="banner_text">Banner Text</label>
