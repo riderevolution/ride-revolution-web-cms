@@ -43,10 +43,10 @@
                             <label for="show_overlay">Show Overlay</label>
                         </div>
                     </div>
-                    <div class="form_group">
+                    <!-- <div class="form_group">
                         <label for="banner_text">Banner Text</label>
                         <input type="text" name="banner_text" placeholder="Enter banner text" v-model="data.banner_text" autocomplete="off" class="default_text">
-                    </div>
+                    </div> -->
                     <div class="form_group">
                         <label for="button_text">Button Text</label>
                         <input type="text" name="button_text" placeholder="Enter button text" v-model="data.button_text" autocomplete="off" class="default_text">
