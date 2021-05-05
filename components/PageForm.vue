@@ -80,8 +80,26 @@
                 <h2 class="form_title">Image Upload</h2>
             </div>
             <div class="form_main_group">
-                <banner-handler-container ref="banner_handler" :data="(data.banners[0].path != null) ? data.banners : ''" :parent="data.id" :dimension="bannerDimensions" />
-                <input type="hidden" name="banner_category[]" value="banner" v-for="(count, key) in imageCount" :key="key">
+                <!-- Banner Handler Container -->
+                <banner-handler-container
+                    ref="banner_handler"
+                    :image_label="'Banner'"
+                    :multiple="false"
+                    :category="'banner'"
+                    :parent="data.id"
+                    :data="(data.banners[0] && data.banners[0].path != null) ? data.banners : [0]"
+                    :dimension="bannerDimensions"
+                />
+                <!-- Mobile Banner Handler Container -->
+                <mobile-banner-handler-container
+                    ref="mobile_banner_handler"
+                    :image_label="'Mobile Banner'"
+                    :multiple="false"
+                    :category="'mobile-banner'"
+                    :parent="data.id"
+                    :data="(data.banners[1] && data.banners[1].path != null) ? data.banners : [1]"
+                    :dimension="mobileDimensions"
+                />
             </div>
         </div>
         <div class="form_wrapper">
@@ -143,16 +161,20 @@
             }
         },
         components: {
+            'mobile-banner-handler-container': BannerHandlerContainer,
             BannerHandlerContainer
         },
         data () {
             return {
                 res: null,
-                imageCount: 0,
                 teaser_length: false,
                 subtitle_length: false,
                 form: {
                     subtitle: ''
+                },
+                mobileDimensions: {
+                    imageWidth: 750,
+                    imageHeight: 750
                 },
                 bannerDimensions: {
                     imageWidth: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 2560 : 2564) : 2560,
@@ -269,11 +291,6 @@
                     $('#subtitle').summernote('code', me.data.subtitle)
                 }
             }, 100)
-            setTimeout( () => {
-                if (me.hasImage) {
-                    me.imageCount = me.$refs.banner_handler.images
-                }
-            }, 10)
         }
     }
 </script>
