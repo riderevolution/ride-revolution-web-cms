@@ -87,7 +87,7 @@
                     :multiple="false"
                     :category="'banner'"
                     :parent="data.id"
-                    :data="(data.banners[0] && data.banners[0].path != null) ? data.banners : [0]"
+                    :data="(data.banners[0] && data.banners[0].path != null) ? banner.desktop : [0]"
                     :dimension="bannerDimensions"
                 />
                 <!-- Mobile Banner Handler Container -->
@@ -97,7 +97,7 @@
                     :multiple="false"
                     :category="'mobile-banner'"
                     :parent="data.id"
-                    :data="(data.banners[1] && data.banners[1].path != null) ? data.banners : [1]"
+                    :data="(data.banners[1] && data.banners[1].path != null) ? banner.mobile : [1]"
                     :dimension="mobileDimensions"
                 />
             </div>
@@ -171,6 +171,10 @@
                 subtitle_length: false,
                 form: {
                     subtitle: ''
+                },
+                banner: {
+                    desktop: [],
+                    mobile: []
                 },
                 mobileDimensions: {
                     imageWidth: 450,
@@ -288,6 +292,8 @@
                     }
                 })
                 if (me.data != null) {
+                    me.banner.desktop.push(me.data.banners[0])
+                    me.banner.mobile.push(me.data.banners[1])
                     $('#subtitle').summernote('code', me.data.subtitle)
                 }
             }, 100)
