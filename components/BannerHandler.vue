@@ -3,8 +3,8 @@
         <div class="form_group">
             <input type="file" class="action_image" :data-vv-name="`image_form_${unique}.banner[]`" accept=".jpeg, .jpg, .png" :key="`image_form_${unique}.banner[]`" :id="`image${unique}`" name="banner[]" ref="file" @change="getFile($event)" v-validate="`${(dataImage.id) ? '' : 'required|'}image|ext:jpeg,jpg,png,svg|size:20000${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`" v-if="not_required">
             <input type="file" class="action_image" :data-vv-name="`image_form_${unique}.banner[]`" accept=".jpeg, .jpg, .png" :key="`image_form_${unique}.banner[]`" :id="`image${unique}`" name="banner[]" ref="file" @change="getFile($event)" v-validate="`image|ext:jpeg,jpg,png,svg|size:20000${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`" v-else>
-            <input type="hidden" name="file_id[]" v-model="dataImage.id">
-            <input type="hidden" name="file_category[]" v-model="category">
+            <input type="hidden" name="banner_id[]" v-model="dataImage.id">
+            <input type="hidden" name="banner_category[]" v-model="category">
             <label class="action_image_label" :for="`image${unique}`">Choose File</label>
             <div v-if="$parent.showCloser" class="action_image_remove" @click="removeImage($event, unique, item.id, parent)">Remove</div>
             <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.banner[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner[]`)) }}</span></transition>
