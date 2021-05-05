@@ -173,8 +173,8 @@
                     subtitle: ''
                 },
                 mobileDimensions: {
-                    imageWidth: 500,
-                    imageHeight: 750
+                    imageWidth: 400,
+                    imageHeight: 700
                 },
                 bannerDimensions: {
                     imageWidth: (!this.isHome) ? (this.$route.params.slug == 'book-a-bike' ? 2560 : 2564) : 2560,
