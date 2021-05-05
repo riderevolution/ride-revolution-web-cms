@@ -90,16 +90,18 @@
                     :data="(data.banners[0] && data.banners[0].path != null) ? banner.desktop : [0]"
                     :dimension="bannerDimensions"
                 />
+                <template v-if="$route.params.slug == 'home'">
                 <!-- Mobile Banner Handler Container -->
-                <mobile-banner-handler-container
-                    ref="mobile_banner_handler"
-                    :image_label="'Mobile Banner'"
-                    :multiple="false"
-                    :category="'mobile-banner'"
-                    :parent="data.id"
-                    :data="(data.banners[1] && data.banners[1].path != null) ? banner.mobile : [1]"
-                    :dimension="mobileDimensions"
-                />
+                    <mobile-banner-handler-container
+                        ref="mobile_banner_handler"
+                        :image_label="'Mobile Banner'"
+                        :multiple="false"
+                        :category="'mobile-banner'"
+                        :parent="data.id"
+                        :data="(data.banners[1] && data.banners[1].path != null) ? banner.mobile : [1]"
+                        :dimension="mobileDimensions"
+                    />
+                </template>
             </div>
         </div>
         <div class="form_wrapper">
@@ -293,7 +295,9 @@
                 })
                 if (me.data != null) {
                     me.banner.desktop.push(me.data.banners[0])
-                    me.banner.mobile.push(me.data.banners[1])
+                    if (me.$route.params.slug == 'home') {
+                        me.banner.mobile.push(me.data.banners[1])
+                    }
                     $('#subtitle').summernote('code', me.data.subtitle)
                 }
             }, 100)
