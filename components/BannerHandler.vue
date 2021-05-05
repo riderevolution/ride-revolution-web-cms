@@ -1,33 +1,33 @@
 <template>
     <div v-if="enabled" :data-vv-scope="`image_form_${unique}`">
-        <div class="group">
+        <div class="form_group">
             <input type="file" class="action_image" :data-vv-name="`image_form_${unique}.banner[]`" accept=".jpeg, .jpg, .png" :key="`image_form_${unique}.banner[]`" :id="`image${unique}`" name="banner[]" ref="file" @change="getFile($event)" v-validate="`${(dataImage.id) ? '' : 'required|'}image|ext:jpeg,jpg,png,svg|size:20000${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`" v-if="not_required">
             <input type="file" class="action_image" :data-vv-name="`image_form_${unique}.banner[]`" accept=".jpeg, .jpg, .png" :key="`image_form_${unique}.banner[]`" :id="`image${unique}`" name="banner[]" ref="file" @change="getFile($event)" v-validate="`image|ext:jpeg,jpg,png,svg|size:20000${(dimension.imageWidth == 0) ? '' : `|dimensions:${dimension.imageWidth},${dimension.imageHeight}`}`" v-else>
             <input type="hidden" name="file_id[]" v-model="dataImage.id">
             <input type="hidden" name="file_category[]" v-model="category">
             <label class="action_image_label" :for="`image${unique}`">Choose File</label>
             <div v-if="$parent.showCloser" class="action_image_remove" @click="removeImage($event, unique, item.id, parent)">Remove</div>
-            <transition name="slide"><span class="validate" v-if="errors.has(`image_form_${unique}.banner[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner[]`)) }}</span></transition>
+            <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.banner[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner[]`)) }}</span></transition>
         </div>
         <div class="form_tags_group" v-if="showTags">
             <div class="preview_group">
                 <img :id="`preview_image${unique}`" :src="`${(item != null) ? item.path : ''}`" />
             </div>
             <div class="tags_group">
-                <div class="group bordered filled">
+                <div class="form_group">
                     <label :for="`image_title${unique}`">{{ image_label }}  Title <span>*</span></label>
-                    <input type="text" name="banner_title[]" :id="`image_title${unique}`" :data-vv-name="`image_form_${unique}.banner_title[]`" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\_]*$', max: 50}" autocomplete="off" class="input" v-model="dataImage.title">
-                    <transition name="slide"><span class="validate" v-if="errors.has(`image_form_${unique}.banner_title[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner_title[]`)) }}</span></transition>
+                    <input type="text" name="banner_title[]" :id="`image_title${unique}`" :data-vv-name="`image_form_${unique}.banner_title[]`" v-validate="{required: true, regex: '^[a-zA-Z0-9\-_ |\_]*$', max: 50}" autocomplete="off" class="action_form default_text" v-model="dataImage.title">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.banner_title[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner_title[]`)) }}</span></transition>
                 </div>
-                <div :class="[ 'group bordered filled', ($parent.multiple) ? '' : 'nmb' ]">
+                <div class="form_group">
                     <label :for="`image_alt${unique}`">{{ image_label }}  Alt <span>*</span></label>
-                    <input type="text" name="banner_alt[]" :id="`image_alt_${unique}`" :data-vv-name="`image_form_${unique}.banner_alt[]`" v-validate="{required: true, regex: '^[a-zA-Z0-9\_\-]*$', max: 50}" autocomplete="off" class="input" v-model="dataImage.alt">
-                    <transition name="slide"><span class="validate" v-if="errors.has(`image_form_${unique}.banner_alt[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner_alt[]`)) }}</span></transition>
+                    <input type="text" name="banner_alt[]" :id="`image_alt_${unique}`" :data-vv-name="`image_form_${unique}.banner_alt[]`" v-validate="{required: true, regex: '^[a-zA-Z0-9\_\-]*$', max: 50}" autocomplete="off" class="action_form default_text" v-model="dataImage.alt">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.banner_alt[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner_alt[]`)) }}</span></transition>
                 </div>
-                <div class="group bordered filled nmb" v-if="$parent.multiple">
+                <div class="form_group" v-if="$parent.multiple">
                     <label :for="`image_sequence${unique}`">{{ image_label }}  Sequence <span>*</span></label>
-                    <input type="text" name="banner_sequence[]" :id="`image_sequence_${unique}`" :data-vv-name="`image_form_${unique}.banner_sequence[]`" v-validate="{required: true, numeric: true, min_value: 1, max_value: 99}" autocomplete="off" class="input" v-model="dataImage.sequence">
-                    <transition name="slide"><span class="validate" v-if="errors.has(`image_form_${unique}.banner_sequence[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner_sequence[]`)) }}</span></transition>
+                    <input type="text" name="banner_sequence[]" :id="`image_sequence_${unique}`" :data-vv-name="`image_form_${unique}.banner_sequence[]`" v-validate="{required: true, numeric: true, min_value: 1, max_value: 99}" autocomplete="off" class="action_form default_text" v-model="dataImage.sequence">
+                    <transition name="slide"><span class="validation_errors" v-if="errors.has(`image_form_${unique}.banner_sequence[]`)">{{ properFormat(errors.first(`image_form_${unique}.banner_sequence[]`)) }}</span></transition>
                 </div>
             </div>
         </div>
