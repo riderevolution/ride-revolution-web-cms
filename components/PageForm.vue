@@ -173,7 +173,7 @@
                     subtitle: ''
                 },
                 mobileDimensions: {
-                    imageWidth: 750,
+                    imageWidth: 500,
                     imageHeight: 750
                 },
                 bannerDimensions: {
