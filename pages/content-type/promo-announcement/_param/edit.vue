@@ -58,8 +58,14 @@
                                 <h2 class="form_title">Image Upload</h2>
                             </div>
                             <div class="form_main_group">
-                                <banner-handler-container ref="banner_handler" :dimension="bannerDimensions" :data="res.banners" :parent="res.id" />
-                                <input type="hidden" name="banner_category[]" value="banner" v-for="(count, key) in imageCount" :key="key">
+                                <banner-handler-container
+                                    ref="banner_handler"
+                                    :image_label="'Banner'"
+                                    :dimension="bannerDimensions"
+                                    :data="res.banners"
+                                    :parent="res.id"
+                                    :category="'banner'"
+                                />
                             </div>
                         </div>
                         <div class="form_footer_wrapper">
