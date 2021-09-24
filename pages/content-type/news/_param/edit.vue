@@ -11,7 +11,9 @@
                 <section id="content">
                     <form id="default_form" @submit.prevent="submitForm()" enctype="multipart/form-data">
                         <div class="form_group_disclaimer">
-                            <div class="form_disclaimer"><img src="/icons/disclaimer-icon.svg" /> <span>Fields with asterisks(*) are required.</span></div>
+                            <div class="form_disclaimer">
+                                <img src="/icons/disclaimer-icon.svg" /> <span>Fields with asterisks(*) are required.</span>
+                            </div>
                         </div>
                         <div class="form_wrapper">
                             <div class="form_header_wrapper">
@@ -61,6 +63,7 @@
                                     :category="'banner'"
                                 />
                             </div>
+                            <div>
                                 <image-handler-container ref="image_handler" :dimension="imageDimensions" :multiple="false" :data="res.images" :parent="res.id" />
                             </div>
                         </div>

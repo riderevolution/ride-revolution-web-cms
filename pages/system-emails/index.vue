@@ -147,6 +147,11 @@
                         searched: true
                     },
                     {
+                        label: 'Receiving a Gift Card From Ride Revolution',
+                        slug: 'receiving-a-gift-card-from-ride-revolution',
+                        searched: true
+                    },
+                    {
                         label: 'Zoom Link',
                         slug: 'zoom-link',
                         searched: true
