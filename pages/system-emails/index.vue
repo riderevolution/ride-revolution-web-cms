@@ -236,6 +236,11 @@
                         slug: 'sharing-package-confirmation',
                         searched: true
                     },
+                    {
+                        label: 'Subscription Package Expiry Notification',
+                        slug: 'subscription-package-expiry-notif',
+                        searched: true
+                    },
                 ]
             }
         },
