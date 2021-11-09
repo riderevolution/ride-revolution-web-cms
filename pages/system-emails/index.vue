@@ -241,6 +241,11 @@
                         slug: 'subscription-package-expiry-notif',
                         searched: true
                     },
+                    {
+                        label: 'Expired Subscription Notification',
+                        slug: 'subscription-expired',
+                        searched: true
+                    },
                 ]
             }
         },
