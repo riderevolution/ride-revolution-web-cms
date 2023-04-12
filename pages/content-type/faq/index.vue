@@ -1,20 +1,77 @@
 <template>
     <div class="content">
         <transition name="fade">
-            <div id="admin" class="cms_dashboard" v-if="loaded">
-                <section id="top_content" class="table">
+            <div
+                id="admin"
+                class="cms_dashboard"
+                v-if="loaded"
+            >
+                <section
+                    id="top_content"
+                    class="table"
+                >
                     <div class="action_wrapper">
                         <h1 class="header_title">FAQs</h1>
                         <div class="actions">
-                            <div class="total">Total: {{ totalItems(totalResults) }}</div>
+                            <div class="total">
+                                Total: {{ totalItems(totalResults) }}
+                            </div>
                             <div class="toggler">
-                                <div :class="`status ${(status == 1) ? 'active' : ''}`" @click="toggleOnOff(1)">Activated</div>
-                                <div :class="`status ${(status == 0) ? 'active' : ''}`" @click="toggleOnOff(0)">Deactivated</div>
+                                <div
+                                    :class="`status ${
+                                        status == 1 ? 'active' : ''
+                                    }`"
+                                    @click="toggleOnOff(1)"
+                                >
+                                    Activated
+                                </div>
+                                <div
+                                    :class="`status ${
+                                        status == 0 ? 'active' : ''
+                                    }`"
+                                    @click="toggleOnOff(0)"
+                                >
+                                    Deactivated
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="action_buttons">
-                        <nuxt-link :to="`${$route.path}/create`" class="action_btn"><svg xmlns="http://www.w3.org/2000/svg" width="17.016" height="17.016" viewBox="0 0 17.016 17.016"><defs></defs><g transform="translate(-553 -381)"><circle class="add" cx="8.508" cy="8.508" r="8.508" transform="translate(553 381)"/><g transform="translate(558.955 386.955)"><line class="add_sign" y2="5.233" transform="translate(2.616 0)"/><line class="add_sign" x2="5.233" transform="translate(0 2.616)"/></g></g></svg>Add a FAQ</nuxt-link>
+                        <nuxt-link
+                            :to="`${$route.path}/create`"
+                            class="action_btn"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="17.016"
+                                height="17.016"
+                                viewBox="0 0 17.016 17.016"
+                            >
+                                <defs></defs>
+                                <g transform="translate(-553 -381)">
+                                    <circle
+                                        class="add"
+                                        cx="8.508"
+                                        cy="8.508"
+                                        r="8.508"
+                                        transform="translate(553 381)"
+                                    />
+                                    <g transform="translate(558.955 386.955)">
+                                        <line
+                                            class="add_sign"
+                                            y2="5.233"
+                                            transform="translate(2.616 0)"
+                                        />
+                                        <line
+                                            class="add_sign"
+                                            x2="5.233"
+                                            transform="translate(0 2.616)"
+                                        />
+                                    </g>
+                                </g>
+                            </svg>
+                            Add a FAQ
+                        </nuxt-link>
                     </div>
                 </section>
                 <section id="content">
@@ -28,30 +85,61 @@
                             </tr>
                         </thead>
                         <tbody v-if="res.faqs.data.length > 0">
-                            <tr v-for="(data, key) in res.faqs.data" :key="key">
+                            <tr
+                                v-for="(data, key) in res.faqs.data"
+                                :key="key"
+                            >
                                 <td>{{ data.name }}</td>
                                 <td>{{ data.sequence }}</td>
-                                <td>{{ $moment(data.created_at).format('MMMM DD, YYYY') }}</td>
+                                <td>
+                                    {{
+                                        $moment(data.created_at).format(
+                                            'MMMM DD, YYYY'
+                                        )
+                                    }}
+                                </td>
                                 <td width="20%">
                                     <div class="table_actions">
-                                        <nuxt-link class="table_action_edit" :to="`${$route.path}/${data.id}/edit`">Edit</nuxt-link>
-                                        <div class="link table_action_cancel" @click="toggleDelete(data.id)">Delete</div>
+                                        <nuxt-link
+                                            class="table_action_edit"
+                                            :to="`${$route.path}/${data.id}/edit`"
+                                        >
+                                            Edit
+                                        </nuxt-link>
+                                        <div
+                                            class="link table_action_cancel"
+                                            @click="toggleDelete(data.id)"
+                                        >
+                                            Delete
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
                         </tbody>
-                        <tbody class="no_results" v-else>
+                        <tbody
+                            class="no_results"
+                            v-else
+                        >
                             <tr>
                                 <td :colspan="rowCount">No Result(s) Found.</td>
                             </tr>
                         </tbody>
                     </table>
-                    <pagination :apiRoute="res.faqs.path" :current="res.faqs.current_page" :last="res.faqs.last_page" />
+                    <pagination
+                        :apiRoute="res.faqs.path"
+                        :current="res.faqs.current_page"
+                        :last="res.faqs.last_page"
+                        :params="`&enabled=${status}`"
+                    />
                 </section>
             </div>
         </transition>
         <transition name="fade">
-            <delete v-if="$store.state.deleteStatus" ref="delete" :url="`api/web/faqs`" />
+            <delete
+                v-if="$store.state.deleteStatus"
+                ref="delete"
+                :url="`api/web/faqs`"
+            />
         </transition>
         <foot v-if="$store.state.isAuth" />
     </div>
@@ -67,7 +155,7 @@
             Pagination,
             Delete
         },
-        data () {
+        data() {
             return {
                 loaded: false,
                 lastRoute: '',
@@ -78,44 +166,49 @@
             }
         },
         methods: {
-            toggleOnOff (status) {
+            toggleOnOff(status) {
                 const me = this
                 me.status = status
                 me.fetchData()
             },
-            toggleDelete (id) {
+            toggleDelete(id) {
                 const me = this
                 me.$store.state.deleteStatus = true
                 document.body.classList.add('no_scroll')
-                setTimeout( () => {
+                setTimeout(() => {
                     me.$refs.delete.contentID = id
                 }, 100)
             },
-            fetchData () {
+            fetchData() {
                 const me = this
                 me.loader(true)
-                me.$axios.get(`api/web/faqs?enabled=${me.status}`).then(res => {
-                    if (res.data) {
-                        setTimeout( () => {
-                            me.res = res.data
-                            me.totalResults = me.res.faqs.total
-                            me.loaded = true
+                me.$axios
+                    .get(`api/web/faqs?enabled=${me.status}`)
+                    .then(res => {
+                        if (res.data) {
+                            setTimeout(() => {
+                                me.res = res.data
+                                me.totalResults = me.res.faqs.total
+                                me.loaded = true
+                            }, 500)
+                        }
+                    })
+                    .catch(err => {
+                        me.$store.state.errorList = err.response.data.errors
+                        me.$store.state.errorStatus = true
+                    })
+                    .then(() => {
+                        setTimeout(() => {
+                            me.rowCount =
+                                document.getElementsByTagName('th').length
+                            me.loader(false)
                         }, 500)
-                    }
-                }).catch(err => {
-                    me.$store.state.errorList = err.response.data.errors
-                    me.$store.state.errorStatus = true
-                }).then(() => {
-                    setTimeout( () => {
-                        me.rowCount = document.getElementsByTagName('th').length
-                        me.loader(false)
-                    }, 500)
-                })
+                    })
             }
         },
-        mounted () {
+        mounted() {
             const me = this
-            setTimeout( () => {
+            setTimeout(() => {
                 me.fetchData()
                 window.scrollTo({ top: 0, behavior: 'smooth' })
             }, 500)
